@@ -1,0 +1,71 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>跳ね返るボールのアニメーション（Timer）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+跳ね返るボールのアニメーション
+</h2>
+<h3 class="lm70 tm0 bm0">
+Timerの定時間隔起動を利用してアニメーションを実現する
+</h3>
+<h4 class="lm70 tm5 bm0">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0
+
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B54/bauncing_ball.mp4&title=bauncing_ball1&width=550" target="_new">
+<img class="lm80 tm10 bm0" src="bauncing_ball.png" alt="[bauncing_ball]" width="300"></a>
+<div class="lm120 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<h3 class="lm70 tm20 rm60 bm0" id="point">
+実装のポイント
+</h3>
+<div class="lm70 tm0 rm60">
+図形（赤いボール）はNSViewクラスのdrawメソッドにより表示される。drawメソッドはタイマーの定時間隔起動により、ごく短い間隔で起動するように指定する。
+</div>
+<div class="lm70 tm10 rm60">
+１回の図形の移動は一つのベクトルとして表現することができる。ベクトルの距離は速度に相当する。
+本例では、ベクトルの距離を４ピクセル、処理の起動間隔を100分の1秒としているが、この組み合わせあたりが限界かもしれない。起動間隔をいくら短くしても処理のオーバーヘッドがあるので数字通りに速くなることはない。
+</div>
+<div class="lm70 tm10 rm60">
+ボールが壁にぶつかったとき、その軸側のベクトル成分の正負を逆転させることでボールの進行方向を変えている。正確には、次のスパンで壁にぶつかると判断した時点で方向を切り替えるので、ほとんどの場合、ごくわずかの差ではあるが壁に到達する前に方向転換が行われることになる。（少なくとも見た目ではわからない）
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B54/bauncing_ball2.png&title=跳ね返り&width=600" target="_new">
+<img class="lm70 tm5 " src="bauncing_ball2.png" alt="[跳ね返り]" width="400"></a>
+
+<h3 class="lm70 tm20 rm60 bm0">
+ビューのサブクラス
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B54/UAView.swift" width="580" height="1040"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+AppDelegate
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B54/AppDelegate.swift" width="580" height="280"></iframe>
+
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

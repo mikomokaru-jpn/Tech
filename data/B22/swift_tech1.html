@@ -1,0 +1,150 @@
+<!-- 
+NewPractice_Swift/01 MyCalendar 
+NewPractice_Swift/05 MyHealthCaledar
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>オプショナル変数/型のキャスト</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<div class="lm70 tm20 rm60">
+macOS Sierra 10.12.6 / Xcode 9.2 / Swift 4.0
+</div>
+<h2 class="lm70 tm20 bm0 rm60">
+オプショナル変数
+</h2>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+Swiftでは、変数がnilであることを極力避けようとする。言語仕様上、通常の変数にnilを代入できない。これははコンパイル時にチェックされる。
+</div>
+<div class="lm70 tm10 rm60">
+どうしても変数にnilを持たせたいときは、オプショナル変数とする。オプショナル変数にはnilの代入が可能である。
+</div>
+<div class="lm70 tm10 rm60">
+Swiftの通常の変数とオプショナル変数は「型」が異なる。オプショナル変数は、その中に通常型の変数を含んでいると見做すことができる。オプショナル変数の型は"Optional( )"と表示される。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/descript.txt" width="550" height="230"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+変数の代入
+</h3>
+<div class="lm70 tm5 rm60">
+通常の変数 ← オプショナル変数
+</div>
+<div class="lm70 tm0 rm60">
+ダウンキャストに相当するので特別な操作（アンラップ）が必要
+</div>
+<div class="lm70 tm10 rm60">
+オプショナル変数 ← 通常の変数 
+</div>
+<div class="lm70 tm0 rm60">
+アップキャストに相当するので単なる代入扱いで良い
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+オプショナル変数が必要な理由（個人的見解）
+</h3>
+<div class="lm70 tm5 rm60">
+xibファイルのオブジェクトと Outlet接続しているビューやウィンドウプはオプショナル変数となる。これらのプロパティは xibファイルロード時までnilの状態になっているので、オプショナルでなければならない。
+</div>
+<div class="lm70 tm10 rm60">
+この場合、実行時にオブジェクトが接続されることは当然のことであり、プロパティが nilであるのはバグ以外ありえないので、変数の参照は強制アンラップ（!）で良い。
+</div>
+<div class="lm70 tm10 rm60">
+オプショナル変数が必要な理由は、処理の異常を認知するためのものだと思っている。異常が発生し正しい計算結果が得られないときに戻り値や変数に nilを設定しアプリケーションに対応を促すという働きである。
+</div>
+<div class="lm70 tm10 rm60">原則的には、ある変数が nilになることが論理的にバグしか考えられない場合は処理を明示的に止めるべきであり、
+アンラップの評価によるエラー処理の実行か、強制アンラップにより処理を落とすかは、エラー対応の考え方の違いである。
+</div>
+<div class="lm70 tm10 rm60">
+ただし、クラスの設計によってはメソッドの通常処理の戻り値として nilを返すということもあり得る。この場合は当然アンラップによる評価により処理の振り分けを行うことになる。（考え方としてはあまり好ましくない）
+</div>
+<div class="lm70 tm20 rm60">
+次の例は、NSFontクラスのイニシャライザを呼んでいる。指定したフォント名がシステムで未対応であった場合、初期化が失敗し nilが返るのでその対応を組み込んでいる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B22/NSFont.txt" width="550" height="200"></iframe>
+<div class="lm70 tm10 rm60">
+次のような方法で回避することもできる。"??"の後の式は、初期化が失敗したときに評価される。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B22/NSFont2.txt" width="550" height="60"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+オプショナル変数をアンラップする
+</h3>
+<div class="lm70 tm5 rm60">
+オプショナル変数と通常の変数は「型」が異なり、両者を混在して操作するのは面倒のので、できるだけ早い段階で通常の変数にアンラップして使用すべきである。
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+Optional Binding（guard構文とif構文）
+</h3>
+<div class="lm70 tm5 rm60">
+オプショナル変数を通常の変数に代入する。値が nilであれば代入が失敗するので、エラー処理を実行する。成功すれば、その値を利用する。
+</div>
+<div class="lm70 tm10 rm60">
+guard構文とif構文は基本的に同じ働きをするが、guard構文の良いところは正常処理をネストを下げることなく記述することができる。ただし、else句の処理は return または throwにより処理を抜けなくてはならない。また
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/Binding.txt" width="550" height="210"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+Optional Chaining
+</h3>
+<div class="lm70 tm5 rm60">
+クラスのオブジェクトをオプショナルとしたとき、オブジェクト名とプロパティ名やメソッド名の間に ’？’ 記号を入れることによりオブジェクト変数のアンラップを簡潔に行うことができる。
+</div>
+<div class="lm70 tm10 rm60">
+プロパティを参照したとき、オブジェクトがnilでなければ値が参照でき、nilのときには nilが返る。メソッドを呼び出したとき、オブジェクトがnilでなければメソッドを実行し、nilのときは何もしない。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/Chaining.txt" width="550" height="150"></iframe>
+<h2 class="lm70 tm30 bm0 rm60">
+型のキャスト
+</h2>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+ダウンキャストの型変換
+</div>
+<div class="lm70 tm0 rm60">
+次の例は、Any型の変数をString型またはInt型にキャストする処理である。as句の後ろに'?'を付けることによって、変換が失敗した場合はnilが返る。キャスト後の変数はオプショナルである。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/cast1.txt" width="550" height="280"></iframe>
+<div class="lm70 tm20 rm60">
+Optional Bindingの if構文を使用すれば、キャストを行なったあとアンラップした変数を取得することができる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/cast2.txt" width="550" height="380"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+アンラップとキャストを組み合わせて実行する
+</h3>
+<div class="lm70 tm5 rm60">
+DictionaryオブジェクトからAny型の値を取得し Int型に変換する。アンラップとのキャストの二つの操作が必要。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/sample1.txt" width="550" height="320"></iframe>
+<div class="lm70 tm10 rm60">
+アンラップとキャストを一つの if構文で行うともできる。ただし失敗した場合どちらに原因があるかわからない。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/sample2.txt" width="550" height="110"></iframe>
+<div class="lm70 tm10 rm60">
+一つの if構文で複数の代入文を評価することができる。それぞれの文はカンマで区切って並べる。全ての代入（アンラップ、キャスト）が成功したとき条件が真となる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/sample3.txt" width="550" height="150"></iframe>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

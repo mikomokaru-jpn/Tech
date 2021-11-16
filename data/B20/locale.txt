@@ -1,0 +1,9 @@
+let now = Date.init()
+let formatter: DateFormatter = DateFormatter()
+formatter.locale = Locale.init(identifier: "en_US")
+formatter.dateStyle = .full
+formatter.timeStyle = .full
+print(formatter.string(from: now))
+
+//結果
+Tuesday, February 16, 2021 at 11:39:04 PM Japan Standard Time

@@ -1,0 +1,1 @@
+func pasteImage(){    //イメージをペーストボードから取得する    if let objects = pasteboard.readObjects(forClasses:[NSImage.self] ,                                             options: [:]),        objects.count > 0{        image = objects[0] as? NSImage        if image == nil{            return        }        self.needsDisplay = true        return    }}

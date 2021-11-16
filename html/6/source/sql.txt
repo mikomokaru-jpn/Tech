@@ -1,0 +1,38 @@
+-- OR条件の検索を行う方法
+SELECT date FROM diary_text WHERE text LIKE '%スープ%'
+UNION
+SELECT date FROM diary_text WHERE text LIKE '%チーズ%'
+UNION
+SELECT date FROM diary_text WHERE text LIKE '%トマト%'
+ORDER BY date;
+
+-- AND条件の検索を行う方法：テーブルの自己結合
+//2条件
+SELECT T1.date FROM 
+    (SELECT date FROM diary_text WHERE text LIKE '%八ヶ岳%') as T1,  
+    (SELECT date FROM diary_text WHERE text LIKE '%夕食%') as T2 
+    WHERE T1.date = T2.date;
+
+//3条件
+SELECT T1.date FROM 
+    (SELECT date FROM diary_text WHERE text LIKE '%八ヶ岳%') as T1,  
+    (SELECT date FROM diary_text WHERE text LIKE '%夕食%') as T2,
+    (SELECT date FROM diary_text WHERE text LIKE '%トマト%') as T3
+    WHERE T1.date = T2.date AND T2.date = T3.date;
+
+-- AND条件の検索を行う方法：INNER JOINによる結合 ちょっとややこしい。
+//2条件
+SELECT T1.date FROM 
+   (SELECT date  FROM diary_text WHERE text LIKE '%八ヶ岳%') AS T1
+   INNER JOIN (SELECT date FROM diary_text WHERE text LIKE '%夕食%') AS T2 
+   ON T1.date = T2.date;
+
+//3条件（条件が増えるごとにネストが深くなる）
+SELECT T3.date FROM
+   (SELECT T1.date FROM 
+       (SELECT date  FROM diary_text WHERE text LIKE '%八ヶ岳%') AS T1
+       INNER JOIN (SELECT date FROM diary_text WHERE text LIKE '%夕食%') AS T2 
+       ON T1.date = T2.date) AS T3 
+    INNER JOIN (SELECT date FROM diary_text WHERE text LIKE '%トマト%') AS T4
+    ON T3.date = T4.date;
+

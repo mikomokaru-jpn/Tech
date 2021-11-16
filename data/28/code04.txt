@@ -1,0 +1,11 @@
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+formatter.dateFormat = @"yyyy_MM_dd HH-mm-ss";    
+NSString *dateString= @"2000_5_31 23-15-8";
+NSDate *date = [formatter dateFromString:dateString];
+
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:date]);
+
+//結果
+2000年5月31日水曜日 23時15分08秒 日本標準時

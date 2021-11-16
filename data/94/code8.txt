@@ -1,0 +1,1 @@
+func applicationDidFinishLaunching(_ aNotification: Notification) {    ....    myBrowser.setCellClass(UABrowserCell.self) //セルクラスの変更を通知する}

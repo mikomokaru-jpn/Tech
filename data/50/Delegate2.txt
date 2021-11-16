@@ -1,0 +1,3 @@
+- (void)tableViewSelectionDidChange:(NSNotification *)notification{
+    [self displayImage:_tableView.selectedRow];
+}

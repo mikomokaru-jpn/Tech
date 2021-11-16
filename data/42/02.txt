@@ -1,0 +1,24 @@
+//  CGBitmapContextCreateメソッドにより
+//  変更するサイズと同じ大きさのビットマップコンテキストを作成する。
+//  メソッドの引数はリファレンスマニュアル等を参照
+//  サイズの指定以外は、お決まりの値で宜しいらしい。
+    _xLength = 800;
+    _yLength = 600;
+    CGColorSpaceRef imageColorSpace = 
+        CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );      
+    CGContextRef newContext = 
+        CGBitmapContextCreate (NULL, 
+                               (int)_xLength, 
+                               (int)_yLength,
+                               8, 
+                               (int)_xLength * 4,
+                               imageColorSpace, 
+                               kCGImageAlphaPremultipliedLast);
+    
+//  イメージをビットマップコンテキストに出力する。
+//  イメージはrectのサイズに合わせて縮小/拡大する。
+    CGRect rect = CGRectMake(0, 0, _xLength, _yLength);
+    CGContextDrawImage(newContext, rect, originalImage);
+
+//  サイズ変更後のイメージをビットマップコンテキストから取得する
+    CGImageRef cgNewImage = CGBitmapContextCreateImage(newContext);

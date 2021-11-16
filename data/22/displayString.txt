@@ -1,0 +1,3 @@
+NSTableCellView *cellView = 
+    [tableView makeViewWithIdentifier:column.identifier owner:self];
+cellView.textField.attributedStringValue = 〜属性付き文字列〜 ;

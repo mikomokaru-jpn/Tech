@@ -1,0 +1,4 @@
+NSTableCellView *cellView = 
+    [tableView makeViewWithIdentifier:column.identifier owner:self];
+[cellView addSubview:〜NSButtonオブジェクト〜;
+return cellView;

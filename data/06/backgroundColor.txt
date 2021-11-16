@@ -1,0 +1,25 @@
+//ファーストレスポンダーを受け付ける
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
+//ファーストレスポンダーになった
+- (BOOL)becomeFirstResponder {
+    _color = [NSColor orangeColor].CGColor; //背景色を変える（選択中）
+    self.needsDisplay = YES;
+    return YES;
+}
+//ファーストレスポンダーを放棄する
+- (BOOL)resignFirstResponder
+{
+    _color = [NSColor blackColor].CGColor;  //背景色を変える
+    self.needsDisplay = YES;
+    return YES;
+}
+//ビューの描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    self.layer.backgroundColor = _color;
+    self.layer.cornerRadius = 10.0; //角の丸み
+}

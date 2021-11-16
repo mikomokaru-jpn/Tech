@@ -1,0 +1,8 @@
+NSTableCellView *cellView =
+    [tableView makeViewWithIdentifier:column.identifier owner:self];
+//行の背景色を偶数行・奇数行で変える
+if ((row % 2) == 1){
+    cellView.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+}else{
+    cellView.layer.backgroundColor = [UAUtility cgColorR:255 G:228 B:196];
+}

@@ -1,0 +1,172 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Upload a local file to the server by HTTP request</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+Upload a local file to the server by HTTP request
+</h2>
+<a href="/lib/HTMLofImage.html?filename=/data/56/56_file_upload.png&title=ファイルアップロード&width=900" target="_new">
+<img class="lm70 tm20 bm0"src="/data/56/56_file_upload.png" alt="[ファイルアップロード]" width="550"></a>
+<div class="lm70 tm20 rm60">
+There are two ways to upload a local file to the server from the client application with POST command of HTTP request.
+</div>
+<h2 class="lm70 tm15 bm0 rm60">
+Using multipart / form-data format
+</h2>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm10 rm60">
+Select a image file (.jpg) of your local disk and write a description.
+Create a request message with multipart / form-data format and send it to the server.
+The server-side process (PHP script) saves the sent data as a file in the predetermined directory.    
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Method to create a request message
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/uploadByMultipart.txt" width="580" height="750"></iframe>
+<h3 class="lm70 tm15 rm60 bm0">
+Create and send a request message
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/request1.txt" width="580" height="80"></iframe>
+<div class="lm70 tm10 rm60">
+Common functon for sending and receiving a request message　<a href="/lib/HTMLofText.html?filename=/data/56/source/sendRequest.txt&title=sendRequest" target="_new">sendRequest</a>
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+A content of a request message sending to the server
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/request_data1.txt" width="580" height="350"></iframe>
+<div class="lm70 tm10 rm60">
+Set POST data in the part surrounded by delimiter strings ("boundary" variable).
+Specify a filename and send the data.
+</div>
+<div class="lm70 tm10 rm60">
+Make sure to put two hyphens at the beginning of the delimiter string, and the position and number of LF codes are correct.
+Although a small point, if it's not correct, it won't work at all.
+</div>
+<div class="lm70 tm10 rm60">
+You specify random strings of any length as  delimiter strings.
+However, the delimiter strings must be long enough not to accidentally exactly match the transmitted data.
+I'm not sure about the theoretical safety length, but I think the delimiter strings in the example is actually perfect.
+</div>
+<div class="lm70 tm10 rm60">
+For MAX_FILE_SIZE, specify the maximum length of the file to send in bytes. This is a keyword that PHP scripts  refer to.
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Server-side processing (PHP script)
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/upload_multipart.txt" width="580" height="340"></iframe>
+<div class="lm70 tm10 rm60">
+PHP script saves the received data in a temporary file. Then move the temporary file to a specific directory with a specified name.
+MIME type is received as a POST parameter but not used.
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Response data dump (for confirmation)
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/result1.txt" width="580" height="500"></iframe>
+
+<!------------------------------------------------------------------------------>
+<h2 class="lm70 tm40 bm0 rm60">
+Convert a file to BASE64 format strings and upload it
+</h2>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm10 rm60">
+you  encode the data of a file  into BASE64 format character strings with MIME extension method, and send it as one of the POST data of a request message.    
+The server-side process (PHP script) decodes the received character strings and outputs them to the specified directory as a file.
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Method to create a request message
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/uploadByMIME.txt" width="580" height="570"></iframe>
+<div class="lm70 tm10 rm60">
+POST data is sent as JSON format data.
+It is also possible in x-www-form-urlencoded format.    
+</div>
+<div class="lm70 tm0 rm60">
+Data is base64 encoded by "base64EncodedStringWithOptions" method of  NSData class.
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Create and send a request message
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/request2.txt" width="580" height="80"></iframe>
+<div class="lm70 tm10 rm60">
+Common functon for sending and receiving a request message　<a href="/lib/HTMLofText.html?filename=/data/56/source/sendRequest.txt&title=sendRequest" target="_new">sendRequest</a>
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Server-side processing (PHP script)
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/upload_mime.txt" width="580" height="440"></iframe>
+<div class="lm70 tm10 rm60">
+JSON format data is read from php: // input stream.
+Base64 data is decoded with base64_decode function.    
+</div>
+<div class="lm70 tm0 rm60">
+MIME type, MAX_FILE_SIZE  are received as POST parameters but not used.
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+Response data dump (for confirmation)
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/result2.txt" width="580" height="180"></iframe>
+
+<h2 class="lm70 tm20 bm0 rm60">
+GitHub
+</h2>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_C41_fileUpload" target="_new">mikomokaru-jpn/macOS_C41_fileUpload</a>
+</div>
+
+<h2 class="lm70 tm20 bm0 rm60">
+Tips
+</h2>
+<!--div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div-->
+<h3 class="lm70 tm10 bm0 rm60">
+Function to determine the MIME type from the UTI of a file
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/getMIMEString.txt" width="580" height="180"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+Function to generate  random strings
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/generateRandomString.txt" width="580" height="220"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+How to increase the limit of size of upload files
+</h3>
+<div class="lm70 tm5 rm60">
+You should change the parameter values in the PHP configuration file (php.ini).
+For example, if you want to upload a 10MB file, write as follows.
+In the case of multipart / form-data method, it is also necessary to specify MAX_FILE_SIZE in the request message.    
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/phpini.txt" width="580" height="190"></iframe>
+<h4 class="lm70 tm20 rm60 bm0">
+How to find the location of php.ini
+</h4>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/phpinfo.txt" width="580" height="130"></iframe>
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+

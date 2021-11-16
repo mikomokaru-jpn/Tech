@@ -1,0 +1,6 @@
+//---- Sushi.m ----
+@implementation Sushi
+- (NSComparisonResult)compare:(Sushi*)aSushi{
+    return [_kana compare:aSushi.kana];
+}
+@end

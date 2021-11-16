@@ -1,0 +1,7 @@
+//ビューを取得する（再帰関数呼び出し）
+let array =  self.getSubview3(self.window!.contentView!)
+
+//再帰関数
+func getSubview3(_ view: NSView) -> [NSView]{
+    return view.subviews +  view.subviews.flatMap{ getSubview3($0) }
+}

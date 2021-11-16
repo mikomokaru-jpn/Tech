@@ -1,0 +1,38 @@
+//Gridオブジェクトの作成
+let gridObject =  GridObject()   
+//<<< 共通定義 >>>
+gridObject.rowHeight = 28               //行の高さ
+gridObject.borderLine = 1               //枠線の太さ
+gridObject.borderColor  = .black        //枠線の色
+//<<< 見出し行の定義 >>>
+gridObject.headerBackColor = .lightGray     //背景色
+gridObject.headerHeight = 30                //行の高さ
+gridObject.headerFontSize = 16              //フォントサイズ
+//<<< 列の定義 GridCol構造体 >>>
+//日付
+var gridCol1 = GridCol(identifire: "date", width: 120.0) //識別子と幅
+gridCol1.fontSize = 18    //フォントサイズ
+gridCol1.align = .left    //水平方向の文字位置
+gridCol1.title = "日付"    //列見出し 
+//最低血圧
+var gridCol2 = GridCol(identifire: "lower", width: 70.0)
+gridCol2.fontSize = 18
+gridCol2.align = .right
+gridCol2.title = "最低血圧"
+//最高血圧
+var gridCol3 = GridCol(identifire: "upper", width: 70.0)
+gridCol3.fontSize = 18
+gridCol3.align = .right
+gridCol3.title = "最高血圧"
+//脈圧
+var gridCol4 = GridCol(identifire: "pulse", width: 80.0)
+gridCol4.fontSize = 18
+gridCol4.align = .right
+gridCol4.title = "脈圧"
+//平均血圧
+var gridCol5 = GridCol(identifire: "average", width: 80.0)
+gridCol5.fontSize = 18
+gridCol5.align = .right
+gridCol5.title = "平均血圧"
+//<<< 定義の登録 >>>
+gridObject.setCols([gridCol1, gridCol2, gridCol3, gridCol4, gridCol5])

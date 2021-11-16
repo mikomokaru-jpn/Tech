@@ -1,0 +1,3 @@
+#import "NSObject+who.h"
+NSLog(@"%@", [_inField who]);
+//（出力） NSTextField -> NSControl -> NSView -> NSResponder -> NSObject

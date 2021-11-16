@@ -1,0 +1,20 @@
+NSAlert *alert = [[NSAlert alloc] init];
+[alert addButtonWithTitle:@"OK"];
+[alert addButtonWithTitle:@"キャンセル"];
+alert.suppressionButton.title = @"「今後このメッセージを表示しない」みたいな";
+alert.showsSuppressionButton = YES;
+alert.messageText = @"メッセージを表示する";
+alert.informativeText = @"ここに詳細な情報を表示する";
+alert.alertStyle = NSAlertStyleInformational;
+NSModalResponse ret = [alert runModal];
+switch (ret) {
+    case NSAlertFirstButtonReturn:
+        NSLog(@"OK");
+        NSLog(@"suppressionButton:%ld", alert.suppressionButton.state);
+        break;
+    case NSAlertSecondButtonReturn:
+        NSLog(@"キャンセル");
+        break;
+    default:
+        break;
+}

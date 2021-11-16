@@ -1,0 +1,7 @@
+//--------------------------------------------------------------------------
+// NSAlert
+//--------------------------------------------------------------------------
+NSAlert *alert = [[NSAlert alloc] init];
+[alert setMessageText:@"ファイルを更新しました"];
+[alert setInformativeText:[NSString stringWithFormat:@"%@", _aFileName]];
+[alert runModal];

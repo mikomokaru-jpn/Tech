@@ -1,0 +1,56 @@
+/*----------------------------------------------------------------------
+辞書の宣言の２通りの方法
+var dict: Dictionary<キーの型, 値の型>
+var dict: [キーの型:値の型]
+要素の型はジェネリクスのパラメータとして明示的に指定すること。
+どちらも同じで下は簡易的な書き方。
+辞書のキーはHashableであること。 
+----------------------------------------------------------------------*/
+//辞書の宣言と初期化
+var dict1: [String:String] = ["A":"America", "B":"Brazil"]
+
+//空の辞書の作成
+var dict1a: [String:String] = [:]
+var dict1b = [String:String]()
+
+//Objective-Cと違って基本数値型を値に持てる
+var dict2: [Int:Float] = [1:9.8, 2:10.3]
+
+//宣言がなくても初期化子から推論して型が決定される。
+var dict3 = ["円周率":3.14]  //Dictionary<String, Double>
+
+//値に型の混在も可能。明示的にAny型として宣言すること
+var dict4: [String:Any] = ["A":"America", "円周率":3.14]
+
+//値に配列を持つ
+var dict5: [String:[String]] = ["A":["America", "Argentina"]]
+
+//値に辞書を持つ
+var dict6: [String:[String:Int]] = ["鈴木桃子":["国語":80, "算数":95],
+                                    "山田太郎":["国語":92, "算数":65]]
+/*----------------------------------------------------------------------
+辞書を読み込んだときの戻り値はOptional型である。
+----------------------------------------------------------------------*/
+var value = dict1["A"]
+print(String(describing: value))  // → Optional("America")
+value = dict1["X"]
+print(String(describing: value))  // → nil
+
+// imutableにするには letで宣言する。
+let dict7 = ["A":"America", "B":"Brazil"]
+//dict7["C"] = "China" コンパイルエラー
+
+/*----------------------------------------------------------------------
+Swiftの辞書は値型である。
+辞書のコピーでは要素が全てコピーされる（いわゆるdeep copy）
+----------------------------------------------------------------------*/
+var dict8 = dict1
+dict1["C"] = "Canada"
+//結果
+dict1: ["C": "Canada", "B": "Brazil", "A": "America"]
+dict8: ["C": "China", "B": "Brazil", "A": "America"]
+
+//全てのキーと値の取得
+for (k, v) in dict1{
+    print("\(k) -> \(v)")
+}

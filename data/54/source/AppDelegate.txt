@@ -1,0 +1,21 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "UAListView.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property UAListView *listView;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //リストビューを作成する
+    _listView = [[UAListView alloc] initWithFrame:NSMakeRect(20, 20, 50*10+2*11, 50+2*2)];
+    [_window.contentView addSubview:_listView];
+}
+@end

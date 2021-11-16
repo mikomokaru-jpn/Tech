@@ -1,0 +1,15 @@
+function sorting(){
+    if (sortingFlag == 'A'){
+        recordList.sort(function(a,b){
+            return (b.year - a.year); //年で降順
+        });            
+        displayList(); //表の再表示
+        sortingFlag = 'D';
+    }else{
+        recordList.sort(function(a,b){
+            return (a.year - b.year); //年で昇順
+        });
+            displayList(); //表の再表示
+        sortingFlag = 'A';
+    }
+}

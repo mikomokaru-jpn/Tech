@@ -1,0 +1,7 @@
+func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+    if let node = item as? Node{
+        return node.children.count
+    }else{
+        return root.children.count   //最上位
+    }
+}

@@ -1,0 +1,9 @@
+//イベントハンドラの定義
+document.addEventListener('keydown', logKey);   
+
+//イベントプロシージャ
+function logKey(e) {
+    console.log(`${e.code} ${e.shiftKey}`);
+}
+//コンソールログ・シフトキーを押しながら右矢印キーを押した
+ArrowRight true  

@@ -1,0 +1,9 @@
+//POSTパラメータ
+NSString* param = [NSString stringWithFormat:
+                   @"id=%ld&fromDate=%ld&toDate=%ld",
+                   500L ,calInfo.fromDate, calInfo.toDate];
+
+//戻り値は辞書の配列：Keyは、[id][date][upper][lower]
+NSArray<NSDictionary *>* bloodPressureList; 
+bloodPressureList = [UAServerRequest post:DB_URL_READ1 
+                                prmString:param];

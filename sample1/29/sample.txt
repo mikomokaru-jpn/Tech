@@ -1,0 +1,21 @@
+enum DayType{
+    case Weekday       //平日
+    case Saturday      //土曜日
+    case Sunday        //日曜日
+}
+
+let dayType1 = DayType.Weekday 
+let dayType2:DayType = .Sunday
+
+enum DayType2: Int{
+    case Weekday = 100 //平日
+    case Saturday      //土曜日
+    case Sunday        //日曜日
+}
+
+let dayType3:DayType2 = .Saturday
+let dayType4 = DayType2.init(rawValue: 102)!
+
+print("\(dayType3)")                //"Saturday"
+print("\(dayType3.rawValue)")       //"101"
+print("\(dayType4)")                //"Sunday"

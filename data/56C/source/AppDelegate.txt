@@ -1,0 +1,203 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTextField* fileNameField;
+@property (weak) IBOutlet NSTextField* mimetypeField;
+@property (weak) IBOutlet NSTextField* titleField;
+@property NSURL *fileURL;
+@end
+
+@implementation AppDelegate
+//アプリケーション起動時
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //ラベルの背景色
+    _fileNameField.drawsBackground = YES;
+    _fileNameField.backgroundColor = [NSColor colorWithCalibratedWhite:0.7 alpha:1.0];
+    _mimetypeField.drawsBackground = YES;
+    _mimetypeField.backgroundColor = [NSColor colorWithCalibratedWhite:0.7 alpha:1.0];
+}
+//upload by multipart
+-(IBAction)btnUpload:(id)sender{
+    //ファイルアップロード
+    NSMutableURLRequest *request = [self uploadByMultipart];
+    [self sendRequest:request];
+}
+//upload by mime
+-(IBAction)btnUpload2:(id)sender{
+    //ファイルアップロード
+    NSMutableURLRequest *request = [self uploadByMIME];
+    [self sendRequest:request];
+}
+//リクエストデータの作成：Content-Type:multipart/form-data
+-(NSMutableURLRequest*)uploadByMultipart{
+    //URL
+    NSURL *url = [NSURL URLWithString:@"http://localhost/50_test/upload_multipart.php"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    //メソッド
+    [request setHTTPMethod:@"POST"];
+    //boudary
+    NSString *boundary = generateRandomString(30);
+    NSData *boundaryData = [ [NSString stringWithFormat:@"--%@\r\n", boundary]
+                            dataUsingEncoding:NSUTF8StringEncoding];
+    //リクエストヘッダ
+    NSString *contentType =
+    [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+    [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
+    //リクエストボディ
+    NSMutableData *body = [NSMutableData data];
+    [body appendData:boundaryData]; //------------------------------------------
+    //説明
+    [body appendData:[@"Content-Disposition: form-data; name=\"title\"\r\n\r\n"
+                      dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[_titleField.stringValue dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:boundaryData]; //------------------------------------------
+    //MAX_FILE_SIZE
+    [body appendData:[@"Content-Disposition: form-data; name=\"MAX_FILE_SIZE\"\r\n\r\n"
+                      dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[@"10000000" dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:boundaryData]; //------------------------------------------
+    //ファイルデータ
+    [body appendData:[[NSString stringWithFormat:
+                       @"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"\r\n",
+                       _fileNameField.stringValue] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n",
+                       _mimetypeField.stringValue] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[NSData dataWithContentsOfURL:_fileURL]];
+    [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:boundaryData]; //------------------------------------------
+    [request setHTTPBody:body];
+    return request;
+}
+//リクエストデータの作成：Content-Type:application/json
+-(NSMutableURLRequest*)uploadByMIME{
+    //URL
+    NSURL *url = [NSURL URLWithString:@"http://localhost/50_test/upload_mime.php"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    //メソッド
+    [request setHTTPMethod:@"POST"];
+    //POSTパラメータの作成
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    dict[@"title"] = _titleField.stringValue;
+    dict[@"MAX_FILE_SIZE"] = @"10000000";
+    //ファイルデータ --> Base64
+    dict[@"file_name"] = _fileNameField.stringValue;
+    dict[@"file_type"] = _mimetypeField.stringValue;
+    NSString *base64Data = [[NSData dataWithContentsOfURL:_fileURL]
+                            base64EncodedStringWithOptions:0];
+    dict[@"mime_data"] = base64Data;
+    NSData *body =  [NSJSONSerialization dataWithJSONObject:dict
+                                                    options:NSJSONWritingPrettyPrinted
+                                                      error:nil];
+    //リクエストヘッダ：受信データ形式
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    //リクエストヘッダ：コンテンツ種別
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //リクエストヘッダ：コンテンツ長(POSTデータのバイト数)
+    [request setValue:[NSString stringWithFormat:@"%ld",[body length]]
+     forHTTPHeaderField:@"Content-Length"];
+    //リクエストヘッダ：メッセージボディ(Jsonデータ)をセット
+    [request setHTTPBody:body];
+    return request;
+}
+//HTTP通信：リクエストの送信・レスポンスの受信
+-(void)sendRequest:(NSMutableURLRequest*)request{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSArray* responseList = nil;
+    //ネットワーク通信オブジェクトの生成（一時セッション）
+    NSURLSessionConfiguration *configuration =
+    [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+    //データの送受信：バックグラウンドで実行する（非同期）
+    NSURLSessionDataTask *task =
+    [session dataTaskWithRequest:request
+               completionHandler:^(NSData * _Nullable data,
+                                   NSURLResponse * _Nullable response,
+                                   NSError * _Nullable error) {
+                   if (error) {
+                       NSLog(@"%@", error);
+                       dispatch_semaphore_signal(semaphore); //taskの終了を通知する
+                       return;
+                   }
+                   NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+                   if (httpResponse.statusCode != 200) {
+                       dispatch_semaphore_signal(semaphore); //taskの終了を通知する
+                       return;
+                   }
+                   //レスポンスデータは、NSData* data に格納されている。
+                   responseList =
+                   [NSJSONSerialization JSONObjectWithData:data
+                                        options:NSJSONReadingMutableContainers
+                                                     error:nil];
+                   dispatch_semaphore_signal(semaphore);
+               }];
+    [task resume];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);  //taskの終了を待つ
+    /*
+    _fileName.stringValue = @"";
+    _mimetype.stringValue = @"";
+    _title.stringValue = @"";
+    */
+    NSString *logText = @"";
+    for(NSString *str in responseList){
+        logText = [logText stringByAppendingString:str];
+    }
+    NSLog(@"%@", logText);
+}
+//ファイルを選ぶ
+-(IBAction)btnOpen:(id)sender{
+    //オープンパネルオブジェクトの生成
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    //パネルの設定
+    [openPanel setCanChooseFiles:YES];         //ファイル選択可能
+    [openPanel setCanChooseDirectories:NO];    //ディレクトリ選択不可
+    [openPanel setAllowsMultipleSelection:NO]; //ファイルを複数選択不可
+    [openPanel setMessage:@"ファイルを開く"];    //ウィンドウのタイトル
+    //選択可能なファイルタイプ
+    //[openPanel setAllowedFileTypes:@[@"txt", @"htm", @"html"]];
+    //最初に位置付けるディレクトリパス
+    NSURL *url = [NSURL URLWithString:
+                  [NSHomeDirectory() stringByAppendingString:@"/Pictures"]];
+    [openPanel setDirectoryURL:url];
+    //オープンパネルを開く（ハンドラ定義）
+    [openPanel beginWithCompletionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton){
+            //OKボタン
+            _fileURL = openPanel.URLs[0];
+            _fileNameField.stringValue =  [[_fileURL path] lastPathComponent];
+            _mimetypeField.stringValue = getMIMEString([_fileURL path]);
+        }
+    }];
+}
+//UTI Type --> MIME Type
+NSString* getMIMEString(NSString* path){
+    NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];
+    NSString *utiStr = [workSpace typeOfFile:path error:nil];
+    CFStringRef utiCStr = (__bridge CFStringRef)utiStr;;
+    CFStringRef mimeCStr = UTTypeCopyPreferredTagWithClass(utiCStr,
+                                                           kUTTagClassMIMEType);
+    return (__bridge_transfer NSString*)mimeCStr;;
+}
+//ランダム文字列の生成
+NSString* generateRandomString(int length) {
+    NSString *chars =
+      @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJLKMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomStr = [NSMutableString string];
+    for (int i=0; i<length; i++) {
+        int index = arc4random_uniform((int)chars.length);
+        [randomStr appendString:[chars substringWithRange:NSMakeRange(index, 1)]];
+    }
+    return randomStr;
+}
+@end

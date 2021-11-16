@@ -1,0 +1,153 @@
+//------------------------------------------------------------------------------
+//  UAView.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "NSView+UAViewDelegate.h"
+@interface UAView : NSView <NSDraggingSource>
+@property NSImage* image;
+@property(weak, nonatomic) id myDelegate;
+@end
+
+
+//------------------------------------------------------------------------------
+//  UAView.m
+//------------------------------------------------------------------------------
+#import "UAView.h"
+//---- 宣言 ----
+@interface UAView()
+@property NSURL *url;
+@end
+//---- 実装 ----
+@implementation UAView
+//イニシャライザ
+-(id)initWithCoder:(NSCoder *)decoder{
+    if(![super initWithCoder:decoder])
+        return nil;
+    self.wantsLayer = YES;
+    self.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+    
+    //ドラッグで受け入れ可能なオブジェクトの種類を指定する
+    NSArray *allowDragTypes= @[@"public.image",
+                               @"public.url"];
+    [self registerForDraggedTypes:allowDragTypes];
+    return self;
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    NSSize viewSize = dirtyRect.size;
+    NSSize imageSize = _image.size;
+    NSSize newSize;
+    if (imageSize.width >= imageSize.height){
+        //横長
+        newSize.width = viewSize.width;
+        newSize.height = imageSize.height * (viewSize.width / imageSize.width);
+        dirtyRect.origin.y = (viewSize.height - newSize.height) /2;
+    }else{
+        //縦長
+        newSize.width = imageSize.width * (viewSize.height / imageSize.height);
+        newSize.height = viewSize.height;
+        dirtyRect.origin.x = (viewSize.width - newSize.width) /2;
+    }
+    dirtyRect.size = newSize;
+    [_image drawInRect:dirtyRect];
+}
+//NSDraggingDestination Delegate -----------------------------------------------
+//ドラッグによりオブジェクトがビューに入る（戻り値を返すことが必須）
+- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender{
+    NSLog(@"draggingEntered");
+    return NSDragOperationGeneric; //戻り値はとりあえずお決まり
+}
+//イメージを読み込む
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)info{
+    [_myDelegate displayNoImage:YES];
+    [_myDelegate writeLabel:@""];
+    _url = nil;
+    //画像イメージを読む
+    self.image = nil;
+    NSArray *objects = [[info draggingPasteboard]
+                        readObjectsForClasses:@[[NSImage class]] options:nil];
+    if (objects.count > 0){
+        //画像あり
+        self.image = [objects objectAtIndex:0];
+        [_myDelegate displayNoImage:NO];
+    }
+    objects = [[info draggingPasteboard]
+               readObjectsForClasses:@[[NSURL class]] options:nil];
+    if (objects.count > 0){
+        //URLあり
+        _url = [objects objectAtIndex:0];
+        [_myDelegate writeLabel:[_url absoluteString]];
+    }
+    //画像なし＆URLあり
+    if (_url && !self.image){
+        NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];
+        NSString *utiType;
+        //URLのuti typeの判定
+        if ([_url getResourceValue:&utiType forKey:NSURLTypeIdentifierKey error:nil]) {
+            //Http:は、utiTypeがnullになり、読めない。
+            if (utiType){
+                //uti typeが image の場合、URL先の画像イメージを読む
+                if ([workSpace type:utiType conformsToType:@"public.image"]) {
+                    NSImage *image = [[NSImage alloc] initWithContentsOfURL:_url];
+                    self.image = image;
+                }else{
+                    self.image = nil;
+                }
+            }else{
+                self.image = nil;
+            }
+        }
+    }
+    [_myDelegate displayNoImage:!self.image];
+    self.needsDisplay = YES;
+    return YES;
+}
+//NSResponder Mouse Event ------------------------------------------------------
+-(void)mouseDown:(NSEvent *)theEvent{
+    //ドラッッグするイメージ・オブジェクトを格納する
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    /*
+      URLオブジェクトとイメージオブジェクトを両方格納してはならない。
+      格納すると、Finderへのドロップを拒否される。
+      URLのみ格納で、他のアプリへドロップしたときイメージの表示は問題ない。
+      URLから画像を読み込んでいるらしい。
+    */
+    if (_url){
+        //URLオブジェクトがあれば格納する
+        [items addObject:[[NSDraggingItem alloc]
+                          initWithPasteboardWriter:_url]];
+    }else{
+        //URLオブジェクトがなく、イメージオブジェクトがあれば、イメージを格納する。
+        [items addObject:[[NSDraggingItem alloc] initWithPasteboardWriter:self.image]];
+    }
+    //ドラッグイメージの作成：カーソルの移動とともに表示される小さな画像
+    NSSize dragImageSize;
+    double rate = self.frame.size.width / self.image.size.width;
+    dragImageSize.width = (self.image.size.width * rate) / 2;
+    dragImageSize.height = (self.image.size.height * rate) / 2;
+    NSPoint dragStratPoint;
+    dragStratPoint.x = (self.frame.size.width / 2.0) - (dragImageSize.width / 2.0);
+    dragStratPoint.y = (self.frame.size.height / 2.0) - (dragImageSize.height / 2.0);
+    NSRect dragRect;
+    dragRect.origin = dragStratPoint;
+    dragRect.size = dragImageSize;
+    [items[0] setDraggingFrame:dragRect contents:self.image];
+    //ドラッグセッションを開始する
+    [self beginDraggingSessionWithItems:items
+                                  event:theEvent source:self];
+}
+//NSDraggingSource Delegate ----------------------------------------------------
+//ドラッグ開始
+-(NSDragOperation)draggingSession:(NSDraggingSession *)session
+sourceOperationMaskForDraggingContext:(NSDraggingContext)context{
+    NSLog(@"* draggingSession");
+    return NSDragOperationCopy;
+}
+//ドロップ後
+- (void)draggingSession:(NSDraggingSession *)session
+           endedAtPoint:(NSPoint)screenPoint
+              operation:(NSDragOperation)operation{
+    NSLog(@"* endedAtPoint");
+}
+@end

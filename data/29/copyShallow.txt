@@ -1,0 +1,8 @@
+//配列の作成
+AClass *obj1 = [[AClass alloc] init...];
+AClass *obj2 = [[AClass alloc] init...];
+NSMutableArray<AClass*> *arrayA = [@[obj1, obj2] mutableCopy];
+NSMutableArray<AClass*> *arrayB;
+arrayB = [arrayA mutableCopy]; //オブジェクト変数をコピーする（メソッド名注意）
+arrayA[0].number = 123;        //要素の更新：arrayB[0]も更新する
+arrayA = nil;                  //arrayBは影響を受けない

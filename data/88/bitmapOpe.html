@@ -1,0 +1,93 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビットマップを操作してイメージをグレースケールにする</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm40 tm20 bm0">
+ビットマップを操作してイメージをグレースケールにする
+</h2>
+
+<div class="lm70 tm5 rm60">
+イメージファイル（jpeg, png）を読み込み、ビットマップ操作によりイメージをグレースケール化し画面に表示する。また、変換後のイメージをpngファイルとして出力する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/88/bitmapOpe1.png?title=GraphicTool1&width=640" target="_new">
+<img class="lm100 tm20 bm0" src="bitmapOpe1.png" alt="[GraphicTool1]" width="400"></a>
+<div class="lm110 tm20 rm60">
+元のイメージ
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/88/bitmapOpe2.png?title=GraphicTool1&width=640" target="_new">
+<img class="lm100 tm0 bm0" src="bitmapOpe2.png" alt="[GraphicTool1]" width="400"></a>
+
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+データフロー図
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/88/bitmapOpe3.png&title=データフロー図&width=700" target="_new">
+<img class="lm70 tm0 " src="bitmapOpe3.png" alt="[データフロー図]" width="550"></a>
+
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+実装のポイント
+</h3>
+
+<div class="lm70 tm5 rm60">
+イメージファイル（jpeg, png）を読み込み、CGImageオブジェクトに変換する
+</div>
+
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/88/bitmapOpe1.txt&font=font100" width="580" height="320"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+イメージのグレースケール化
+</h3>
+<div class="lm70 tm0 rm60">
+CGImageオブジェクトからビットマップコンテキストを作成する。ビットマッップの各ピクセルからRGB要素を取得し、グレースケールを計算した後、RGB値に描き戻す。ビットマップのRGB値への参照は、bindMemoryメソッドを使用して、Cポインタ経由で行う。よって unsafe である。グレースケールを求める係数はいくつかあり、ここでは、HDTV係数を使用している。他には、NTSC係数などがある。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/88/bitmapOpe2.txt&font=font100" width="580" height="640"></iframe>
+
+<div class="lm70 tm20 rm60">
+CGImageオブジェクトをpng形式のファイルに出力する
+</div>
+
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/88/bitmapOpe3.txt&font=font100" width="580" height="90"></iframe>
+
+
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+ソースコード
+</h3>
+
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/88/source/AppDelegate.swift&title=AppDelegate" target="_new">AppDelegate.swift</a>
+</div>
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/88/source/UAView.swift&title=UAView" target="_new">UAView.swift</a>
+</div>
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

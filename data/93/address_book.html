@@ -1,0 +1,191 @@
+<!-- 
+
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title> アドレス帳（Contacts like）</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10"> アドレス帳（Contacts like）</h2>
+<div class="lm70 tm0 rm60">
+macOS Mojave 10.14.6 / Xcode 11.3.1 / Swift 5
+</div>
+
+
+<div class="table lm70 tm20 rm60">
+<div class="table_cell">
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/93/address_book0.png&title=address_book0&width=400" target="_new">
+<img class="lm10 tm0 bm0" src="/data/93/address_book0.png" alt="[address_book0]" width="250"></a>
+</div>
+<div class="table_cell">
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/93/address_book1.png&title=address_book1&width=400" target="_new">
+<img class="lm30 tm0 bm0" src="/data/93/address_book1.png" alt="[address_book1]" width="250"></a>
+</div>
+</div>
+    
+
+<h2 class="lm70 tm20 bm0 rm60">
+機能
+</h2>
+<div class="lm70 tm5 rm60">
+iPhoneアプリのCopntacts（連絡先）と同じような動きをするアプリを作ってみた。
+</div>
+<div class="lm70 tm5 rm60">
+連絡先の一覧を表示する。連絡先を編集し、名前、郵便番号、住所、および既存の電話番号とメールアドレスを変更することができる。電話番号とメールアドレスの追加と削除ができる。
+</div>
+<div class="lm70 tm10 rm60">
+以下、実装に工夫をこらしたので注目して欲しいところを示す。
+</div>
+<h2 class="lm70 tm20 rm60 bm0">
+キーボードに隠れた入力コントロールをスクロールして表示する
+</h2>
+<div class="lm70 tm5 rm60">
+キーボードを表示したとき、テキストフィールドがキーボードにより隠れる場合は、スクロールビューを上方にスクロールしてテキストフィールを表示し入力できるようにする。
+</div>
+
+<div class="table lm70 tm20 rm60">
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/93/address_book2.mp4&title=address_book2&width=400" target="_new">
+<img class="lm10 tm0 bm0" src="/data/93/address_book2.png" alt="[address_book2]" width="250"></a>
+</div>    
+
+<h3 class="lm70 tm20 rm60 bm0">
+実装のポイント
+</h3>    
+<div class="lm70 tm5 rm60">
+入力コントロール（テキストフィールド、テキストビュー）は上下に移動させるため、スクロールビューの上に貼り付ける。
+テキストを入力するためコントロールをタップするとその時点でキーボードが現れる。このとき、入力中のコントロールの高さ（ベースビューを基準としたY座標）とキーボードの高さ（同Y座標）を求め、コントロールがキーボードに隠れる場合は、コントロールが現れて入力可能となる高さまでスクロールビューを上方にスクロールする。
+</div>
+<div class="lm70 tm10 rm60">
+ベースビューを基準にしたコントロールのY座標は、スクロールビューのY座標 − スクロールビューのオフセット ＋ テキストフィールドのY座標となる
+</div>
+<div class="lm70 tm10 rm60">
+なお、テキストフィールドがテーブルビューのセルの一部になっている場合は、
+</div>
+<div class="lm70 tm0 rm60">
+Y座標は、スクロールビューのY座標 − スクロールビューのオフセット ＋ テーブルビューのY座標 ＋ テーブルビューセルのY座標となる
+</div>
+<div class="lm70 tm20 rm60">
+テキストフィールドの入力開始時　ViewControllerDetail.swift
+</div>
+
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/93/code1.txt&font=font90" width="580" height="450"></iframe>
+
+<div class="lm70 tm20 rm60">
+Y方向へのスクロールの値は、（コントロールのY座標 − キーボードのY座標） ＋ コントロールの高さ ＋ スクロールビューのオフセットとなる。
+</div>
+
+<div class="lm70 tm10 rm60">
+キーボードが開いたとき　ViewControllerDetail.swift
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/93/code2.txt&font=font90" width="580" height="480"></iframe>
+
+<h2 class="lm70 tm20 rm60 bm0">
+テーブルビューのセルの削除の確認
+</h2>
+<div class="lm70 tm5 rm60">
+既存の電話番号またはメールアドレスを削除ボタンをタップして削除しようとしたとき、削除確認用のボタンがスライドして出てくる。ボタンをタップすれば当該レコードは削除され、ボタン以外のどこかをタップすれば処理はキャンセルされる。
+</div>
+
+<div class="table lm70 tm20 rm60">
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/93/address_book3.mp4&title=address_book3&width=400" target="_new">
+<img class="lm10 tm0 bm0" src="/data/93/address_book3.png" alt="[address_book3]" width="250"></a>
+</div>	
+
+<h3 class="lm70 tm20 rm60 bm0">
+実装のポイント
+</h3>    
+<div class="lm70 tm5 rm60">
+この仕様の課題は削除確認用のボタン以外の場所をタップしたとき、それがどのコントロール上であろうと、削除処理をキャンセルできるようにすることである。私の解は次の通り。削除処理の前処理でベースのビューと同じ大きさの透明なカスタムビューを表示し、タップイベントを待ち受ける。タップされた位置が削除確認用のボタンの中か外かで処理を切り分ける。ボタンの中であればクロージャに定義されたテーブルビューのセルの削除を実行し、外であれば処理をキャンセルする。削除確認用のボタンは、イベントの待受を行わない、単に表示のみのビューである。
+</div>
+
+<div class="lm70 tm20 rm60">
+テーブルビューセルのカスタムクラス　UATableViewCell.swift
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/93/code3.txt&font=font90" width="580" height="260"></iframe>
+
+<div class="lm70 tm20 rm60">
+ビューコントローラ・テーブルビューセルのデリゲートになる　ViewControllerDetail.swift
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/93/code4.txt&font=font90" width="580" height="450"></iframe>
+
+<div class="lm70 tm20 rm60">
+応答受け付けビュー　UAConfirmView.swift
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/93/code5.txt&font=font90" width="580" height="280"></iframe>
+
+
+<h2 class="lm70 tm20 rm60 bm0">
+更新ボタンの有効化/無効化
+</h2>
+<div class="lm70 tm5 rm60">
+テキストを変更した時点で変更後テキストと初期表示のテキストを比較し、変更があった場合にナビゲーションバーの更新ボタンを有効化する。テキストを変更した結果、初期表示と同じになる場合は、更新の必要がないのでボタンは無効化する。
+</div>
+
+<div class="table lm70 tm20 rm60">
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/93/address_book4.mp4&title=address_book4&width=400" target="_new">
+<img class="lm10 tm0 bm0" src="/data/93/address_book4.png" alt="[address_book4]" width="250"></a>
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+実装のポイント
+</h3>   
+<div class="lm70 tm5 rm60">
+テキストフィールドおよびテキストビューに文字が１文字入力または削除されたタイミングで起動するメソッドを作成する。その中で初期値と入力された値の比較により変更の有無を判定し、更新ボタンの有効/無効化を行う。
+</div>
+<div class="lm70 tm20 rm60">
+テキストフィールドは、UIViewクラスの addTargetメソッドの action引数にメソッドを指定する。このメソッドは for引数の指定により、テキストフィールドの値が変更されるたびに呼び出される。
+</div>
+<div class="lm70 tm10 rm60">
+ViewControllerDetail2.swift
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/93/code6.txt&font=font90" width="580" height="290"></iframe>
+
+
+<div class="lm70 tm20 rm60">
+テキストビューは、UITextViewDelegateの textViewDidChangeメソッドを実装する、
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/93/code7.txt&font=font90" width="580" height="150"></iframe>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/ios_i02_AddressBook" target="_new">mikomokaru-jpn/ios_i02_AddressBook</a>
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+ビュー構造図（ViewControllerDetail）
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/ata/93/view_structure.png&title=ビュー構造図&width=1000" target="_new">
+<img class="lm50 tm0 bm0" src="/data/93/view_structure.png" alt="[ビュー構造図]" width="600"></a>
+
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index8.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>

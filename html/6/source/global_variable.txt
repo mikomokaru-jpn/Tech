@@ -1,0 +1,30 @@
+//-------------------------------------------------------------------
+//変数を定義する側　
+//-------------------------------------------------------------------
+//---- AppDelegate.h ----
+NSString *globalMessage;  //クラス宣言の外側でグローバル変数を宣言する
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+...
+@end
+//---- AppDelegate.h ----
+@interface AppDelegate ()
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    globalMessage = @"おはようございます";
+    AClass *obj = [[AClass alloc] init];
+}
+@end
+
+//-------------------------------------------------------------------
+//変数を利用する側　AClass.m 
+//-------------------------------------------------------------------
+extern NSString *globalMessage;　//グローバル変数の利用を宣言
+@implementation AClass
+-(id)init{
+    if (![super init]){
+        return nil;
+    }
+    NSLog(@"グローバル変数: %@", globalMessage);
+    return self;
+}
+@end

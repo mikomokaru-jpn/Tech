@@ -1,0 +1,19 @@
+//text を keyword で検索する。
+//結果は、3件マッチする。
+NSString* text = @"_____XYZ___XYZ__XY_Z____XYZ";
+NSString* keyword = @"XYZ";
+
+NSRange range= NSMakeRange(0, 0);
+NSRange result = NSMakeRange(0, 0);
+int resultCount = 0;
+do{
+    range.location = result.location+result.length;
+    range.length = [text length] - (result.location+result.length);
+    result = [text rangeOfString:keyword
+                         options:NSLiteralSearch
+                           range:range];
+    if(result.location != NSNotFound){
+        resultCount++;
+    }
+} while(result.location != NSNotFound);
+NSLog(@"Mathced:%d", resultCount);

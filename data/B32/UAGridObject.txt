@@ -1,0 +1,4 @@
+if let closure = gridColList[j].dynamicForeColor2{
+    let color = closure(dataRecord)
+    itemView.foreColor = self.setColor(color)
+}

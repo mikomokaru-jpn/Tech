@@ -1,0 +1,154 @@
+<!-- 
+NewPractice/57 graphicEditor1
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>CALayerクラスを使用した簡単な図形描画ツール</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">CALayerクラスを使用した簡単な図形描画ツール</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor1.png&title=graphic_editor1&width=600" target="_new">
+<img class="lm200 tm10 bm0" src="graphic_editor1.png" alt="[graphic_editor1]" width="300"></a>
+<!-- 動画 -->
+<h3 class="lm100 tm20 bm0 rrm60">
+<a href="/lib/HTMLofVideo.html?filename=/data/75/graphic_editor1.mp4&title=graphic_editor1_1&width=700" target="_new">
+サンプル動画
+</a>
+</h3>
+<h3 class="lm100 tm10 bm0 rm60">
+図形を描画する
+</h3>
+<div class="lm100 tm0 rm60">
+四角形のCShapeALayerオブジェクトを作成し、addSublayerメソッドでビューに追加する。作成した図形をクリックすれば選択状態（赤線で囲まれる）になり、以下の操作を行うことができる。図形の外側をクリックすれば選択状態は外れる。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+図形を移動する
+</h3>
+<div class="lm100 tm0 rm60">
+四角形を選んでドラッグすれば任意の場所まで移動することができる。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+図形を拡大・縮小する
+</h3>
+<div class="lm100 tm0 rm60">
+四角形の縦の線をドラッグして図形を水平方向に拡大縮小する。
+</div>
+<div class="lm100 tm0 rm60">
+四角形の横の線をドラッグして図形を垂直方向に拡大縮小する。
+</div>
+<div class="lm100 tm0 rm60">
+四角形の四隅をドラッグして図形を水平/垂直方向に拡大縮小する。
+</div>
+<div class="lm100 tm20 bm0 rm60">
+実装のポイント
+</div>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm100 tm5 bm0 rm60">
+四角形を描画する
+</h3>
+<div class="lm100 tm0 rm60">
+本アプリケーションでは、一つの矩形に一つのUAShapeItemクラスのオブジェクトを割り当てる。このクラスは CAShapeLayerオブジェクトを保持し、各種の描画操作を実装する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/UAShapeItem.h" width="550" height="630"></iframe>
+<div class="lm100 tm10 rm60">
+矩形のCAShapeLayerオブジェクトを作成するには、NSBezierPathオブジェクトにより矩形を作成し、それをCAShapeLayerオブジェクトのpathプロパティにセットする。矩形の表示位置は、オブジェクトを貼り付ける親ビューの座標で定義する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/shapeCreating.txt" width="550" height="240"></iframe>
+<div class="lm100 tm10 rm60">
+CAShapeLayerオブジェクトをビューに表示するには、親ビューのレイヤーにオブジェクトを追加する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/addSublayer.txt" width="550" height="50"></iframe>
+<div class="lm100 tm10 rm60">
+消去するには、CAShapeLayerオブジェクトのremoveFromSuperlayerメソッドを呼ぶ。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/remove.txt" width="550" height="50"></iframe>
+<h3 class="lm100 tm20 bm0 rm60">
+四角形の移動、拡大/縮小
+</h3>
+<div class="lm100 tm5 rm60">
+四角形の形状は、原点の位置および幅と高さで決まる。四角形を表すオブジェクトはこれを属性として持つ。
+</div>
+<div class="lm100 tm10 rm60">四角形の移動は、ドラッグの方向と距離に応じて四角形の原点を移動することである。    
+</div>
+<div class="lm100 tm10 rm60">四角形の拡大/縮小は、ドラッグの方向と距離に応じて、四角形の幅と高さを変更することである。ただし四角形の原点は四角形を描画したときの開始点であるため、四隅のうちのどれか一つとなる。したがって次の図に示すように、四角形の拡大/縮小の方向によっては原点の位置を移動させる必要があり、実装が少し複雑になる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor2.png&title=graphic_editor2&width=800" target="_new">
+<img class="lm90 tm10 bm0" src="graphic_editor2.png" alt="[graphic_editor2]" width="550"></a>
+<h3 class="lm100 tm10 bm0 rm60">
+クラス関連図
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor3.png&title=graphic_editor3&width=800" target="_new">
+<img class="lm90 tm0 bm0" src="graphic_editor3.png" alt="[graphic_editor3]" width="550"></a>
+
+<h3 class="lm100 tm0 bm0 rm60">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rrm60">
+<a href="/lib/HTMLofText.html?filename=/data/75/source/UAView.txt&title=UAView" target="_new">UAView</a>
+</div>
+<div class="lm100 tm5 rrm60">
+<a href="/lib/HTMLofText.html?filename=/data/75/source/UAShapeManager.txt&title=UAShapeManager" target="_new">UAShapeManager</a>
+</div>
+<div class="lm100 tm5 rrm60">
+<a href="/lib/HTMLofText.html?filename=/data/75/source/UAShapeItem.txt&title=UAShapeItem" target="_new">UAShapeItem</a>
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+イベントとハンドラの関連
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor4.png&title=graphic_editor4&width=900" target="_new">
+<img class="lm90 tm0 bm0" src="graphic_editor4.png" alt="[graphic_editor4]" width="550"></a>
+<h3 class="lm100 tm20 bm0 rm60">
+操作方法：図中の番号は上記の関連表の番号と対応する
+</h3>
+<table border='0' class="lm90 tm5 bm0">
+<tr>
+<td>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor5.png&title=graphic_editor5&width=500" target="_new">
+<img src="graphic_editor5.png" alt="[graphic_editor5]" width="250"></a>
+</td>
+<td>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor6.png&title=graphic_editor6&width=500" target="_new">
+<img class="lm20" src="graphic_editor6.png" alt="[graphic_editor6]" width="250"></a>
+</td>
+</tr>
+<tr>
+<td valign="top" >
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor7.png&title=graphic_editor7&width=500" target="_new">
+<img class="tm10" src="graphic_editor7.png" alt="[graphic_editor7]" width="250"></a>
+</td>
+<td>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor8.png&title=graphic_editor8&width=500" target="_new">
+<img class="tm10 lm20" src="graphic_editor8.png" alt="[graphic_editor8]" width="280"></a>
+</td>
+</tr>
+</table>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

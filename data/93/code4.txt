@@ -1,0 +1,25 @@
+//テーブルビューのセルの削除確認時、応答を受け付けるビュー
+let confirmView = UAConfirmView()  
+
+//テーブルビューセルの削除の準備
+func deletePrepare(_ sender: UATableViewCell) {
+    let tag = sender.tag
+    let index = sender.index
+    //応答受け付けビューを表示・self.vewと同サイズ
+    confirmView.frame = scrollcontent.frame  
+    //クロージャの実装
+    confirmView.clousure = {(point: CGPoint) in
+        //削除確認ボタンの位置とサイズを求める
+        let deleteViewPoint = sender.convert(sender.deleteAgree.frame.origin,
+                                             to: self.scrollcontent)
+        let rect = CGRect(origin: deleteViewPoint, 
+                            size: sender.deleteAgree.frame.size)
+        if rect.contains(point){
+            //削除確認ボタンの中をタッチされていたらセルの削除を実行する
+            self.deleteCell(tag: tag, index: index)
+            sender.resetLayout()
+        }
+        sender.resetLayout()
+        self.confirmView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+    }
+}

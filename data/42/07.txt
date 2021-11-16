@@ -1,0 +1,6 @@
+NSURL *url = ...; //イメージファイルパス
+NSImage *image = [[NSImage alloc] initWithContentsOfFile:url.path];
+NSRect imageRect = NSMakeRect(0, 0, image.size.width, image.size.height);
+CGImageRef cgImage = [image CGImageForProposedRect:&imageRect
+                                           context:NULL hints:nil];
+NSLog(@"%@", cgImage);

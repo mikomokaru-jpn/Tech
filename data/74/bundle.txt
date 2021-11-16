@@ -1,0 +1,2 @@
+NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+//*** NSBundle *bundle = [NSBundle mainBundle]; では読めない。***

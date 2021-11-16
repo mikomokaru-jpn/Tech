@@ -1,0 +1,10 @@
+let text2 = "謹賀新年"
+let font2 = NSFont.init(name:"HiraginoSans-W3", size:40)
+    ?? NSFont.systemFont(ofSize: 12)
+let attributedText2 = NSMutableAttributedString.init(
+                      string: text2,
+                      attributes: [.font : font2])
+//属性の追加
+attributedText2.addAttributes([.foregroundColor: NSColor.red],
+                              range: NSMakeRange(1, 1))
+self.textField2.attributedStringValue = attributedText2

@@ -1,0 +1,15 @@
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    
+//  ビューコンテキストを取得する。
+    CGContextRef myContext = 
+        [[NSGraphicsContext currentContext] graphicsPort];
+
+//  イメージを表示するコンテキストの領域（位置と大きさを）定義する。
+    CGRect rect = CGRectMake(0, 0, _xLength, _yLength);
+    
+//  ビューコンテキストにイメージを書き出す。
+//  imageのサイズがrectと異なる場合、rectに合わせて拡大・縮小される。
+    CGImageRef image = ....; 
+    CGContextDrawImage(context, rect, image);
+}

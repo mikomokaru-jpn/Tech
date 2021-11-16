@@ -1,0 +1,3 @@
+- (void)concludeDragOperation:(id<NSDraggingInfo>)sender{
+    //some operation
+}

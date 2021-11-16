@@ -1,0 +1,9 @@
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| id      | int(11)    | NO   | PRI | NULL    |       |  MyNumber
+| date    | int(11)    | NO   | PRI | NULL    |       |  日付  YYYYMMDD
+| lower   | int(11)    | YES  |     | NULL    |       |  最低血圧
+| upper   | int(11)    | YES  |     | NULL    |       |  最高血圧
+| confirm | tinyint(1) | YES  |     | NULL    |       |  確定フラグ
++---------+------------+------+-----+---------+-------+

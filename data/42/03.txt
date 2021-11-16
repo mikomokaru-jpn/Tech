@@ -1,0 +1,7 @@
+//  取り出す部分イメージの位置と大きさ（rect）を定義する
+    CGRect rect = CGRectMake(xPos, yPos,
+                             xLength, yLength);
+
+//  イメージを切り出し新しいイメージを作成する
+    CGImageRef partImage = 
+      CGImageCreateWithImageInRect(originalImage, rect);

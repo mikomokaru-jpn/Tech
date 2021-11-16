@@ -1,0 +1,2 @@
+~/local/include/UADateUtil.h
+~/local/lib/libSimpleDate.a

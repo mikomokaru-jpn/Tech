@@ -1,0 +1,17 @@
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import <MyCalendar/UAView.h> //フレームワークをインポートする
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property UAView *uaView;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //フレームワークが提供するカレンダービュークラスのオブジェクトを生成する
+    _uaView = [[UAView alloc] initWithPoint:NSMakePoint(30, 30)];
+    //ウィンドウにカレンダーを表示する。
+    [[_window contentView] addSubview:_uaView];
+}
+@end

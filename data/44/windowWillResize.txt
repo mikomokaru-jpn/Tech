@@ -1,0 +1,20 @@
+@property NSSize myMinSize; //最小ウィンドウサイズ
+@property NSSize myMaxSize; //最大ウィンドウサイズ
+
+ - (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)inSize
+ {
+     NSSize outSize = inSize;                //現在のサイズ
+     if (inSize.width < _myMinSize.width){   //幅が最小値より小さくなった
+         outSize.width = _myMinSize.width;   //幅を最小値に戻す
+     }
+     if (inSize.height < _myMinSize.height){ //高さが最小値より小さくなった
+         outSize.height = _myMinSize.height; //高さを最小値に戻す
+     }
+     if (inSize.width > _myMaxSize.width){   //幅が最大値より大さくなった
+         outSize.width = _myMaxSize.width;   //幅を最大値に戻す
+     }
+     if (inSize.height > _myMaxSize.height){ //高さが最大値より大さくなった
+         outSize.height = _myMaxSize.height; //高さを最大値に戻す
+     }
+     return outSize;                         //新しいサイズを返す
+ }

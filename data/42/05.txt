@@ -1,0 +1,16 @@
+@property  NSInteger timeCount;
+@property  double elapseSec;
+
+-(void)displayRandomlyStart:(NSTimer*)tm
+{    ....
+    //-------------------------------------------------
+    // バインドした変数の変化を監視する。
+    // 値が変化するとバインド先のコントロール値に即時に反映する
+    //-------------------------------------------------
+    [self willChangeValueForKey:@"timeCount"];
+    [self willChangeValueForKey:@"elapseSec"];
+    _timeCount++;                                          //回数
+    _elapseSec = floor((SKTSPLIT()+accumeSec)*100)/100;;   //経過時間
+    [self didChangeValueForKey:@"timeCount"];
+    [self didChangeValueForKey:@"elapseSec"];
+}

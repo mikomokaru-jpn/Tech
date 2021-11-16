@@ -1,0 +1,131 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Elapse測定 〜マルチスレッド対応、C言語で作成〜</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">
+Elapse測定 〜マルチスレッド対応、C言語で作成〜
+</h2>
+<div class="lm100 tm10 rm60">
+プログラムコードにC言語関数を埋め込み、特定のプログラムコードの処理時間を測定する。C言語のソースファイル（UAElapse.h/m）として提供する。使用者はヘッダファイルをインクルードして使用する
+</div>
+<div class="lm100 tm20 rm60">
+測定に使用する時刻は、C言語POSIXライブラリの clock_gettime関数（CLOCK_REALTIME）で得る。なお、秒未満の値の制度システム環境に依存する。関数の仕様上ナノ秒まで計測できるよう定義されてているが、筆者のMacBook Proでは、最小単位は 1000ナノ秒(1マイクロ秒)である。
+</div>
+<!------------------------------------------------------------------------------>
+<h4 class="lm100 tm20 bm0 rm60">
+ストップウォッチ機能：ラップタイム計測
+</h4>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+チェックポイントごとの間隔（秒数）を計算し、double型の変数として戻す。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/40/40_elapse1.png&title=ラップタイム&width=700" target="_new">
+<img class="lm130 tm10 bm5" src="40_elapse1.png" width="400" align="top" alt="ラップタイム" >
+</a>
+<div class="lm100 tm20 rm60">
+サンプルコード
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm0 bm10" src="/lib/HTMLofText.html?filename=/data/40/stop_watch_lap.txt&font=font100" width="550" height="180">
+</iframe>
+<!------------------------------------------------------------------------------>
+<h4 class="lm100 tm20 bm0 rm60">
+ストップウォッチ機能：スプリットタイム計測
+</h4>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+開始時刻からの累積時間（秒数）を計算し、double型の変数として戻す。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/40/40_elapse2.png&title=スプリットタイム&width=700" target="_new">
+<img class="lm130 tm10 bm5" src="40_elapse2.png" width="400" align="top" alt="スプリットタイム" >
+</a>
+<div class="lm100 tm20 rm60">
+サンプルコード
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm0 bm10" src="/lib/HTMLofText.html?filename=/data/40/stop_watch_split.txt&font=font100" width="550" height="180">
+</iframe>
+<div class="lm100 tm10 rm60">
+ストップウォッチ機能は、マルチスレッド処理に対応していない。マルチスレッドで実行した場合、時刻の開始と終了の組み合わせが、スレッッド間で入り繰ってしまう。正しい経過時間を取得するためには、処理ごとにスレッッドIDを特定し、処理をグループ化する必要がある。
+</div>
+<!------------------------------------------------------------------------------>
+<h4 class="lm100 tm20 bm0 rm60">
+経過時間の計測（マルチスレッッド対応）
+</h4>
+<div class="lm100 tm0" style="width:530px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+１. チェックポイントごとにログ出力処理を埋め込む
+</div>
+<div class="lm100 tm5 rm60">
+時刻、スレッドIDを記録したログを作成し、static領域に作成した測定データテーブルに追加する。
+</div>
+<div class="lm100 tm10 rm60">
+２. 最後に処理時間の計算を行う
+</div>
+<div class="lm100 tm5 rm60">
+作成したログをスレッッドIDでソートし、スレッドごとに処理時間を計算し、結果を標準出力に出力（printf）する。処理時間は、ログ出力とログ出力の間隔となる。（ラップタイムと同じ）
+</div>
+<div class="lm100 tm5 rm60">
+この操作は、全てのログ出力が終わってから実行すること。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/40/40_elapse3.png&title=マルチスレッド対応&width=900" target="_new">
+<img class="lm130 tm10 bm5" src="40_elapse3.png" width="520" align="top" alt="マルチスレッド対応" >
+</a>
+<div class="lm100 tm20 rm60">
+サンプルコード
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm0 bm10" src="/lib/HTMLofText.html?filename=/data/40/log.txt&font=font100" width="550" height="500">
+</iframe>
+<!------------------------------------------------------------------------------>
+<h4 class="lm100 tm20 bm0 rm60">
+Cソースファイル
+</h4>
+<div class="lm100 tm5 rm60">
+関数の宣言
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/40/UAElapse.h.txt&font=font100" width="550" height="220">
+</iframe>
+<div class="lm100 tm5 rm60">関数の本体　
+<a href="/lib/HTMLofText.html?filename=/data/40/source/UAElapse.m.txt&title=UAElapse.m" target="_new">UAElapse.m</a>
+</div>
+<h4 class="lm100 tm20 bm0 rm60">
+ログ出力処理の直列化
+</h4>
+<div class="lm100 tm5 rm60">
+本処理では、ログを出力するテーブルは、ログの件数の増加に従って、メモリを動的に確保する方法をとる。
+</div>
+<div class="lm100 tm5 rm60">
+ログ出力処理は、件数の確認→必要ならメモリを確保→ログの追加→件数のインクリメントというステップを踏むが、これはスレッッドごとに不可分な処理（atomic）でなければならない。そのために、ログ出力処理は、GCD機能のシリアルキューを利用したトランザクション処理とする。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm10 bm10" src="/lib/HTMLofText.html?filename=/data/40/registerLogt.txt&font=font100" width="550" height="460">
+</iframe>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+

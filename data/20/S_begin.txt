@@ -1,0 +1,36 @@
+-(void)mouseDown:(NSEvent *)theEvent{
+    //ドラッッグするイメージ・オブジェクトを格納する
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    /*
+      URLオブジェクトとイメージオブジェクトを両方格納してはならない。
+      格納すると、Finderへのドロップを拒否される。
+      URLのみ格納で、他のアプリへドロップしたときイメージの表示は問題ない。
+      URLから画像を読み込んでいるらしい。
+    */
+    if (_url){
+        //URLオブジェクトがあれば格納する
+        [items addObject:[[NSDraggingItem alloc]
+                          initWithPasteboardWriter:_url]];
+    }else{
+        //URLオブジェクトがなく、イメージオブジェクトがあれば、イメージを格納する。
+        [items addObject:[[NSDraggingItem alloc] 
+                          initWithPasteboardWriter:self.image]];
+    }
+    //ドラッグイメージの作成
+    NSSize dragImageSize;
+    double rate = self.frame.size.width / self.image.size.width;
+    dragImageSize.width = (self.image.size.width * rate) / 2;
+    dragImageSize.height = (self.image.size.height * rate) / 2;
+    NSPoint dragStratPoint;
+    dragStratPoint.x = 
+        (self.frame.size.width / 2.0) - (dragImageSize.width / 2.0);
+    dragStratPoint.y =
+        (self.frame.size.height / 2.0) - (dragImageSize.height / 2.0);
+    NSRect dragRect;
+    dragRect.origin = dragStratPoint;
+    dragRect.size = dragImageSize;
+    [items[0] setDraggingFrame:dragRect contents:self.image];
+    //ドラッグセッションを開始する
+    [self beginDraggingSessionWithItems:items
+                                  event:theEvent source:self];
+}

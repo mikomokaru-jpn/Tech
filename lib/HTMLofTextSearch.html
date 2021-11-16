@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>source</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body>
+<h3 class="tm0 bm0">
+<!-- 題名 -->
+</h3>
+<pre class="tm5"><code>
+<!-- text -->
+</pre></code>
+
+<script type="text/javascript">
+var url = new URL(window.location.href);
+//GET引数の取得
+var params = url.searchParams;
+var filename = params.get('filename');
+var title = params.get('title');
+var font = params.get('font');
+var keywords = params.getAll('keyword');
+var caseFlag = params.get('case');
+
+
+//タグの参照
+const titleTag = document.querySelector('title'); 
+const hTag = document.querySelector('h3'); 
+const preTag = document.querySelector('pre'); 
+if (title != null){
+    titleTag.innerHTML = title;
+    hTag.innerHTML = title;
+}
+let request = new XMLHttpRequest()
+request.open('GET', filename, true);
+request.send(filename);
+request.onload = function(){ 
+    if (request.readyState == 4 && request.status == 200){       
+        let text = request.responseText;
+        text = text.replace(/</g, "&lt");   
+        text = text.replace(/>/g, "&gt");    
+
+        //ハイライト設定
+        const x = "CGContextRef";
+        const y = "a";
+        //検索語の編集・配列化
+        let keywordList = "";
+        for (let i = 0; i < keywords.length; i++){
+            if (i == 0){
+                keywordList += keywords[i];
+            }else{
+                keywordList += "|" + keywords[i];
+            }
+        }
+        //ハイライト設定 by 正規表現
+        let flags = "";
+        if (caseFlag == "NO"){
+            flags = "ig";
+        }else{
+            flags = "g";
+        }
+        let regexp =  new RegExp("(" + keywordList + ")", flags);
+        text = text.replace(regexp, '<span class="bkYellow">$1</span>');
+        preTag.innerHTML = text;
+         if (font == null){
+            preTag.classList.add("font120");
+        }else{
+            preTag.classList.add(font); 
+        }
+    }
+}
+</script>
+
+</body>
+</html>

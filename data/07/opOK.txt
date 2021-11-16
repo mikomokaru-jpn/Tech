@@ -1,0 +1,1 @@
+-(IBAction)opOK:(id)sender{    NSColor* color = [_colorWell color];    //メソッドの存在チェック    if ([_ccDelegate respondsToSelector:@selector(changeColorByButton:)]){        //メソッドの起動        [_ccDelegate changeColorByButton:color];     }else{        NSLog(@"changeColorByButton: not registered");    }    [self.window close];}

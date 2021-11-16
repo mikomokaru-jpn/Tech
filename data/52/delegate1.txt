@@ -1,0 +1,27 @@
+- (BOOL)control:(NSControl *)control
+       textView:(NSTextView *)textView
+doCommandBySelector:(SEL)command{
+    //テキストフィールドオブジェクトの取得
+    UATextField *textField = (UATextField *)control;
+    if (command == @selector(insertNewline:)){
+        //ニューメリックチェック
+        NSCharacterSet *inputCharSet = [NSCharacterSet 
+            characterSetWithCharactersInString:textView.string];
+        NSCharacterSet *digitCharSet = [NSCharacterSet 
+            characterSetWithCharactersInString:@"0123456789"];
+        if ([digitCharSet isSupersetOfSet:inputCharSet]){
+            //数値ならデータの更新
+            NSMutableArray *result = _resultList[textField.teamName];
+            if ([textField.identifier isEqualToString:@"win"]){
+                result[0] = @(textView.string.intValue);
+            }else if ([textField.identifier isEqualToString:@"lose"]){
+                result[1] = @(textView.string.intValue);
+            }else if ([textField.identifier isEqualToString:@"draw"]){
+                result[2] = @(textView.string.intValue);
+            }
+        }else{
+            NSLog(@"数値以外が含まれています.");
+        }
+    }
+    return NO;
+}

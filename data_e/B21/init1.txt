@@ -1,0 +1,7 @@
+class MyClass: NSObject {
+    var value:Int      //プロパティ  
+    //イニシャライザ
+    override init() {
+        value = 100    //プロパティの初期化
+    }
+}

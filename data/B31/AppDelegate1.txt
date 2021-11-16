@@ -1,0 +1,10 @@
+//<<< 列の定義 >>>
+//日付
+gridCol1.sort = true
+gridCol1.initialSort = .ascending
+
+//最低血圧
+gridCol2.sort = true
+
+//最高血圧
+gridCol3.sort = true

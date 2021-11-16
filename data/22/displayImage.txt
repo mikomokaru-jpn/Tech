@@ -1,0 +1,5 @@
+NSTableCellView *cellView = 
+    [tableView makeViewWithIdentifier:column.identifier owner:self];
+((IconView *)cellView.textField).teamIcon = 〜NSImageオブジェクト〜;
+cellView.textField.stringValue  = @"dummy";  //（注１）
+return cellView;

@@ -1,0 +1,11 @@
+NSDate *now = [NSDate date];
+NSDateComponents *dComp = [[NSCalendar currentCalendar]
+                           components:NSCalendarUnitWeekday fromDate:now];
+NSInteger weekday = dComp.weekday;
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+NSLog(@"%@ %@",
+      formatter.weekdaySymbols[weekday-1],
+      formatter.shortWeekdaySymbols[weekday-1]);
+
+//結果
+金曜日 金

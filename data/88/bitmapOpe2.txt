@@ -1,0 +1,35 @@
+var bitmapContext: CGContext?
+let dataSize = cgImage.width * cgImage.height * 4 //ピクセル数x4バイト(RGBA)
+var pixelData = [UInt8](repeating: 0, count: Int(dataSize))
+let colorSpace = CGColorSpaceCreateDeviceRGB()
+
+//変換用コンテキストの生成・入力イメージと同じ大きさ
+bitmapContext = CGContext(data: &pixelData,
+                         width: Int(cgImage.width),
+                        height: Int(cgImage.height),
+              bitsPerComponent: 8,
+                   bytesPerRow: 4 * Int(cgImage.width),
+                         space: colorSpace,
+                    bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)
+
+//作業用コンテキストにイメージオブジェクトを描画する
+let rect = CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height)
+bitmapContext?.draw(cgImage, in: rect)
+
+//bindMemoryによりコンテキストのデータをポインタ経由で参照する
+let count = Int(cgImage.width) * Int(cgImage.height)
+if let buffer = bitmapContext?.data?.bindMemory(to: UInt8.self, 
+                                          capacity: count){
+    //グレースケール変換
+    for i in stride(from:0, to: dataSize-1, by:4){
+        //グレースケール変換 HDTV係数       
+        let grayInt = UInt8(0.2126 * CGFloat(buffer[i]) +
+                            0.7152 * CGFloat(buffer[i+1])  +
+                            0.0722 * CGFloat(buffer[i+2]))
+        buffer[i] = grayInt
+        buffer[i+1] = grayInt
+        buffer[i+2] = grayInt
+    }
+}
+self.newImage = bitmapContext?.makeImage()
+self.needsDisplay = true

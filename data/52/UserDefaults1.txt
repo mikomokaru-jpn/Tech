@@ -1,0 +1,7 @@
+@property NSMutableDictionary<NSString*, NSMutableArray*>*resultList;
+
+- (void)windowWillClose:(NSNotification *)notification{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:_resultList forKey:@"SAVE_DATA"];
+    [ud synchronize]; //即更新する
+}

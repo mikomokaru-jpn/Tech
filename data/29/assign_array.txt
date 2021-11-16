@@ -1,0 +1,6 @@
+//配列の作成
+NSMutableArray *arrayA =
+    [[NSMutableArray alloc] initWithObjects:@"A", @"B", @"C", nil];
+NSMutableArray *arrayB;
+arrayB = arrayA;    //オブジェクト変数を代入する
+arrayA[0] = @"X";   //要素の更新：arrayB[0]も更新する

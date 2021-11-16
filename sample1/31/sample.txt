@@ -1,0 +1,23 @@
+//-------
+// OKのみ
+//-------
+let alert = NSAlert()
+alert.messageText = "上段　大きいフォント"
+alert.informativeText = "下段　小さいフォント"
+alert.runModal()
+
+//--------------
+// OK or Cancel
+//--------------
+let alert = NSAlert()
+alert.messageText = "上段　大きいフォント"
+alert.informativeText = "下段　小さいフォント"
+alert.addButton(withTitle: "OK")
+alert.addButton(withTitle: "Cancel")
+alert.alertStyle = .critical
+if alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn{
+    //OKに対応する処理
+}
+if alert.runModal() == .alertSecondButtonReturn{
+    //Cancelに対応する処理
+}

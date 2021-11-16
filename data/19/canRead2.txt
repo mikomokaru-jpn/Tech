@@ -1,0 +1,6 @@
+if ([_pasteboard canReadObjectForClasses:@[[NSImage class]] options:nil]){
+    NSLog(@"canReadClass:NSImage");
+}
+if ([_pasteboard canReadObjectForClasses:@[[NSURL class]] options:nil]){
+    NSLog(@"canReadClass:NSURL");
+}

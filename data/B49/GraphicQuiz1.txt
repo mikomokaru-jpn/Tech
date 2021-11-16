@@ -1,0 +1,1 @@
+let url: URL = openPanel.urls[0]if let cgImageSource = CGImageSourceCreateWithURL(url as CFURL, nil){    if let cgImage = CGImageSourceCreateImageAtIndex(cgImageSource, 0, nil){        ....    }}

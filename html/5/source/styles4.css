@@ -1,0 +1,79 @@
+/*
+一覧表
+*/
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 0px;
+}
+
+.thisYearMonth{
+    padding-top: 0px;
+    margin: 0px 0px 0px 10px;
+    font-size:  1.5rem;
+}
+.chart { /* 一覧表 */
+    display: grid; 
+    grid-template-columns: 40px 40px 50px 50px 400px ;  /* 1行に5列配置する */
+    grid-auto-rows:  22px;　/*　行の高さ */
+    width: 900px;
+    margin-top: 0px;
+} 
+.box1{ /* 日付 */
+    text-align: right;
+    padding-top: 1px;
+    padding-right: 2px;
+    border-left: solid 1px black;
+    border-top: solid 1px black;
+    background-color: white;
+}
+.box2{ /* 曜日 */
+    padding-top: 1px;
+    text-align: center;
+    border-left: solid 1px black;
+    border-top: solid 1px black;
+    background-color: white;
+}
+.box3{ /* 最低血圧  */
+    padding-top: 1px;
+    padding-right: 2px;
+    text-align: right;
+    border-left: solid 1px black;
+    border-top: solid 1px black;
+    background-color: white;
+}
+.box4{ /* 最高血圧  */
+    padding-top: 1px;
+    padding-right: 2px;
+    text-align: right;
+    border-left: solid 1px black;
+    border-top: solid 1px black;
+    background-color: white;
+}
+.box5{ /* 棒グラフ */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    border-left: solid 1px black;
+    border-top: solid 1px black;
+    border-right: solid 1px black;
+    background-color: white;
+}
+.graph{
+    display: flex;
+    background-color:white;
+}
+.midashi{
+    font-size: 0.95rem;
+    text-align: center;
+}
+.midashi2{
+    font-size: 0.95rem;
+    text-align: right;
+}
+.frameBorder{
+    border-top: solid 1px black;
+}
+
+
+

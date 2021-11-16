@@ -1,0 +1,83 @@
+<!-- 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Create a list（３） </title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+Create a list（３）
+</h2>
+<h2 class="lm70 tm0 bm10">
+Change cell attributes with conditions
+</h2>
+<div class="lm100 tm10 rm60">
+The text color and background color of a specific display value can be changed dipending on  record values.
+The condition can be based on multiple values.    
+</div>
+<div class="lm100 tm10 rm60">
+In the following, [Pulse pressure] and [Average blood pressure] are marked in red when their values exceed normal values.
+The background color of [lowest blood pressure] and [highest blood pressure] are yellow when either the diastolic blood pressure or the systolic blood pressure exceeds their normal value, and red when both of them are exceeded.
+Also, [Date] is inserted slashes between year, month, and day.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B32/gridObject3.mp4&title=gridObject3&width=600" target="_new">
+<img class="lm100 tm0 bm0" src="/data/B32/gridObject3.png" alt="[gridObject3]" width="450"></a>
+<div class="lm120 tm0 rm60">
+Click the image to see the video
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+How to change cell attributes depending on conditions
+</h3>
+<div class="lm100 tm0 rm60">
+Call a closure when creating a cell.
+Closures return cell attributes such as text color and background color according to the values of  a record,  and edit and return the text string. Then these are set to attributes or string of the column .    
+</div>
+<div class="lm100 tm10 rm60">
+Closure definition　GridDefinition.swift
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B32/GridDefinition.txt" width="550" height="290"></iframe>
+<div class="lm100 tm20 rm60">
+In the following example, if the lowest blood pressure is 85 or higher and the highest blood pressure is 135 or higher, the background color of both blood pressures are red. It determines  by two values.   
+</div>
+<div class="lm100 tm10 rm60">
+Closure implementation　AppDelegate.swift
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B32/AppDelegate1.txt" width="550" height="430"></iframe>
+
+<div class="lm100 tm10 rm60">
+セルの編集（クロージャの呼び出し）　UAGridObject.swift
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B32/UAGridObject.txt" width="550" height="90"></iframe>
+
+<h3 class="lm100 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S12_UAGridView" target="_new">mikomokaru-jpn/macOS_S12_UAGridView</a>
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="../index2.php">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,8 @@
+NSImage* getIcon(NSString* itemPath)
+{
+    NSImage *iconImage = nil;
+    //ファイル/ディレクトリのアイコン取得
+    iconImage = [[NSWorkspace sharedWorkspace] iconForFile:itemPath]; 
+    [iconImage setSize:NSMakeSize(16, 16)]; //アイコンのサイズの変更
+    return iconImage;
+}

@@ -1,0 +1,13 @@
+// _window：メインウィンドウ
+-(IBAction)openWindow1:(id)sender
+{
+    [_window beginSheet:_winCtrl1.window
+      completionHandler:^(NSModalResponse returnCode) {
+          //シートを閉じたときのコールバック処理
+          NSLog(@"モーダルなシートが閉じられた");
+          if (returnCode == NSModalResponseOK){
+              //リターンコードに応じた処理
+              NSLog(@"it's OK");
+          }
+      }];
+}

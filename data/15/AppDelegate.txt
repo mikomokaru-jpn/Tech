@@ -1,0 +1,18 @@
+//配列（Personオブジェクトリスト）の作成
+NSArray *personList = [[NSArray alloc] initWithPersonList];
+
+//誕生日の範囲で人物を検索
+NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+[formatter setDateFormat:@"yyyy-MM-dd"];
+NSDate *fromDate = [formatter dateFromString:@"1970-01-01"];
+NSDate *toDate = [formatter dateFromString:@"1980-12-31"];
+NSArray<Person*>* array1 = [personList 
+                            selectByBirthdayFrom:fromDate to:toDate];
+for (Person* person in array1){
+    NSLog(@"1 %@", person.name);
+}
+//性別で人物を検索
+NSArray<Person*>* array2 = [personList selectBySex:FEMALE];
+for (Person* person in array2){
+    NSLog(@"2 %@", person.name);
+}

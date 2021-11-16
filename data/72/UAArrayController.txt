@@ -1,0 +1,24 @@
+//---- UAArrayController.h ----
+#import <Cocoa/Cocoa.h>
+@interface UAArrayController : NSArrayController
+@end
+
+//---- UAArrayController.m ----
+#import "UAArrayController.h"
+#import "Yokai.h"
+@interface UAArrayController()
+@property (weak) IBOutlet NSTableView *tableView;
+@end
+@implementation UAArrayController
+//オブジェクトのロード時
+-(void)awakeFromNib{
+    //テーブルビューの１行目を選択
+    [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0]
+            byExtendingSelection:YES];
+}
+//NSTableViewDelegate
+//現在行の変更
+- (void)tableViewSelectionDidChange:(NSNotification *)notification{
+    [self setSelectionIndex:_tableView.selectedRow];
+}
+@end

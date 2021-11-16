@@ -1,0 +1,60 @@
+//------------------------------------------------------------------------------
+// サブフォーム制御　SubWinCtrl.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "ChangeColorDelegate.h"
+#import "NSObjrct+ChangeColor.h"
+
+@interface SubWinCtrl : NSWindowController
+@property NSInteger delegateKind;                   //プロトコル種別
+@property(weak) IBOutlet NSColorWell *colorWell;    //カラーウェル
+//プロトコル宣言によるデリゲートオブジェクトへの参照
+@property(weak, nonatomic) id<ChangeColorDelegate> ccDelegate;
+//カテゴリ宣言によるデリゲートオブジェクトへの参照
+@property(weak, nonatomic) id ccDelegateOfCategory;
+//ボタン・アクション
+-(IBAction)opOK:(id)sender;
+-(IBAction)opCancel:(id)sender;
+@end
+
+//------------------------------------------------------------------------------
+// サブフォーム制御　SubWinCtrl.m
+//------------------------------------------------------------------------------
+#import "SubWinCtrl.h"
+@implementation SubWinCtrl
+//イニシャライザ
+-(id)init{
+    //ウィンドウオブジェクトのロード
+    if (![super initWithWindowNibName:@"SubWindow"])
+        return nil;
+    return self;
+}
+//OKボタン
+-(IBAction)opOK:(id)sender{
+    NSColor* color = [_colorWell color];
+    //選択された処理方法
+    if (_delegateKind == 1){
+        //プロトコル
+        if ([_ccDelegate respondsToSelector:@selector(changeColorByButton:)]){
+            [_ccDelegate changeColorByButton:color];
+        }else{
+            NSLog(@"changeColorByButton: not registered");
+        }
+    }
+    else if (_delegateKind  == 2){
+        //カテゴリ
+        if ([_ccDelegateOfCategory respondsToSelector:@selector(changeColorByButtonOfCategory:)]){
+            [_ccDelegateOfCategory changeColorByButtonOfCategory:color];
+        }else{
+            NSLog(@"colorChangeCategory: not registered");
+        }
+    }
+    [self.window close];
+}
+//キャンセルボタン
+-(IBAction)opCancel:(id)sender
+{
+    [self.window close];
+}
+
+@end

@@ -1,0 +1,54 @@
+//------------------------------------------------------------------------------
+// カウント処理：宣言
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+
+//プロトコル宣言
+@protocol CountNumberDelegate <NSObject>
+@optional
+-(void)updateUI:(int)counter;
+-(void)postRoutine;
+-(BOOL)isCancel;
+@end
+
+//インタフェース宣言
+@interface CountNumber : NSObject
+@property(weak, nonatomic) id<CountNumberDelegate> cnDelegate;  //デリゲート変数
+-(void)count; //カウント処理
+@end
+
+
+//------------------------------------------------------------------------------
+// カウント処理：実装
+//------------------------------------------------------------------------------
+#import "CountNumber.h"
+
+//宣言
+@interface CountNumber()
+@property int counter;   //カウンタ
+@end;
+
+//実装
+@implementation CountNumber
+
+//カウント処理
+-(void)count
+{
+    for(int i=0; i<20; i++){
+        [NSThread sleepForTimeInterval:0.1];
+        _counter = i+1;
+        if ([_cnDelegate isCancel] == YES){
+            break;  //中止
+        }
+        //UI更新・カウンタ表示、プログレスバー
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [_cnDelegate updateUI:_counter]; //Call a delegate method
+        });
+    }
+    //UI更新・終了メッセージ
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [_cnDelegate postRoutine]; //Call a delegate method
+    });
+}
+
+@end

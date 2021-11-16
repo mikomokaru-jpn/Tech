@@ -1,0 +1,75 @@
+import Cocoa
+class UAView: NSView {
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        self.setTrackingArea()
+    }
+    //イニシャライザ
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.wantsLayer = true
+        self.layer?.backgroundColor = NSColor.lightGray.cgColor
+        self.setTrackingArea()
+    }
+    private func setTrackingArea(){
+        //トラッキングエリアの設定：補足したいイベントを指定する
+        let options:NSTrackingArea.Options = [
+            .mouseMoved,
+            .mouseEnteredAndExited,
+            .activeAlways
+            ]
+        //インスタンスの作成
+        let trackingArea = NSTrackingArea.init(rect: self.bounds,
+                                               options: options,
+                                               owner: self,
+                                               userInfo: nil)
+        //インスタンスの追加
+        self.addTrackingArea(trackingArea)
+    }
+    //マウスクイベント
+    override func mouseDown(with event: NSEvent) {
+        NSCursor.pointingHand.set()
+        self.printToView(String(format:" *mouseDown    %.0f:%.0f",
+                     event.locationInWindow.x,event.locationInWindow.y))
+    }
+    override func mouseUp(with event: NSEvent) {
+        NSCursor.arrow.set()
+        self.printToView(String(format:" *mouseUp      %.0f:%.0f",
+                     event.locationInWindow.x,event.locationInWindow.y))
+    }
+    override func mouseMoved(with event: NSEvent) {
+        self.printToView(String(format:"  mouseMoved   %.0f:%.0f",
+                     event.locationInWindow.x,event.locationInWindow.y))
+    }
+    override func mouseDragged(with event: NSEvent){
+        self.printToView(String(format:"  mouseDragged %.0f:%.0f",
+                     event.locationInWindow.x,event.locationInWindow.y))
+    }
+    override func mouseEntered(with event: NSEvent){
+        self.printToView(String(format:" *mouseEntered %.0f:%.0f",
+                     event.locationInWindow.x,event.locationInWindow.y))
+    }
+    override func mouseExited(with event: NSEvent){
+        self.printToView(String(format:" *mouseExited  %.0f:%.0f",
+                     event.locationInWindow.x,event.locationInWindow.y))
+    }
+    //ログ出力
+    var atrStr : NSAttributedString?
+    var logs = [String]()
+    let font = NSFont.init(name: "Osaka-Mono", size: 18) ?? NSFont.systemFont(ofSize: 10)
+    private func printToView(_ text: String){
+        if logs.count > 10{
+            logs.remove(at: 0)
+        }
+        logs.append(text + "\n")
+        var buff = ""
+        for log in logs{
+            buff += log
+        }
+        atrStr = NSAttributedString.init(string: buff, attributes: [.font : font])
+        self.needsDisplay = true
+    }
+    override func draw(_ dirtyRect: NSRect) {
+        atrStr?.draw(in: dirtyRect)
+    }
+}

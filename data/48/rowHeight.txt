@@ -1,0 +1,5 @@
+-(void)awakeFromNib{
+    _browser.rowHeight = 20.0;  //ブラウザの1行の高さ
+    [_browser selectRow:0 inColumn:0];
+    [self selectNode:_browser];
+}

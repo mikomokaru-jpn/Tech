@@ -1,0 +1,111 @@
+// ユーザーデフォルトに保存できるオブジェクトの種類
+// Data、String、Number、Date、Array、Dictionary、Bool
+//----------------------------------------------------------------------
+//  Objective-C
+//----------------------------------------------------------------------
+//配列オブジェクトを保存する
+-(void)saveUserDefaults{
+    NSArray<NSDictionary*> *saveData =
+                @[@{@"key1":@"A", @"key2":@"B", @"key3":@"C"},
+                  @{@"key4":@"D", @"key5":@"E", @"key6":@"F"},
+                  @{@"key7":@"G", @"key8":@"H", @"key9":@"I"}];    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:saveData forKey:@"SAVE_DATA"];
+    [ud synchronize]; //即更新する
+}
+
+//配列オブジェクトを読み込む
+-(void)readUserDefaults{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSArray<NSDictionary*> *saveData = [ud arrayForKey:@"SAVE_DATA"];   
+    if (saveData == nil){
+        NSLog(@"saveData empty");
+        return;
+    }
+    for (NSDictionary* dictionary in saveData){
+        for (NSString *key in dictionary.allKeys){
+            NSLog(@"%@ %@", key, dictionary[key]);
+        }
+    }
+}
+
+//保存している配列オブジェクトを削除する
+-(void)removeUserDefaults{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud removeObjectForKey:@"SAVE_DATA"];
+}
+
+//----------------------------------------------------------------------
+// Swift
+//----------------------------------------------------------------------
+//配列オブジェクトを保存する
+func saveUserDefaults(){
+    let saveData = [["key1":"A", "key2":"B", "key3":"C"],
+                    ["key4":"D", "key5":"E", "key6":"F"],
+                    ["key7":"G", "key8":"H", "key9":"I"]];
+    UserDefaults.standard.set(saveData, forKey: "SAVE_DATA")
+    UserDefaults.standard.synchronize()
+}
+
+//配列オブジェクトを読み込む
+func readUserDefaults(){
+    let saveData:Any? = UserDefaults.standard.array(forKey: "SAVE_DATA")
+    guard let array = saveData as? Array<Dictionary<String, Any>> else{
+        print("saveData empty")
+        return
+    }
+    for dictionary in array {
+        for (key, data) in dictionary{
+            print("key: \(key) value: \(data)")
+        }
+    }
+}
+
+//保存している配列オブジェクトを削除する
+func removeUserDefaults(){
+    UserDefaults.standard.removeObject(forKey: "SAVE_DATA")
+}
+
+//**** 特殊な例 ****
+//NSRect構造体（ウィンドウの位置と大きさ）を保存する
+    //保存
+    // NSRect -> NSValue -> Data に変換する
+    let winRect: NSRect = self.window.frame
+        let value = NSValue.init(rect: winRect)
+        let data: Data = NSKeyedArchiver.archivedData(withRootObject: value)
+        UserDefaults.standard.set(data, forKey:"winRect")
+
+    //読み込み
+    // Data -> NSValue -> NSRect に変換する
+    if let data: Data = UserDefaults.standard.data(forKey: "winRect")  {
+        if let value = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? NSValue {
+            var rect: NSRect = NSZeroRect
+            value?.getValue(&rect)
+            self.window?.setFrame(rect, display: true)
+        }
+    }
+
+//ユーザ定義構造体を保存する
+    //構造体の定義：Codableプロトコルに準拠
+    struct Person :Codable {
+        var name: String
+        var age: Int
+    }
+    var person = Person(name: "TARO", age: 32)
+
+    //保存
+    //struct -> Json文字列
+    let encoder = JSONEncoder()
+    if let encodedValue = try? encoder.encode(person) {
+        UserDefaults.standard.set(encodedValue, forKey: "person")
+    }
+
+    //読み込み
+    //Json文字列 -> struct
+    if let savedValue: Data = UserDefaults.standard.data(forKey: "person")  {
+        let decoder = JSONDecoder()
+        if let savedPerson = try? decoder.decode(Person.self, from: savedValue) { //Person型の指定
+           self.person = savedPerson
+           print(self.person)
+        }
+    }

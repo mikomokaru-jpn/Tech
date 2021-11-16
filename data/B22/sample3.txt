@@ -1,0 +1,7 @@
+<span class="redcolor">if let value = dict["VALUE"] as? Int,
+   let string = dict["STRING"] as? String</span>{
+    print("\(value) \(string)")
+}else{
+    print("someting erro")
+}
+//結果は両方の値のアンラップとキャストが成功するので、123 ABC

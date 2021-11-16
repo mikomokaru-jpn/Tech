@@ -1,0 +1,1 @@
+@IBAction func copy(_ sender: NSMenuItem){    if let view = self.window.firstResponder as? UAView{        view.copyImage()    }}

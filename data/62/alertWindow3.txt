@@ -1,0 +1,14 @@
+NSAlert *alert = [[NSAlert alloc] init];
+[alert addButtonWithTitle:@"1"];
+[alert addButtonWithTitle:@"2"];
+[alert addButtonWithTitle:@"3"];
+[alert addButtonWithTitle:@"4"];
+[alert addButtonWithTitle:@"5"];
+alert.messageText = @"沢山のボタン";
+alert.informativeText = @"リターンコードは、1000からインクリメントする";
+alert.alertStyle = NSAlertStyleInformational;
+NSModalResponse ret = [alert runModal];
+NSLog(@"returnCode:%ld", ret);
+
+//4番目のボタンをクリック
+//returnCode:1003

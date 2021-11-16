@@ -1,0 +1,5 @@
+let objcLib = ObjcLib.init()
+let valueOut = objcLib.method2(123)
+print("method2 \(valueOut) \(type(of: valueOut))")
+//結果
+method2 246 Int

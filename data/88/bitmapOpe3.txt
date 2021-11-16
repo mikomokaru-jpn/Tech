@@ -1,0 +1,3 @@
+let bitmap = NSBitmapImageRep.init(cgImage: image)
+let exporttData: Data? = bitmap.representation(using: .png, properties: [:])
+try exporttData.write(to:url)

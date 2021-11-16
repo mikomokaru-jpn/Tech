@@ -1,0 +1,7 @@
+let objcLib = ObjcLib.init()
+let strOut = objcLib.method1("abc")
+if let str = strOut{
+    print("method1 \(str) \(type(of: strOut))")
+}
+//結果
+method1 ABC Optional<String>

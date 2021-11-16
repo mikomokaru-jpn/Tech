@@ -1,0 +1,26 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    var subWinController: SubWinController //ウィンドウコントローラ
+    //イニシャライザ
+    override init() {
+        subWinController = SubWinController()
+        super.init()
+    }
+    //サブウィンドウを開く
+    @IBAction func clickOpen(_ sender: NSButton){
+        //サブウィンドウの表示位置を決める
+        let origin :CGPoint = (window?.frame.origin)!
+        let size :CGSize = (window?.frame.size)!
+        let x: CGFloat = origin.x + size.width
+        let y: CGFloat = origin.y 
+                       - ((subWinController.window?.frame.size.height)! 
+                           - size.height)
+        let point = CGPoint(x: x, y: y)
+        //サブウィンドウの位置をメインウィンドウの右横に合わせる
+        subWinController.window?.setFrameOrigin(point)
+        subWinController.showWindow(self)
+    }
+}

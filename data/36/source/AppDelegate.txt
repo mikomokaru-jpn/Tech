@@ -1,0 +1,346 @@
+//------------------------------------------------------------------------------
+//  AppDelegate
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "TimeSheet.h"
+#import "Task.h"
+#import "NSMutableArray+TaskInfo.h"
+#import "TimeCalc.h"
+#import "Constants.h"
+
+//---- 宣言 ----
+@interface AppDelegate ()
+{
+    TimeSheet *timeSheet;                               //作業時間管理オブジェクト
+    TimeCalc *timeCalc;                                 //日時計算ユーティリティ
+}
+@property (weak) IBOutlet NSWindow *window;             //ウィンドウ
+@property (weak) IBOutlet NSTextField *taskName;        //タスク名
+@property (weak) IBOutlet NSTextField *startDate;       //開始日付
+@property (weak) IBOutlet NSTextField *startTime;       //開始時刻
+@property (weak) IBOutlet NSTextField *eraTime;         //経過時間
+@property (weak) IBOutlet NSTextField *statusLabel;     //状態（実行中/休止中）
+@property (weak) IBOutlet NSTableView *taskListView;    //タスクリスト（テーブルビュー）
+@property (weak) IBOutlet NSTableView *summaryListView; //実績リスト（テーブルビュー）
+@property (weak) IBOutlet NSTextField *currentDate;     //現在日付
+@property (weak) IBOutlet NSTextField *currentTime;     //現在時刻
+@property (weak) IBOutlet NSButton *updateButton;       //終了ボタン
+@property (weak) IBOutlet NSButton *cancelButton;       //キャンセルボタン
+@property (weak) IBOutlet NSComboBox *comboBox;         //実績のサマリー単位
+@property (weak) IBOutlet NSTextView *logText;          //ログ出力 for test
+
+@property NSDate *now;                                  //現在日付時刻
+@property NSMutableArray *taskArray;                    //タスクリスト
+@property NSArray<TimeCard *> *summaryList;             //実績リスト（オブジェクトで保管する）
+@property SummaryKeyType summayKey;                     //実績リスト・現在の集計キー
+@property NSDateFormatter *dfmt;                        //日付書式指定子
+
+
+@end
+//---- 実装 ----
+@implementation AppDelegate
+
+//xibファイルのロード直後
+-(void)awakeFromNib
+{
+    //[self lookOver];
+    //時間計算ユーティリティ
+    timeCalc = [TimeCalc shareInstance];
+    //### 作業時間管理オブジェクトの作成 ###
+    timeSheet = [[TimeSheet alloc] init];
+    //タスクリストの作成（category）
+    _taskArray = [[NSMutableArray alloc] init];
+    [_taskArray createTable];
+    _taskListView.tableColumns[0].title = @"code";
+    _taskListView.tableColumns[1].title = @"タスク名";
+    NSIndexSet *indexes;
+    if (timeSheet.working)
+    {
+        NSInteger i = [_taskArray indexOfCode:timeSheet.currentTimeCard.code];
+        indexes = [NSIndexSet indexSetWithIndex:i];//１行目を選択
+
+    }else{
+        indexes = [NSIndexSet indexSetWithIndex:0];//１行目を選択
+    }
+    [_taskListView selectRowIndexes:indexes byExtendingSelection:YES];
+    //実績リストの取得
+    _summaryList = [timeSheet summayList:_summayKey];
+    [_comboBox selectItemAtIndex:0];    //コンボボックスの１行目を選択
+    _summaryListView.tableColumns[0].title = @"日付";
+    _summaryListView.tableColumns[1].title = @"タスク";
+    _summaryListView.tableColumns[2].title = @"作業時間";
+    indexes = [NSIndexSet indexSetWithIndex:0];//１行目を選択
+    [_summaryListView selectRowIndexes:indexes byExtendingSelection:YES];
+
+    _dfmt = [[NSDateFormatter alloc] init];//日付書式の事前定義
+    //フォームの編集
+    [self resetForm];
+    //最新日付時刻の更新
+    [self getDateTime];
+    //日付・時刻更新処理の定時起動：１分ごと
+    [NSTimer scheduledTimerWithTimeInterval:60
+                                    repeats:YES
+                                      block:^(NSTimer * _Nonnull timer) {
+                                          [self getDateTime];
+                                      }];
+}
+//NSButton action --------------------------------------------------------------
+//終了ボタン（実行中 -> 休止中）
+-(IBAction)operaionButton:(id)sender
+{
+    [timeSheet endTask:_now];                           //タスクの終了
+    _summaryList = [timeSheet summayList:_summayKey];   //### 実績リストの更新 ###
+    [_summaryListView reloadData];                      //実績リストビューの際表示
+    [self resetForm];                                   //フォームの再表示
+}
+//キャンセルボタン
+-(IBAction)cancelButton:(id)sender
+{
+    [timeSheet cancelTask];                         //タスクのキャンセル
+    [self resetForm];                               //フォームの再表示
+}
+
+//タスクの選択（休止中 -> 実行中）
+-(IBAction)clickRow:(id)sender
+{
+    if (!timeSheet.working){
+        //休止中 -> 新しいタスクの開始
+        Task *task = _taskArray[_taskListView.selectedRow]; //リストビューで選択中のタスクコード
+        [timeSheet startTask:task.code strat:[NSDate date]];
+        [self resetForm];                           //フォームの再表示
+        [self getDateTime];                         //最新日付時刻の更新
+    }
+}
+//NSTableViewDataSource --------------------------------------------------------
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tv
+{
+    if (tv == _taskListView){
+        return [_taskArray count];      //タスクリスト
+    }else if (tv == _summaryListView){
+        return _summaryList.count;
+    }
+    return 0;
+}
+- (id)tableView:(NSTableView *)tv objectValueForTableColumn:(NSTableColumn *)column
+            row:(NSInteger)row{
+    if (tv == _taskListView){
+        //タスクリスト
+        Task *task = _taskArray[row];
+        if([column.identifier isEqualToString:@"number"])
+        {
+            return task.code;
+        }
+        else if([column.identifier isEqualToString:@"taskName"])
+        {
+            return task.name;
+        }
+        return nil;
+    }else if (tv == _summaryListView){
+        //実績リスト
+        TimeCard *tc = _summaryList[row];
+        
+        if (_summayKey == BY_DATE)
+        {
+            if([column.identifier isEqualToString:@"date"]){
+                return [self stringDate:tc.startDateTime format:@"yyy/MM/dd"];  //日付
+            }else if([column.identifier isEqualToString:@"task"]){
+                return @"";
+            }else if([column.identifier isEqualToString:@"elapsTime"]){
+                return tc.stringElapsTime;                                      //経過時間
+            }else{
+                return nil;
+            }
+        }else if (_summayKey == BY_CODE)
+        {
+            if([column.identifier isEqualToString:@"date"]){
+                return @"";
+            }else if([column.identifier isEqualToString:@"task"]){
+                return [NSString stringWithFormat:@"%@ %@",
+                        tc.code, [_taskArray taskNameAt:tc.code]];              //タスク
+            }else if([column.identifier isEqualToString:@"elapsTime"]){
+                return tc.stringElapsTime;                                      //経過時間
+            }else{
+                return nil;
+            }
+        }else if (_summayKey == BY_DATE_CODE)
+        {
+            if([column.identifier isEqualToString:@"date"]){
+                return [self stringDate:tc.startDateTime format:@"yyy/MM/dd"];  //日付
+            }else if([column.identifier isEqualToString:@"task"]){
+                return [NSString stringWithFormat:@"%@ %@",
+                        tc.code, [_taskArray taskNameAt:tc.code]];              //タスク
+            }else if([column.identifier isEqualToString:@"elapsTime"]){
+                return tc.stringElapsTime;                                      //経過時間
+            }else{
+                return nil;
+            }
+        }else{
+            return nil;
+        }
+    }
+    return nil;
+}
+// NSComboBox delegate ---------------------------------------------------------
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification
+{
+    //### 実績リストの集計キー ###
+    _summayKey = [_comboBox indexOfSelectedItem];
+    _summaryList = [timeSheet summayList:_summayKey];
+    //tableVireの構成の変更
+    if (_summayKey == BY_DATE){
+        _summaryListView.tableColumns[0].hidden = NO;
+        _summaryListView.tableColumns[1].hidden = YES;
+        _summaryListView.tableColumns[2].hidden = NO;
+    }else if (_summayKey == BY_CODE){
+        _summaryListView.tableColumns[0].hidden = YES;
+        _summaryListView.tableColumns[1].hidden = NO;
+        _summaryListView.tableColumns[2].hidden = NO;
+    }else{  //_summayKey == BY_DATE)
+        _summaryListView.tableColumns[0].hidden = NO;
+        _summaryListView.tableColumns[1].hidden = NO;
+        _summaryListView.tableColumns[2].hidden = NO;
+    }
+    //tableVireの再表示
+    [_summaryListView reloadData];
+}
+
+// NSWindow Delegate -----------------------------------------------------------
+//ウィンドウを閉じる前
+- (BOOL)windowShouldClose:(NSWindow *)sender
+{
+    //タイムカードリストをテキストファイルに書き出す
+    BOOL result = [timeSheet writeFile];
+    if (result){
+        [sender orderOut:self];
+        return YES;
+    }
+    return NO;
+}
+//ウィンドウの再表示 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {
+    if (!flag)
+    {
+        for (NSWindow *openWindow in sender.windows) {
+            NSLog(@"flg:%d %@",flag, openWindow);
+            if (openWindow == _window)
+            {
+                [openWindow makeKeyAndOrderFront:self];
+            }
+        }
+    }
+    return YES;
+}
+//internal method --------------------------------------------------------------
+-(NSString*)stringDate:(NSDate*)dt format:(NSString*)fmt
+{
+    _dfmt.dateFormat = fmt;
+    return [_dfmt stringFromDate:dt];
+}
+//フォームの編集
+-(void)resetForm
+{
+    TimeCard *tc = timeSheet.currentTimeCard;
+    if (timeSheet.working)
+    {   //実行中
+        _statusLabel.attributedStringValue =
+        [AppDelegate attributedString:@"実行中" size:22 color:[NSColor redColor]];
+        //タスク名称（表示）
+        _taskName.stringValue = [NSString stringWithFormat:@"%@：%@",
+                                 tc.code, [_taskArray taskNameAt:tc.code]];
+        //開始日付と時刻（表示）
+        _startDate.stringValue = [self stringDate:tc.startDateTime format:kDayFormat];
+        _startTime.stringValue = [self stringDate:tc.startDateTime format:kTimeFormat];
+        //ボタンを表示
+        _updateButton.enabled = YES;
+        _cancelButton.enabled = YES;
+    }else
+    {   //休止中：タスク情報は空白にする
+        _statusLabel.attributedStringValue =
+        [AppDelegate attributedString:@"休止中" size:22 color:[NSColor blackColor]];
+        //タスク名称（表示）
+        _taskName.stringValue = @"";
+        //開始日時（表示）
+        _startDate.stringValue = @"";
+        _startTime.stringValue = @"";
+        //経過時間
+        _eraTime.stringValue = @"";
+        //ボタンを非表示
+        _updateButton.enabled = NO;
+        _cancelButton.enabled = NO;
+    }
+    //_logText.string = [timeSheet description_r];
+}
+
+//最新日付時刻の更新
+-(void)getDateTime
+{
+    //現在日付時刻（内部プロパティ）
+    _now = [NSDate date];
+    //最新日付時刻（表示）
+    _currentDate.stringValue = [self stringDate:_now format:kDayFormat];
+    _currentTime.stringValue = [self stringDate:_now format:kTimeFormat];
+    //実行中
+    if(timeSheet.working){
+        //経過時間（表示）
+        _eraTime.stringValue =
+        [timeCalc stringEraFrom:[timeSheet currentTimeCard].startDateTime to:_now];
+        [timeSheet updateElaps:_now];
+        //### 実績リストの更新とリストビューの再表示 ###
+        _summaryList = [timeSheet summayList:_summayKey];
+        [_summaryListView reloadData];
+    }
+}
+//修飾文字列
++(NSAttributedString*)attributedString:(NSString*)str
+                                  size:(NSInteger)size
+                                 color:(NSColor*)color
+{
+    NSFont* font = [NSFont fontWithName:@"HiraKakuProN-W3" size:size];
+    NSMutableParagraphStyle *pgraph = [[NSMutableParagraphStyle alloc] init];
+    pgraph.alignment = NSTextAlignmentCenter;
+    NSDictionary *attributes = @{NSFontAttributeName:font,
+                                 NSForegroundColorAttributeName:color,
+                                 NSParagraphStyleAttributeName:pgraph};
+    NSAttributedString *atrStr = [[NSAttributedString alloc]
+                                  initWithString:str
+                                  attributes:attributes];
+    return atrStr;
+}
+
+//test
+-(void)lookOver{
+    
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSFileManager *fm = [NSFileManager defaultManager];   //ファイルマネージャ
+    
+    _logText.string = [NSString stringWithFormat:@"ID:%@",
+                       [bundle bundleIdentifier]];
+    _logText.string = [NSString stringWithFormat:@"%@\nバンドルパス:%@",
+                       _logText.string, [bundle bundlePath]];
+    _logText.string = [NSString stringWithFormat:@"%@\nホームディレクトリ:%@",
+                       _logText.string, NSHomeDirectory()];
+    //アプリケーションバンドルのディレクトリ構造
+    NSDirectoryEnumerator *dirEnum = [fm enumeratorAtPath:[bundle bundlePath]];
+    NSArray *dirArray = [dirEnum allObjects];
+    for(id obj in dirArray){
+        NSString *fullPath = [NSString stringWithFormat:@"%@/%@", [bundle bundlePath], obj];
+        //ディレクトリのみ表示する
+        BOOL isDir;
+        if([fm fileExistsAtPath:fullPath isDirectory:&isDir])
+        {
+            if(isDir){
+                NSLog(@"%@", obj);
+            }
+        }
+    }
+}
+@end

@@ -1,0 +1,8 @@
+@property (weak) IBOutlet NSView *strechView;
+
+//ビューのautoresizingMaskの設定
+NSInteger mask = 0;
+mask += NSViewMinXMargin;                //左側マージン可変
+mask += NSViewMinYMargin;                //下側マージン可変
+mask += NSViewHeightSizable;             //高さ可変
+_strechView.autoresizingMask = mask;

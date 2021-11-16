@@ -1,0 +1,24 @@
+@property NSImage *image;
+
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //イメージの表示領域（NSRect構造体）を算出する
+    float aRatio = _image.size.height / _image.size.width;
+    float x, y, w, h;
+    if (dirtyRect.size.width >= dirtyRect.size.height){
+        //横長
+        w = dirtyRect.size.width;
+        h = dirtyRect.size.height * aRatio;
+        x = 0;
+        y = (dirtyRect.size.height - h) / 2;
+    }else{
+        //縦長
+        w = dirtyRect.size.width * (1 / aRatio);
+        h = dirtyRect.size.height;
+        x = (dirtyRect.size.width - w) / 2;;
+        y = 0;
+    }
+    NSRect newRect = NSMakeRect(x, y, w, h);
+    //イメージを描画する：矩形領域を指定
+    [_image drawInRect:newRect];
+}

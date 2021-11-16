@@ -1,0 +1,1 @@
+func browser(_ sender: NSBrowser, willDisplayCell cell: Any, atRow row: Int, column: Int){    let myCell = cell as! UABrowserCell //カスタムクラス    ....}

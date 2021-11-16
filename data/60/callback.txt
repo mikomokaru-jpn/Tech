@@ -1,0 +1,12 @@
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context{
+    if ([keyPath isEqual:@"counter"]) {
+        //プロパティの名前を判定する。
+        //変更前後の値をテキストフィールド（左）に出力する。
+        _outField.stringValue =
+        [NSString stringWithFormat:@"%@ → %@", 
+                  change[@"old"], change[@"new"]];
+    }
+}

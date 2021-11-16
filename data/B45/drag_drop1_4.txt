@@ -1,0 +1,23 @@
+override func performDragOperation(_ info: NSDraggingInfo) -> Bool{    
+    //オブジェクトの存在チェック
+    if !info.draggingPasteboard().canReadItem(
+                                  withDataConformingToTypes: [typeFileURL]){
+        print("file not found")
+        return false  
+    }
+    //クラスを指定して読み込む 
+    if let objects = info.draggingPasteboard().readObjects(
+                                               forClasses:[NSURL.self] , 
+                                               options: [:]),
+       objects.count > 0,
+       let fileURL = objects[0] as? URL{
+       //イメージを読み込む 
+       image = NSImage.init(contentsOf: fileURL)
+       if image == nil{
+           return false
+       }
+       self.needsDisplay = true
+       return true
+   }
+    return false //ドロップ不成立
+}

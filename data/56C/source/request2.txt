@@ -1,0 +1,3 @@
+//ファイルアップロード
+NSMutableURLRequest *request = [self uploadByMIME];
+[self sendRequest:request];

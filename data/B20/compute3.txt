@@ -1,0 +1,17 @@
+var dComp = Calendar.current.dateComponents([.year, .month, .day], from: Date.init())
+dComp.day = 1
+if let firstDate = Calendar.current.date(from: dComp){
+    var dComp = DateComponents()
+    dComp.month = 1
+    dComp.day = -1
+    if let lastDate = Calendar.current.date(byAdding: dComp, to: firstDate){
+        let formatter: DateFormatter = DateFormatter()
+        formatter.locale = Locale.init(identifier: "ja_JP")
+        formatter.dateStyle = .full
+        formatter.timeStyle = .full
+        print(formatter.string(from: lastDate))
+    }
+}
+
+//結果
+2021年10月31日 日曜日 0時00分00秒 日本標準時

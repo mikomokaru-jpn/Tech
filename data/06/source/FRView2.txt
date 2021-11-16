@@ -1,0 +1,27 @@
+//------------------------------------------------------------------------------
+// インタフェース宣言
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface FRView2 : NSView
+@end
+
+
+//------------------------------------------------------------------------------
+// クラス実装
+//------------------------------------------------------------------------------
+#import "FRView2.h"
+@implementation FRView2
+
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    
+    self.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+}
+
+-(void)keyDown:(NSEvent *)event
+{
+    //レスポンダチェーンによりkeyDownイベントがFRViewオブジェクトから遡上する。
+    NSLog(@"keyDown of FRView2");
+}
+
+@end

@@ -1,0 +1,17 @@
+@property CAShapeLayer *shape;
+
+//NSBezierPathオブジェクトの作成 
+NSBezierPath *bezierPath = [NSBezierPath bezierPath];
+//始点の設定
+[bezierPath moveToPoint:startPoint];
+//終点の設定             
+[bezierPath lineToPoint:endPoint];               
+//CAShapeLayerオブジェクトの作成し、NSBezierPathオブジェクトを設定する
+_shape = [CAShapeLayer layer]; 
+_shape.path = bezierPath.cgPath;
+//線の太さ
+_shape.lineWidth = 2.0;
+//線の色
+_shape.strokeColor = [NSColor redColor].CGColor;
+//オブジェクトの追加 
+[self.layer addSublayer:_shape];

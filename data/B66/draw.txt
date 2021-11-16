@@ -1,0 +1,11 @@
+class RectView: NSView {
+    var selectedRect = CGRect() //選択領域
+    //再描画
+    override func draw(_ dirtyRect: NSRect) {
+        let context:CGContext? = NSGraphicsContext.current?.cgContext
+        context?.addRect(selectedRect)
+        context?.setLineWidth(1.0)
+        context?.setStrokeColor(NSColor.black.cgColor)
+        context?.strokePath()
+    }
+}

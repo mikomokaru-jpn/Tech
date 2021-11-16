@@ -1,0 +1,2 @@
+DirectoryTraverse was compiled with optimization - 
+stepping may behave oddly; variables may not be available.

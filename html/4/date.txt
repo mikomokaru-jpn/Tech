@@ -1,0 +1,29 @@
+月初日 2020/5/1
+let firstDt = new Date(2020, 11, 1); 
+console.log(firstDt.toLocaleString()); 
+-> 2020/5/1 0:00:00
+
+//月末日 2020/5/31
+let lastDt = new Date(firstDt.getFullYear(), firstDt.getMonth()+1, 0); 
+console.log(lastDt.toLocaleString()); 
+-> 2020/5/31 0:00:00
+
+//カレンダ第1週の前月末の日数 4日
+let preDays = firstDt.getDay() - 1;          
+if (preDays < 0){ preDays = 6 };
+console.log(preDays); 
+-> 4
+
+//前月末日の月曜の日付 2010/4/27
+let topOfCalendar = new Date(firstDt.getTime());
+topOfCalendar.setDate(firstDt.getDate() - preDays); 
+console.log(topOfCalendar.toLocaleString()); 
+-> 2020/4/27 0:00:00
+
+//カレンダーの週数 5週
+if (lastDt.getDate() + preDays > 5*7){   
+    console.log("6週のカレンダ");
+}else{
+    console.log("5週のカレンダ");
+}
+-> 5週のカレンダ

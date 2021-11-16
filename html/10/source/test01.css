@@ -1,0 +1,36 @@
+.grid_form { /* 表 */
+    display: grid; 
+    grid-template-columns: 120px 80px 80px 120px; 
+    grid-auto-rows:  35px;
+} 
+.head{ 
+    text-align: center;
+    font-size: 1.0em;
+	padding-top: 5px;
+}
+.col{ 
+    text-align: right;
+	padding-top: 5px;
+	margin-left: 5px;
+    padding-right: 5px;
+    font-size: 1.2em;
+    height: 23px;
+    font-family:monospace;
+    border:  solid 1px black;
+}
+.w100 {
+    width: 200px
+}
+.tm20 {
+    margin-top: 20px;
+}
+select{ /* コンボボックス */
+    border: 1px solid #808080; /* これがないとfont-sizeが反映しない Safariのバグ？*/
+    font-size: 1.0em;
+    width: 200px;
+}
+button{ /* ボタン */
+    font-size: 0.9em;
+    width: 90px;
+	margin-left: 10px; 
+}

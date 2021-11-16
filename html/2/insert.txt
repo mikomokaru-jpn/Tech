@@ -1,0 +1,1 @@
+/* データの追加：血圧データ */INSERT INTO blood_pressure VALUES (500, 20200101, 120, 85, true);INSERT INTO blood_pressure VALUES (500, 20200102, 140, 95, false);

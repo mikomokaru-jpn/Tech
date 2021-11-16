@@ -1,0 +1,1 @@
+@IBAction func paste(_ sender: NSMenuItem){    //ファーストレスポンダーのあるビューに対してイメージを貼り付ける    if let view = self.window.firstResponder as? UAView{        view.pasteImageFromURL()    }}

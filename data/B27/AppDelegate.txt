@@ -1,0 +1,22 @@
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate{
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var textField: NSTextField!
+    //通知センターの取得
+    let nc = NotificationCenter.default
+    var subWinController = SubWinController()
+    func applicationDidFinishLaunching(_ aNotification: Notification){
+        subWinController.showWindow(self)
+        self.window.makeKeyAndOrderFront(nil)
+    }
+    @IBAction func notify(_ sendrt: Any?){
+        //通知オブジェクトの作成
+        let notif = Notification.init(
+                    name: Notification.Name("MyNotice"),
+                    object: nil,
+                    userInfo: ["message":textField.stringValue])
+        //通知の送信
+        nc.post(notif)
+    }
+}

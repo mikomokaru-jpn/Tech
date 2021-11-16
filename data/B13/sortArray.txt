@@ -1,0 +1,15 @@
+let dataList = [["id":"1", "score": 98],
+                ["id":"2", "score": 76],
+                ["id":"3", "score": 100],
+                ["id":"4", "score": 56],
+                ["id":"5", "score": 81]]
+
+let dataList2 = dataList.sorted{
+    guard let v1 = $0["score"] as? Int else{
+        return false
+    }
+    guard let v2 = $1["score"] as? Int else{
+        return false
+    }
+    return v1 > v2  //降順
+}

@@ -1,0 +1,43 @@
+//------------------------------------------------------------------------------
+//  View4.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface View4 : NSView
+-(id)initWithFrame:(NSRect)dirtyRect attributedString:(NSAttributedString*)aString;
+@end
+
+//------------------------------------------------------------------------------
+//  View4.m
+//------------------------------------------------------------------------------
+#import "View4.h"
+#import <QuartzCore/QuartzCore.h>
+
+@interface View4()
+@property NSAttributedString *attributedString;
+@end
+
+//イニシャライザ
+@implementation View4
+-(id)initWithFrame:(NSRect)dirtyRect attributedString:(NSAttributedString*)aString{
+    if (![super initWithFrame:dirtyRect])
+        return nil;
+    _attributedString = aString;
+    self.wantsLayer = YES;
+    self.layer.borderWidth = 1.0;
+    self.layer.borderColor = [NSColor grayColor].CGColor;
+    return self;
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //属性付き文字列
+    CATextLayer *textLayer = [CATextLayer layer];
+    float x = (dirtyRect.size.width / 2) - (_attributedString.size.width / 2);
+    float y = (dirtyRect.size.height / 2) - (_attributedString.size.height / 2);
+    textLayer.frame = NSMakeRect(x, y,
+                                 _attributedString.size.width,
+                                 _attributedString.size.height);
+    textLayer.string = _attributedString;
+    [self.layer addSublayer:textLayer];
+}
+@end

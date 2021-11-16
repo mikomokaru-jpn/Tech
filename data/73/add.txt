@@ -1,0 +1,12 @@
+- (IBAction) add:(id)sender{
+    Yokai *yokai = [[Yokai alloc] init];
+    yokai.name = @"(新しい名前）";
+    yokai.kana = @"(新しいカナ）";
+    [self addObject:yokai];
+    NSLog(@"add selectionIndex:%ld", self.selectionIndex);
+    /**** 注1
+    [_tableView selectRowIndexes:[NSIndexSet 
+                                  indexSetWithIndex:self.selectionIndex]
+            byExtendingSelection:NO];
+    *****/
+}

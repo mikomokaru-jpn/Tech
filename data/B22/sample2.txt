@@ -1,0 +1,5 @@
+<span class="redcolor">if let value = dict["VALUE"] as? Int</span>{
+    print(value)
+}else{
+    print("someting erro")
+}

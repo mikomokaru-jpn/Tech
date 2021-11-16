@@ -1,0 +1,12 @@
+//スクロールビューの作成
+let scrollView = NSScrollView(frame: CGRect(x: 50, y: 50, 
+                                            width: 200, height: 100))
+scrollView.hasVerticalScroller = true
+scrollView.hasHorizontalScroller = true
+scrollView.borderType = .bezelBorder
+self.window?.contentView?.addSubview(scrollView)
+
+//内部ビューの作成
+let innerView = NSView(frame: CGRect(x:0, y:0, 
+                                     width: 250, height: 200))
+scrollView.documentView = innerView

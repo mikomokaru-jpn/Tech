@@ -1,0 +1,25 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    var sheetController: SheetController //ウィンドウコントローラ
+    //イニシャライザ
+    override init() {
+        sheetController = SheetController()
+        super.init()
+    }
+    //シートを開く
+    @IBAction func clickOpen(_ sender: NSButton){
+        window?.beginSheet(sheetController.window!, 
+                           completionHandler:{(response) in
+            //コールバック処理
+            if response == .OK{
+                print("OK")
+            }
+            if response == .cancel{
+                print("Cancel")
+            }
+        })
+    }
+}

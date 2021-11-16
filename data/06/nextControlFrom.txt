@@ -1,0 +1,36 @@
+//デリゲートメソッドの実装：ファーストレスポンダを前進させる
+-(void)nextControlFrom:(id)object
+{
+    //起動元コントロールを判定し、次のコントロールにファーストレスポンダを移す
+    if (object == _frButton){
+        //ボタン -> カスタムビュー
+        [_window makeFirstResponder:_frView];
+    }else if (object == _frView){
+        //カスタムビュー -> テーブルビュー
+        [_window makeFirstResponder:_frTableView];
+    }else if (object == _frTableView){
+        //テーブルビュー -> テキストフィールド
+        [_window makeFirstResponder:_frTextField];
+    }else if (object == _frTextField){
+        //テキストフィールド -> ボタン
+        [_window makeFirstResponder:_frButton];
+    }
+}
+//デリゲートメソッドの実装：ファーストレスポンンダを後退させる
+-(void)prevControlFrom:(id)object
+{
+    //起動元コントロールを判定し、次のコントロールにファーストレスポンダを移す
+    if (object == _frButton){
+        //ボタン -> テキストフィールド
+        [_window makeFirstResponder:_frTextField];
+    }else if (object == _frView){
+        //カスタムビュー -> ボタン
+        [_window makeFirstResponder:_frButton];
+    }else if (object == _frTableView){
+        //テーブルビュー -> カスタムビュー
+        [_window makeFirstResponder:_frView];
+    }else if (object == _frTextField){
+        //テキストフィールド -> テーブルビュー
+        [_window makeFirstResponder:_frTableView];
+    }
+}

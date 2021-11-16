@@ -1,0 +1,20 @@
+//--------------------------------------------------------------------------
+// テキストファイルを読み込む
+//--------------------------------------------------------------------------
+NSString *path =  [NSHomeDirectory() stringByAppendingString:@"/Documents/sample.txt"];
+NSError *error;
+NSString *string = [NSString stringWithContentsOfFile:path
+                                            encoding:NSUTF8StringEncoding
+                                               error:&error];
+//--------------------------------------------------------------------------
+// イメージファイルを読み込む 
+//--------------------------------------------------------------------------
+path =  [NSHomeDirectory() stringByAppendingString:@"/Documents/sample.jpg"];
+NSImage *image = [[NSImage alloc] initWithContentsOfFile:path];
+
+//--------------------------------------------------------------------------
+// バイナリデータとして読み込む
+//--------------------------------------------------------------------------
+path =  [NSHomeDirectory() stringByAppendingString:@"/Documents/sample.dat"];
+NSData *data = [NSData dataWithContentsOfFile:path];
+

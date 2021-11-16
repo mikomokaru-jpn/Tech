@@ -1,0 +1,17 @@
+//@property NSScrollView *scrollView;         //スクロールビュー
+
+//画像ビューオブジェクトを作成する
+NSImage *image = [self imageFile];            //イメージファイルを読み込む
+_orgImageView.image = image;                  //サムネイル画像
+NSSize imageViewsize = NSMakeSize(600, 450);  //画像ビューの大きさ
+UAImageView *imageView = [[UAImageView alloc] 
+                          initWithImage:image size:imageViewsize];
+
+//スクロールビューオブジェクトを作成する
+NSRect rect = NSMakeRect(20, 20, 300, 225);   //スクロールビューの大きさ
+_scrollView = [[NSScrollView alloc] initWithFrame:rect];
+_scrollView.borderType = NSBezelBorder;       //枠線
+_scrollView.hasVerticalScroller = YES;        //スクロールバーを表示する
+_scrollView.hasHorizontalScroller = YES;
+[baseView addSubview:_scrollView];            //スクロールビューをベースビューに追加する
+[_scrollView setDocumentView:imageView];      //画像ビューをスクロールビューに埋め込む  

@@ -1,0 +1,21 @@
+-(id)initWithFrame:(NSRect)dirtyRect{
+    if (![super initWithFrame:dirtyRect])
+        return nil;
+    self.wantsLayer = YES;
+    //背景色
+    self.layer.backgroundColor = [NSColor blackColor].CGColor;
+    //枠線
+    self.layer.borderWidth = 20.0;
+    self.layer.borderColor = [NSColor lightGrayColor].CGColor;
+    //円
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    NSRect rect = NSMakeRect(35, 35,
+                             dirtyRect.size.width-70,
+                             dirtyRect.size.height-70);
+    NSBezierPath *path1 = [NSBezierPath bezierPathWithOvalInRect:rect];
+    shapeLayer.path = path1.cgPath;
+    shapeLayer.lineWidth = 30.0;
+    shapeLayer.strokeColor = [NSColor greenColor].CGColor;
+    [self.layer addSublayer:shapeLayer];
+    return self;
+}

@@ -1,0 +1,22 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "CustomizedView.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property CustomizedView *custView;   //カスタマイズビュー
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //カスタマイズビューのオブジェクト作成
+    _custView = [[CustomizedView alloc] initWithOwnerFrame:_window.contentView.frame.size];
+    //ウィンドウのコンテントビューに貼り付ける
+    [_window.contentView addSubview:_custView];
+}
+@end

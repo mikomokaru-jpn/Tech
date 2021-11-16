@@ -1,0 +1,3 @@
+- (NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender{
+    return NSDragOperationGeneric; //戻り値はお決まり
+}

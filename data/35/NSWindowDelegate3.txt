@@ -1,0 +1,7 @@
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender 
+                    hasVisibleWindows:(BOOL)flag {
+    if (!flag) { //(*1)  
+        [_window makeKeyAndOrderFront:self];
+    }
+    return YES;
+}

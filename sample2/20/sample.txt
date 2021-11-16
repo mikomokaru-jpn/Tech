@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>js01</title>
+<link rel="stylesheet" type="text/css" href="document.css">
+</head>
+<body>
+<div><input type="radio" name="search_type" value=1 checked>入力した値をそのまま検索する</div>
+<div><input type="radio" name="search_type" value=2>入力した値をスペースで分割しAND検索する</div>
+<button>CLICK</button>
+
+<script>
+const radioList = document.getElementsByName('search_type'); 
+const button = document.querySelector('button'); 
+button.addEventListener('click', buttonClicked);
+//ボタンのクリック
+function buttonClickede(){
+    for (let i=0; i<radioList.length; i++){
+        if (radioList[i].checked){
+            console.log(radioList[i].value);
+            break;
+        }
+    }
+}
+</script>
+
+</body>
+</html>

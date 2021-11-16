@@ -1,0 +1,26 @@
+-(IBAction)btnOpen:(id)sender{ 
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel]; 
+    [openPanel setCanChooseFiles:YES];         //ファイル選択可能
+    [openPanel setCanChooseDirectories:NO];    //ディレクトリ選択不可
+    [openPanel setAllowsMultipleSelection:NO]; //ファイルを複数選択不可
+    [openPanel setMessage:@"ファイルを開く"];    //ウィンドウのタイトル
+    //選択可能なファイルタイプ
+    [openPanel setAllowedFileTypes:@[@"txt", @"htm", @"html"]];
+    //最初に位置付けるディレクトリパス
+    NSURL *url = [NSURL URLWithString:[NSHomeDirectory()
+                        stringByAppendingString:@"/Desktop"]];
+    [openPanel setDirectoryURL:url];
+    //オープンパネルを開く
+    [openPanel beginWithCompletionHandler:^(NSInteger result){
+        //ハンドラ
+        if (result == NSFileHandlingPanelOKButton){
+            //OKボタン
+            NSURL *url = openPanel.URLs[0]; //選択されたファイル
+            //テキストファイルを読み込む
+            NSString* text = [NSString stringWithContentsOfURL:url
+                                       encoding:NSUTF8StringEncoding
+                                       error:nil];
+            _textView.string = text; //テキストビューに表示する
+        }
+     }];
+}

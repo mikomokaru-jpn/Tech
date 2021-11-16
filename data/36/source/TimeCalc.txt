@@ -1,0 +1,133 @@
+//------------------------------------------------------------------------------
+//  TimeCalc：シングルトン
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+
+@interface TimeCalc : NSObject
+
++(TimeCalc *)shareInstance;  //シングルトンなインスタンスを返す
+
+@property NSCalendar *calendar;
+@property unsigned unitDate;
+@property NSDateFormatter *fmt;
+//２つの時刻から経過時間を計算する（NSDateComponents型を返す）
+-(NSDateComponents*)compEraFrom:(NSDate*)dt1 to:(NSDate*)dt2;
+//２つの時刻から経過時間を計算する（NSDate型を返す）
+-(NSDate*)dateEraFrom:(NSDate*)dt1 to:(NSDate*)dt2;
+//２つの時刻から経過時間を計算する（"HH時間 mm分"を返す）
+-(NSString*)stringEraFrom:(NSDate*)dt1 to:(NSDate*)dt2;
+//時間を加算する（NSDate型 <-- NSDate型 + NSDate型）
+-(NSDate*)addTime:(NSDate*)dt1 plus:(NSDate*)dt1;
+//日付を比較する（NSComparisonResult型 <-- NSDate型 : NSDate型）
+-(NSComparisonResult)compareByDay:(NSDate*)dt1 to:(NSDate*)dt2;
+//日付・時刻の文字列表現（"yyyy-MM-dd HH:mm" <-- NSDate型）
+-(NSString*)stringDateTime:(NSDate*)dt;
+//経過時間の文字列表現（"HH時間mm分" <-- NSDate型）
+-(NSString*)stringErapsTime:(NSDate*)dt;
+@end
+//------------------------------------------------------------------------------
+//  TimeCalc.m
+//------------------------------------------------------------------------------
+#import "TimeCalc.h"
+
+@implementation TimeCalc
+
+static TimeCalc *shareInstance = nil;
+
+//シングルトンオブジェクト
++(TimeCalc *)shareInstance
+{
+    if (!shareInstance) {
+        //最初だけインスタンスを作成する
+        shareInstance = [[TimeCalc alloc] internalInit];
+    }
+    //２回目以降は作成済みのインスタンスを返す
+    return shareInstance;
+}
+//インスタンスの生成
+-(TimeCalc *)internalInit{
+    if (![super init])
+        return nil;
+    _calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    _unitDate = NSCalendarUnitHour|NSCalendarUnitMinute;
+    _fmt = [[NSDateFormatter alloc] init];
+    return self;
+}
+//ダミーイニシャライザ
+-(id)init
+{
+    NSLog(@"!!! Don't init an instance !!!");
+    return nil;
+}
+//２つの時刻から経過時間を計算する（NSDateComponents型を返す）
+-(NSDateComponents*)compEraFrom:(NSDate*)dt1 to:(NSDate*)dt2
+{
+    if (dt1 == nil){
+        return nil;
+    }
+    
+    if (dt2 == nil){
+        return nil;
+    }
+    _unitDate = NSCalendarUnitHour|NSCalendarUnitMinute;
+    NSDateComponents *dtEra = [_calendar components:_unitDate
+                                           fromDate:dt1 toDate:dt2 options:0];
+    return dtEra;
+}
+//２つの時刻から経過時間を計算する（NSDate型を返す）
+-(NSDate*)dateEraFrom:(NSDate*)dt1 to:(NSDate*)dt2
+{
+    if (dt2 == nil)
+        return nil;
+    NSDateComponents *dComp = [self compEraFrom:dt1 to:dt2];
+    return [_calendar dateFromComponents:dComp];
+}
+//２つの時刻から経過時間を計算する（"HH時間 mm分"を返す）
+-(NSString*)stringEraFrom:(NSDate*)dt1 to:(NSDate*)dt2
+{
+    NSDateComponents *dtEra = [self compEraFrom:dt1 to:dt2];
+    NSString *hour = (dtEra.hour > 0) ?
+        [NSString stringWithFormat:@"%ld時間",dtEra.hour] : @"";
+    NSString *minute = (dtEra.minute > 0) ?
+        [NSString stringWithFormat:@"%ld分",dtEra.minute] : @"0分";
+    NSString *text = [NSString stringWithFormat:@"%@ %@", hour, minute];
+    return text;
+}
+//時間を加算する（NSDate型 <-- NSDate型 + NSDate型）
+-(NSDate*)addTime:(NSDate*)dt1 plus:(NSDate*)dt2
+{
+    _unitDate = NSCalendarUnitHour|NSCalendarUnitMinute;
+    NSDateComponents *dComp = [_calendar components:_unitDate fromDate:dt1];
+    return [_calendar dateByAddingComponents:dComp toDate:dt2 options:0];
+}
+
+//日付を比較する（NSComparisonResult型 <-- NSDate型 : NSDate型）
+-(NSComparisonResult)compareByDay:(NSDate*)dt1 to:(NSDate*)dt2{
+    //NSDateFormattterにより年月日の文字列を求め
+    //文字列の比較により等しいか判定する
+    _fmt.dateFormat = @"yyyyMMdd";
+    NSString *str1 = [_fmt stringFromDate:dt1];
+    NSString *str2 = [_fmt stringFromDate:dt2];
+    return [str1 compare:str2];
+}
+
+//日付・時刻の文字列表現（"yyyy-MM-dd HH:mm" <-- NSDate型）
+-(NSString*)stringDateTime:(NSDate*)dt
+{
+    if (dt == nil)
+        return @"";
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"yyyy-MM-dd HH:mm";
+    return [fmt stringFromDate:dt];
+}
+//経過時間の文字列表現（"HH時間mm分" <-- NSDate型）
+-(NSString*)stringErapsTime:(NSDate*)dt
+{
+    if (dt == nil)
+        return @"";
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"HH時間mm分";
+    return [fmt stringFromDate:dt];
+}
+
+@end

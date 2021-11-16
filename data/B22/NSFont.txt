@@ -1,0 +1,10 @@
+let str = "ABC"
+if let myfont = NSFont.init(name:"Arial", size:32) {
+    let attributes: [NSAttributedStringKey:Any] = [.font:myfont]
+    let aString = NSAttributedString.init(string: str, 
+                                      attributes: attributes)
+    aString.draw(at: NSMakePoint(10, 10))
+}else{
+    //NSFontオブジェクトがnil（初期化に失敗した）
+    str.draw(at: NSMakePoint(10, 10))
+}

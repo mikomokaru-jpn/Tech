@@ -1,0 +1,11 @@
+for aFont in NSFontManager.shared.availableFonts{
+    print(aFont);
+}
+//フォント名の例
+Osaka
+HiraMinPro-W3
+HiraKakuProN-W3  
+HiraMaruProN-W4
+Helvetica
+Osaka-mono         //等幅
+Monaco             //等幅

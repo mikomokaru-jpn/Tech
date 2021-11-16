@@ -1,0 +1,6 @@
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    NSRect rect = _window.contentView.frame;
+    UAItemView *view = [[UAItemView alloc] initWithFrame:rect];
+    [_window.contentView addSubview:view];
+}

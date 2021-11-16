@@ -1,0 +1,37 @@
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var tabView: NSTabView!      //タブビュー
+    var tabCount: Int = 0
+    //アプリケーションの開始   
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        // Insert code here to initialize your application
+    }
+    //タブの追加
+    @IBAction func addItem(_ sender: Any){
+        tabCount += 1
+        let newItem = NSTabViewItem.init(identifier: tabCount)
+        newItem.label = String(tabCount)
+        let rect = NSMakeRect(0, 0,
+                              tabView.contentRect.size.width,
+                              tabView.contentRect.size.height)
+        let textView = NSTextView.init(frame: rect)
+        newItem.view?.addSubview(textView)
+        self.tabView.addTabViewItem(newItem)
+        self.tabView.selectTabViewItem(newItem)
+        textView.font = NSFont.systemFont(ofSize: 24)
+        textView.string = String(format:"%d 番目のテキストビュー", tabCount)
+    }
+    //タブの削除
+    @IBAction func removeItem(_ sender: Any){
+        for item in self.tabView.tabViewItems{
+            if let count = item.identifier as? Int {
+                if count == tabCount{
+                    tabView.removeTabViewItem(item)
+                    tabCount -= 1
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+コマンド
+php -r "echo phpinfo();" | grep "php.ini"
+
+結果
+Configuration File (php.ini) Path => /usr/local/etc/php/7.4
+Loaded Configuration File => /usr/local/etc/php/7.4/php.ini

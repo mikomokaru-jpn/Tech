@@ -1,0 +1,123 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Finderからイメージファイルをコピーし、ビューに表示する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">Finderからイメージファイルをコピーしビューに</h2>
+<h2 class="lm70 tm0 bm0">表示する</h2>
+
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B47/pasteboard&title=copy_paste1&width=900" target="_new">
+<img class="lm70 tm5 bm0" src="copy_paste1.png" alt="[copy_paste1]" width="550"></a>
+
+<div class="lm70 tm5 rm60">
+  画像をクリックすると動画になります。
+</div>
+
+<div class="lm70 tm20 rm60">
+本章ではペーストボードにコピーされたオブジェクトをビューに貼り付ける処理について説明する。
+</div>
+<div class="lm70 tm10 rm60">
+他のアプリケーション（Finder）からFile URLオブジェクトをコピーし、ファイルがイメージ（png, jpeg等）であれば当アプリケーションのビューに貼り付け表示する。コピー＆ペーストによるオブジェクトの受け渡しは Generalペーストボードを介して行われる。貼り付け処理はNSViewクラスのサブクラスに実装する。
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+  ペーストボードのイメージ
+  </h3>
+  <!-- 画像 -->
+  <a href="/lib/HTMLofImage.html?filename=/data/B47/pasteboard.png&title=copy_paste1pasteboard&width=700" target="_new">
+  <img class="lm70 tm5 bm0" src="pasteboard.png" alt="[pasteboard]" width="350"></a>
+  
+
+<h3 class="lm70 tm20 rm60 bm0">
+Generalペーストボードへの接続
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B47/copy_paste1_1.txt&font=font100" width="580" height="40"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+貼り付けの実行
+</h3>
+<div class="lm70 tm5 rm60">
+AppDelegateにメニューのアクションを実装する。メニューアイテムの pasteが選択が選択されたときビューオブジェクトの貼り付け処理を実行する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B47/copy_paste1_6.txt" width="580" height="130"></iframe>
+<div class="lm70 tm20 rm60">
+FileURLからファイルパスを取得し、ファイルからイメージを読み込み、ビューに表示する。NSViewクラスのサブクラスに実装する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B47/copy_paste1_2.txt" width="580" height="280"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+オブジェクト有無の事前チェック
+</h3>
+<div class="lm70 tm5 rm60">
+メニューが開いた時に、ペーストボードに貼り付け可能なFileURLオブジェクトが存在するかチェックし、メニューの pasteアイテムの編集を行う。オブジェクトがあれば アイテムを有効とし、なければ無効としメニューから選択できないようにする。
+</div>
+<div class="lm70 tm10 rm60">
+AppDelegateの中で NSMenuDelegateプロトコルの menuWillOpen(_:)メソッドを実装する。 
+</div>
+<div class="lm70 tm5 rm60">
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B47/copy_paste1_4.txt" width="580" height="490"></iframe>
+<div class="lm70 tm10 rm60">
+（注）UTIは要はファイルの拡張子であるので、拡張子を恣意的に異なるものに変えたら、本来の種類を認識できなくなる。その場合この方法では判定できない。
+</div>
+<div class="lm70 tm20 rm60">
+また UTTypeConformsTo関数を使用すれば UTIの階層構造を利用しファイルの種類の判定を簡単に行うことができる。
+PNGファイル、JPEGファイルを表すUTIは、それぞれ "public.jpeg" "public.jpeg" であるが、これらは、UTI "public.image" から継承したものである。
+</div>
+<div class="lm70 tm10 rm60">
+UTTypeConformsTo関数はファイルが特定のUTI、またはそこから継承するUTIに含まれるか否かを判定する。オブジェクトのクラスを判定する is演算子と同じような働きである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B47/copy_paste1_5.txt" width="580" height="160"></iframe>
+<div class="lm70 tm10 rm60">
+（注）この関数は現在 当環境のmacOS10.12.6では非推奨になっているが一応動いている。macOS 11.0+では 新しく UTTypeクラスによる判定に移行するようだ。
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+ソースコード
+</h3>
+<div class="lm70 tm5 rm60">
+ドラッグ＆ドロップ、コピー＆ペーストの全ての処理を網羅した共通のアプリケーションとなっている。
+</div>
+
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/dataB45/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>　アプリケーション制御
+</div>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B45/source/UAView.txt&title=UAView" target="_new">UAView</a>　NSViewクラスのサブクラス
+</div>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B45/source/NSView_imageDisplay.txt&title=NSView+imageDisplay" target="_new">NSView+imageDisplay</a>　イメージの表示サイズを変更するユーティリティ
+</div>
+
+<!-- 画像 
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu1.png&title=menu1&width=900" target="_new">
+<img class="lm70 tm10 bm0" src="menu1.png" alt="[menu1]" width="550"></a-->
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

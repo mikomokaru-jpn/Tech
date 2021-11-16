@@ -1,0 +1,29 @@
+@interface UATeam : NSObject
+{
+    NSString *_nameString;
+    int _rankingValue;
+    int _numberValue;
+    int _winValue;
+    int _loseValue;
+    int _drawValue;
+    float _rateValue;
+}
+//表示オブジェクト
+@property(readonly) NSAttributedString *name;     //球団名（表示）
+@property(readonly) NSAttributedString *ranking;  //順位（表示）
+@property(readonly) NSAttributedString *number;   //試合数（表示）
+@property(readonly) NSAttributedString *win;      //勝（表示）
+@property(readonly) NSAttributedString *lose;     //負（表示）
+@property(readonly) NSAttributedString *draw;     //引き分け（表示）
+@property(readonly) NSAttributedString *rate;     //勝率（表示）
+@property NSImage *image;                         //イメージ
+@property NSButton *link;                         //リンクボタン
+//セッター用プロパティ
+@property NSString *nameString;         //球団名
+@property int rankingValue;             //順位
+@property int winValue;                 //勝
+@property int loseValue;                //負
+@property int drawValue;                //引き分け
+//イニシャライザ
+-(id)initWithName:(NSString *)name;
+@end

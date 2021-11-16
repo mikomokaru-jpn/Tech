@@ -1,0 +1,5 @@
+//カテゴリ宣言  NSObject+who.h 
+#import <Foundation/Foundation.h>
+@interface NSObject (who)
+-(NSString*)who; //クラス名称を自身のクラスからNSObjectまでさかのぼって取得する。
+@end

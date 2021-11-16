@@ -1,0 +1,10 @@
+let request = new XMLHttpRequest()
+//休日ファイルの場所
+request.open('GET', '/doc_calendar/holiday.json');
+request.send();
+
+request.onload = function(){ 
+    let jsonText = request.responseText;
+    let holidaysList = JSON.parse(jsonText); //JSON文字列から配列を作成する
+    ...
+}

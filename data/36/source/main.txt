@@ -1,0 +1,13 @@
+//
+//  main.m
+//  TimeCard
+//
+//  Created by 伊藤功 on 2019/04/06.
+//  Copyright © 2019年 伊藤功. All rights reserved.
+//
+
+#import <Cocoa/Cocoa.h>
+
+int main(int argc, const char * argv[]) {
+    return NSApplicationMain(argc, argv);
+}

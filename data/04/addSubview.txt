@@ -1,0 +1,6 @@
+-(void)drawingView{
+    View1 *view1 = [[View1 alloc] 
+                     initWithFrame:NSMakeRect(10 ,10, 150, 150)
+                     attributedString:atributedString];
+    [_window.contentView addSubview:view1];    
+}

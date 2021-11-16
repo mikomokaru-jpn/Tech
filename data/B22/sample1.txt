@@ -1,0 +1,17 @@
+let dict:[String:Any] = ["VALUE":123, "STRING":"123"]
+
+<span class="redcolor">if let value = dict["VALUE"]</span>{
+    <span class="redcolor">if let value = value as? Int</span>{
+        print(value)
+    }else{
+        print("value is not Int")
+    }
+}else{
+    print("member not found")
+}
+// 結果は、123
+// dict["STRING"] の場合は、value is not Int
+// dict["XZZZZZ"] の場合は、member not found
+
+// (注)スコープの異なる同じ名前の変数 value が出てくるがこれでも動く。
+// 違った名前を考えるより楽かなとは思う。

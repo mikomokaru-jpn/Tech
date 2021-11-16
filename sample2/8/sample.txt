@@ -1,0 +1,12 @@
+<?php
+print('<div>カレントディレクトリ：'.getcwd().'</div>');
+if (chdir("../../")){
+    print('<div>新しいカレントディレクトリ：'.getcwd().'</div>');    
+}
+print('<div>ドキュメントルート：'.$_SERVER['DOCUMENT_ROOT'].'</div>');
+?>
+
+--- 出力 ----
+カレントディレクトリ：/Library/WebServer/Documents/atest/php
+新しいカレントディレクトリ：/Library/WebServer/Documents
+ドキュメントルート：/Library/WebServer/Documents

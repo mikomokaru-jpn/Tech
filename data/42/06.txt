@@ -1,0 +1,6 @@
+NSURL *url = ...; //イメージファイルパス
+CGImageSourceRef src = 
+  CGImageSourceCreateWithURL((__bridge CFURLRef)url, nil);
+CGImageRef cgImage = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+NSLog(@"%@", cgImage);
+CFRelease(src);

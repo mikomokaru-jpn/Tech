@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>cgiValueTest.py</title>
+<style>
+input {font-size:1.5em;}
+input#submit_buttom {width: 100px; 
+                     height: 40px; 
+                     font-size: 1.2em;} //safariはwidthしか効かない
+</style>
+</head>
+<body>
+<form action="hello2.py" method="POST">
+  <input type="text" name="text" value="python" />  
+  <input type="submit" name="submit" id="submit_buttom" />
+</form>
+</body>
+</html>

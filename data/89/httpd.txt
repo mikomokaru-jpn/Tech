@@ -1,0 +1,4 @@
+#削除
+#LoadModule php7_module /usr/local/opt/php/lib/httpd/modules/libphp7.so
+#追加
+LoadModule php_module /usr/local/opt/php/lib/httpd/modules/libphp.so

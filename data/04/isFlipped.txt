@@ -1,0 +1,5 @@
+@implementation CustomizedView
+- (BOOL) isFlipped{
+    return YES;     //YESを返す。
+}
+@end

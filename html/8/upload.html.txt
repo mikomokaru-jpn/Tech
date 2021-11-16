@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>PHP Test</title>
+<style>
+textarea, input {font-size: 1em;}
+</style>
+</head>
+<body>
+<form enctype="multipart/form-data" action="upload.php" method="POST">
+<!--form action="upload.php" method="POST"-->
+<p><input type="text" name="date" size="20" value="20200101"></p>
+<p><textarea name="intext" cols="40" rows="5">こんにちは</textarea></p>
+<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+<p>このファイルをアップロード: <br><input name="userfile" type="file" /></p>
+<p><input type="submit" value="送信" /></p>
+</form>
+</body>
+</html>

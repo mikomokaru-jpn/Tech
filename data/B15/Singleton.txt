@@ -1,0 +1,18 @@
+//---- Singleton.swift ----
+import Foundation
+class Singleton: NSObject {
+    //Initialization Closureを使う
+    //イニシャライザはプロパティsharedInstance生成時に一度だけ起動する。
+    <span class="redcolor">static let sharedInstance: Singleton = {
+        return Singleton.init()
+    }()</span>
+    //次のようにも記述できる
+    //static let sharedInstance: Singleton = Singleton()
+    //プロパティ（共有される）
+    var counter: Int
+    //非公開なイニシャライザ
+    private override init() {
+        counter = 0
+        print("Singleton init")
+    }
+}

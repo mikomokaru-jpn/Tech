@@ -1,0 +1,20 @@
+func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
+    var node:Node
+    if let item = item as? Node{
+        node = item
+    }else{
+        node = root //最上位
+    }
+    let child = node.children[index]
+    let url = child.url!
+    var isDir: ObjCBool = false
+    FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir)
+    child.isFile = !isDir.boolValue
+    //孫のURL情報を取得
+    let arrayOfURL = self.contentsOfDirectoryOfPath(url.path)
+    for chilChildUrl in arrayOfURL{
+        let childChild = Node(url: chilChildUrl)
+        child.children.append(childChild)
+    }
+    return node.children[index]
+} 

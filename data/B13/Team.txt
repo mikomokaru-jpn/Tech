@@ -1,0 +1,32 @@
+//---- Team.swift ----
+import Foundation
+class Team: NSObject, Comparable {
+    var name: String = ""   //チーム名
+    var games: Int = 0      //試合数
+    var wins: Int = 0       //勝ち数
+    //イニシャライザ
+    init(_ name: String, _ games: Int, _ wins: Int) {
+        self.name = name
+        self.games = games
+        self.wins = wins
+    }
+    //勝率
+    var rate: Float{
+        return Float(wins) / Float(games)
+    }
+    //--------------------------------------
+    //Comparableプロトコルの実装：勝率の降順ソート
+    //--------------------------------------
+    static func < (lTeam: Team, rTeam: Team) -> Bool {
+        if lTeam.rate > rTeam.rate{
+            return true
+        }
+        return false
+    }
+    static func == (lTeam: Team, rTeam: Team) -> Bool {
+        if lTeam.rate == rTeam.rate{
+            return true
+        }
+        return false
+    }
+}

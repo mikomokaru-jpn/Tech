@@ -1,0 +1,34 @@
+#include <dirent.h>   //ディレクトリ内のファイルリストを得る（POSIX）
+
+void traverse(const char* path, NSMutableArray* array) {
+    DIR* dir = opendir(path);   //ディレクトリをオープンする
+    struct dirent* entry;       //ディレクトリ情報
+    char newPath[4096];         //パス名の格納バッファ [最大長4096バイト]
+    if (dir) {
+        for(;;) {
+            if ((entry = readdir(dir)) == NULL) { //ノードを読み込む
+                break;
+            }
+            //パス名の編集
+            strcpy(newPath, path);          //パス名
+            strcat(newPath, "/");
+            strcat(newPath, entry->d_name); //名前（ファイルorディレクトリ）
+            NSString* strPath = [NSString stringWithCString:newPath
+                                 encoding:NSUTF8StringEncoding];
+            if (entry->d_type == DT_DIR) {  //種別の判定
+                //ディレクトの場合
+                if (strcmp(entry->d_name, ".") == 0 || 
+                    strcmp(entry->d_name, "..") == 0) {
+                    //カレントディレクトリ(.)、親ディレクトリ(..)はスキップ
+                }else {
+                    //ディレクトリなら自身を呼び出す（再帰）
+                    traverse(newPath, array);
+                }
+            } else {
+                //ファイルの場合、ファイルリストに格納
+                [array addObject:strPath];
+            }
+        }
+    }
+    closedir(dir);  //ディレクトリをクローズする
+}

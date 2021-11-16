@@ -1,0 +1,4 @@
+let cmd = "http://localhost:5000/sql_r10"
+let param = String(format:"id=%ld&from_date=%ld&to_date=%ld",
+                   500, calendar.startOfCalendar, calendar.endOfCalendar)
+let list = UAServerRequest.postSync(urlString:cmd, param:param)

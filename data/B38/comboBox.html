@@ -1,0 +1,110 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>コンボボックスを自前で実装する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">コンボボックスを自前で実装する</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B38/comboBox.mp4&title=comboBox&width=600" target="_new">
+<img class="lm100 tm0 bm0" src="comboBox.png" alt="[comboBox]" width="300"></a>
+<div class="lm100 tm10 rm60">
+基本的なコンボボックスを表示するためのカスタムクラスを作成した。
+</div>
+<div class="lm100 tm10 rm60">
+自前の実装を行うため、Cocoaの NSComboBoxクラス、NSPopUpButtonクラスは使用していない。コンボボックスの構成は、選択値を表示するテキストフィールド、プルダウンメニュー、プルダウンメニューを表示するボタンからなる。プルダウンメニューは、NSPanelクラスののウィンドウオブジェクトとし、中に選択値のリストを格納する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B38/comboBox2.png&title=comboBox2&width=800" target="_new">
+<img class="lm100 tm20 bm0" src="comboBox2.png" alt="[comboBox2]" width="500"></a>
+<div class="lm100 tm20 rm60">
+コンボボックの利用者は、ComboBoxクラスのオブジェクトを作成し、テキストフィールドの大きさとそれを表示する位置を指定する。ボタンはテキストフィールドの右隣に自動的に置かれる。選択値のリストとして文字列の配列を作成し引数に指定する。あとは ComboBoxオブジェクトを表示したいビューに追加すればよい。
+</div>
+<div class="lm100 tm10 rm60">
+ボタンをクリックするとプルダウンメニューが開く。通常メニューは下側に開くが、下側の領域が狭くて表示が切れてしまう場合は上側に開く。
+</div>
+<div class="lm100 tm10 rm60">
+メニューの要素を選択（mouseUp）すると選択した値がテキストフィールドに表示される。選択した要素のインデックス値はプロパティから取得することができる。
+</div>
+<div class="lm100 tm10 rm60">
+また、値が選択されたタイミングで、インデックス値をアプリケーション側に通知することもできる。通知の仕方は、プロトコルに定義されたデリゲートメソッドの起動によるもの、および completionHandler の引数から受け取ることもできる。
+</div>
+<div class="lm100 tm10 rm60">
+プルダウンメニューの上でマウスを動かすとマウスの下の要素がハイライトする。表示中のプルダウンメニューはスクリーン上のどの場所をクリックしても閉じられる。
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+アプリケーションからの利用方法
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B38/AppDelegate1.txt" width="550" height="470"></iframe>
+<div class="lm100 tm20 rm60">
+デリゲートにより選択値のインデックスを取得する方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B38/AppDelegate2.txt" width="550" height="150"></iframe>
+<div class="lm100 tm20 rm60">
+completionHandler により選択値のインデックスを取得する方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B38/AppDelegate3.txt" width="550" height="130"></iframe>
+<h3 class="lm100 tm20 bm0 rm60">
+クラス一覧
+</h3>
+
+<!--ソースコードリンク-->
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B38/source/AppDelegate.swift&title=AppDelegate" target="_new">AppDelegate</a>　アプリケーション：コンボボックスの利用者
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B38/source/ComboBox.swift&title=ComboBox" target="_new">ComboBox</a>　コンボボックスを制御するクラス
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B38/source/ComboButton.swift&title=ComboButton" target="_new">ComboButton</a>　プルダウンメニューを開くボタン
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B38/source/ComboItem.swift&title=ComboItem" target="_new">ComboItem</a>　プルダウンメニューの要素
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B38/source/NSBezierPathExtension.swift&title=20" target="_new">NSBezierPathExtension</a>　NSBezierPath拡張：CGPathに変換する
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B38/source/AcceptFirstView.swift&title=NSBezierPathExtension" target="_new">AcceptFirstView</a>　NSViewサブクラス：ビューをクリックしたときに即反応する
+</div>
+
+<h3 class="lm100 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/S17_comboBox" target="_new">mikomokaru-jpn/S17_comboBox</a>
+</div>
+
+<h3 class="lm100 tm20 bm0 rm60">
+補足
+</h3>
+<div class="lm100 tm0 rm60">
+プルダウンシートを表示するとき、表示位置の計算方法がかなりややこしいので仕様メモを残しておく。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B38/comboBox3.png&title=comboBox3&width=800" target="_new">
+<img class="lm70 tm10 bm0" src="comboBox3.png" alt="[comboBox3]" width="500"></a>
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

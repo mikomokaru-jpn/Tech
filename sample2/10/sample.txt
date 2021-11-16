@@ -1,0 +1,16 @@
+const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let sum = 0;
+//方法1
+for (let i = 0; i < array.length; i++){
+    sum += array[i];
+}
+console.log(`sum = ${sum}`);
+//方法2
+for (let value of array){
+    sum += value;
+}
+console.log(`sum = ${sum}`);
+
+//結果
+sum = 55 
+sum = 110 

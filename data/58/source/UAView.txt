@@ -1,0 +1,189 @@
+//------------------------------------------------------------------------------
+//  UAView.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface UAView : NSView
+@end
+
+
+//------------------------------------------------------------------------------
+//  UAView.m
+//------------------------------------------------------------------------------
+#import "UAView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "NSBezierPath+MyBezierPath.h"
+@interface UAView()
+//イメージオブジェクト
+@property CGImageRef imageRef;
+//マウス操作
+@property BOOL selectedFlg;     //選択済フラグ
+@property CGPoint startPoint;   //開始ポイント
+@property CGPoint endPoint;     //終了ポイント
+@property CGFloat width;        //幅
+@property CGFloat height;       //高さ
+//選択矩形
+@property CAShapeLayer *rectShape;
+//ペーストボード
+@property NSPasteboard *pasteboard;
+@end
+
+@implementation UAView
+//ファーストレスポンダーを受け付ける
+- (BOOL)acceptsFirstResponder{
+    return YES; // default NO
+}
+//初期処理
+-(void)awakeFromNib{
+    _pasteboard = [NSPasteboard generalPasteboard]; //genaral pasreboardの取得
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;
+    _selectedFlg = NO;
+    [self readFile];
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //表示方法：元のイメージのサイズは、800x600
+    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+    //CGRect rect = CGRectMake(0, 0, CGImageGetWidth(_imageRef), CGImageGetHeight(_imageRef));
+    CGContextDrawImage(context, dirtyRect, _imageRef);
+    CGContextDrawImage(context, dirtyRect, _imageRef);
+
+}
+//ウィンドウが非アクティブな状態でもマウスイベントが発生する
+- (BOOL) acceptsFirstMouse:(NSEvent *)e {
+    return YES;
+}
+//マウスダウン
+- (void)mouseDown:(NSEvent *)event{
+    //直前の矩形（CALayerオブジェクト）を消す
+    [_rectShape removeFromSuperlayer];
+    //矩形の選択を開始する
+    _selectedFlg = NO;
+    //始点を決める
+    _startPoint = [self convertPoint:event.locationInWindow fromView:nil];
+}
+//マウスドラッグ
+- (void)mouseDragged:(NSEvent *)event{
+    //終点を決める
+    _endPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    //（選択途中の）矩形を表示する
+    [self makeRect];
+}
+//マウスアップ
+- (void)mouseUp:(NSEvent *)event{
+    //終点を決める
+    _endPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    //矩形の選択が完了した
+    _selectedFlg = YES;
+    //矩形を表示する
+    [self makeRect];
+}
+//メニューが閉じるられた
+- (void)menuDidClose:(NSMenu *)menu{
+}
+//矩形で囲まれた画像の一部をペーストボードにコピーする
+-(IBAction)copy:(id)sender{
+    //矩形により画像が選択されていないときは何もしない。
+    if (!_selectedFlg || CGPointEqualToPoint(_startPoint, _endPoint)){
+        return;
+    }
+    //選択範囲のイメージの位置と大きさを求める：必要であれば原点とサイズの変更を行う
+    CGRect rect = [self adjustRect:CGRectMake(_startPoint.x, _startPoint.y,
+                                              _width, _height)];
+    //部分イメージを取得する
+    CGImageRef partImageRef = CGImageCreateWithImageInRect(_imageRef, rect);
+    //CGImageRef -> NSImageに変換する
+    NSImage *partimage = [[NSImage alloc] initWithCGImage:partImageRef size:rect.size];
+    CGImageRelease(partImageRef);
+    //NSImageオブジェクトをペーストボードにコピーする
+    [_pasteboard clearContents];
+    NSMutableArray *objects = [[NSMutableArray alloc] init];
+    [objects addObject:partimage];
+    [_pasteboard writeObjects:objects];
+}
+//切り取り
+-(IBAction)cut:(id)sender{
+    //未作成
+}
+//内部メソッド -------------------------------------------------------------------
+//マウスで矩形を描く
+-(void)makeRect{
+    if (NSEqualPoints(_startPoint, _endPoint) ){
+        //始点と終点が同じとき何もしない。
+        return;
+    }
+    //直前の矩形（CALayerオブジェクト）を消す
+    [_rectShape removeFromSuperlayer];
+    //矩形の位置とサイズを決める
+    _width = _endPoint.x - _startPoint.x;
+    _height = _endPoint.y - _startPoint.y;
+    CGRect rect = CGRectMake(_startPoint.x, _startPoint.y,_width, _height);
+    NSBezierPath *rectBezier = [NSBezierPath bezierPathWithRect:rect];
+    //ShapeLayerオブジェクトの作成
+    _rectShape = [CAShapeLayer layer];
+    _rectShape.lineWidth = 1;                               //枠線の太さ
+    _rectShape.strokeColor = [NSColor whiteColor].CGColor;  //枠線の色
+    _rectShape.fillColor = [NSColor clearColor].CGColor;    //塗りつぶしなし
+    _rectShape.path = rectBezier.cgPath;
+    //_rectShape.position = NSZeroPoint; //No need
+    //ShapeLayerオブジェクトを親ビューに追加する
+    [self.layer addSublayer:_rectShape];
+}
+//矩形定義の変更（かなり不恰好なコーディングだが）
+//原点は座標平面の左上、幅と高さは正の値とする。
+//範囲外の選択領域（ビューからはみ出る矩形部分）を除外する
+//-----------------------------------------------
+-(CGRect)adjustRect:(CGRect)inRect{
+    CGRect outRect = inRect;
+    //幅と高さを絶対値にする。
+    outRect.size.width = fabs(outRect.size.width);
+    outRect.size.height = fabs(outRect.size.height);
+    //まず、NSViewクラスの座標系に合わせ、開始点を左下に移動
+    //X値の移動。
+    if (inRect.size.width < 0){
+        outRect.origin.x -= outRect.size.width;
+    }
+    //Y値の移動。
+    if (inRect.size.height < 0){
+        outRect.origin.y -= outRect.size.height;
+    }
+    //範囲外の領域を除外する
+    //X値が0以下
+    if (outRect.origin.x < 0){
+        outRect.size.width += outRect.origin.x;
+        outRect.origin.x = 0;
+    }
+    //X値がビューの幅以上
+    CGFloat extra = outRect.size.width - (self.frame.size.width - outRect.origin.x);
+    if (extra > 0){
+        outRect.size.width -= extra;
+    }
+    //Y値が0以下
+    if (outRect.origin.y < 0){
+        outRect.size.height += outRect.origin.y;
+        outRect.origin.y = 0;
+    }
+    //Y値がビューの高さ以上
+    extra = outRect.size.height - (self.frame.size.height - outRect.origin.y);
+    if (extra > 0){
+        outRect.size.height -= extra;
+    }
+    //CoreDraphicsの座標系の原点は左上なので、Y値を反転する
+    outRect.origin.y = self.frame.size.height -
+    (outRect.origin.y + outRect.size.height);
+    return outRect;
+}
+//イメージファイルを読み込む
+- (void)readFile{
+    //イメージファイル
+    NSString *folder = [NSString stringWithFormat:@"%@/Documents",NSHomeDirectory()];
+    NSString *path = [folder stringByAppendingString:@"/picture01.png"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    //CGImageオブジェクトに読み込む
+    CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)url, nil);
+    _imageRef = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+    CFRelease(src);
+    self.needsDisplay = YES;
+    //NSLog(@"%ld:%ld", CGImageGetWidth(_imageRef), CGImageGetHeight(_imageRef));
+}
+@end

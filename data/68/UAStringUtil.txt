@@ -1,0 +1,18 @@
+//----  UAStringUtil.h ----
+#import <Cocoa/Cocoa.h>
+@interface UAStringUtil : NSObject
+//文字列を属性付き文字列にして返す。（属性は指定されたサイズのシステムフォント）
++(NSAttributedString*)string:(NSString*)str ofSize:(NSInteger)size;
+@end
+
+//---- UAStringUtil.m ----
+#import "UAStringUtil.h"
+@implementation UAStringUtil
++(NSAttributedString*)string:(NSString*)str ofSize:(NSInteger)size;{
+    NSFont *font = [NSFont systemFontOfSize:size];
+    NSDictionary *attributes = @{NSFontAttributeName:font};
+    NSAttributedString *aStrDay = [[NSAttributedString alloc]
+                    initWithString:str attributes:attributes];
+    return aStrDay;
+}
+@end

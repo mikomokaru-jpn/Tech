@@ -1,0 +1,14 @@
+- (id)browser:(NSBrowser *)browser child:(NSInteger)index 
+                                  ofItem:(id)item{
+    Node* node = item;
+    Node* newNode = node.children[index];
+    [newNode.children removeAllObjects];
+    
+    NSArray* arrayOfURL = [self contentsAtURL:[newNode url]];
+    for(NSURL* url in arrayOfURL)
+    {
+        Node *node = [[Node alloc] initWithURL:url];
+        [newNode.children addObject:node];
+    }   
+    return newNode;
+}

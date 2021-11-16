@@ -1,0 +1,38 @@
+//---- UAImageCell.h ----
+#import <Cocoa/Cocoa.h>
+@interface UAImageCell : NSCell
+@property NSImage *myImage;
+-(id)initWithImage:(NSImage*)image;
+@end
+
+//---- UAImageCell.m ----
+#import "UAImageCell.h"
+@implementation UAImageCell
+//イニシャライザ
+-(id)initWithImage:(NSImage*)image{
+    if (![super init])
+        return nil;
+    _myImage = image;
+    return self;
+}
+//セルの描画
+- (void)drawWithFrame:(NSRect)cellFrame
+               inView:(NSView *)controlView{    
+    NSRect imageRect = 
+      NSMakeRect(0, 0, _myImage.size.width, _myImage.size.height);
+    NSRect viewRect = 
+      NSMakeRect(cellFrame.origin.x, cellFrame.origin.y,
+                 imageRect.size.width, imageRect.size.height);
+    //表示位置補正
+    viewRect.origin.x += (cellFrame.size.width-_myImage.size.width)/2;
+    viewRect.origin.y += (cellFrame.size.height-_myImage.size.height)/2;
+    //イメージの描画
+    [_myImage drawInRect:viewRect
+                fromRect:imageRect
+               operation:NSCompositingOperationSourceOver
+                fraction:1
+          respectFlipped:YES
+                   hints:nil];
+    [super drawInteriorWithFrame:cellFrame inView:controlView];
+}
+@end

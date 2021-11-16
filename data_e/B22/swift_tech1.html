@@ -1,0 +1,169 @@
+<!-- 
+NewPractice_Swift/01 MyCalendar 
+NewPractice_Swift/05 MyHealthCaledar
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Optional Variables/Type Casting</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<div class="lm70 tm20 rm60">
+macOS Sierra 10.12.6 / Xcode 9.2 / Swift 4.0
+</div>
+<h2 class="lm70 tm20 bm0 rm60">
+Optional Variables
+</h2>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+In Swift It should be avoided as much as possible that a variable is nil.
+By the language specification, nil cannot be assigned to ordinary ( non optinal ) variables. This is checked at compile.
+</div>
+<div class="lm70 tm10 rm60">
+If you want a variable to have nil, make it an optional variable. Nil can be assigned to optional variables.
+</div>
+<div class="lm70 tm10 rm60">
+Types of non-optional variables and optional variables  are different.
+An optional variable can be considered to contain a non-optional variable.
+The type of an optional variable is displayed as "Optional ()".
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/descript.txt" width="550" height="230"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+Variable assignment
+</h3>
+<div class="lm70 tm5 rm60">
+Non Optional Variable ← Optional Variable
+</div>
+<div class="lm70 tm0 rm60">
+It is Downcast, special operation (unwrap) is required.
+</div>
+<div class="lm70 tm10 rm60">
+Optional Variable ← Non Optional Variable
+</div>
+<div class="lm70 tm0 rm60">
+It is Upcast, you can just substitute it.
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+Why optional variables need (my personal view)
+</h3>
+<div class="lm70 tm5 rm60">
+A view or a window that is outlet-connected to an object in a xib file is an optional variable. It is  nil  until a  xib file is loaded, ​so it must be optional.
+</div>
+<div class="lm70 tm10 rm60">
+In this case, it is expected that a object of a xib file  is connected to a valiable at runtime.
+If a variable is nil, there can be no other than a bug, so a variable can be referenced by forced unwrapping.
+</div>
+<div class="lm70 tm10 rm60">
+I think the reason why optional variables are needed is to recognize errors of processing.
+When an error occurs and  a correct calculation result cannot be obtained, nil is set in a return value or variable to prompt a application to respond.
+</div>
+<div class="lm70 tm10 rm60">
+In principle, if a variable becomes nil, you should explicitly stop the process  if a possible cause is a bug.
+Whether to execute error processing by evaluating unwrapping or to drop processing by forced unwrapping is a difference in the way of thinking about error handling.
+</div>
+<div class="lm70 tm10 rm60">
+However, depending on a design of a class, it is possible to return nil as  a normal return value    of a method.
+In this case, by unwrapping a return value, a subsequent processing is branched.
+(However, this method is not very preferable)
+
+</div>
+<div class="lm70 tm20 rm60">
+The following example calls the initializer of NSFont class.
+If the specified font name is not supported by the system, the initialization will fail and nil will be returned, for that, a post-processing is prepared.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B22/NSFont.txt" width="550" height="200"></iframe>
+<div class="lm70 tm10 rm60">
+It can also be  handled  by the following method. The expression after "??" is evaluated when the initialization fails.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B22/NSFont2.txt" width="550" height="60"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+Unwrap optional variables..
+</h3>
+<div class="lm70 tm5 rm60">
+Since  to operate optional variables and non-optional  variables together  is  complicated, 
+you should unwrap them to non-optional variables as soon as possible.  
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+Optional Binding（guard syntax and if syntax）
+</h3>
+<div class="lm70 tm5 rm60">
+Assign an optional variable to an non-optional variable. If a value is nil, an assignment will fail, so error handling will be executed.
+If successful, use a value.
+</div>
+<div class="lm70 tm10 rm60">
+Guard syntax and If syntax work basically the same. 
+An advantage of guard syntax is you can write codes without lowering  nesting,  
+however  a process of  else clause must be exited by return or throw statement.   
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/Binding.txt" width="550" height="210"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+Optional Chaining
+</h3>
+<div class="lm70 tm5 rm60">
+When a variable of a class  object is optional,  you can unwrap it in brief  by inserting a symbol「?」between an object name and a property name or method name.
+</div>
+<div class="lm70 tm10 rm60">
+When referencing a property,  if the class object is not nil you can get  the value , and if it is nil  no value returned . 
+When a method is called, if the class object is not nil, the method is executed, and if it is nil, nothing is done.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/Chaining.txt" width="550" height="150"></iframe>
+<h2 class="lm70 tm30 bm0 rm60">
+Type Casting
+</h2>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+Downcast type conversion
+</div>
+<div class="lm70 tm0 rm60">
+The following example is a process of casting an Any type variable to a String type or an Int type. 
+By adding「?」after the as clause, nil is returned if the conversion fails. Variables after casting are optional.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/cast1.txt" width="550" height="280"></iframe>
+<div class="lm70 tm20 rm60">
+You can use if syntax of optional binding  to get an unwrapped variable after casting.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/cast2.txt" width="550" height="380"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+Performing a combination of unwrap and cast
+</h3>
+<div class="lm70 tm5 rm60">
+In order to get a value  from a Dictionary object of Any type and convert it to Int type, 
+two operations of unwrap and cast are required.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/sample1.txt" width="550" height="320"></iframe>
+<div class="lm70 tm10 rm60">
+You can also unwrap and cast with a single if syntax. However, if it fails you do not know which is invalid.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/sample2.txt" width="550" height="110"></iframe>
+<div class="lm70 tm10 rm60">
+You can evaluate multiple assignment statements with one if syntax. 
+Each sentence  separates  with a comma.
+The condition is true when all assignments (unwrap, cast) are successful.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/B22/sample3.txt" width="550" height="150"></iframe>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+func browser(_ browser: NSBrowser, numberOfChildrenOfItem item: Any?) -> Intfunc 
+rootItem(for browser: NSBrowser) -> Any?
+func browser(_ browser: NSBrowser, child index: Int, ofItem item: Any?) -> Any
+func browser(_ browser: NSBrowser, isLeafItem item: Any?) -> Bool
+func browser(_ browser: NSBrowser, objectValueForItem item: Any?) -> Any?

@@ -1,0 +1,82 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+@interface AppDelegate () <NSTableViewDataSource>
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTableView *tableView2;
+@property NSArray<NSArray<NSString*>*>*sourceList;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+   //テーブルビューのデータソース
+   _sourceList = @[@[@"萩", @"はぎ"],
+                   @[@"尾花", @"おばな"],
+                   @[@"葛", @"くず"],
+                   @[@"撫子", @"なでしこ"],
+                   @[@"女郎花", @"おみなえし"],
+                   @[@"藤袴", @"ふじばかま"],
+                   @[@"桔梗", @"ききょう"]];
+    //スクロールビューの作成
+    NSRect sRect = NSMakeRect(280, 60, 240, 100);
+    NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:sRect];
+    scrollView.hasVerticalScroller = YES;  //垂直スクロールバー
+    scrollView.borderType = NSBezelBorder; //枠線
+    //テーブルビューの作成
+    NSRect tRect = NSMakeRect(0, 0, 238, 76); //InterfaceBuilderの定義と同じにした
+    NSTableView *tableView = [[NSTableView alloc] initWithFrame:tRect];
+    //列１オブジェクトの作成
+    NSTableColumn *column1 =[[NSTableColumn alloc]initWithIdentifier:@"name"];
+    [column1 setWidth:100];
+    [column1.headerCell setTitle:@"名前"];
+    [column1.headerCell setAlignment:NSTextAlignmentLeft];
+    [tableView addTableColumn:column1];
+    //列２オブジェクトの作成
+    NSTableColumn *column2 =[[NSTableColumn alloc]initWithIdentifier:@"kana"];
+    [column2 setWidth:100];
+    [column2.headerCell setTitle:@"かな"];
+    [tableView addTableColumn:column2];
+    //データソースの指定
+    [tableView setDataSource:self];
+    //スクロールビューにテーブルビューを埋め込む
+    [scrollView setDocumentView:tableView];
+    //コンテントビューにスクロールビューを埋め込む
+    [_window.contentView addSubview:scrollView];
+    //クリップビューのboundsを求める
+    // 0:-23 225x100 微妙な数字!
+    NSRect bounds = scrollView.contentView.bounds;
+    NSLog(@"%.0f:%.0f %.0fx%.0f", bounds.origin.x, bounds.origin.y,
+                                  bounds.size.width, bounds.size.height);
+    //１行目を選択行にする
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:0];
+    [tableView selectRowIndexes:indexes byExtendingSelection:YES];
+    [tableView setFocusRingType:NSFocusRingTypeNone];
+    [_window makeFirstResponder:scrollView];
+
+    //IBで作成したテーブルビューのデータソースの指定
+    [_tableView2 setDataSource:self];
+    [_tableView2 selectRowIndexes:indexes byExtendingSelection:YES];
+}
+//NSTableView Delegate
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tv{
+    return [_sourceList count];
+}
+- (id)tableView:(NSTableView *)tv
+      objectValueForTableColumn:(NSTableColumn *)column
+            row:(NSInteger)row{
+    if ([column.identifier isEqualToString:@"name"]){
+         return _sourceList[row][0];
+    }else if ([column.identifier isEqualToString:@"kana"]){
+        return _sourceList[row][1];
+    }
+    return nil;
+}
+@end

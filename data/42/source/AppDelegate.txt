@@ -1,0 +1,81 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "UAView.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet UAView *uaView;               //イメージ分割操作ビュー
+@property  (weak) IBOutlet NSButton *pause;             //実行ボタン
+@property (weak) IBOutlet NSTextField *sec;             //経過時間
+@property (weak) IBOutlet NSTextField *times;           //実行回数
+@property (weak) IBOutlet NSTextField *xtimes;          //分割数・横
+@property (weak) IBOutlet NSTextField *ytimes;          //分割数・縦
+@property (weak) IBOutlet NSTextField *orgImgWidth;     //オリジナルイメージの大きさ・横
+@property (weak) IBOutlet NSTextField *orgImgHeight;    //オリジナルイメージの大きさ・縦
+@property (weak) IBOutlet NSTextField *nrmImgWidth;     //正規化後イメージの大きさ・横
+@property (weak) IBOutlet NSTextField *nrmImgHeight;    //正規化後ルイメージの大きさ・縦
+@property NSURL *urlOfDirectory;                        //オープンパネルの初期ディレクトリ
+@end
+
+@implementation AppDelegate
+//初期処理
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+    _urlOfDirectory = nil;
+    _xtimes.integerValue = 20;
+    _ytimes.integerValue = 20;
+}
+// ファイル・オープン
+-(IBAction)openFile:(id)sender{
+    [_uaView timerStop];    //タイマーの解除
+    //基準ディレクトリ
+    if (!_urlOfDirectory){
+        _urlOfDirectory = [NSURL URLWithString:[NSHomeDirectory()
+                                                stringByAppendingString:@"/Pictures"]];
+    }
+    //イメージファイルの選択
+    NSArray* fileTypes = @[@"png", @"jpg"];
+    NSOpenPanel *opPanel = [NSOpenPanel openPanel];
+    [opPanel setCanChooseFiles:YES];
+    [opPanel setCanChooseDirectories:NO];
+    [opPanel setAllowsMultipleSelection:NO];
+    [opPanel setAllowedFileTypes:fileTypes];
+    [opPanel setDirectoryURL:_urlOfDirectory];
+    [opPanel setMessage:@"イメージファイルを選択する"];
+    [opPanel beginWithCompletionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton){
+            _urlOfDirectory = opPanel.directoryURL; //選択ディレクトリの保存
+            //イメージファイルをCGImageとして読み込む。
+            NSURL *url = opPanel.URLs[0];
+            CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)url, nil);
+            CGImageRef cgImage = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+            //イメージ分割処理の準備
+            [_uaView setUpImage:cgImage
+                         xParts:_xtimes.integerValue
+                         yParts:_ytimes.integerValue];
+            CFRelease(src);
+            //ランダムイメージの表示（初回）
+            [_uaView displayRandomlyInitial];
+            //[_uaView displayInOrder];
+            //オリジナルイメージの大きさをテキストフィールドに表示する
+            _orgImgWidth.integerValue = _uaView.xTotalImageLength;
+            _orgImgHeight.integerValue = _uaView.yTotalImageLength;
+            //正規化後イメージの大きさをテキストフィールドに表示する
+            _nrmImgWidth.integerValue = _uaView.xDispLength;
+            _nrmImgHeight.integerValue = _uaView.yDispLength;
+        }
+    }];
+}
+// 一時停止・開始
+-(IBAction)pause:(id)sender
+{
+    [_uaView displayRandomlyPause];
+}
+@end

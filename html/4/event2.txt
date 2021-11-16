@@ -1,0 +1,10 @@
+//HTMLのタグ定義
+<button class='preButton'><</button>  
+
+//イベントハンドラの定義
+preButton.addEventListener('click', preMonth);  //前月ボタン  
+
+//イベントプロシージャ
+function preMonth(){
+    //前月のカレンダーを表示する
+}

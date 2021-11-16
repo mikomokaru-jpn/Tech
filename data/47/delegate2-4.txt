@@ -1,0 +1,8 @@
+-(id)browser:(NSBrowser *)browser objectValueForItem:(id)item{
+    Node* node = item;
+    NSString *value;
+    [node.url getResourceValue:&value
+                        forKey:NSURLNameKey
+                         error:nil];
+    return value;
+}

@@ -1,0 +1,1 @@
+//---- UAImageListView.h ----#import <Cocoa/Cocoa.h>#import "UAView.h"@interface UAListView : NSView <UAViewDelegate>@property NSMutableArray<UAView*>* viewList; //ビュー配列@end

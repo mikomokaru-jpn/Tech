@@ -1,0 +1,11 @@
+if let path = Bundle.main.path(forResource: "holiday", ofType: "json"){
+    do {
+        let url:URL = URL.init(fileURLWithPath: path)
+        let data = try Data.init(contentsOf: url)
+        print("getting successfully \(data)")
+    }catch{
+        print("file reading error cought")
+    }
+}else{
+    print("file not found")
+}

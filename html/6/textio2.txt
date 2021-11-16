@@ -1,0 +1,33 @@
+//リクエストの送信
+let request = new XMLHttpRequest()
+request.open('POST', './php/sql_r10.php'); 
+request.setRequestHeader('Content-Type',
+                         'application/x-www-form-urlencoded');
+request.timeout = 3000; //msec
+let id=500;
+let yyyymmdd = `${inputYear}${('0'+inputMonth).slice(-2)}${('0'+inputDay).slice(-2)}`;
+let param = `date=${yyyymmdd}`;   
+request.send(param);
+
+//レスポンスの受信
+request.onload = function(){
+    let READYSTATE_COMPLETED = 4;
+    let HTTP_STATUS_OK = 200;
+    if( this.readyState == READYSTATE_COMPLETED
+        && this.status == HTTP_STATUS_OK ){
+        let jsonText = request.responseText;
+        let valuesList = JSON.parse(jsonText);
+        //正常
+        if (valuesList.length > 0){
+            //カーソルをテキストの終端に位置付ける対応
+            inText.value = ''; inText.focus(); 
+            inText.value = valuesList[0]["text"];
+        }else{
+            //未入力
+            inText.focus();
+        }
+    }else{
+        alert('HTTPエラー status:'+this.status);
+        return;
+    }
+}

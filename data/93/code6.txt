@@ -1,0 +1,17 @@
+let name = UITextField()  //名前
+
+override func viewDidLoad() {
+    ....
+    name.addTarget(self, 
+                   action: #selector(self.checkChange(_:)), 
+                   for: UIControl.Event.editingChanged)
+}
+
+//テキストフィールドに文字が入力された
+@objc func checkChange(_ textField: UITextField){
+    if isModified(){
+         updateBarButtonItem.isEnabled = true
+    }else{
+         updateBarButtonItem.isEnabled = false
+    }
+}

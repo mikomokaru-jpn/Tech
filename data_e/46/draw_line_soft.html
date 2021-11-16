@@ -1,0 +1,194 @@
+<!-- 
+90 drawLine
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Super easy drawing software</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<!----------------------------------------------->
+<h2 class="lm70 tm20 bm0">Super easy drawing software</h2>
+<h2 class="lm100 tm0 bm10">Advanced version of "drawing line"</h2>
+<div class="table tm20 lm70 rm40">
+  <div class="table_cell">
+  <!--画像-->
+    <a href="/lib/HTMLofImage.html?filename=/data/46/dora1.png&title=ドラえもん1&width=400" target="_new">
+    <img src="/data/46/dora1.png" alt="[ドラえもん1]" width="300" align="middle"></a>
+  </div>
+  <div class="table_cell">
+    <div class="lm20 tm20">	
+      You can draw a line by dragging the mouse,  and can select  line width and color.
+    </div>
+    <div class="lm20 tm20">	
+      You can erase lines inside the rectangle created by dragging with right mouse button.
+    </div>
+    <div class="lm20 tm20">	
+      The created image can be output as a png format file.
+    </div>
+    <div class="lm20 tm20">	
+      You can undo the last operation (drawing a line or erasing lines). 
+    </div>
+  </div>
+</div>
+<!-- 動画 -->
+<h3 class="lm70 tm20 bm0 rrm60">
+<a href="/lib/HTMLofVideo.html?filename=/data/46/henoheno.mp4&title=healthCalendar&width=500" target="_new">
+Click here
+</a>to see the video
+</h3>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm30 bm5 rm60">
+  Topics
+</h3>
+<h3 class="lm70 tm5 bm0 rm60">
+  Erase lines 
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+  Hold down the right mouse button and drag to create a rectangle surrounded by light gray. 
+  Click  Clear Button to clear the lines inside the rectangle.
+</div>
+<div class="table tm10 lm70 rm40">
+  <div class="table_cell">
+  <!--画像-->
+    <a href="/lib/HTMLofImage.html?filename=/data/46/dora2.png&title=ドラえもん2&width=400" target="_new">
+    <img src="/data/46/dora2.png" alt="[ドラえもん2]" width="220" align="middle"></a>
+  </div>
+  <div class="table_cell">
+  <!--画像-->
+    <img class="tm50" src="46_allow.png" width="70" align="middle"></a>
+  </div>
+  <div class="table_cell">
+  <!--画像-->
+    <a href="/lib/HTMLofImage.html?filename=/data/46/dora3.png&title=ドラえもん3&width=400" target="_new">
+    <img src="/data/46/dora3.png" alt="[ドラえもん3]" width="220" align="middle"></a>
+  </div>
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+  Line length unit
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+  A line is drawn as a set of CAShapeLayer objects with length of 1 pixel,  so you can erase the line smoothly.
+</div>
+<div class="lm70 tm10 rm60">
+  If you drag the mouse quickly, the length from the start to the end point can be tens of pixels.
+  Representing the line as a single CAShapeLayer object, if you try to erase the line inside the rectangle, even the line outside the rectangle may be erased. This looks strange.
+  To avoid this,  a line with a length of 1 pixel or more is generated as a set of CAShapeLayer objects with a length of 1 pixel.
+</div>
+<div class="lm70 tm10 rm60">
+  If a line is a vector,  a set of objects can be regarded as a stack of unit vectors.
+  In the example below, if you drag from coordinates (100, 50) to (104, 53), 5 CAShapeLayer objects will be created. The indivisible end is less than 1 pixel.
+</div>
+ <!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/46/46_vector.png&title=プロット&width=600" target="_new">
+<img class="lm70 tm10" src="/data/46/46_vector.png" alt="[プロット]" width="300" align="middle"></a>
+<h3 class="lm70 tm30 bm0 rm60">
+  Implementation of Undo function
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+  Create a history record with drawing a line or elasing  lines as an operation unit, and add it to the stack list.  When undo is requested, the last added history record is fetched and the operation is canceled (actually, the reverse operation is executed).
+</div>
+<div class="lm70 tm10 rm60">
+  redo is not supported.
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+  Output image to file
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+ <!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/46/doraPNG.png&title=ファイル出力&width=600" target="_new">
+<img class="lm70 tm10" src="/data/46/doraPNG.png" alt="[ファイル出力]" width="300" align="middle"></a>
+<h4 class="lm70 tm20 bm0 rm60">
+  The following flow  corresponds to <a href="/lib/HTMLofText.html?filename=/data/46/source/capture.txt&indent=20" target="_new">the code of  "capture" method of UACGView class</a>
+</h4>
+<div class="lm70 tm10 rm60">
+  (1) Create a bitmap context with the CGBitmapContextCreate function.
+</div>
+<div class="lm70 tm0 rm60">
+  (2) Draw the image layer object in the bitmap context.
+</div>
+<div class="lm70 tm0 rm60">
+  (3) Create a CGImage object from the bitmap context.
+</div>
+<div class="lm70 tm0 rm60">
+  (4) Create an NSBitmapImage object from the CGImage object.
+</div>
+<div class="lm70 tm0 rm60">
+  (5) Convert the NSBitmapImage object to a PNG format NSData object.
+</div>
+<div class="lm70 tm0 rm60">
+  (6) Output the NSData object to a file.
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+Class Structure Diagram
+</h3>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/46/46_Class.png&title=クラス構造図&width=900" target="_new">
+<img class="lm90 tm0" src="/data/46/46_Class.png" alt="[クラス構造図]" width="560" align="middle"></a>
+<div class="lm70 tm5 rm60">
+  UAShape class, which represents a line, has properties, which are the references to CAShapeLayer object, the object numbers, and the start and end coordinates.
+</div>
+<div class="lm70 tm10 rm60">
+  UAShapeListMgr class provides  methods to create a UAShape object and holds a created object in the array. It also provides methods to erase  lines.
+</div>
+<div class="lm70 tm10 rm60">
+  UAHistoryItem classr records an operation  drawing a line or erasing lines by a user.
+</div>
+<div class="lm70 tm10 rm60">
+  UAHisoryMgr class holds UAHistoryItem objects and manages the history of operations.
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+Souce Code
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UACGView.txt&title=UACGView" target="_new">UACGView</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAShapeListMgr.txt&title=UAShapeListMgr" target="_new">UAShapeListMgr</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAShape.txt&title=UAShape" target="_new">UAShape</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAHistoryMgr.txt&title=UAHistoryMgr" target="_new">UAHistoryMgr</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAHistoryItem.txt&title=UAHistoryItem" target="_new">UAHistoryItem</a>
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/C90_drawLine" target="_new">mikomokaru-jpn/C90_drawLine</a>
+</div>
+
+<!----------------------------------------------->
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+
+

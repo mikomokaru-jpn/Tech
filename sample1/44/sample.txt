@@ -1,0 +1,13 @@
+override func keyDown(with event: NSEvent) {
+    print(event.keyCode)
+    if event.modifierFlags.contains(.shift){
+        print("+ shift Key")
+    }
+}
+
+override func keyUp(with event: NSEvent) {
+    print(event.keyCode)
+    if event.modifierFlags.contains(.control){
+        print("+ control Key")
+    }
+}

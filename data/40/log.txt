@@ -1,0 +1,30 @@
+//マルチスレッド処理
+-(IBAction)op2:(id)sender
+{
+    ELAPSE_INIT(); //静的変数の初期化
+    dispatch_queue_t queue;
+    queue = dispatch_queue_create("com.mikomokaru", 
+                                   DISPATCH_QUEUE_CONCURRENT); 
+    //サブスレッッド１
+    dispatch_async(queue, ^{
+        ELAPSE_LOG(@"サブスレッド処理１　始まる");
+            [NSThread sleepForTimeInterval:0.5];
+        ELAPSE_LOG(@"サブスレッド処理１　終わる");
+    });
+    //サブスレッッド２
+    dispatch_async(queue, ^{
+        ELAPSE_LOG(@"サブスレッド処理２　始まる");
+        [NSThread sleepForTimeInterval:0.5];
+        ELAPSE_LOG(@"サブスレッド処理２　終わる");
+    });
+}
+//クローズ処理
+-(IBAction)op3:(id)sender{
+    ELAPSE_CLOSE(); //ログから処理時間を計算し出力する。
+}
+
+// 実行結果
+11:38:36.988073 ThreadID:00005123 Elapse:  0.000000 サブスレッド処理２　始まる
+11:38:37.488302 ThreadID:00005123 Elapse:  0.500229 サブスレッド処理２　終わる
+11:38:36.988073 ThreadID:00005891 Elapse:  0.000000 サブスレッド処理１　始まる
+11:38:37.488308 ThreadID:00005891 Elapse:  0.500235 サブスレッド処理１　終わる

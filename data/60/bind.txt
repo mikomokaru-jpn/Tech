@@ -1,0 +1,3 @@
+[self willChangeValueForKey:@"counter"];
+_counter++;
+[self didChangeValueForKey:@"counter"];

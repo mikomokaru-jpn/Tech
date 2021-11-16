@@ -1,0 +1,3 @@
+let table = document.querySelector('table').tBodies[0];    
+let rowCount = table.rows.length;
+let cellCount = table.rows[0].cells.length;

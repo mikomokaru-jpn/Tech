@@ -1,0 +1,25 @@
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+formatter.dateFormat = @"Gyy/MM/dd HH-mm-ss";
+//カレンダー（和暦）
+NSCalendar *calendarJpn = [[NSCalendar alloc]
+                           initWithCalendarIdentifier:
+                           NSCalendarIdentifierJapanese];
+formatter.calendar = calendarJpn;
+NSString *dateString = @"昭和39/10/1 0-15-59";
+NSDate *date = [formatter dateFromString:dateString];
+NSLog(@"%@", [formatter stringFromDate:date]);
+
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:date]);
+
+//西暦表示に戻す
+formatter.calendar = [NSCalendar currentCalendar];
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:date]);
+
+//結果
+昭和39/10/01 00-15-59
+昭和39年10月1日木曜日 0時15分59秒 GMT+09:00
+1964年10月1日木曜日 0時15分59秒 GMT+09:00

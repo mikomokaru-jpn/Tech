@@ -1,0 +1,28 @@
+//--- SubWindow.h ---
+#import <Cocoa/Cocoa.h>
+@interface SubWindow : NSWindowController
+@end
+
+//----  SubWindow.m ----
+#import "SubWindow.h"
+
+@interface SubWindow ()
+@property (weak) IBOutlet NSTextField *textField;
+@property (weak) IBOutlet NSButton *button;
+@end
+
+@implementation SubWindow
+//ウィンドウオブジェクトのロード時
+- (void)windowDidLoad {
+    [super windowDidLoad];
+    NSLog(@"windowDidLoad");
+    [_textField setStringValue:@"テスト"];
+    [_button setTitle:@"Click me"];
+
+}
+//ボタンクリック
+-(IBAction)buttonClicked:(id)sender{
+    [_textField setStringValue:@"ボタンがクリックされた"];
+    [_button setEnabled:NO];    //ボタンを無効化する
+}
+@end

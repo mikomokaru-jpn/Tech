@@ -1,0 +1,114 @@
+//------------------------------------------------------------------------------
+//  UAShapeManager.h　図形管理クラス
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+#import "UAShapeItem.h"
+
+@interface UAShapeManager : NSObject
+//選択中のCAShapeLayerオブジェクト
+-(CAShapeLayer*)selectedShapelayer;
+//オブジェクトの作成
+-(void)createStart:(CGPoint)point;
+//図形（矩形）の描画中の処理
+-(void)createGoing:(CGPoint)toPoint;
+//図形（矩形）の描画の完了
+-(BOOL)createStop:(CGPoint)toPoint;
+//図形の移動・拡大・縮小の開始
+-(void)start:(CGPoint)fromPoint;
+//図形の移動・拡大・縮小中
+-(void)going:(CGPoint)point;
+//図形の移動・拡大・縮小の完了
+-(void)stop:(CGPoint)toPoint;
+//図形の削除
+-(void)delete;
+@end
+
+
+//------------------------------------------------------------------------------
+//  UAShapeManager.m　図形管理クラス
+//------------------------------------------------------------------------------
+#import "UAShapeManager.h"
+
+@interface UAShapeManager()
+@property NSMutableArray<UAShapeItem*> *itemList;   //オブジェクトリスト
+@property UAShapeItem *selectedItem;                //選択中のオブジェクト
+@end
+
+@implementation UAShapeManager
+//イニシャライザ
+-(id)init{
+    if (![super init]){
+        return nil;
+    }
+    _itemList = [[NSMutableArray alloc] init];
+    return self;
+}
+//選択中のCAShapeLayerオブジェクト
+-(CAShapeLayer*)selectedShapelayer{
+    return  _selectedItem.shapelayer;
+}
+//オブジェクトの作成
+-(void)createStart:(CGPoint)point{
+    [_selectedItem selectOff]; //選択中のオブジェクトの選択を解除する
+    _selectedItem  = [[UAShapeItem alloc] initWithPoint:point]; //ShapeItemオブジェクトの作成
+    [_itemList addObject: _selectedItem ];  //自身のリストに追加する
+}
+//図形描画のドラッグ中
+-(void)createGoing:(CGPoint)point{
+    [_selectedItem shapeCreating:point];
+}
+//図形描画のドラッグ終了
+-(BOOL)createStop:(CGPoint)toPoint{
+    if([_selectedItem nearToPoint:toPoint]){
+        //開始と終了ポイントが同じとき図形を作らない
+        [_selectedItem.shapelayer removeFromSuperlayer];
+         [_itemList removeObject:_selectedItem];
+        _selectedItem = nil;
+        return NO;
+    }else{
+        [_selectedItem shapeCreated:toPoint];
+        return YES;
+    }
+}
+//ドラッグの開始
+-(void)start:(CGPoint)fromPoint{
+    _selectedItem.transformKind = 0;
+    if ([_selectedItem inTheArea:fromPoint]){
+        //開始ポイントが選択された図形の上にある
+        [_selectedItem startTransform:fromPoint];
+    }
+}
+//ドラッグ中
+-(void)going:(CGPoint)toPoint{
+    if (_selectedItem.transformKind != 0){
+        //図形の移動・拡大・縮小中
+        [_selectedItem updateTransform:toPoint];
+    }
+}
+//ドラッグの終了
+-(void)stop:(CGPoint)toPoint{
+    if (_selectedItem.transformKind != 0 &&
+        !NSEqualPoints(_selectedItem.fromPoint, toPoint)){ //カーソルの移動があるとき
+        //図形の移動・拡大・縮小の完了
+        [_selectedItem performTransform:toPoint];
+    }else{
+        //図形の選択を外す
+        [_selectedItem selectOff];
+        _selectedItem = nil; 
+        //終了ポイントに図形があれば選択中にする
+        NSInteger count =_itemList.count;
+        for (NSInteger i = count-1; i>=0; i--){
+            if (!_itemList[i].unUsed && [_itemList[i] inTheArea:toPoint]){
+                _selectedItem = _itemList[i];       //選択中オブジェクトにする
+                [_selectedItem selectOn];
+                //NSLog(@"%.0f:%.0f is in the area.",_itemList[i].origin.x, _itemList[i].origin.y);
+                return;
+            }
+        }
+    }
+}
+//図形の削除
+-(void)delete{
+    _selectedItem.unUsed = YES;
+}
+@end

@@ -1,0 +1,19 @@
+#import "NSObjrct+ChangeColor.h" //カテゴリ宣言のインポート
+@interface SubWinCtrl : NSWindowController
+@property(weak, nonatomic) id ccDelegateOfCategory; //参照変数の定義
+...
+@end
+
+@implementation SubWinCtrl
+...
+-(IBAction)opOK:(id)sender{
+    //デリゲートメソッドの実行
+    if ([_ccDelegateOfCategory respondsToSelector:
+         @selector(changeColorByButtonOfCategory:)]){
+        [_ccDelegateOfCategory changeColorByButtonOfCategory:color];
+    }else{
+        NSLog(@"colorChangeCategory: not registered");
+    }
+}
+...
+@end

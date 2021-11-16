@@ -1,0 +1,180 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>テキスト全文検索ツール</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+
+<h2 class="lm100 tm20 rm60 bm0">ディレクトリをトラバースしながらファイルを全文検索する（マルチスレッドによる並列処理）</h2>    
+
+<div class="lm100 tm5 rm60">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0
+</div>
+
+<h3 class="lm100 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S_FindingWords2" target="_new">mikomokaru-jpn/macOS_S_FindingWords2</a>
+</div>
+
+<!--div class="lm100 tm20 rm60">
+自作のツールですが、実務でそこそこ役に立っているので、ちょっと紹介したいと思います。
+</div-->
+
+<div class="lm100 tm20 rm60">
+特定のフォルダの下にあるテキストファイルをサブフォルダも含め全て検索し、指定した検索語を含んだファイルの一覧をテーブルビューに表示する。対象フォルダはオープンパネルにより指定する。
+</div>
+<div class="lm100 tm10 rm60">
+ファイルシステムに対するテキスト全文検索処理は、数千から数万のオーダーのファイルを対象とすることが想定される。ターンアラウンドタイムを短くするために、検索処理を分割し、マルチスレッドにより並列して実行する。
+</div>
+
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B43/findingWords2.mp4&title=findingWords2&width=700" target="_new">
+<img class="lm100 tm30 bm0" src="findingWords2.png" alt="[findingWords2]" width="450"></a>
+
+<h2 class="lm100 tm20 rm60 bm0">
+表示項目
+</h2>
+<div class="lm100 tm5 rm60">
+検索語にヒットしたファイルをテーブルビューに表示する。表示項目は、フォルダ名、ファイル名、ファイルの中に含まれる検索語の数、ファイルのサイズ（バイト数）である。それぞれの項目をキーにしてレコードのソートを行うことができる。フォルダ名のソートはフォルダ名+ファイル名がキーとなる。列見出しをクリックすると昇順/降順のソートが繰り返される。
+テーブルビューのレコードを選択しダブルクリックすると、そのファイルをエディタまたはブラウザで開くことができる。
+</div>
+
+<h2 class="lm100 tm20 rm60 bm0">
+検索条件を指定する
+</h2>
+<h3 class="lm100 tm10 rm60 bm0">
+(1) 検索語の複数指定
+</h3>
+<div class="lm100 tm5 rm60">
+検索語を複数指定することができる。ファイルに検索語が全て含まれている場合に判定が真となるAND検索、検索語が最低一つでも含まれていれば真となるOR検索に対応する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords5a.png&title=findingWords5a&width=600" target="_new">
+<img class="lm120 tm0 bm0" src="/data/B43/findingWords5a.png" alt="[findingWords5a]" width="380" align="middle"></a>
+
+<h3 class="lm100 tm20 rm60 bm0">
+(2) 検索対象ファイルの絞り込み
+</h3>
+<div class="lm100 tm5 rm60">
+ファイルの拡張子を指定して検索する対象ファイルを絞り込むことができる。拡張子の複数の入力、ワイルドカード（*)による指定が可能である。また除外チェックボックスを on にすれば、上記と逆に指定した拡張子のファイルは検索の対象外となる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords6a.png&title=findingWords6a&width=480" target="_new">
+<img class="lm120 tm0 bm0" src="/data/B43/findingWords6a.png" alt="[findingWords6a]" width="310" align="middle"></a>
+<h3 class="lm100 tm20 rm60 bm0">
+(3) 検索方法の指定
+</h3>
+<div class="lm100 tm5 rm60">
+検索方法は、Stringクラスのrange(of:)メソッドか、正規表現オブジェクトのいずれかを選択できる。前者は正規表現に対応していない。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords2a.png&title=findingWords2a&width=500" target="_new">
+<img class="lm120 tm10 bm0" src="/data/B43/findingWords2a.png" alt="[findingWords2a]" width="300" align="middle"></a>
+<h3 class="lm100 tm10 rm60 bm0">
+(4) 大文字/小文字の区別
+</h3>
+<div class="lm100 tm5 rm60">
+検索のときアルファベットの大文字/小文字を区別するか、しないかを選択できる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords4a.png&title=findingWords4a&width=500" target="_new">
+<img class="lm120 tm10 bm0" src="/data/B43/findingWords4a.png" alt="[findingWords4a]" width="300" align="middle"></a>
+
+<h3 class="lm100 tm20 rm60 bm0">
+ファイルを開くアプリケーションの選択
+</h3>
+<div class="lm100 tm0 rm60">
+いずれかのアプリケーションをメニューから選ぶことができる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords3a.png&title=findingWords3a&width=500" target="_new">
+<img class="lm120 tm20 bm0" src="/data/B43/findingWords3a.png" alt="[findingWords3a]" width="300" align="middle"></a>
+
+<h2 class="lm100 tm20 rm60 bm0">
+状態の保存
+</h2>
+<div class="lm100 tm5 rm60">
+ウィンドウの大きさ、テーブルビューの列の幅、列の並びはアプリケーション終了時にユーザーデフォルトに保存する。ユーザによるこれらの変更は、アプリケーションが終了しても次回に引き継がれる。</div>
+<div class="lm100 tm10 rm60">
+メニューの設定「検索方法」「アプリケーション」「大文字/小文字」の選択値は plist に保存して引き継ぐ。　~/Documents/DirectoryTraverse.plist
+</div>
+
+<h2 class="lm100 tm20 rm60 bm0">
+並列化について
+</h2>
+<div class="lm100 tm5 rm60">
+検索対象のファイルを2〜10分割し、それぞれ個別にテキスト検索処理を並列して行い、全ての処理が終了後に結果をマージする。結果は最終的にソートするので処理の順番は問わない。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+処理の途中経過（進捗率）をUIのプログレスバーに表示する。進捗率は全ファイル数に対する処理済みのファイル数の割合を表示する。ただしこの機能は効率の点から特定のファイル数（1,000）以下では動かないようにしている。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+処理の途中で、処理の中止をUIから受け付けられるようにする。中止ボタンがクリックされたら即時に処理を中止する。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+対象範囲が大き過ぎると処理が長時間になるので、ファイル数が特定の数（100,000）を超えた場合、警告ダイアログを表示し、処理をキャンセルできるようにする。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+本アプリでは、複数の選択肢からスレッド数を選べるがあまり意味はない。単純に 1 or 10 で良いのだが、Elapsを確認したかったのでそのままにしてある。
+</div>
+
+
+
+<h3 class="lm100 tm20 rm60 bm0">
+クラス関連図
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords2-2.png&title=findingWords2-2&width=900" target="_new">
+<img class="lm110 tm0 bm0" src="findingWords2-2.png" alt="[findingWords2-2]" width="500"></a>
+<h3 class="lm100 tm0 rm60 bm0">
+(1) マルチスレッド処理
+</h3>
+<div class="lm100 tm5 rm60 bm0">
+処理の並列化はGCDによるマルチスレッド機能を利用し、キューはコンカレントとする（シリアルでは処理が直列するので無意味）。処理中のUIに対する出力、UIからの入力の受け付けを可能とするため、サブスレッドの処理は非同期(async）とする。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+サブスレッドによる全てのテキスト検索が終わった後、一覧表の作成と表示は AppDelegateで行う。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+プログレスバーの表示や、キャンセルの受付などの UI操作はサブスレッド上では実行できないため、それらの処理は一度メインスレッドに切り替えてから実行する。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+コンカレントに起動した複数のサブスレッドからオブジェクトの共用プロパティにアクセスするときは注意が必要。たとえば配列に対する要素の追加はスレッドセーフでないので、代入時の競合でシステムクラッシュする可能性がある。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+またサブスレッドで作成した値を共用プロパティに更新する処理があったとする。プロパティの値を取得し、それに対して何らかの加工のあと書き戻すをというように処理が複数ステップにわたるとき、多数のスレッドが同時にこの処理を実行した場合、スレッドごとの一貫性が保証されず、予期しない結果となる可能性が高い。
+</div>
+<div class="lm100 tm10 rm60 bm0">
+このようなケースでは、処理ブロックをシリアルキューに入れ、時系列に沿った順次処理を保証することで問題を回避する。このアプリケーションでは、個別の検索結果のリストを統合用テーブルにマージする処理と、進捗表示のため処理済みファイル数をカウントアップしプログレスバーに出力する処理をメインスレッドのシリアルキューで実行している。
+</div>
+<h3 class="lm100 tm10 rm60 bm0">
+(2) 処理の同期
+</h3>
+<div class="lm100 tm5 rm60 bm0">
+並行して実行される検索処理の終了を待って次の一覧表の作成に進むには、同期的な制御が必要になる。ここではグローバルなカウンタを用意し、検索処理がひとつ終わるごとにカウンタをインクリメントし、全てが終わった時点で一覧表を作成・表示するデリゲートメソッドを呼び出す。最後の一回以外はデータのマージのみを行う。
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+湖畔
+
+
+

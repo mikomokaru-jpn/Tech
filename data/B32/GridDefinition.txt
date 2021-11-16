@@ -1,0 +1,14 @@
+struct GridCol{
+    .... 
+    //テキストの整形・年月日をスラッシュで区切って返す
+    var formatText: ((Any) -> (String))? = nil
+    //変数の値に応じた文字色を返す
+    var dynamicForeColor: ((Any) -> GridColor)? = nil              
+    //複数の変数の値に応じた文字色を返す
+    var dynamicForeColor2: (([String:Any]) -> GridColor)? = nil    
+    //変数の値に応じた背景色を返す
+    var dynamicBackColor: ((Any) -> GridColor)? = nil              
+    //複数の変数の値に応じた背景色を返す
+    var dynamicBackColor2: (([String:Any]) -> GridColor)? = nil    
+    ....
+}    

@@ -1,0 +1,15 @@
+-(NSString*)getFileData
+{
+    //アプリケーションバンドルを取得する
+    NSBundle *bundle = [NSBundle mainBundle];
+    //リーソスに格納されているファイル（tanka.txt）のパスを求める
+    NSString *path = [bundle pathForResource:@"tanka"
+                                      ofType:@"txt"];
+    //NSURLに変換する
+    NSURL *url = [NSURL fileURLWithPath:path];
+    //ファイルを読み込む
+    NSString *string = [NSString stringWithContentsOfURL:url
+                               encoding:NSUTF8StringEncoding
+                                                   error:nil];
+    return string;
+}

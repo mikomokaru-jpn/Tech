@@ -1,0 +1,15 @@
+var results:[NSRange]
+results = text.searchReg(keyword: "japan")
+print(results) // [{6, 5}]
+
+results = text.searchReg(keyword: "japan", options: [.caseInsensitive])
+print(results) // [{6, 5}, {87, 5}, {244, 5}]
+
+results = text.searchReg(keyword: "日本")
+print(results) // [{147, 2}, {388, 2}]
+
+results = text.searchReg(keyword: "j.*?n", options: [.caseInsensitive])
+print(results) // [{6, 5}, {87, 5}, {244, 5}]
+
+results = text.searchReg(keyword: "日.*?本")
+print(results) // [{147, 2}, {289, 5}, {388, 2}]

@@ -1,0 +1,11 @@
+$ brew info node
+node: stable 16.2.0 (bottled), HEAD
+Platform built on V8 to build network applications
+https://nodejs.org/
+/usr/local/Cellar/node/16.2.0 (2,799 files, 49.7MB) *
+  Poured from bottle on 2021-06-01 at 16:33:13
+From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/node.rb
+
+#パッケージのインストール 
+$ npm install express —save
+$ npm install mysql —save

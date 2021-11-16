@@ -1,0 +1,14 @@
+$_POST['id']
+
+-- 使用例 -- CGContextRef
+try{
+    $sql = "SELECT id, date, upper, lower, confirm FROM blood_pressure 
+                WHERE  ( id=:id ) AND ( date >=:fd AND date <=:td ); ";
+    $stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':id', $_POST['id'], PDO::PARAM_INT);	
+    $stmh->bindValue(':fd', $_POST['from_date'], PDO::PARAM_INT);
+    $stmh->bindValue(':td', $_POST['to_date'], PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー:'. $e->getMessage());
+}

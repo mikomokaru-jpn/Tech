@@ -1,0 +1,92 @@
+<!-- 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>マウスイベントを補足する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm100 tm20 bm10">マウスイベントを補足する</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B33/TrackingArea1.mp4&title=TrackingArea1&width=600" target="_new">
+<img class="lm100 tm0 bm0" src="TrackingArea1.png" alt="[TrackingArea1]" width="400"></a>
+<div class="lm120 tm0 rm60">
+画像をクリックすると動画になります。
+</div>
+<div class="lm100 tm20 rm60">
+基本的には、NSResponderクラスに属する"mouse"で始まるインスタンスメソッドをNSViewのサブクラスに実装すれば、ビュー上のマウスイベントを補足することができる。ただし、mouseMovedメソッドによりマウスの移動イベントを補足するためには、トラッキングエリア（NSTrackingAreaクラスのインスタンス）というものを作成しビューに追加する必要がある。
+</div>
+<div class="lm100 tm20 rm60">
+トラッキングエリアの設定
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B33/TrackingArea.txt" width="550" height="300"></iframe>
+<div class="lm100 tm20 rm60">
+マウスイベントを補足するメソッド
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B33/mouseEvent.txt" width="550" height="330"></iframe>
+<div class="lm100 tm20 rm60">サンプルプログラムのソースコード
+<a href="/lib/HTMLofText.html?filename=/data/B33/source/UAView.txt&title=UAView" target="_new">NSViewのサブクラス</a>
+</div>
+
+<h3 class="lm100 tm20 rm60 bm0">
+ビューの座標系を変更する
+</h3>
+<div class="lm100 tm5 rm60">
+上記サンプルグログラムを実行すると、マウスイベントのlocationInWindowプロパティからマウスポインタが指す点を取得できるが、これはウィンドウを基準とした座標となる。この点を特定のビューの座標系に変換するには、NSViewクラスのconvertメソッドを使用する。
+</div>
+<div class="lm100 tm20 rm60">
+次のコードはマウスポインタの点を内側（自身）のビューの座標系に変換する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B33/convert1.txt" width="550" height="40"></iframe>
+<div class="lm130 tm5 rm60">
+取得した点（event.locationInWindow）を
+</div>
+<div class="lm130 tm0 rm60">
+ウィンドウ座標から（from: nil）
+</div>
+<div class="lm130 tm0 rm60">
+内側のビュー（self）を基準にした座標に変換せよ。
+</div>
+
+<div class="lm100 tm20 rm60">
+次のコードでも同じである
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B33/convert2.txt" width="550" height="60"></iframe>
+<div class="lm130 tm5 rm60">
+取得した点（event.locationInWindow）を
+</div>
+<div class="lm130 tm0 rm60">
+ウィンドウ座標と重なるビュー（window!.contentView!.superview!）から
+</div>
+<div class="lm130 tm0 rm60">
+内側のビュー（self）を基準にした座標に変換せよ。
+</div>
+
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B33/convert.png&title=convert.png&width=800" target="_new">
+<img class="lm90 tm30 bm0" src="convert.png" alt="[convert.png]" width="550"></a>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

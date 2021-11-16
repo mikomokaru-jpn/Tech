@@ -1,0 +1,34 @@
+//------------------------------------------------------------------------------
+//  View6.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface View6 : NSView
+@end
+
+//------------------------------------------------------------------------------
+//  View6.m
+//------------------------------------------------------------------------------
+#import <QuartzCore/QuartzCore.h>
+#import "View6.h"
+#import "NSBezierPath+MyBezierPath.h"
+@implementation View6
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    //背景色
+    self.layer.backgroundColor = [NSColor blackColor].CGColor;
+    //枠線
+    self.layer.borderWidth = 20.0;
+    self.layer.borderColor = [NSColor lightGrayColor].CGColor;
+    //円
+    NSRect rect = NSMakeRect(35, 35,
+                             dirtyRect.size.width-70,
+                             dirtyRect.size.height-70);
+    NSBezierPath *path1 = [NSBezierPath bezierPathWithOvalInRect:rect];
+    shapeLayer.path = path1.cgPath;
+    shapeLayer.lineWidth = 30.0;
+    shapeLayer.strokeColor = [NSColor greenColor].CGColor;
+    [self.layer addSublayer:shapeLayer];
+}
+@end

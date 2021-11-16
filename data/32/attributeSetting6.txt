@@ -1,0 +1,12 @@
+NSMutableAttributedString *atrStr = [[NSMutableAttributedString alloc]
+                                     initWithString:@"幸い住むとひとのいう"];
+NSFont* font = [NSFont fontWithName:@"YuKyo-Bold" size:20];
+[atrStr addAttribute:NSFontAttributeName 
+               value:font 
+               range:NSMakeRange(0, [atrStr length])];
+[atrStr addAttribute:NSUnderlineStyleAttributeName 
+               value:@(NSUnderlineStyleSingle) //NSInteger
+               range:NSMakeRange(0, 5)];
+[atrStr addAttribute:NSUnderlineColorAttributeName 
+               value:[NSColor redColor]
+               range:NSMakeRange(0, 5)];

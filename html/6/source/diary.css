@@ -1,0 +1,257 @@
+/*---------------------
+healthCalendar.html
+---------------------*/
+body.topLevel{
+    display: grid;
+    grid-template-columns: 350px 410px 405px;
+    margin-top: 20px;
+}
+body.topLevel2{
+    display: grid;
+    grid-template-columns: 350px 0px 405px;
+    margin-top: 20px;
+}
+/* カレンダー --------------------------------------------------------------------*/
+.calendar{
+    width: 305px;
+    grid-column: 1;
+    margin-left: 10px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    background-color:darkgray;
+
+}
+table {
+    border-spacing: 3px; 
+}
+table th{
+    width: 35px; height: 20px;
+    font-size: 0.9rem;
+}
+table th.saturday{
+    color: blue;
+}
+table th.sunday{
+    color: red;
+}
+table td{
+    text-align: center;
+    vertical-align: middle;
+    width: 35px; height: 45px;
+}
+table td.holiday{
+    color: #ff0000;
+}
+table td.saturday{
+    color: #0000ff;
+}
+table td.largeFont{
+    font-size: 1.5rem;
+}
+table td.smallFont{
+    font-size: 1.0rem;
+}
+table td.input{
+    background-color: skyblue;  /*日付の背景色*/
+}
+table td.noInput{
+    background-color: white;   
+}
+table td.currentDay{
+    width: 31px; height: 41px;
+    border: solid 2px red;
+}
+button {
+    margin-top: 5px;
+    width: 30px;
+    height: 25px;
+    background-color: #ffffff;
+    border: solid 1px #ffffff;
+    color: black;
+    font-size: 1.0rem;
+    border-radius: 7px;
+}
+button.preButton {
+    margin-left: 2px;
+}
+button.nxtButton {
+    margin-left: 0px;
+}
+p.thisYearMonth{
+    display: inline-block;
+    width: 208px;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+.buttons {
+    display: grid;
+    grid-template-columns: 142px 142px;
+    grid-template-rows:  minmax(0px, auto);
+}
+.buttonField {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+.aButton {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: white;
+    color: black;
+    border-bottom: solid 4px black;
+}
+.aButton:active{
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;
+}
+/*-----------------------------------------------------------------------------
+ 入力フォーム 
+-----------------------------------------------------------------------------*/
+section.INwrapper { 
+    display: block; 
+    grid-column: 2;
+    background-color: darkgray;
+} 
+/* 年月 */
+section.INwrapper > div.INbox1{ 
+    padding-top: 5px;
+}
+div.INbox1 > div.INmidashi{
+    font-size:  1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* 入力フィールド */
+div.INbox2 > textarea.INTextArea{
+    width: 360px;
+    height: 363px;
+    font-size: 0.9rem; 
+    margin-left: 20px;
+    resize: none;
+}
+/*　更新・閉じるボタン */
+.INaButton {
+    display: inline-block;
+    width: 90px;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
+    margin-left: 20px;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    background: white;
+    color: black;
+    border-bottom: solid 4px black;
+    font-size: 0.9rem;
+}
+.INaButton:active{
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;
+}
+/*-----------------------------------------------------------------------------
+ 検索フォーム 
+-----------------------------------------------------------------------------*/
+section.INwrapper2 { 
+    display: block; 
+    grid-column: 3;
+    background-color: darkgray;
+} 
+.SearchYear{
+    margin-top: 10px;
+    margin-left: 12px;
+    width: 40px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.SearchMonth{
+    width: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.SearchNum{
+    margin-left: 0px;
+    width: 18px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.SearchText{
+    display: block; 
+    width: 376px;
+    height: 20px;
+    margin-top: 10px;
+    margin-left: 12px;
+    padding-left: 3px;
+    font-size: 0.9rem; 
+}
+.SearchButton{
+    display: inline-block;
+    width: 60px;
+    text-align: center;
+    background: white;
+    color: black;
+    margin-top: 15px;
+    margin-left: 12px;
+    margin-right: 10px;
+    padding-top: 2px;
+    font-size: 0.9rem; 
+    border-bottom: solid 2px black;
+}
+.SearchButton:active{
+    transform: translateY(2px);/*下に動く*/
+    border-bottom: none;
+}
+.CloseButton{
+    display: inline-block;
+    width: 60px;
+    text-align: center;
+    background: white;
+    color: black;
+    margin-top: 15px;
+    margin-left: 142px;
+    margin-right: 10px;
+    padding-top: 2px;
+    font-size: 0.9rem; 
+    border-bottom: solid 2px black;
+}
+.CloseButton:active{
+    transform: translateY(2px);/*下に動く*/
+    border-bottom: none;
+}
+p.date{
+    width: 120px;
+    text-align: left;
+    font-size: 0.9rem; 
+    background-color: white;
+    margin-left: 12px;
+    margin-top: 15px;
+    margin-bottom: 0px;
+    padding-left: 2px;
+}
+p.text{
+    width: 380px;
+    text-align: left;
+    font-size: 0.9rem; 
+    background-color: white;
+    margin-left: 12px;
+    margin-top: 0px;
+    padding-left: 2px;
+    padding-top: 2px;
+}
+p.notice{
+    font-size: 1.2rem; 
+    color: red;
+    padding-left: 12px;
+}
+.smallFont{
+    font-size: 0.9rem; 
+}
+span.match{
+    background-color: yellow;
+}

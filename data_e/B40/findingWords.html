@@ -1,0 +1,150 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Text search tool No. 1</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs2.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm100 tm20 bm0">Text search tool No. 1</h2>
+<h2 class="lm100 tm0 bm0">Full-text search  traversing  a specified directory</h2>    
+<div class="lm100 tm10 rm60">
+Confirmed operation: MacOS 10.14.6 / Xcode 11.3.1
+</div>
+<div class="lm100 tm10 rm60">
+It searches all text files under a specific folder, including subfolders, and displays a list of file names containing the search terms on the table view. 
+A target folder could be specified by Open Panel.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B40/findingWords1.mp4&title=findingWords&width=800" target="_new">
+<img class="lm100 tm0 bm0" src="/data/B40/findingWords1.png" alt="[findingWords1]" width="500"></a>
+<h3 class="lm100 tm20 rm60 bm0">
+Display items
+</h3>
+<div class="lm100 tm5 rm60">
+Display  file names  that  contains  search terms in  its text string.
+The items are the folder name, the file name, the number of search terms contained in the file, and the file size (number of bytes).
+Records can be sorted using each item as a key.
+Clicking on a column heading of  the table view,  the records are sorted by ascending or descending order that toggled.
+</div>
+<div class="lm100 tm10 rm60">
+You can open the file with  editor or browser, if you select a record of the table view and double-click it.
+</div>
+<div class="lm100 tm10 rm60">
+Click  list display button to output the file data to a file and  open it with the same application as above.
+</div>
+<div class="lm100 tm0 rm60">
+  Output destination： ~/Documents/DirectoryTraverse.txt
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+You can specify the following search conditions
+</h3>
+<h3 class="lm100 tm5 rm60 bm0">
+(1) Multiple search terms
+</h3>
+<div class="lm100 tm5 rm60">
+AND search that  AND oerator is true  is  all  search terms are included in the file.
+And OR search  that OR operator is true is at least one search term is included in the file.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B40/findingWords5.png&title=findingWords5&width=600" target="_new">
+<img class="lm120 tm0 bm0" src="/data/B40/findingWords5.png" alt="[findingWords5]" width="380" align="middle"></a>
+
+<h3 class="lm100 tm20 rm60 bm0">
+(2) Limitting files to be searched by a extention
+</h3>
+<div class="lm100 tm5 rm60">
+You can limmit the files to be searched by specifying a file extension  that could  be with a wild card (*).
+Also you can enter multiple extensions.
+If the exclusion check box is on, on the contrary, files with the specified extension will not be searched.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B40/findingWords6.png&title=findingWords6&width=480" target="_new">
+<img class="lm120 tm0 bm0" src="/data/B40/findingWords6.png" alt="[findingWords6]" width="310" align="middle"></a>
+<h3 class="lm100 tm20 rm60 bm0">
+(3) Specifying the search method
+</h3>
+<div class="lm100 tm5 rm60">
+You can select either  range (of :) method of  String class or  regular expression object as the search method. 
+The former does not support regular expression function.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B40/findingWords2.png&title=findingWords2&width=500" target="_new">
+<img class="lm120 tm10 bm0" src="/data/B40/findingWords2.png" alt="[findingWords2]" width="300" align="middle"></a>
+<h3 class="lm100 tm10 rm60 bm0">
+(4) Case sensitive
+</h3>
+<div class="lm100 tm5 rm60">
+You can choose to be Case sensitive or not.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B40/findingWords4.png&title=findingWords4&width=500" target="_new">
+<img class="lm120 tm10 bm0" src="/data/B40/findingWords4.png" alt="[findingWords4]" width="300" align="middle"></a>
+
+<h3 class="lm100 tm20 rm60 bm0">
+Select the application to open file
+</h3>
+<div class="lm100 tm0 rm60">
+You can select an application from the menu.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B40/findingWords3.png&title=findingWords3&width=500" target="_new">
+<img class="lm120 tm20 bm0" src="/data/B40/findingWords3.png" alt="[findingWords3]" width="300" align="middle"></a>
+
+<h3 class="lm100 tm20 rm60 bm0">
+Save the current state and options
+</h3>
+<div class="lm100 tm5 rm60">
+The size of the window, the width of the columns in the table view, and the order of the columns are saved in User Default when the application is ended.
+Selection values of menus which are search method,  application for opening file, and case sensitive are also saved.
+These changes made by a user is  carried over to the next time when the application starts.
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+  Class structure diagram
+</h3>
+<div class="lm100 tm10 rm60">
+!!!!! under construction !!!!
+</div>
+
+<h3 class="lm100 tm20 rm60 bm0">
+  About full-text search techniques
+</h3>
+<div class="lm100 tm0 bm0 rm60">
+  See independent chapters.
+</div>
+
+<h4 class="lm100 tm10 bm0 rm60">
+<a href='/data/87/traverse.html' target="_blank">ディレクトリをトラバースしてファイル情報を得る</a>
+</h4>
+
+<h4 class="lm100 tm10 bm0 rm60">
+<a href='/data/B39/objc_call.html' target="_blank">SwiftからObjective-Cメソッドを呼ぶ</a>
+</h4>
+<h4 class="lm100 tm10 bm0 rm60">
+<a href='/data/B41/text_search.html' target="_blank">テキスト全文検索を行う</a>
+</h4>
+
+<h3 class="lm100 tm30 bm0">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S18_FindingWords" target="_new">github.com/mikomokaru-jpn/macOS_S18_FindingWords</a>
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+

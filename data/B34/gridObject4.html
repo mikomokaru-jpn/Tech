@@ -1,0 +1,109 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>一覧表を作成する（４）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">一覧表を作成する（４） 外部ファイルから定義を読み込む</h2>
+<div class="lm100 tm10 rm60">
+表の定義データを外部ファイルから読み込むことを可能とする。これによりアプリケーションのビルドの後でも、一覧表を動的に作成・変更することができる。定義データは、各定義のプロパティ名をキーとした辞書形式のレコードとして読み込む。本サンプルでは、特定のURLからHTTPリクエストのレスポンスとして定義データを取得する方法で実装してみた。
+</div>
+<!-- 画像 -->
+<img class="lm100 tm10 bm0" src="gridObject4.png" alt="[gridObject4]" width="400">
+<h3 class="lm100 tm20 bm0 rm60">
+テーブルの一覧表を作成して表示するためのコード
+</h3>
+<h3 class="lm100 tm5 bm0 rm60">
+表の定義と表示
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B34/AppDelegate1.txt" width="550" height="340"></iframe>
+<h3 class="lm100 tm20 bm0 rm60">
+定義データの取得
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B34/AppDelegate2.txt" width="550" height="380"></iframe>
+
+
+<h3 class="lm100 tm20 bm0 rm60">
+定義データの定義
+</h3>
+<div class="lm100 tm0 rm60">
+サーバサイドのPHPスクリプトにJSON形式で記述する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B34/request.txt" width="550" height="910"></iframe>
+
+
+<h3 class="lm100 tm30 bm0">
+クラス一覧
+</h3>
+
+<!-- ソースコード　リンク -->
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B34/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>　アプリケーション
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+一覧表の表示を実現するための汎用クラス
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridDefinition.txt&title=GridDefinition" target="_new">GridDefinition</a>　列プロパティの構造体定義
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridConstants.txt&title=GridConstants" target="_new">GridConstants</a>　定数および共通クラスメソッドの定義
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridObject.txt&title=GridObject" target="_new">
+GridObject
+</a>　一覧表作成処理を制御するクラス
+</div>
+<div class="lm100 tm20 bm0 rm60">
+※ 以下のクラスはアプリケーションから直接参照はしない
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridBaseView.txt&title=GridBaseView" target="_new">
+GridBaseView
+</a>　スクロールビューに含まれるコンテントビュー
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridRecordView.txt&title=GridRecordView" target="_new">
+GridRecordView
+</a>　１行のレコードビュー
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridItemView.txt&title=GridItemView" target="_new">
+GridItemView
+</a>　セル（行列の要素）ビュー
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridHeaderView.txt&title=GridHeaderView" target="_new">
+GridHeaderView
+</a>　列見出しビュー
+</div>
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B30/source/GridHeaderItemView.txt&title=GridHeaderItemView" target="_new">
+GridHeaderItemView
+</a>　列見出しのセル（要素）ビュー
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,9 @@
+#import "Person.h"
+@interface NSArray (Person)
+//イニシャライザ：Personオブジェクトのリストを作成
+-(id)initWithPersonList;
+//検索メソッド：指定した誕生日の範囲
+-(NSArray<Person*>*)selectByBirthdayFrom:(NSDate*)from to:(NSDate*)to;
+//検索メソッド：指定した性別
+-(NSArray<Person*>*)selectBySex:(SexType)sex;
+@end

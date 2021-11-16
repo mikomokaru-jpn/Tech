@@ -1,0 +1,24 @@
+let targetPath = "/Users/itohisao/Desktop/mikomokaru"
+let fileNameArray = NSMutableArray.init()
+traverse(targetPath, fileNameArray) //配列は参照渡しになる
+
+//-- 実行結果 fileNameArray --
+/Users/itohisao/Desktop/mikomokaru/data/.DS_Store
+/Users/itohisao/Desktop/mikomokaru/data/01/.DS_Store
+/Users/itohisao/Desktop/mikomokaru/data/01/01_calendar01.png
+/Users/itohisao/Desktop/mikomokaru/data/01/calendar.png
+/Users/itohisao/Desktop/mikomokaru/data/01/calendar01.jpg
+/Users/itohisao/Desktop/mikomokaru/data/01/simple_calendar.php
+/Users/itohisao/Desktop/mikomokaru/data/01/simple_calendar.php-e
+/Users/itohisao/Desktop/mikomokaru/data/01/source/.DS_Store
+/Users/itohisao/Desktop/mikomokaru/data/01/source/AppDelegate.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/holiday.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/NSColorMyColor.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/UACalendar.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/UACalendarDate.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/UADateUtil.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/UAItemView.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/UATextField.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/source/UAView.txt
+/Users/itohisao/Desktop/mikomokaru/data/01/viewLayer.png
+/Users/itohisao/Desktop/mikomokaru/data/01/xfile.txt

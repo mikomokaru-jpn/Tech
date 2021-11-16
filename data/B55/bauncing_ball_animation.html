@@ -1,0 +1,82 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>跳ね返るボールのアニメーション（CABasicAnimation）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+跳ね返るボールのアニメーション
+</h2>
+<h3 class="lm70 tm5 bm0">
+CABasicAnimationクラスを使う
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B55/bauncing_ball_animation.mp4&title=bauncing_ball1&width=550" target="_new">
+<img class="lm80 tm10 bm0" src="bauncing_ball_animation.png" alt="[bauncing_ball]" width="300"></a>
+<div class="lm120 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+実装のポイント
+</h3>
+<div class="lm70 tm0 rm60">
+CABasicAnimationクラスを利用したアニメーションとは、ある点からある点までの図形の移動のことである。
+</div>
+<div class="lm70 tm10 rm60">
+ボールの移動の単位は「Timerを利用した跳ね返るボールのアニメーション」と同様に、距離４ピクセルのベクトルとして表現する。跳ね返りの仕組みも同様である。一つのアニメーションは一つのベクトル単位と対応し、アニメーションを連続して実行することによりボールを移動させている。
+
+</div>
+<div class="lm70 tm10 rm60">
+アニメーションを連続して実行するには、ひとつのアニメーションが終わったあと、次のアニメーションを起動させる必要がある。これは CAAnimationDelegate の animationDidStopメソッドにより得られるアニメーションの終了通知をトリガーとしている。
+</div>
+  
+<div class="lm70 tm10 rm60">
+この方法ではやはりパフォーマンスがよくないので、ボールの移動速度は劣る。別の方法として、壁から壁までの移動をひとつのアニメーションとしてしまえば良いのだが、跳ね返り処理の仕方が思いつかなかったので諦めてしまった。
+</div>
+
+<div class="lm70 tm10 rm60">
+毎回のアニメーションの開始時には、ボールの表示位置（position）にアニメーションの開始位置（fromValue）を設定すること。これを忘れると毎回一瞬だけボールが初期位置に現れて画面がちらつく。
+</div>
+
+<div class="lm70 tm10 rm60">
+</div>
+
+<div class="lm70 tm10 rm60">
+</div>
+
+<div class="lm70 tm5 rm60">
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+ビューのサブクラス（全ソースコード）
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B55/UAView.swift" width="580" height="1100"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+AppDelegate
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B55/AppDelegate.swift" width="580" height="250"></iframe>
+
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

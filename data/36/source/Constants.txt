@@ -1,0 +1,19 @@
+//------------------------------------------------------------------------------
+//  Constants.h
+//------------------------------------------------------------------------------
+#ifndef Constants_h
+#define Constants_h
+
+//テキストファイルの日付フォーマット
+static NSString* const kDateFormat = @"yyyy-MM-dd HH:mm";
+//フォーム表示の日付フォーマット
+static NSString* const kDayFormat = @"yyyy年MM月dd日(E)";
+static NSString* const kTimeFormat = @"HH時mm分";
+//実績リストのサマリーキー
+typedef enum : NSInteger{
+    BY_DATE = 0,
+    BY_CODE = 1,
+    BY_DATE_CODE = 2,
+} SummaryKeyType;
+
+#endif /* Constants_h */

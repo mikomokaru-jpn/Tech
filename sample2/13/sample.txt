@@ -1,0 +1,45 @@
+//------------------------------------------------------
+// HTTPリクエスト（POSTコマンド）によりJSON形式のデータを送信する
+//------------------------------------------------------
+function getData(){
+    //オブジェクトの作成
+    let request = new XMLHttpRequest();
+    //POSTパラメータの設定・連想配列をJSON文字列に変換する
+    let from_date = '20180501';
+    let to_date = '20180531';       
+    let record = {id:500, from_date:from_date, to_date:to_date}; 
+    let param = JSON.stringify(record);
+    //通信方法の設定
+    request.open('POST', './php/select01post_json.php'); 
+    //リクエストヘッダの設定
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //リクエストの送信
+    request.send(param);
+
+    //-----------------------------------
+    //レスポンスの受信・受信時に起動するメソッド
+    //-----------------------------------
+    request.onload = function(){
+        let READYSTATE_COMPLETED = 4;
+        let HTTP_STATUS_OK = 200;
+        if( this.readyState == READYSTATE_COMPLETED && this.status == HTTP_STATUS_OK ){
+            //正常・データ取得
+            let jsonText = request.responseText;
+            let valuesList = JSON.parse(jsonText);
+            for(let rec of valuesList){
+                console.log(rec);    
+            }
+        }else{
+            alert('HTTPエラー status:'+this.status);
+            return;
+        }
+    }
+    
+    //---------------------------
+    //タイムアウト時に起動するメソッド
+    //---------------------------
+    request.ontimeout = function () {
+        alert("timed out.");
+        return;
+    }; 
+}

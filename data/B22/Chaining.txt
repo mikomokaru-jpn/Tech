@@ -1,0 +1,7 @@
+//プロパティの参照
+let myfont: NSFont? = NSFont.init(name:"Arial", size:32)
+let name:String? = <span class="redcolor">myfont?.fontName</span>
+
+//メソッドの呼び出し
+let obj: Aclass? = Aclass.init()
+obj.funcA()

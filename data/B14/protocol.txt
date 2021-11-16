@@ -1,0 +1,4 @@
+//プロトコル宣言
+protocol SubWinViewDelegate: class {
+    func clickView(event: NSEvent)
+}

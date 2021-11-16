@@ -1,0 +1,11 @@
+let now = Date.init()
+let formatter: DateFormatter = DateFormatter()
+formatter.locale = Locale.init(identifier: "ja_JP")
+formatter.timeZone = TimeZone.init(secondsFromGMT: 0) //GMTからの時差(分)
+//formatter.timeZone = TimeZone(abbreviation:"GMT")   //略称指定
+formatter.dateStyle = .full
+formatter.timeStyle = .full
+print(formatter.string(from: now))
+
+//結果
+2021年10月23日 土曜日 3時54分42秒 グリニッジ標準時

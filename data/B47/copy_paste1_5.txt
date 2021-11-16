@@ -1,0 +1,7 @@
+// 包括チェック
+if let value = try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]) {
+    if UTTypeConformsTo(value.typeIdentifier! as CFString, kUTTypeImage){
+        menu.item(withTitle: "Paste")?.isEnabled = true
+        self.objectType = typeFileURL
+    }
+}

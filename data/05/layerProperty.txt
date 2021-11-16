@@ -1,0 +1,9 @@
+- (void)applicationDidFinishLaunching:(NSNotification *)ntf{
+    NSView *view = _window.contentView; //コンテントビュー
+    //外見のカスタマイズ
+    view.wantsLayer = YES;                                     
+    view.layer.backgroundColor = [NSColor cyanColor].CGColor;  
+    view.layer.borderWidth = 3.0;                              
+    view.layer.borderColor = [NSColor blueColor].CGColor;      
+    view.layer.cornerRadius = 20.0;                            
+}

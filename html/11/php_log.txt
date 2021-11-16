@@ -1,0 +1,9 @@
+//phpスクリプト・指定した名前のテーブルが存在しない
+try{
+    $sql = "SELECT * FROM access_codes;";
+    $stmh = $pdo->prepare($sql);
+    $stmh->execute();
+}catch (PDOException $e) {
+    error_log("collect_codes1.php ". $e->getMessage());    
+    die('SELECT error:');
+}

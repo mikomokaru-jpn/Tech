@@ -1,0 +1,1 @@
+@interface AppDelegate : NSObject <NSApplicationDelegate,                                    ChangeColorDelegate> //デリゲートを受託

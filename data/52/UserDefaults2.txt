@@ -1,0 +1,19 @@
+@property NSMutableDictionary<NSString*, NSMutableArray*>*resultList;
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    ....
+    //保存データの読み込み
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSDictionary<NSString*, NSMutableArray*>*saveData =
+        [ud dictionaryForKey:@"SAVE_DATA"];
+    if (saveData != nil){
+        _resultList = [saveData mutableCopy];
+        for (NSString *key in saveData.allKeys){
+            _resultList[key] = [saveData[key] mutableCopy];
+        }
+    }else{
+        NSLog(@"saveData empty !!!!");
+        //初期成績表の作成
+    }
+    ....
+}

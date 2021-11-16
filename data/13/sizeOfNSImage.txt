@@ -1,0 +1,5 @@
+//値の単位は、NSInteger
+NSImageRep *imageRep = image.representations[0];
+NSLog(@"NSImage %ld:%ld", imageRep.pixelsWide, imageRep.pixelsHigh);
+
+//NSImageオブジェクトのsizeプロパティは、画面解像度に依存するサイズ情報なので不適

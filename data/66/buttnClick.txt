@@ -1,0 +1,9 @@
+-(void)buttnClick:(NSButton*)sender{
+    //引数senderには、クリックしたボタンのオブジェクトが渡る。
+    NSInteger sCode = sender.bezelStyle;
+    NSString *text = [NSString stringWithFormat:
+                      @"( state=%ld )  %@ clicked ",
+                      sender.state, _styleStringArray[sCode]];
+    _tesxtField.stringValue = text;
+    NSLog(@"%@",text);
+}

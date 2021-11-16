@@ -1,0 +1,78 @@
+//NSRectの配列
+-(void)arrayOfNSRect
+{
+    NSMutableArray *valueList = [[NSMutableArray alloc] init];
+    for (int i=0; i<10; i++)
+    {
+        NSRect rect = NSMakeRect(i*10, i*10, i+1, i+2); 
+        //NSRect → NSValue変換（関数あり）
+        [valueList addObject:[NSValue valueWithRect:rect]];
+    }
+    NSLog(@"NSRectの配列");
+    for (NSValue *value in valueList)
+    {
+        NSRect rect;
+        //NSValue → NSRect変換
+        [value getValue:&rect];
+        NSLog(@"x=%02.0f y=%02.0f Width=%2.0f Height=%2.0f",
+              rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+    }
+}
+
+//実行結果
+2019-09-19 14:09:08.980447+0900 test[2114:198156] NSRectの配列
+2019-09-19 14:09:08.980504+0900 test[2114:198156] x=00 y=00 Width= 1 Height= 2
+2019-09-19 14:09:08.980526+0900 test[2114:198156] x=10 y=10 Width= 2 Height= 3
+2019-09-19 14:09:08.980547+0900 test[2114:198156] x=20 y=20 Width= 3 Height= 4
+2019-09-19 14:09:08.980568+0900 test[2114:198156] x=30 y=30 Width= 4 Height= 5
+2019-09-19 14:09:08.980581+0900 test[2114:198156] x=40 y=40 Width= 5 Height= 6
+2019-09-19 14:09:08.980596+0900 test[2114:198156] x=50 y=50 Width= 6 Height= 7
+2019-09-19 14:09:08.980615+0900 test[2114:198156] x=60 y=60 Width= 7 Height= 8
+2019-09-19 14:09:08.980635+0900 test[2114:198156] x=70 y=70 Width= 8 Height= 9
+2019-09-19 14:09:08.980653+0900 test[2114:198156] x=80 y=80 Width= 9 Height=10
+2019-09-19 14:09:08.980672+0900 test[2114:198156] x=90 y=90 Width=10 Height=11
+
+
+//構造体の配列
+-(void)arrayOfStruct
+{
+    NSMutableArray *valueList = [[NSMutableArray alloc] init];
+    for (int i=0; i<10; i++)
+    {
+        MyStruct rect = MyMakeStruct(i*10, i*10, i+1, i+2);
+        //構造体 → NSValue変換（@encode）
+        [valueList addObject:[NSValue value:&rect withObjCType:@encode(MyStruct)]];
+    }
+    NSLog(@"構造体の配列");
+    for (NSValue *value in valueList)
+    {
+        MyStruct rect;
+        //NSValue → 構造体変換
+        [value getValue:&rect];
+        NSLog(@"x=%02ld y=%02ld Width=%2ld Height=%2ld",
+              rect.x, rect.y, rect.width, rect.height);
+    }
+}
+//構造体の初期化関数
+MyStruct MyMakeStruct(NSInteger x, NSInteger y, NSInteger width, NSInteger height)
+{
+    MyStruct rec;
+    rec.x = x;
+    rec.y = y;
+    rec.width = width;
+    rec.height = height;
+    return rec;
+}
+
+//実行結果
+2019-09-19 14:09:08.980707+0900 test[2114:198156] 構造体の配列
+2019-09-19 14:09:08.980728+0900 test[2114:198156] x=00 y=00 Width= 1 Height= 2
+2019-09-19 14:09:08.980746+0900 test[2114:198156] x=10 y=10 Width= 2 Height= 3
+2019-09-19 14:09:08.980764+0900 test[2114:198156] x=20 y=20 Width= 3 Height= 4
+2019-09-19 14:09:08.980825+0900 test[2114:198156] x=30 y=30 Width= 4 Height= 5
+2019-09-19 14:09:08.980851+0900 test[2114:198156] x=40 y=40 Width= 5 Height= 6
+2019-09-19 14:09:08.980871+0900 test[2114:198156] x=50 y=50 Width= 6 Height= 7
+2019-09-19 14:09:08.980889+0900 test[2114:198156] x=60 y=60 Width= 7 Height= 8
+2019-09-19 14:09:08.980906+0900 test[2114:198156] x=70 y=70 Width= 8 Height= 9
+2019-09-19 14:09:08.980928+0900 test[2114:198156] x=80 y=80 Width= 9 Height=10
+2019-09-19 14:09:08.980946+0900 test[2114:198156] x=90 y=90 Width=10 Height=11

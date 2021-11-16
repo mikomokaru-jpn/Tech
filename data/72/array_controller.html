@@ -1,0 +1,151 @@
+<!-- 
+NewPractice/54 ArrayController
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ArrayControllerを使ってテーブルビューを表示する</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">ArrayControllerを使ってテーブルビューを表示する</h2>
+<div class="lm70 tm10 rm60">
+ArrayControllerとバインドを使って配列（NSArrayオブジェクト）の要素をテーブルビューを表示する方法について説明する。テーブルビューは ViewBasedとする。
+</div>
+<div class="lm70 tm10 rm60">
+バインドは、一例をあげれば、テキストフィールドを特定のクラスの特定のプロパティに結びつけ、プロパティの変化を監視し、値が変化したらその値を自身のビューに表示する。また、ユーザがテキストフィールドの値を変更したら、バインドしているプロパティに自動的に反映させるという機能を実現する。
+</div>
+<div class="lm70 tm10 rm60">
+これを、ActionやDelegateを駆使する従来型の方法で実現しようとするとかなり複雑な処理になる。これを、ほとんどプログラムコードを書かず、IntefaceBuilderの操作だけで実装することができる。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+実装例
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=72/array_controller1.png&title=array_controller1&width=600" target="_new">
+<img class="lm70 tm5 bm0" src="array_controller1.png" alt="[array_controller1]" width="400"></a>
+<div class="lm70 tm20 rm60">
+日本の妖怪の一覧と国語と算数の点数をテーブルビューに表示する。テキストフィールドには、テーブルビューで選択中の行のデータを表示する。テーブルビューの現在行を変えれば自動的にテキストフィールドのデータの表示も変わる。
+</div>
+<div class="lm70 tm10 rm60">
+ユーザがテーブルビューのセルの値を変更したら、その変更は自動的にテキストフィールドの表示データにも反映される。また逆に、テキストフィールドの値を変更すれば対応するテーブルビューのデータにも反映される。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+クラス関連図
+</h3>
+<div class="lm70 tm5 rm60">
+テーブルビューとテキストフィールドがひとつの配列をバインドするという構造
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller6.png&title=array_controller6&width=750" target="_new">
+<img class="lm70 tm0 bm0" src="array_controller6.png" alt="[array_controller6]" width="500"></a>
+<div class="lm70 tm30 rm60">
+クラス構造は MVCモデルに則る。
+</div>
+<div class="lm70 tm10 rm60">
+テーブルビュー、テキストフィールドは ArrayControllerにバインドする。ArrayControllerはモデルの配列にバインドする。
+</div>
+<div class="lm70 tm10 rm60">
+テーブルビュー、テキストフィールドにはバインドを通して配列のデータが表示される。テキストフィールドにはテーブルビューで選択中の行のデータが表示される。
+</div>
+<div class="lm70 tm10 rm60">
+テーブルビューのセルの値をユーザが変更した場合、対応するモデルの配列の要素も同時に更新される。このとき、配列の当該要素をバインドしているテキストフィールドの値も自動的に更新される。逆にテキストフィールドの値を変更した場合も同じ流れとなる。
+</div>
+<div class="lm70 tm10 rm60">
+モデルの配列に対しプログラムで変更を行った場合も、同じようにテーブルビュー、テキストビューに反映される。（若干コードの追加あり）
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+実装手順
+</h3>
+<div class="lm70 tm5 rm60">
+配列の要素は、Yokaiクラスというカスタムクラスとする。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/72/Yokai.txt" width="580" height="430"></iframe>
+<div class="lm70 tm20 rm60">
+Yokaiクラスは、Recordクラスをプロパティに持つ。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/72/Records.txt" width="580" height="350"></iframe>
+<div class="lm70 tm20 rm60">
+AppDelegateに配列を作成する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/72/AppDelegate.txt" width=580" height="750"></iframe>
+<div class="lm70 tm20 rm60">
+xibファイルにArrayControllerオブジェクトを作成しインスタンス化する
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller7.png&title=array_controller7&width=750" target="_new">
+<img class="lm70 tm0 bm0" src="array_controller7.png" alt="[array_controller7]" width="500"></a>
+<div class="lm70 tm20 rm60">
+各クラス間でバインドの設定を行う
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+TableView → Array Controller
+</h3>
+<div class="lm70 tm0 rm60">
+Controller Keyは自動的にarrangedObjectsになる。 
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller8.png&title=array_controller8&width=900" target="_new">
+<img class="lm70 tm0 bm10" src="array_controller8.png" alt="[array_controller8]" width="500"></a>
+<h3 class="lm70 tm10 bm0 rm60">
+Table View Cell → ArrayController（Table Cell View）
+</h3>
+<div class="lm70 tm0 rm60">
+テーブルビューのセルをtable Cell View（これは配列の要素と理解すればよい）にバインドする。Model Key Path の objectValue の後ろに配列の要素のプロパティ名を指定する。
+</div>
+<div class="lm70 tm0 rm60">
+continuouslyUpdateYalueをYESにすれば、値が一文字変更されるごとに即、モデルのデータに反映される。（次のText Fieldも同じ）
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller10.png&title=array_controller108&width=900" target="_new">
+<img class="lm70 tm0 bm10" src="array_controller10.png" alt="[array_controller10]" width="500"></a>
+<h3 class="lm70 bm0 tm10 rm60">
+Text Field → ArrayController
+</h3>
+<div class="lm70 tm0 rm60">
+テキストフィールドを Array Controller にバインドする。Controller Key を selection にすることで選択中の配列の要素を表示することができる。選択しているのは Array Controllerの要素であり、テーブルビューの選択行でないことに注意。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller9.png&title=array_controller9&width=900" target="_new">
+<img class="lm70 tm0 bm10" src="array_controller9.png" alt="[array_controller9]" width="500"></a>
+<h3 class="lm70 tm10 bm0 rm60">
+ArrayController → AppDelegate
+</h3>
+<div class="lm70 tm0 rm60">
+Arry Vontroller をモデルであるAppDelegate の配列にバインドする。model Key Path の self の後に配列のプロパティ名を指定する。</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller11.png&title=array_controller11&width=900" target="_new">
+<img class="lm70 tm0 bm10" src="array_controller11.png" alt="[array_controller11]" width="500"></a>
+<h3 class="lm70 tm20 bm0 rm60">
+NSArayControllerのサブクラスを作成し実装する
+</h3>
+<div class="lm70 tm5 rm60">
+ユーザがテーブルビューの選択行を変更したとき ArrayControllerの現在行をそれに合わせる。ビューを初期表示したときテーブルビューの１行目を選択行とする。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/72/UAArrayController.txt" width="580" height="440"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+バインドされたプロパティをプログラムで変更したとき、変更の通知をバインド元に知らせる方法
+</h3>
+<div class="lm70 tm5 rm60">
+プロパティを更新するコードの前後を willChangeValueForKeyメソッド、didChangeValueForKeyメソッドで囲むこと。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/72/notification.txt" width="580" height="80"></iframe>
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

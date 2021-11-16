@@ -1,0 +1,147 @@
+//------------------------------------------------------------------------------
+//  UAView.h  CGContextRef
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface UAView : NSView
+@property (weak) IBOutlet NSMatrix *selectKindButton; //ラジオボタン
+@property (weak) IBOutlet NSButton *resizeButton;
+//画像
+@property CGImageRef imageRef;
+@property NSImage *image;
+//表示方法
+@property NSInteger showKind;
+@end
+
+//------------------------------------------------------------------------------
+//  UAView.m
+//------------------------------------------------------------------------------
+#import "UAView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "NSBezierPath+MyBezierPath.h"
+
+@implementation UAView
+//ファーストレスポンダーを受け付ける
+- (BOOL)acceptsFirstResponder{
+    return YES; // default NO
+}
+//初期処理
+-(void)awakeFromNib{
+    //ボタンアクションの設定
+    [_selectKindButton setTarget:self];
+    [_selectKindButton setAction:@selector(selectKind:)];
+    [_resizeButton setTarget:self];
+    [_resizeButton setAction:@selector(resize:)];
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;
+    //イメージファイルを読み込む
+    [self readFile];
+    _showKind = 1;
+    self.needsDisplay = YES;
+
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //CALayerオブジェクトで表示されている画像を消す
+    if (_showKind != 3){
+        [self removeImageLayer];
+    }
+    if (_showKind == 1){
+        //表示方法 Core Graphics：元のイメージのサイズは、800x600
+        CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+        
+        CGRect rect = CGRectMake(0, 0, CGImageGetWidth(_imageRef),
+                                       CGImageGetHeight(_imageRef));
+    
+        CGContextDrawImage(context, rect, _imageRef);
+        NSLog(@"* Core Graphics");
+    }else if (_showKind == 2){
+        //表示方法 NSImage drawInRect
+        [_image drawInRect:dirtyRect];
+        NSLog(@"** NSImage");
+    }
+}
+//CALayerオブジェクトを表示する
+- (void)addImageLayer {
+    CAShapeLayer *imageLayer = [CAShapeLayer layer];
+    NSRect rect = self.bounds;
+    //NSRect rect = CGRectMake(0, 0, 400, 300);
+    //0:0 W:800 H:600
+    imageLayer.frame = rect;
+    //NSLog(@"%.0f:%.0f W:%.0f H:%.0f",
+    //      rect.origin.x, rect.origin.y,rect.size.width, rect.size.height);
+    imageLayer.contents = _image;
+    [self.layer addSublayer:imageLayer];
+    [self.layer setValue:imageLayer forKey:@"imageeee"];
+    NSLog(@"*** CALayer");
+}
+//CALayerオブジェクトを消去する
+-(void)removeImageLayer {
+    CALayer *oldLayer = [self.layer valueForKey:@"imageeee"];
+    [oldLayer removeFromSuperlayer];
+    oldLayer = nil;
+}
+//内部メソッド -------------------------------------------------------------------
+- (void)readFile{
+    //イメージファイル
+    NSString *folder = [NSString stringWithFormat:@"%@/Documents",NSHomeDirectory()];
+    NSString *path = [folder stringByAppendingString:@"/picture03.jpg"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    
+    //CGImageオブジェクトに読み込む
+    CGImageSourceRef src = CGImageSourceCreateWithURL((__bridge CFURLRef)url, nil);
+    _imageRef = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+    //画像の大きさ
+    //NSLog(@"CGImageRef %ld:%ld", CGImageGetWidth(_myView.imageRef),
+    //                             CGImageGetHeight(_myView.imageRef));
+    //NSImageオブジェクトに読み込む
+    _image = [[NSImage alloc] initWithContentsOfURL:url];
+    //画像の大きさ（NSImageのsizeプロパティは、画面解像度に依存するサイズ情報なので不適）
+    //NSImageRep *imageRep = image.representations[0];
+    //NSLog(@"NSImage %ld:%ld", imageRep.pixelsWide, imageRep.pixelsHigh);
+}
+//ラジオボタンのクリック：表示方法の選択
+-(void)selectKind:(id)sender{
+    //方法の決定
+    _showKind = _selectKindButton.selectedCell.tag;
+    if (_showKind == 3){
+        [self addImageLayer];
+    }
+    self.needsDisplay = YES;
+}
+//CGImageRefを縮小してビューに表示する。ファイル(png)に出力するボタン
+-(void)resize:(id)sender{
+    //イメージの出力サイズ
+    CGFloat newWidth = 400;
+    CGFloat newHeight = 300;
+    //ビットマップコンテキストを作成して、イメージを描画する。
+    CGColorSpaceRef imageColorSpace = CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );
+    CGContextRef newContext =
+    CGBitmapContextCreate(NULL,
+                          (int)newWidth,
+                          (int)newHeight,
+                          8,
+                          (int)newWidth * 4,
+                          imageColorSpace,
+                          kCGImageAlphaPremultipliedLast);
+    CGContextDrawImage(newContext,
+                       //CGRectMake(0, 0, newWidth, newHeight),
+                       CGRectMake(0, 0, 400, 300),
+                       _imageRef);
+    _imageRef = CGBitmapContextCreateImage(newContext);
+    //NSLog(@"%ld:%ld", CGImageGetWidth(_imageRef), CGImageGetHeight(_imageRef));
+    //NSBitmapImageオブジェクトに変換する
+    NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithCGImage:_imageRef];
+    //NSDataオブジェクトに変換する
+    NSData *exportedData = [bitmap representationUsingType:NSBitmapImageFileTypePNG
+                                                properties:[[NSDictionary alloc] init]];
+    //pngファイルに出力する
+    NSString *folder = [NSString stringWithFormat:@"%@/Documents",NSHomeDirectory()];
+    NSString *path = [folder stringByAppendingString:@"/out03.png"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    [exportedData writeToURL:url atomically:YES];
+    //ラジオボタンのリセット
+    self.showKind = 1;
+    [_selectKindButton selectCell:[_selectKindButton cellWithTag:_showKind]];
+    self.needsDisplay = YES;
+}
+@end

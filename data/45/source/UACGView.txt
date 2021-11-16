@@ -1,0 +1,116 @@
+//------------------------------------------------------------------------------
+//  UACGView.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface UACGView : NSView
+-(void)drawShape:(id)sender;
+-(void)clearShape:(id)sender;
+@end
+
+//------------------------------------------------------------------------------
+//  UACGView.m
+//------------------------------------------------------------------------------
+#import "UACGView.h"
+#import "UAElapse.h"
+#import <QuartzCore/QuartzCore.h>
+#import "NSBezierPath+MyBezierPath.h"
+//線を描く位置（構造体）
+typedef struct _Map
+{
+    NSPoint start;  //始点
+    NSPoint end;    //終点
+}Map;
+//線を描く位置の値（配列）
+struct _Map mapArray[30] = {
+    {{  0,  0}, { 10,  0}},     //x  +10
+    {{ 10,  0}, { 10,-10}},     //y  -10
+    {{ 10,-10}, {-10,-10}},     //x  -20
+    {{-10,-10}, {-10, 10}},     //y  +20
+    {{-10, 10}, { 20, 10}},     //x  +30
+    {{ 20, 10}, { 20,-20}},     //y  -30
+    {{ 20,-20}, {-20,-20}},     //x  -40
+    {{-20,-20}, {-20, 20}},     //y  +40
+    {{-20, 20}, { 30, 20}},     //x  +50
+    {{ 30, 20}, { 30,-30}},     //y  -50
+    {{ 30,-30}, {-30,-30}},     //x  -60
+    {{-30,-30}, {-30, 30}},     //y  +60
+    {{-30, 30}, { 40, 30}},     //x  +70
+    {{ 40, 30}, { 40,-40}},     //y  -70
+    {{ 40,-40}, {-40,-40}},     //x  -80
+    {{-40,-40}, {-40, 40}},     //y  +80
+    {{-40, 40}, { 50, 40}},     //x  +90
+    {{ 50, 40}, { 50,-50}},     //y  -90
+    {{ 50,-50}, {-50,-50}},     //x -100
+    {{-50,-50}, {-50, 50}},     //y +100
+    {{-50, 50}, { 60, 50}},     //x +110
+    {{ 60, 50}, { 60,-60}},     //y -110
+    {{ 60,-60}, {-60,-60}},     //x -120
+    {{-60,-60}, {-60, 60}},     //y +120
+    {{-60, 60}, { 70, 60}},     //x +130
+    {{ 70, 60}, { 70,-70}},     //y -130
+    {{ 70,-70}, {-70,-70}},     //x -140
+    {{-70,-70}, {-70, 70}},     //y +140
+    {{-70, 70}, { 80, 70}},     //x +150
+    {{ 80, 70}, { 80,-80}},     //y -150
+};
+
+@interface UACGView()
+//現在の表示位置
+@property int mapNumber;
+@property CGPoint basePoint;
+//線（CAShapeLayerオブジェクト）の配列
+@property NSMutableArray<CAShapeLayer*> *shapeList;
+//追加する線（CAShapeLayerオブジェクト）
+@property CAShapeLayer *latestShape;
+@end
+
+@implementation UACGView
+
+//初期化
+-(void)awakeFromNib{
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;  //背景色
+    _basePoint = CGPointMake(125, 125);
+    _mapNumber = 0;
+    _shapeList = [[NSMutableArray alloc] init];
+    _latestShape = nil;
+}
+//線の作成
+-(void)drawShape:(id)sender{
+    if (_mapNumber >= 30)
+        return;
+    if (_shapeList.count > _mapNumber ){
+        _latestShape = _shapeList[_mapNumber]; //既存のオブジェクト
+    }else{
+        Map map = mapArray[_mapNumber];
+        //始点と終点を求める
+        map.start.x = map.start.x + _basePoint.x;
+        map.start.y = map.start.y + _basePoint.y;
+        map.end.x = map.end.x + _basePoint.x;
+        map.end.y = map.end.y + _basePoint.y;
+        //bezierPathオブジェクトの作成
+        NSBezierPath *bezierPath = [NSBezierPath bezierPath];
+        [bezierPath moveToPoint:map.start];    //始点
+        [bezierPath lineToPoint:map.end];      //終点
+        //ShapeLayerオブジェクトに変換
+        CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+        shapeLayer.path = bezierPath.cgPath;
+        //線の太さ
+        shapeLayer.lineWidth = 2.0;
+        //線の色
+        shapeLayer.strokeColor = [NSColor redColor].CGColor;
+        //Shapeリストに追加
+        _latestShape = shapeLayer;
+        [_shapeList addObject:_latestShape];
+    }
+    _mapNumber++;
+    [self.layer addSublayer:_latestShape];
+}
+//線のクリア
+-(void)clearShape:(id)sender{
+    if (_mapNumber <= 0)
+        return;
+    CAShapeLayer *shape = _shapeList[_mapNumber-1];
+    [shape removeFromSuperlayer];
+    _mapNumber--;
+}
+@end

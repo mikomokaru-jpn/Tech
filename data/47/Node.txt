@@ -1,0 +1,22 @@
+//--- Node.h ---
+#import <Foundation/Foundation.h>
+@interface Node : NSObject
+@property NSURL* url;                       // URLオブジェクト
+@property BOOL isFile;                      // ファイル（リーフ）フラグ
+@property NSMutableArray<Node*>*children;   // 子ノードの配列
+-(id)initWithURL:(NSURL*)urlb;
+@end
+
+//--- Node.m ---
+#import "Node.h"
+@implementation Node
+-(id)initWithURL:(NSURL*)url
+{
+    if (![super init])
+        return  nil;
+    _url = url;
+    _isFile = NO;
+    _children = [[NSMutableArray alloc] init];
+    return self;
+}
+@end

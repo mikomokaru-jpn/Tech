@@ -1,0 +1,7 @@
+//モニターの開始
+let localMonitor =  NSEvent.addLocalMonitorForEvents(....)
+
+//モニターの終了
+if let monitor = self.localMonitor{
+    NSEvent.removeMonitor(monitor)
+}

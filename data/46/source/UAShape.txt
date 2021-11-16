@@ -1,0 +1,22 @@
+//------------------------------------------------------------------------------
+//「線」の属性 UAShape.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
+
+@interface UAShape : NSObject
+//「線」の属性
+@property CAShapeLayer *object; //CAShapeLayerオブジェクト
+@property NSInteger number;     //オブジェクトNo.
+@property CGPoint startPoint;   //始点ポイント
+@property CGPoint endPoint;     //終点ポイント
+
+@end
+//------------------------------------------------------------------------------
+//「線」の属性 UAShape.m
+//------------------------------------------------------------------------------
+#import "UAShape.h"
+
+@implementation UAShape
+
+@end

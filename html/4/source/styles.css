@@ -1,0 +1,73 @@
+
+section {
+    width: 305px;
+    margin-left: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    background-color: darkgray;		
+}
+table {
+    border-spacing: 3px; 
+}
+table th{
+    width: 35px; height: 20px;
+    font-size: 0.9rem;
+    background-color:darkgray;		
+}
+table th.saturday{
+    color: blue;
+}
+table th.sunday{
+    color: red;
+}
+table td.currentDay{
+    width: 31px; height: 41px;
+    border: solid 2px red;
+}
+table td{
+   width: 35px; height: 45px;
+   text-align: center;
+   vertical-align: middle;
+    background-color: white;  
+}
+
+button {
+    margin-top: 5px;
+    width: 30px;
+    height: 25px;
+    background-color: #ffffff;
+    border: solid 1px #ffffff;
+    color: black;
+    font-size: 1.0rem;
+    border-radius: 7px;
+
+}
+button.preButton {
+    margin-left: 2px;
+}
+button.nxtButton {
+    margin-left: 0px;
+}
+
+p.thisYearMonth{
+    display: inline-block;
+    width: 208px;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+.holiday{
+    color: #ff0000;
+}
+.saturday{
+    color: #0000ff;
+}
+.largeFont{
+    font-size: 1.5rem;
+
+}
+.smallFont{
+    font-size: 1.0rem;
+
+}
+

@@ -1,0 +1,36 @@
+//--- WinCtrl2.h ---
+#import <Cocoa/Cocoa.h>
+@interface WinCtrl2 : NSWindowController
+@end
+
+//--- WinCtrl2.m ---
+#import "WinCtrl2.h"
+@interface WinCtrl2 ()
+@property(weak) IBOutlet NSTextField *label1;
+-(IBAction)buttonOK:(id)sender;
+-(IBAction)buttonCancel:(id)sender;
+@end
+
+@implementation WinCtrl2
+- (void)windowDidLoad {
+    [super windowDidLoad];
+    _label1.stringValue = @"モーダルなウィンドウ";
+}
+//ウィンドウを閉じる（OK）
+-(IBAction)buttonOK:(id)sender
+{
+    [NSApp stopModalWithCode:NSModalResponseOK];
+    [self.window close];
+}
+//ウィンドウを閉じる（キャンセル）
+-(IBAction)buttonCancel:(id)sender
+{
+    [NSApp stopModalWithCode:NSModalResponseCancel];
+    [self.window close];
+};
+//xボタンでウィンドウが閉じられた （NSWindowDelegate）
+- (void)windowWillClose:(NSNotification *)notification
+{
+    [NSApp stopModalWithCode:NSModalResponseCancel];
+}
+@end

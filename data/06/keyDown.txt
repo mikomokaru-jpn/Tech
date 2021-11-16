@@ -1,0 +1,19 @@
+-(void)keyDown:(NSEvent *)event
+{
+    NSInteger flags = [NSEvent modifierFlags];
+    if (event.keyCode == 48){ //tab key
+        if (flags & NSEventModifierFlagShift){ // +shit key
+            //メソッドの存在チェック
+            if ([_frDelegate respondsToSelector:@selector(prevControlFrom:)])
+            {   //ファーストレスポンダを前に移動する
+                [_frDelegate prevControlFrom:self];
+            }
+        }else{
+            //メソッドの存在チェック
+            if ([_frDelegate respondsToSelector:@selector(nextControlFrom:)])
+            {   //ファーストレスポンダを後ろに移動する
+                [_frDelegate nextControlFrom:self];
+            }
+        }
+    }
+}

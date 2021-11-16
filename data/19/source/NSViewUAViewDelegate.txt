@@ -1,0 +1,8 @@
+//------------------------------------------------------------------------------
+//  UAView+delegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface NSView(UAViewDelegate)
+-(void)writeLabel:(NSString*)text;
+-(void)displayNoImage:(BOOL)flg;
+@end

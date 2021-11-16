@@ -1,0 +1,15 @@
+//GCD CountNumberオブジェクト&デリゲートによるコールバック
+-(void)start3{
+    [self reset];                   //UIリセッット
+    _btnStart.enabled = NO;         //開始ボタン
+    _btnCancel.enabled = YES;       //中止ボタン
+    //カウント処理クラスのオブジェクトを作成し、別スレッドで実行（非同期）
+    dispatch_queue_t queue;
+    queue = 
+      dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL); 
+    dispatch_async(queue, ^{
+        CountNumber *cn = [[CountNumber alloc] init];
+        cn.cnDelegate = self;   //CountNumberDelegate
+        [cn count];
+    });
+}

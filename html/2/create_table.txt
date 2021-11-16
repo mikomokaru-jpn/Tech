@@ -1,0 +1,1 @@
+/* テーブルの作成：血圧データ */CREATE TABLE blood_pressure (  id INT,                 /* MyNumbetr */  date INT,               /* 日付 YYYYMMDD */  lower INT,              /* 最低血圧 */  upper INT,              /* 最高血圧 */  confirm boolean,        /* 確定フラグ */  PRIMARY KEY (id, date));

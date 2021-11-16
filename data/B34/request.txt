@@ -1,0 +1,52 @@
+//<<< 共通定義 >>>
+<?php
+require_once("init.php");
+$common = [ "rowHeight" => 28, 
+                     "borderLine" => 1,
+                     "borderColor" => "gray",
+                     "headerFontSize" => 14,
+                     "headerBackColor" => "lightGray", 
+                     "headerHeight" => 35];
+//JSON形式で出力
+header('Content-type: application/json');
+echo json_encode($common);
+?>
+
+//<<< 列の定義 >>>
+<?php
+require_once("init.php");
+$cols = [
+                [ "identifire" => "date",  
+                  "width" => 140,
+                  "fontSize" => 16,
+                  "align" => "left",
+                  "title" => "日付",
+                  "sort" => 1,
+                  "initialSort" => "ascending"],
+                [ "identifire" => "lower",
+                  "width" => 100,
+                  "fontSize" => 18,
+                  "align" => "right",
+                  "title" => "最低血圧",
+                  "sort" => 1],
+                [ "identifire" => "upper",
+                  "width" => 100,
+                  "fontSize" => 18,
+                  "align" => "right",
+                  "title" => "最高血圧",
+                  "sort" => 1],
+                [ "identifire" => "pulse",
+                  "width" => 70,
+                  "fontSize" => 16,
+                  "align" => "right",
+                  "title" => "脈圧"],
+                [ "identifire" => "average",
+                  "width" => 70,
+                  "fontSize" => 16,
+                  "align" => "right",
+                  "title" => "平均血圧"]
+            ];
+//JSON形式で出力
+header('Content-type: application/json');
+echo json_encode($cols);
+?>

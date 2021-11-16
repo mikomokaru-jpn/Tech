@@ -1,0 +1,12 @@
+@interface TestView : NSView
+@end
+
+@implementation TestView
+
+- (void)cancelOperation:(id)sender
+{
+    NSLog(@"cancelOperation method called in View");
+    [[self window] close]; //ウィンドウを閉じる
+}
+
+@end

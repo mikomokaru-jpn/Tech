@@ -1,0 +1,28 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate,
+                   SubWinViewDelegate //プロトコルに準拠する
+{
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var xPos: NSTextField?   //X座標
+    @IBOutlet weak var yPos: NSTextField?   //Y座標
+    var subWinController: SubWinController  //サブウィンドウコントローラ
+    //イニシャライザ
+    override init() {
+        subWinController = SubWinController()
+        super.init()
+        subWinController.showWindow(self)
+        //自身のオブジェクト参照をデリゲート移譲元に渡す
+        (subWinController.window?.contentView 
+                                  as? SubWinView)?.delegate = self
+    }
+    //デリゲートメソッド
+    @objc func clickView(event: NSEvent){
+        //X座標、Y座標を表示する
+        self.xPos?.stringValue = 
+            String(format:"%0.2f", event.locationInWindow.x)
+        self.yPos?.stringValue = 
+            String(format:"%0.2f", event.locationInWindow.y)
+    }
+}

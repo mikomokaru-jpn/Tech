@@ -1,0 +1,11 @@
+//カレンダオブジェクト
+[NSCalendar currentCalendar]
+
+//日付の計算
+NSDate *date = [[NSCalendar currentCalendar]
+                 dateByAddingComponents: .... ];
+
+//和暦カレンダーの作成
+NSCalendar *calendarJpn = [[NSCalendar alloc]
+                           initWithCalendarIdentifier:
+                           NSCalendarIdentifierJapanese];

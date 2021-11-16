@@ -1,0 +1,11 @@
+func browser(_ sender: NSBrowser, willDisplayCell cell: Any, atRow row: Int, column: Int){
+    let myCell = cell as! NSBrowserCell
+    let url = arrayOfURL[row]
+    //ファイル・ディレクトリ名の設定
+    myCell.stringValue = url.lastPathComponent
+    //アイコン画像の設定
+    let iconImage = NSWorkspace.shared.icon(forFile: url.path)
+    iconImage.size = NSMakeSize(16, 16)
+    myCell.image = iconImage
+    ....
+}

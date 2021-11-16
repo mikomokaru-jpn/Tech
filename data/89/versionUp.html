@@ -1,0 +1,226 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>今更ながらOSをバージョンアップした（Mojave）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs6.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<div class="lm70 tm10 rm60">
+2021/5/31
+</div>
+<h2 class="lm70 tm5 bm0">
+今更ながらOSをバージョンアップした（Mojave）
+</h2>
+<h2 class="lm70 tm5 rm60 bm0">
+Sierra 10.12.6 → Mojava 10.14.6
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp1.png&title=versionUp1&width=700" target="_new">
+<img class="lm70 tm0 " src="versionUp1.png" alt="[versionUp1]" width="400"></a>
+
+<h2 class="lm70 tm20 rm60 bm0">
+OSインストール手順
+</h2>
+<div class="lm70 tm5 rm60">
+AppStoreから macOS Mojava のインストーラをダウンロードする。最新版以前のバージョンんはここからダウンロードする。https://support.apple.com/ja-jp/HT211683
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp2.png&title=versionUp2&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp2.png" alt="[versionUp2]" width="550"></a>
+<div class="lm70 tm20 rm60">
+バージョンアップをずっと怠っていたらバージョンアップができなくなっていた。2019年10月25日に証明書の有効期限が切れたため（！）、「このMacOS Mojaveインストールアプリケーションは破損しているため、macOSのインストールには使用できません」のメッセージが出てインストーラが起動しない。
+</div>
+<div class="lm70 tm10 rm60">
+対応として、ディスクユーティリティを開き、InstallESDのマウントを解除すればインストールできるようになる（これが何を意味しているのかわからんが、とにかくうまくいく）。インストール自体は１時間足らずで終わる。
+</div>
+<h2 class="lm70 tm20 rm60 bm0">
+Apache/PHPの対応
+</h2>
+<div class="lm70 tm10 rm60">
+OSのインストールとともにインストーラにバンドルされているソフトもバージョンアップする。
+</div>
+<div class="lm70 tm10 rm60">
+Apache 2.4.6 → 2.4.41　( httpd -version )
+</div>
+<div class="lm70 tm0 rm60">
+PHP 7.3.3 → 8.0.6　( php -v )
+</div>
+<div class="lm70 tm0 rm60">
+PHP7は homebrewでインストールしていたようだ。
+</div>
+
+<div class="lm70 tm10 rm60">
+MySQLは変わらない    
+</div>
+<div class="lm70 tm0 rm60">
+MySQL 5.7.16　( mysql --version )
+</div>
+<div class="lm70 tm20 rm60">
+Apache の httpd.conf が初期ファイルに置き換わるので今まで使用していたものをバックアップから戻す。ただしPHP8のモジュールをロードする部分は次のように修正する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/89/httpd.txt" width="580" height="90"></iframe>
+<!--ソースコードリンク-->
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/89/source/httpd.conf&title=httpd.conf" target="_new">httpd.conf</a> の全文</div>
+<div class="lm70 tm10 rm60">
+Apache関連の備忘録
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/89/httpd2.txt" width="580" height="250"></iframe>
+<div class="lm70 tm20 rm60">
+PHPの php.ini もデフォルトに置き替わるので元に戻す。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/89/php.txt" width="580" height="80"></iframe>
+<div class="lm70 tm10 rm60">
+ファイルの格納場所が /usr/local/etc/php/8.0 に変わる。ディレクトリ「8.0」を作成し、iniファイルをコピーする。PHPが iniファイルを読み込めたら phpInfoに "Loaded Configuration File”が表示される。
+</div>
+<div class="lm70 tm10 rm60">
+PHP備忘録
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/89/php2.txt" width="580" height="250"></iframe>
+<h2 class="lm70 tm30 rm60 bm0">
+Xcodeのバージョンアップ　9.2 → 11.3.1
+</h2>
+<h2 class="lm70 tm0 rm60 bm0">
+Swift 4 → 5.1.3
+</h2>
+<div class="lm70 tm10 rm60">
+Apple の Developerサイトから、Xcode 11.3.1のインストーラをダウンロードし、起動する。https://developer.apple.com/download/more/
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp3.png&title=versionUp3&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp3.png" alt="[versionUp3]" width="350"></a>
+<div class="lm70 tm20 rm60">
+Swiftもバージョンアップする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/89/swift.txt" width="580" height="60"></iframe>
+<div class="lm70 tm10 rm60">
+以前の環境（Xcode9/Swift4）で作成したプロジェクトはそのままビルドし実行もできるが、最新の環境に合わせて必要な変更を行うことが原則的には必要である。
+</div>
+<div class="lm70 tm20 rm60">
+Xcodeで古いプロジェクトを開くと、次のような警告が表示される。コードをSwift5向けに変換すること、プロジェクトの設定を新しい環境に合わせてアップデートすることを勧めている。表示された警告をクリックするとXcodeが変更作業を自動的に行なってくれるので非常に楽である。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp4.png&title=versionUp4&width=500" target="_new">
+<img class="lm70 tm10" src="versionUp4.png" alt="[versionUp4]" width="200"></a>
+
+<div class="lm70 tm20 rm60">
+(１) ソースコードを変換する
+</div>
+<div class="lm70 tm0 rm60">
+Xcodeはコード変換が必要な箇所を修正前後のコードを並べて表示してくれるので、中身を確認しながら進めることができる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp5.png&title=versionUp5&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp5.png" alt="[versionUp5]" width="450"></a>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp6.png&title=versionUp6&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp6.png" alt="[versionUp6]" width="450"></a>
+<div class="lm70 tm30 rm60">
+(２) プロジェクトの設定を変更する
+</div>
+<div class="lm70 tm0 rm60">
+内容はよくわからないが、Xcodeに任せて実行ボタンを押すだけで良いと思う。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp7.png&title=versionUp7&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp7.png" alt="[versionUp7]" width="450"></a>
+<div class="lm70 tm30 rm60">
+(3) ビューのAutoLayoutで警告が出るようになった
+</div>
+<div class="lm70 tm0 rm60">
+警告は、制約のないビューであるというような意味である。Layoutを Automaticから translate Mask Into Constraintsに変えれば消える。理由はよくわからない。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp8.png&title=versionUp8&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp8.png" alt="[versionUp8]" width="450"></a>
+<div class="lm70 tm30 rm60">
+(3) 実行時、Metal API validation Enabled というメッセージが出る
+</div>
+<div class="lm70 tm0 rm60">
+Metalを使用していないにも拘らず余計な処理が実行されていると思われる。Xcodeスキーマのオプション・GPU Frame Captureを Disabledにすれば消える。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp10.png&title=versionUp10&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp10.png" alt="[versionUp10]" width="450"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+Base SDKについて
+</h3>
+<div class="lm70 tm5 rm60">
+Base SDKのバージョンを指定する必要がなくなっている。Deployment Targetのバージョンだけを考えれば良いわけで、だいぶ分かりやすくなったと思う。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp9.png&title=versionUp9&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp9.png" alt="[versionUp9]" width="450"></a>
+
+<h3 class="lm70 tm20 rm60 bm0">
+Appプロジェクト新規作成におけるUIの実装方法
+</h3>
+<div class="lm70 tm5 rm60">
+Xcode11になり UIを実装する新しい機能として 「SwiftUI」というものが追加された。ただ、これにより作成したアプリケーションは macOS15以上でなければ動作しないようだ。SDKの機能上、Deployment Targetを10.15にすればビルドまで可能だが、実行はできないということ。UIの実装は従来通り「XIB」を選択すること。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp11.png&title=versionUp11&width=750" target="_new">
+<img class="lm70 tm10" src="versionUp11.png" alt="[versionUp11]" width="400"></a>
+
+<h2 class="lm70 tm30 rm60 bm0">
+やはり、バージョンアップによる問題が出てきた
+</h2>
+<div class="lm70 tm5 rm60">
+2021/6/2
+</div>
+<h3 class="lm70 tm0 rm60 bm0">
+signingの設定によりアプリが動かない
+</h3>
+<div class="lm70 tm5 rm60">
+Signingとは、アプリケーションの証明書にかかわる何かで、Signing & Capabikitiesタブで指定する。
+</div>
+<div class="lm70 tm10 rm60">
+アプリを公開するためには、automatically manages signingをYESにする必要があり（憶測）、そのためにはTeamの指定が必要で、Apple Developerへのsign inが必要になる。ただし開発機で開発しているだけなら、どちらの設定でも構わない。
+</div>
+<div class="lm70 tm10 rm60">
+この設定に拘らず 「Signing Certificate」は、「Signing to Run Locally」 にしておかなければビルドは成功しても実行することができない。試行錯誤の結果なので理屈はよくわからない。
+</div>
+<div class="lm70 tm10 rm60">
+この設定はXcode9の時から別の場所にあったのだが、嫌らしいところは、何も触らなければ問題なく動いていたものが、一度何かの設定を変えたところ、全ての設定を正しく行わなければ、よくわからないエラーになってしまうこと。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp13.png&title=versionUp13&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp13.png" alt="[versionUp13]" width="400"></a>
+<div class="lm70 tm20 rm60">
+2021/6/2
+</div>
+<h3 class="lm70 tm0 rm60 bm0">
+App Sandboxの表示方法がわからなくて迷った
+</h3>
+<div class="lm70 tm5 rm60">
+App Sandboxを有効にするには、Signing & Capabikitiesタブの + Capability ボタンをクリックし、AppSandoboxの設定フォームを開く。無効化するにはフォームのはじの x ボタンをクリックする。ON/OFFのスイッチによる切り替えではなくなった。設定内容は変わらず。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/89/versionUp12.png&title=versionUp12&width=800" target="_new">
+<img class="lm70 tm10" src="versionUp12.png" alt="[versionUp12]" width="400"></a>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

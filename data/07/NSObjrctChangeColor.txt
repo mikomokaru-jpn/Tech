@@ -1,0 +1,1 @@
+@interface NSObject(ChangeColor)-(void)changeColorByButtonOfCategory:(NSColor *)color;  //メソッド定義@end

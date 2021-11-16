@@ -1,0 +1,63 @@
+<!-- 
+NewPractice_Swift/03 ViewBased
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>テーブルビューを表示する</title>
+  <link rel="stylesheet" type="text/css" href="../document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">テーブルビューを表示する</h2>
+<div class="lm70 tm0 rm60">
+ビューにデータを表示する方法は、CellBasedとViewBasedの２種類がある。
+</div>
+<div class="lm70 tm10 rm60">
+CellBasedは、ビューのセルに表示できるのは文字列のみ。セルのクラスは、NSTextFieldCell になる。
+</div>
+<div class="lm70 tm10 rm60">
+ViewBasedは、NSCellクラスのオブジェクトを表示する。NSCellクラスのサブクラスであれば文字列の他にボタンやテキストフィールドなどのコントロールやイメージなど表示することができる。
+</div>
+<!-- 画像 -->
+<a href="../HTMLofImage.php?filename=71/tableview1.png&title=tableview1&width=750" target="_new">
+<img class="lm70 tm10 bm0" src="tableview1.png" alt="[tableview1]" width="500"></a>
+<div class="lm70 tm20 rm60">
+以上の２通りの方式で、同じ配列を表示してみる。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+AppDelegate
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="../HTMLofText.php?filename=71/source/AppDelegate.txt" width="580" height="470"></iframe>
+<div class="lm70 tm10 rm60">
+ViewBasedビューの場合は、テーブルビューのdelegateにコントローラを指定する必要がある。
+</div>
+<h3 class="lm70 tm10 rm60 bm0">
+CellBasedビューのコントローラ
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="../HTMLofText.php?filename=71/source/TVCtrlCell.txt" width="580" height="450"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+ViewBasedビューのコントローラ
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="../HTMLofText.php?filename=71/source/TVCtrlView.txt" width="580" height="560"></iframe>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 rm20 bm10 bp10 textleft font80"><a href="#mainheader">TOPに戻る</a></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>
+
+
+
+

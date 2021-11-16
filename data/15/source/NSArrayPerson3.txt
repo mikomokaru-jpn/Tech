@@ -1,0 +1,26 @@
+#import "NSArray+Person.h"
+@implementation NSArray (Person)
+//検索メソッド：指定した誕生日の範囲
+-(NSArray<Person*>*)selectByBirthdayFrom:(NSDate*)from to:(NSDate*)to{
+    NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
+    for (Person *person in self){
+        NSDate *date = person.birthday;
+        if ([from compare:date] <= NSOrderedSame &&
+            [date compare:to] <= NSOrderedSame){
+            [mutableArray addObject:person];
+        }
+    }
+    return [mutableArray copy];
+}
+//検索メソッド：指定した性別
+-(NSArray<Person*>*)selectBySex:(SexType)sex{
+    NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
+    for (Person *person in self){
+        SexType personSex = person.sex;
+        if (personSex == sex){
+            [mutableArray addObject:person];
+        }
+    }
+    return [mutableArray copy];
+}
+@end

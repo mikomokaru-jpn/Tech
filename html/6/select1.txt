@@ -1,0 +1,38 @@
+//キーワードの配列
+$wordArray = preg_split('/[\s|　]+/u', $_POST['keyword']); 
+$resultArray = array(); //結果レコードの配列
+foreach($wordArray as $keyword){
+    try{
+        $sql = "SELECT date, text FROM diary_text 
+                WHERE (text LIKE :keyword) 
+                AND (date >=:from AND date <=:to) 
+                ORDER BY date ASC;";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':from', $_POST['from_date'], PDO::PARAM_INT);
+        $stmh->bindValue(':to', $_POST['to_date'], PDO::PARAM_INT);
+        $stmh->bindValue(':keyword', '%'.$keyword.'%', PDO::PARAM_STR);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー:'. $e->getMessage());
+    }
+    while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+        if (duplicated($row)){            
+            continue; //重複レコードは除外
+        }
+        $resultArray[] = $row;
+    }
+}
+//データの返却・JSON形式で出力 (json_encode 関数)
+header('Content-type: application/json');
+echo json_encode($resultArray);
+
+//日付の重複チェック
+function duplicated($row){
+    global $resultArray;
+    foreach ($resultArray as $record){
+        if ($row['date']  == $record['date']){
+            return true;
+        } 
+    }
+    return false;
+}

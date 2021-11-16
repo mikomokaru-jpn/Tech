@@ -1,0 +1,11 @@
+NSEvent.addLocalMonitorForEvents(matching:[.leftMouseDown],
+    handler: { (event: NSEvent?) -> NSEvent? in
+        let loc = NSEvent.mouseLocation
+        print("-- LocalMonitor --")
+        print(String(format:"In screen %.0f:%.0f", loc.x, loc.y))
+        if let point = event?.locationInWindow{
+            print(String(format:"In window %.0f:%.0f", point.x, point.y))
+        }
+        return event
+    }
+)

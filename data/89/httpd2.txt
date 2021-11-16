@@ -1,0 +1,13 @@
+設定ファイルの場所
+    /etc/apache2/httpd.conf
+    ( /etc -> /private/etc のリンク )
+
+起動/終了方法
+    sudo /usr/sbin/apachectl start
+    sudo /usr/sbin/apachectl stop
+
+起動確認
+    ps aux | grep httpd
+    起動している場合の表示
+    _www  7938 ～ /usr/sbin/httpd -D FOREGROUND
+    root  7932 ～ /usr/sbin/httpd -D FOREGROUND

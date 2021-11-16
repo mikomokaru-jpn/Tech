@@ -1,0 +1,18 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//----  AppDelegate.m ----
+#import "AppDelegate.h"
+#import "UADateUtil.h"  //libSimpleDate (ststic library)
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTextField *textField;
+@end
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    UADateUtil *dateUtil = [[UADateUtil alloc] init];
+    _textField.attributedStringValue = [dateUtil stringTodayOfSize:40];
+}
+@end

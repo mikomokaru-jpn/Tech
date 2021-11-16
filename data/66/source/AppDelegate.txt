@@ -1,0 +1,176 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSComboBoxDelegate>
+@end
+
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "UAView.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSComboBox *combo;
+@property (weak) IBOutlet NSTextField *tesxtField;
+
+@property UAView *myView;
+@property NSMutableArray<NSButton *> *blist;
+@property NSArray<NSNumber*>*typeIntegerArray;
+@property NSArray<NSString*>*typeStringArray;
+@property NSArray<NSString*>* styleStringArray;
+@end
+
+@implementation AppDelegate
+//アプリケーション起動時
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [self createButtons]; //ボタンの作成 
+}
+//NSComboBox Delegate ----------------------------------------------------------
+//コンボボックスの選択値が変わった
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification{
+    NSComboBox* combo =  notification.object;
+    
+    [self resetButtonType:combo.indexOfSelectedItem];
+    
+}
+//ポップアップメニューが閉じられた
+- (void)comboBoxWillDismiss:(NSNotification *)notification{
+}
+//内部メソッド -------------------------------------------------------------------
+//ボタンの作成
+-(void)createButtons{
+    _typeIntegerArray = @[@(NSButtonTypeMomentaryPushIn),
+                          @(NSButtonTypeMomentaryLight),
+                          @(NSButtonTypeMomentaryChange),
+                          @(NSButtonTypePushOnPushOff),
+                          @(NSButtonTypeOnOff)];;
+    _typeStringArray = @[@"NSButtonTypeMomentaryPushIn",
+                         @"NSButtonTypeMomentaryLight",
+                         @"NSButtonTypeMomentaryChange",
+                         @"NSButtonTypePushOnPushOff",
+                         @"NSButtonTypeOnOff"];;
+    
+    _styleStringArray = @[@"(undefined)",
+                          @"NSBezelStyleRounded",
+                          @"NSBezelStyleRegularSquare",
+                          @"(undefined)",
+                          @"(undefined)",
+                          @"NSBezelStyleDisclosure",
+                          @"NSBezelStyleShadowlessSquare",
+                          @"NSBezelStyleCircular",
+                          @"NSBezelStyleTexturedSquare",
+                          @"NSBezelStyleHelpButton",
+                          @"NSBezelStyleSmallSquare",
+                          @"NSBezelStyleTexturedRounded",
+                          @"NSBezelStyleRoundRect",
+                          @"NSBezelStyleRecessed",
+                          @"NSBezelStyleRoundedDisclosure",
+                          @"NSBezelStyleInline"];    
+    //ビューの作成
+    _myView = [[UAView alloc] init];
+    NSRect rect = _window.contentView.frame;
+    [_myView setFrame:rect];
+    [_window.contentView addSubview:_myView];
+    //ボタンタイプ
+    [_combo addItemWithObjectValue:_typeStringArray[0]];
+    [_combo addItemWithObjectValue:_typeStringArray[1]];
+    [_combo addItemWithObjectValue:_typeStringArray[2]];
+    [_combo addItemWithObjectValue:_typeStringArray[3]];
+    [_combo addItemWithObjectValue:_typeStringArray[4]];
+    [_combo selectItemAtIndex:0];
+    [self resetButtonType:0];
+    [_combo setDelegate:self];
+    //ボタンオブジェクト
+    _blist = [NSMutableArray array];
+    NSMutableArray<NSTextField *> *descriptions = [NSMutableArray array];
+    int num = 13;
+    for (int i=0; i<num; i++){
+        //ボタンの属性
+        NSButton *button = [[NSButton alloc] init];
+        button.title = @"";
+        [button setFrameOrigin:NSMakePoint(10, 50+i*40)];
+        [button setFrameSize:NSMakeSize(100, 40)];
+        //アクションの定義
+        [button setAction:@selector(buttnClick:)];
+        /*
+        NSFont *font =  [NSFont systemFontOfSize:28];
+        NSDictionary *attributes = @{NSFontAttributeName:font};
+        NSAttributedString *title = [[NSAttributedString alloc]
+                                      initWithString:@"Button"
+                                      attributes:attributes];
+        button.attributedTitle = title;
+        */
+        [_myView addSubview:button];
+        _blist[i] = button;
+        //説明
+        NSTextField *desc = [[NSTextField alloc] init];
+        [desc setFrameOrigin:NSMakePoint(120, 60+i*40)];
+        [desc setFrameSize:NSMakeSize(200, 25)];
+        desc.editable = NO;
+        desc.selectable = YES;
+        desc.bordered = NO;
+        desc.backgroundColor = [NSColor clearColor];
+        [_myView addSubview:desc];
+        descriptions[i] = desc;
+    }
+    //  1
+    _blist[0].bezelStyle = NSBezelStyleRounded;
+    descriptions[0].stringValue = _styleStringArray[NSBezelStyleRounded];
+    //  2
+    _blist[1].bezelStyle = NSBezelStyleRegularSquare;
+    descriptions[1].stringValue = _styleStringArray[NSBezelStyleRegularSquare];
+    //  5
+    _blist[2].bezelStyle = NSBezelStyleDisclosure;
+    descriptions[2].stringValue = _styleStringArray[NSBezelStyleDisclosure];
+    //  6
+    _blist[3].bezelStyle = NSBezelStyleShadowlessSquare;
+    descriptions[3].stringValue = _styleStringArray[NSBezelStyleShadowlessSquare];
+    //  7
+    _blist[4].bezelStyle = NSBezelStyleCircular;
+    descriptions[4].stringValue = _styleStringArray[NSBezelStyleCircular];
+    //  8
+    _blist[5].bezelStyle = NSBezelStyleTexturedSquare;
+    descriptions[5].stringValue = _styleStringArray[NSBezelStyleTexturedSquare];
+    //  9
+    _blist[6].bezelStyle = NSBezelStyleHelpButton;
+    descriptions[6].stringValue = _styleStringArray[NSBezelStyleHelpButton];
+    // 10
+    _blist[7].bezelStyle = NSBezelStyleSmallSquare;
+    descriptions[7].stringValue = _styleStringArray[NSBezelStyleSmallSquare];
+    // 11 高さ固定
+    _blist[8].bezelStyle = NSBezelStyleTexturedRounded;
+    descriptions[8].stringValue = _styleStringArray[NSBezelStyleTexturedRounded];
+    // 12 高さ固定
+    _blist[9].bezelStyle = NSBezelStyleRoundRect;
+    descriptions[9].stringValue = _styleStringArray[NSBezelStyleRoundRect];
+    // 13
+    _blist[10].bezelStyle = NSBezelStyleRecessed;
+    descriptions[10].stringValue = _styleStringArray[NSBezelStyleRecessed];
+    // 14
+    _blist[11].bezelStyle = NSBezelStyleRoundedDisclosure;
+    descriptions[11].stringValue = _styleStringArray[NSBezelStyleRoundedDisclosure];
+    // 15
+    _blist[12].bezelStyle = NSBezelStyleInline;
+    descriptions[12].stringValue = _styleStringArray[NSBezelStyleInline];
+}
+//ボタンをクリックしたときのアクションの実装
+-(void)buttnClick:(NSButton*)sender{
+    NSInteger sCode = sender.bezelStyle;
+    NSString *text = [NSString stringWithFormat:@"( state=%ld )  %@ clicked ",
+                      sender.state, _styleStringArray[sCode]];
+    _tesxtField.stringValue = text;
+    NSLog(@"%@",text);
+}
+//ボタンタイプの設定
+-(void)resetButtonType:(NSInteger)idx{
+    NSButtonType type = _typeIntegerArray[idx].integerValue;
+    for(NSButton *button in _blist){
+        [button setButtonType:type];
+    }
+    NSLog(@"resetButtonType:%ld", type);
+}
+@end

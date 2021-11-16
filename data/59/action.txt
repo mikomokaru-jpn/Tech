@@ -1,0 +1,20 @@
+//@property (weak) IBOutlet NSTextField *text;
+-(IBAction)clickButton:(id)sender{
+    NSMatrix *matrix = sender;
+    switch (matrix.selectedCell.tag) {
+        case 1:
+            _text.stringValue = @"100";
+            break;
+        case 2:
+            _text.stringValue = @"50";
+            break;
+        case 3:
+            _text.stringValue = @"25";
+            break;
+        case 4:
+            _text.stringValue = @"75";
+            break;
+        default:
+            break;
+    }
+}

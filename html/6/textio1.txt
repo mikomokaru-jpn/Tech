@@ -1,0 +1,15 @@
+!-- テキスト入力画面 -->
+<section class="INwrapper">
+        <div class="INbox1">
+            <div class="INmidashi"><!--日付--></div>
+        </div>
+        <div class="INbox2">
+        <textarea id="inText" class="INTextArea">
+        <!-- 日記帳テキスト -->
+        </textarea>         
+        </div>    
+        <div class="INbox4">
+            <div class="INaButton" id='ok'>更新</div>
+            <div class="INaButton" id='cancel'>閉じる</div>
+        </div>
+</section>

@@ -1,0 +1,23 @@
+<?php
+// POSTデータ(JSON形式)の取得
+$json_post = file_get_contents('php://input');
+$json_string = mb_convert_encoding($json_post,
+               'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+$json_array = json_decode($json_string, true);
+$file_name = $json_array['file_name'];  //ファイル名
+$file_type = $json_array['file_type'];  //MIME Type
+$title = $json_array['title'];          //タイトル
+$decoded_data = base64_decode($json_array['mime_data']);  //ファイルデータ
+//データを読み込みファイルに出力する
+$outfile = 'data/'.$file_name;
+if (file_put_contents($outfile, $decoded_data)){
+    $ret = "file upload was successful";
+} else {
+    $ret = "file upload failed";
+}
+//レスポンスデータ
+header('Content-type: application/json');
+$json_array['mime_data'] = "********"; //巨大なので返さない
+echo json_encode(array( print_r($json_array, true), 
+                        print_r($ret, true) ));
+?>

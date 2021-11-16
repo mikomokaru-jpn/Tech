@@ -1,0 +1,4 @@
+//[alert addButtonWithTitle:〜]の後に追加する。
+NSArray<NSButton*>*buttons = [alert buttons];
+buttons[0].keyEquivalent = @"";
+buttons[1].keyEquivalent = @"\r";

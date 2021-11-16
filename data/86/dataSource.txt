@@ -1,0 +1,22 @@
+//行数を返す
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return _teamList.count;
+}
+//セルに対応した文字列オブジェクトを返す
+- (id)tableView:(NSTableView *)tv
+objectValueForTableColumn:(NSTableColumn *)column
+            row:(NSInteger)row{
+    if ([[column identifier] isEqualToString:@"ranking"] ||
+        [[column identifier] isEqualToString:@"name"]    ||
+        [[column identifier] isEqualToString:@"number"] ||
+        [[column identifier] isEqualToString:@"win"] ||
+        [[column identifier] isEqualToString:@"lose"] ||
+        [[column identifier] isEqualToString:@"draw"] ||
+        [[column identifier] isEqualToString:@"rate"]){
+        NSAttributedString * atrString =
+            [_teamList[row] valueForKey:[column identifier]];
+        return atrString;
+    }else{
+        return nil;
+    }
+}

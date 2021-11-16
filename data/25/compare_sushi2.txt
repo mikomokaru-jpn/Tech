@@ -1,0 +1,12 @@
+//---- Sushi.h ----
+@interface Sushi : NSObject
+//メソッド宣言が必要
+-(NSComparisonResult)compareKana:(Sushi*)aSushi;
+@end
+
+//---- Sushi.m ----
+@implementation Sushi
+- (NSComparisonResult)compareKana:(Sushi*)aSushi{
+    return [_kana compare:aSushi.kana];
+}
+@end

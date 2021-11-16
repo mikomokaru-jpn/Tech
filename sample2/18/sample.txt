@@ -1,0 +1,36 @@
+--------
+Request
+--------
+<!DOCTYPE html>
+<html>
+<head>
+<title>js01</title>
+</head>
+<body>
+<!-- GETパラメータの作成・引数名[]がポイント -->
+<a href="/atest/tes01.php?value[]=1&value[]=2&value[]=3">引数の配列</a>
+</body>
+</html>
+
+---------
+Response
+---------
+<?php
+$valueList = $_GET['value'];  //パラメータを配列に格納
+$sum = 0;
+foreach($valueList as $value){
+    $sum += $value;
+}
+echo <<<EOM
+<!DOCTYPE html>
+<html>
+<head>
+<title>tes01</title>
+<link rel="stylesheet" href="document.css">
+</head>
+<body>
+<h2>$sum<h2>   <!-- "6" が表示される -->
+</body>
+</html>
+EOM;
+?>

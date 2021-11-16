@@ -1,0 +1,110 @@
+//--------------------------------------------------------------------------
+// 文字列の比較 isEqualToString:
+// CGContextRef
+//--------------------------------------------------------------------------
+NSString *str1 = @"ABC";
+if ([str1 isEqualToString:@"ABC"]){
+    NSLog(@"Equal");
+}else{
+    NSLog(@"Deffarent");
+}
+
+//--------------------------------------------------------------------------
+// NSString <--> CFStringRef
+//--------------------------------------------------------------------------
+//CFStringRef -> NSString
+CFStringRef cfSring1 = CFStringCreateWithCString(NULL,
+                                                 "秋深き　隣は何を　する人ぞ",
+                                                 kCFStringEncodingUTF8);
+NSString *nsString1 = (__bridge_transfer NSString*)cfSring1;
+NSLog(@"%@", nsString1);
+NSLog(@"%@", cfSring1);
+//__bridgeでは、オブジェクトが自動的に解放されない。自身で行う必要がある。
+
+//NSString -> CFStringRef
+NSString *nsString2 = @"名月を　とってくれろと　泣く子かな";
+CFStringRef cfSring2 = (__bridge CFStringRef)nsString2;
+NSLog(@"%@", nsString2);
+NSLog(@"%@", cfSring2);
+
+//実行結果 
+  秋深き　隣は何を　する人ぞ
+  秋深き　隣は何を　する人ぞ
+  名月を　とってくれろと　泣く子かな
+  名月を　とってくれろと　泣く子かな 
+
+//--------------------------------------------------------------------------
+// NSString --> unichar（Unicode）
+//--------------------------------------------------------------------------
+unichar uniCode1 = [@"令和" characterAtIndex:0];
+unichar uniCode2 = [@"令和" characterAtIndex:1];
+NSLog(@"令:%@",[NSString stringWithFormat:@"%04X",uniCode1]);
+NSLog(@"和:%@",[NSString stringWithFormat:@"%04X",uniCode2]);
+
+//実行結果 
+令:4EE4
+和:548C
+
+//--------------------------------------------------------------------------
+// 文字列の両端の空白文字を削除する
+//--------------------------------------------------------------------------
+NSString *text1 = @"　全角も半角も削除できる ";
+NSString *text2 = @"\tタブも削除できる\t";
+NSLog(@"before1:%@:length=%ld", text1, text1.length);
+NSLog(@"before2:%@:length=%ld", text2, text2.length);
+text1 = [text1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+text2 = [text2 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+NSLog(@"after1 :%@:length=%ld", text1, text1.length);
+NSLog(@"after2 :%@:length=%ld", text2, text2.length);
+//実行結果 
+before1:　全角も半角も削除できる :length=13
+before2:	タブも削除できる	:length=10
+after1 :全角も半角も削除できる:length=11
+after2 :タブも削除できる:length=8
+
+//--------------------------------------------------------------------------
+// パスの分解
+//--------------------------------------------------------------------------
+NSString *path = @"/ABC/DEF/あああ.png";
+NSString *folder = [path stringByDeletingLastPathComponent];    //フォルダ
+NSString *file = [path lastPathComponent];                      //ファイル
+NSString *extention = [path pathExtension];                     //拡張子
+NSString *fileOnly = [[path lastPathComponent] stringByDeletingPathExtension];  //ファイル（拡張子抜き）
+NSLog(@"%@ | %@ | %@ | %@", folder, file, extention, fileOnly);
+//実行結果 
+/ABC/DEF | あああ.png | png | あああ
+
+//--------------------------------------------------------------------------
+// 文字列を特定の文字によって分割し配列に格納する：タブキー(\t)で分割
+//--------------------------------------------------------------------------
+NSString *text = @"令和元年\t12月25日\taaaa";
+NSArray *array = [text componentsSeparatedByString:@"\t"];
+for(NSString* item in array){
+    NSLog(@"%@",item);
+}
+
+//--------------------------------------------------------------------------
+// 文字列が数字だけで構成されているかチェックする NSCharacterSetクラス
+//--------------------------------------------------------------------------
+//strig 入力文字列
+//入力文字列のCharacterSet
+NSCharacterSet *inputCharSet = 
+[NSCharacterSet characterSetWithCharactersInString:string];
+
+//許容される文字のCharacterSet
+NSCharacterSet *digitCharSet =
+[NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+
+//全角数字も許す場合のCharacterSet
+//NSCharacterSet *digitCharSet =
+//[NSCharacterSet decimalDigitCharacterSet];
+
+//チェック
+if ([digitCharSet isSupersetOfSet:inputCharSet]){
+    NSNumber *count = (NSNumber*)string;
+    NSLog(@"OK %@", count);
+}else{
+    _textField.stringValue = @"";
+    NSLog(@"NG %@", string);   
+}
+

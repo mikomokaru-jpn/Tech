@@ -1,0 +1,42 @@
+-(CGRect)adjustRect:(CGRect)inRect{
+    CGRect outRect = inRect;
+    //幅と高さを絶対値にする。
+    outRect.size.width = fabs(outRect.size.width);
+    outRect.size.height = fabs(outRect.size.height);
+    //まず、NSViewクラスの座標系に合わせ、開始点を左下に移動
+    //X値の移動。
+    if (inRect.size.width < 0){
+        outRect.origin.x -= outRect.size.width;
+    }
+    //Y値の移動。
+    if (inRect.size.height < 0){
+        outRect.origin.y -= outRect.size.height;
+    }
+    //範囲外の領域を除外する
+    //X値が0以下
+    if (outRect.origin.x < 0){
+        outRect.size.width += outRect.origin.x;
+        outRect.origin.x = 0;
+    }
+    //X値がビューの幅以上
+    CGFloat extra = outRect.size.width - 
+                    (self.frame.size.width - outRect.origin.x);
+    if (extra > 0){
+        outRect.size.width -= extra;
+    }
+    //Y値が0以下
+    if (outRect.origin.y < 0){
+        outRect.size.height += outRect.origin.y;
+        outRect.origin.y = 0;
+    }
+    //Y値がビューの高さ以上
+    extra = outRect.size.height -
+            (self.frame.size.height - outRect.origin.y);
+    if (extra > 0){
+        outRect.size.height -= extra;
+    }
+    //CoreDraphicsの座標系の原点は左上なので、Y値を反転する
+    outRect.origin.y = self.frame.size.height -
+    (outRect.origin.y + outRect.size.height);
+    return outRect;
+}

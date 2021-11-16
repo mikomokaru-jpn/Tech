@@ -1,0 +1,7 @@
+**** 顧客マスターテーブル（引数） ****
+ LINKAGE                     SECTION.
+ 01 CUST-COUNT               PIC 9(02).        
+ 01 CUST-TABLE.
+     05 CUSTOMER OCCURS 10 TIMES.
+         10 CUST-CODE        PIC 9(04).
+         10 CUST-NAME        PIC X(20).

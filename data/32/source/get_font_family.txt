@@ -1,0 +1,1 @@
+NSLog(@"--- フォントファミリー ---");NSArray<NSString *>*families = [[NSFontManager sharedFontManager] availableFontFamilies];for (NSString* aFamiry in families){    NSLog(@"%@", aFamiry);}

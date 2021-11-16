@@ -1,0 +1,25 @@
+-(void)tableView:(NSTableView *)tableView
+   setObjectValue:(id)object
+   forTableColumn:(NSTableColumn *)tableColumn
+              row:(NSInteger)row{
+    NSString *string = object; //勝ちor負けor引き分け数
+    //ニューメリックチェック
+    NSCharacterSet *inputCharSet =
+    [NSCharacterSet characterSetWithCharactersInString:string];
+    NSCharacterSet *digitCharSet =
+    [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    if ([digitCharSet isSupersetOfSet:inputCharSet]){
+        UATeam *team = _teamList[row];
+        //更新
+        if ([tableColumn.identifier isEqualToString:@"win"]){
+            team.winValue = string.intValue;
+        }else if ([tableColumn.identifier isEqualToString:@"lose"]){
+            team.loseValue = string.intValue;
+        }else if ([tableColumn.identifier isEqualToString:@"draw"]){
+            team.drawValue = string.intValue;
+        }
+        [self updataData]; //sort & tableview.reload
+    }else{
+        NSLog(@"数値以外が含まれています.");
+    }
+}

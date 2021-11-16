@@ -1,0 +1,10 @@
+[
+ ["upper": 137, "lower": 92,  "pulse": 45, "id": 500, "average": 107, "date": 20180719, "confirm": 1], 
+ ["upper": 120, "lower": 100, "pulse": 20, "id": 500, "average": 106, "date": 20180727, "confirm": 1], 
+ ["upper": 135, "lower": 75,  "pulse": 60, "id": 500, "average": 95,  "date": 20180729, "confirm": 1], 
+ ["upper": 123, "lower": 95,  "pulse": 28, "id": 500, "average": 104, "date": 20181001, "confirm": 1], 
+ ["upper": 136, "lower": 88,  "pulse": 48, "id": 500, "average": 104, "date": 20181002, "confirm": 1], 
+ ["upper": 132, "lower": 100, "pulse": 32, "id": 500, "average": 110, "date": 20181003, "confirm": 1], 
+ ["upper": 139, "lower": 100, "pulse": 39, "id": 500, "average": 113, "date": 20181004, "confirm": 1], 
+ ....
+]

@@ -1,0 +1,5 @@
+-(IBAction)buttonOK:(id)sender
+{
+    [NSApp stopModalWithCode:NSModalResponseOK];
+    [self.window close];    
+}

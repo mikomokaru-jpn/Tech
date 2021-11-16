@@ -1,0 +1,4 @@
+@property WinCtrl3 *winCtrl3;
+- (void)applicationDidFinishLaunching:(NSNotification *)ntf {
+_winCtrl3 = [[WinCtrl3 alloc] initWithWindowNibName:@"SubWindow3"];
+}

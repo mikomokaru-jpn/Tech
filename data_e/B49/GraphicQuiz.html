@@ -1,0 +1,135 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Image Guessing Quiz（Core Grapjics）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+    <h2 class="lm70 tm20 bm0">
+Image Guessing Quiz（Core Grapjics）
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B49/GraphicQuiz.mp4&title=GraphicQuiz&width=640" target="_new">
+<img class="lm70 tm10 bm0" src="/data/B49/GraphicQuiz2.jpg" alt="[GraphicQuiz]" width="450"></a>
+<div class="lm100 tm5 rm60 font90">
+  Click the image to see the video
+</div>
+<div class="lm70 tm20 rm60">
+After you load an image file (JPEG, PNG) with  Open Panel, 
+the image is divided  into a two-dimensional matrix and randomly placed.
+When you click Start Button, the image rearrangement process repeats at a regular interval, 
+and finally all the divided images are placed in the correct position.
+The process is completed when the original image is displayed.
+You can pause the process by clicking Stop button.
+</div>
+<div class="lm70 tm10 rm60">
+See here for <a href="/data/42/core_graphics.html" target="_blank">Objective-C version</a>
+</div>
+<div class="lm70 tm0 rm60">
+It was created before and is a little difficult to understand.
+In this Swift version, I've reviewed the structure of the program, which makes it much more readable.  
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+Processing state transition
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B49/GraphicQuiz4.png&title=GraphicQuiz4&width=700" target="_new">
+<img class="lm70 tm10 " src="/data/B49/GraphicQuiz4.png" alt="[GraphicQuiz4]" width="500"></a>
+<div class="lm70 tm30 rm60">
+The ontroller  monitors the property that represent the processing status and launches a  required processing when a status changes.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz4.txt" width="580" height="640"></iframe>
+
+<h3 class="lm70 tm30 rm60 bm0">
+Rearrange divides images
+</h3>
+<div class="lm70 tm5 rm60">
+The following is an example of displaying an 800x450 pixel image divided into 16 parts.
+If the height of 450 pixels is divided into four equal parts, 
+it cannot be divided, so the remainder is apportioned to each image.
+</div>
+<div class="lm70 tm10 rm60">
+In MacOS framework, the lower left corner of a view is the origin (0,0), 
+but in Graphic Display, the upper left corner is the origin. 
+Therefore, a layout of  divided images needs to be reversed in  Y-axis direction.
+</div>
+<div class="lm70 tm10 rm60">
+Images are centered in the base 800x600 sized views.
+Since the image in the following example is a horizontally long image, 
+the display position of images moves slightly upward on the Y axis.
+</div>
+<div class="lm70 tm0 rm60">
+( 600 - 450 ) / 2 = 75 pixels move up
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B49/GraphicQuiz3.png&title=GraphicQuiz3&width=900" target="_new">
+<img class="lm70 tm20 " src="/data/B49/GraphicQuiz3.png" alt="[GraphicQuiz3]" width="530"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+Key points of implementation of CGImage class
+</h3>
+
+<div class="lm70 tm5 rm60">
+Read an image file and create a image of CGImage .
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz1.txt" width="580" height="140"></iframe>
+<div class="lm70 tm20 rm60">
+Resize an image of CGImage to any size and create a new image.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz2.txt" width="580" height="380"></iframe>
+
+<div class="lm70 tm20 rm60">
+Create a new image from a rectangle which is part of a  image of CGImage. 
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz3.txt" width="580" height="60"></iframe>
+
+<div class="lm70 tm20 rm60">
+Draw a image of CGImage  in a view. 
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz5.txt" width="580" height="150"></iframe>
+
+
+<h3 class="lm70 tm20 rm60 bm0">
+Memory management
+</h3>
+<div class="lm70 tm5 rm60">
+In Swift, CGImage class now supports ARC, so unlike Objective-C, 
+you no longer need to release memory in your application.
+</div>
+<div class="lm70 tm10 rm60">
+You should <span class="redcolor">turn on App Sadbox.</span>
+File Access sets User Selected File to Read Only. 
+When Sadbox is off, a mysterious memory leak occurs in a opening processing of Open Panel.
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S26_GraphicQuiz " target="_new">mikomokaru-jpn/macOS_S26_GraphicQuiz</a>
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

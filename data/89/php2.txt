@@ -1,0 +1,13 @@
+設定ファイルの場所
+    /etc/php.ini
+    ( /etc/php.ini.default をコピーして修正 )
+
+php.iniに追加するコマンド
+Apache経由でlocalhostのMySQLに接続する場合には必要
+    [Pdo_mysql]
+    pdo_mysql.default_socket=/tmp/mysql.sock
+
+UNIX socketを確認するコマンド
+    mysql> status
+    Connection:		Localhost via UNIX socket
+    UNIX socket:		/tmp/mysql.sock                   

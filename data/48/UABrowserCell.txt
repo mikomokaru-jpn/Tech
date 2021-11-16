@@ -1,0 +1,38 @@
+//---- UABrowserCell.h ----
+@property NSImage* iconImage;
+@end
+//----- USBrowserCell.m ----
+@implementation UABrowserCell
+//セルの表示：オーバーライド
+-(void)drawInteriorWithFrame:(NSRect)cellFrame 
+                      inView:(NSView *)controlView{
+    NSLog(@"cellFrame  %2.0f %2.0f   %3.0f %3.0f",
+          cellFrame.origin.x,cellFrame.origin.y,
+          cellFrame.size.width,cellFrame.size.height); //セルの表示領域
+    if (_iconImage != nil) {
+        // アイコン画像があるなら
+        NSRect imageFrame, textFrame;
+        // セルを左右2つの部分（画像部分とテキスト部分）に分割
+        NSDivideRect(cellFrame, &imageFrame, &textFrame,
+                     4+4+[_iconImage size].width, NSMinXEdge);
+        imageFrame.origin.x += 4; // 先頭からアイコンまでのX軸の距離
+        // フレームサイズをアイコンサイズにする（16x16) 
+        imageFrame.size = [_iconImage size]; 
+        // アイコン画像を出力
+        [_iconImage drawInRect:imageFrame
+                      fromRect:NSMakeRect(0, 0,
+                                          _iconImage.size.width,
+                                          _iconImage.size.height)
+                    operation:NSCompositingOperationSourceOver
+                     fraction:1.0
+               respectFlipped:YES
+                        hints:nil];
+        //文字列を表示
+        [super drawInteriorWithFrame:textFrame inView:controlView];
+    } 
+    else { 
+        // アイコン画像がないなら文字列のみ表示
+        [super drawInteriorWithFrame:cellFrame inView:controlView];
+    }
+}
+@end

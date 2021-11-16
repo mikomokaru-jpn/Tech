@@ -1,0 +1,10 @@
+NSBundle *bundle = [NSBundle mainBundle];
+NSString* bundlePath = [bundle bundlePath];
+
+//実行結果
+//開発時はXcode配下のディレクトリにアプリケーション単位で作成される。
+/Users/itohisao/Library/Developer/Xcode/DerivedData/textFileIO-etunpupscfylnnaniyjqwssybhoz/Build/Products/Debug/textFileIO.app
+
+//アプリケーションバンドルファイル（.app）を移動しても自動的に認識する。
+//デスクトップに移動した場合
+/Users/uesr/Desktop/textFileIO.app

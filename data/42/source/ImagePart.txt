@@ -1,0 +1,16 @@
+//------------------------------------------------------------------------------
+//  ImagePart.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+@interface ImagePart : NSObject
+@property CGImageRef partImage;   //分割イメージ
+@property CGRect dispRect;        //表示領域（位置と大きさ）
+@property NSInteger seq;          //分割イメージの順序番号
+@end
+
+//------------------------------------------------------------------------------
+//  ImagePart.m
+//------------------------------------------------------------------------------
+#import "ImagePart.h"
+@implementation ImagePart
+@end

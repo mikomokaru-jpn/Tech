@@ -1,0 +1,13 @@
+--THgmaqexzk4qfoGrGy31Byt30kpwON
+Content-Disposition: form-data; name="userfile"; filename="sakura.jpg"
+Content-Type: application/octet-stream
+
+
+*************************************
+ここにバイナリデータが設定される
+*************************************
+--THgmaqexzk4qfoGrGy31Byt30kpwON
+Content-Disposition: form-data; name="MAX_FILE_SIZE"
+
+10000000
+--THgmaqexzk4qfoGrGy31Byt30kpwON

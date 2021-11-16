@@ -1,0 +1,36 @@
+//---- UATextField.swift ----
+import Cocoa
+//プロトコル定義
+protocol UATextFieldDelegate: class  {
+    func reload()
+}
+class UATextField: NSTextField {
+    var dispAlignment :NSTextAlignment = .left  //文字列の文字揃え
+    var teamName: String = ""                   //球団名
+    weak var uaDelegate: UATextFieldDelegate?  = nil
+    //--------------------------------------------------------------------------
+    //  ビューの再表示
+    //--------------------------------------------------------------------------
+    override func draw(_ dirtyRect: NSRect) {
+        //super.draw(dirtyRect)
+        //文字列の表示位置
+        let y :CGFloat =  dirtyRect.size.height / 2
+                       - self.attributedStringValue.size().height / 2;
+        var x :CGFloat = 10
+        if self.dispAlignment == .center{
+            x = dirtyRect.size.width / 2 - self.attributedStringValue.size().width / 2;
+        }
+        if self.dispAlignment == .right{
+            x = dirtyRect.size.width - self.attributedStringValue.size().width
+        }
+        self.attributedStringValue.draw(at: NSMakePoint(x, y))
+    }
+    //--------------------------------------------------------------------------
+    //  テキストフィールドの編集の終了
+    //--------------------------------------------------------------------------
+    override func textDidEndEditing(_ notification: Notification){
+        uaDelegate?.reload()
+        print("textDidEndEditing")
+    }
+    
+}

@@ -1,0 +1,26 @@
+//キーボードが開いたときの通知を監視
+NotificationCenter.default.addObserver(self,
+               selector: #selector(self.keyboardWillShow(_:)),
+                   name: UIResponder.keyboardWillShowNotification,
+                 object: nil)
+
+
+//キーボードが入力フィールドを隠す場合、フィールドが見えるところまでビューを上方にスクロールする
+@objc func keyboardWillShow(_ notification : Notification?) -> Void {
+    if let info = notification?.userInfo {
+        let frameEndUserInfoKey = UIResponder.keyboardFrameEndUserInfoKey
+        //キーボードのframeを取得
+        if let kbFrame = info[frameEndUserInfoKey] as? CGRect {
+            //入力フィールドのY点とキーボードの表示位置の比較
+            if selectedYpos + selectedFieldHeight > kbFrame.origin.y{
+                //スクロール値の計算
+                let moving = (selectedYpos - kbFrame.origin.y)   //差分
+                           + selectedFieldHeight 
+                           + scrollView.contentOffset.y 
+                           + 2
+                //スクロールビューのスクロール
+                scrollView.setContentOffset(CGPoint(x:0, y: moving),animated: false)
+            }
+        }
+    }
+}

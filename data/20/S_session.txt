@@ -1,0 +1,4 @@
+-(NSDragOperation)draggingSession:(NSDraggingSession *)session
+  sourceOperationMaskForDraggingContext:(NSDraggingContext)context{
+    return NSDragOperationCopy;
+}

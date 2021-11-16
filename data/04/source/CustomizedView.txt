@@ -1,0 +1,111 @@
+//---- CustomizedView.h ----
+#import <Cocoa/Cocoa.h>
+@interface CustomizedView : NSView
+//プロパティ
+@property NSSize canvas;        //親ビューの大きさ
+@property NSSize mySize;        //ビューの大きさ（イベントにより変動する）
+@property NSColor *backColor;   //背景色
+@property NSInteger counter;    //数値カウンタ
+@property NSInteger max;        //数値カウンタの最大値
+@property NSMutableAttributedString *dispText;   //表示テキスト
+//メソッド
+-(id)initWithOwnerFrame:(NSSize)ownerSize;
+-(void)bigger;      //ビューを大きくする
+-(void)smaller;     //ビューを小さくする
++(NSRect)myRectOwnerSize:(NSSize)ownerSize orgSize:(NSSize)orgSize;   //ビューの位置の調整
+@end
+
+//---- CustomizedView.m ----
+#import "CustomizedView.h"
+static const CGFloat DIAMETER = 100;        //定数・直径
+@interface CustomizedView ()
+@property NSMutableDictionary *attributes;  //文字列修飾
+@property NSInteger incr;                   //寸法増分の刻み幅
+@end
+
+@implementation CustomizedView
+//Y軸の反転
+- (BOOL) isFlipped{
+    return YES;
+}
+//初期化
+-(id)initWithOwnerFrame:(NSSize)ownerSize{
+    _mySize = NSMakeSize(DIAMETER, DIAMETER);   //ビューの大きさ（初期値）
+    _canvas = ownerSize;                        //親ビューの大きさの保存
+    _incr = 10;
+    //カウンタの値の表示（文字列修飾）
+    _attributes = [[NSMutableDictionary alloc] init];
+    _attributes[NSForegroundColorAttributeName] = [NSColor whiteColor];
+    _attributes[NSFontAttributeName] = [NSFont systemFontOfSize:60];
+    //カウンターの初期化
+    NSSize size = _canvas;
+    float length = (size.height < size.width ? size.height : size.width);
+    _max = (length / 2) + (DIAMETER/2);
+    _counter = 0;
+    //ビューの初期化
+    if (![super initWithFrame:[CustomizedView myRectOwnerSize:_canvas orgSize:_mySize]])
+        return nil;
+    return self;
+}
+//ビューの描画
+- (void)drawRect:(NSRect)rect {
+    [super drawRect:rect];
+    //円の描画
+    [_backColor set];
+    NSBezierPath *path1 = [NSBezierPath bezierPathWithOvalInRect:
+                           NSMakeRect(0, 0, _mySize.width, _mySize.height)];
+    //枠線の描画
+    [path1 fill];
+    NSBezierPath *path2 = [NSBezierPath bezierPathWithRect:
+                           NSMakeRect(0, 0, _mySize.width, _mySize.height)];
+    [path2 setLineWidth:0.5];
+    [path2 stroke];
+    //カウンタ値の表示（文字列修飾）
+    NSString *str = [NSString stringWithFormat:@"%ld", _counter];
+    _dispText = [[NSMutableAttributedString alloc] initWithString:str attributes:_attributes];
+    float x = (_mySize.width/2) - (_dispText.size.width /2);
+    float y = (_mySize.height/2) - (_dispText.size.height /2);
+    [_dispText drawAtPoint:NSMakePoint(x, y)];
+}
+//マウスイベント
+- (void)mouseUp:(NSEvent *)event{
+    NSUInteger modifierFlags = [NSEvent modifierFlags];
+    if (modifierFlags & NSEventModifierFlagShift) {
+        //Shift Key is ON
+        [self smaller];     //ビューを小さくする
+        NSLog(@"mouse clicked with shift key");
+    }else{
+        [self bigger];      //ビューを大きくする
+        NSLog(@"mouse clicked");
+    }
+}
+// 内部メソッド ------------------------------------------------------------------
+// ビューの位置の調整：ボタンビューの位置をその大きさに合わせて親ビューの中央に合わせる。
++(NSRect)myRectOwnerSize:(NSSize)ownerSize orgSize:(NSSize)orgSize{
+    //親ビューの中央の座標値を計算する
+    float x = (ownerSize.width / 2) - (orgSize.width / 2);
+    float y = (ownerSize.height / 2) - (orgSize.height / 2);
+    NSPoint point = NSMakePoint(x, y);
+    //NSRect値を求める
+    NSRect rect = NSMakeRect(point.x,point.y,orgSize.width,orgSize.height);
+    return rect;
+}
+//ビューを大きくする
+-(void)bigger{
+    if (_counter * _incr >= _max)   //最大値を超える場合は何もしない。
+        return;
+    _counter++; //カウンタ増
+    //ビューの大きさの変更
+    _mySize = NSMakeSize(_mySize.width+=_incr, _mySize.height+=_incr);
+    [self setFrame:[CustomizedView myRectOwnerSize:_canvas orgSize:_mySize]];
+}
+//ビューを小さくする
+-(void)smaller{
+    if (_counter * _incr <= 0)  //最小値を下回る場合は何もしない。
+        return;
+    _counter--; //カウンタ減
+    //ビューの大きさの変更
+    _mySize = NSMakeSize(_mySize.width-=_incr, _mySize.height-=_incr);
+    [self setFrame:[CustomizedView myRectOwnerSize:_canvas orgSize:_mySize]];
+}
+@end

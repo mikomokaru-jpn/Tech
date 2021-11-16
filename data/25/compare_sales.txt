@@ -1,0 +1,14 @@
+//---- Sales.m ----
+#import "Sales.h"
+@implementation Sales
+//比較メソッド：売上金額で比較
+- (NSComparisonResult)compare:(Sales*)aSales{
+    if (_price *_quantity < aSales.price * aSales.quantity){
+        return NSOrderedAscending;
+    }else if (_price *_quantity == aSales.price * aSales.quantity){
+        return NSOrderedSame;
+    }else{
+        return NSOrderedDescending;
+    }
+}
+@end

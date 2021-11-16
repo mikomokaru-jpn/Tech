@@ -1,0 +1,21 @@
+<!-- コマンド http://localhost/01_health/post_r10.php -->
+<DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Test</title>
+</head>
+<body>
+<p>血圧データ照会</p>
+<form method="post" action="sql_r10_test.php">
+<p>id<br><input type="text" name="id" size="10" value="500"></p>
+<p>from_date<br><input type="text" name="from_date" 
+                 size="20" value="20200101"></p>
+<p>to_date<br><input type="text" name="to_date" 
+               size="20" value="20201231"></p>
+<!-- 結果をHTMLに表示する. 指定しないとJSON形式データが返る. -->
+<input type="hidden" name="write_print" value="YES">
+<p><input type="submit" value="送信する"></p>
+</form>
+</body>
+</html>

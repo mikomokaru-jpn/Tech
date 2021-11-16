@@ -1,0 +1,13 @@
+//ウィンドウ
+class UAWindow: NSWindow {
+    @objc func cancel(_ sender: Any?) {
+        close()
+    }
+}
+
+//ウィンドウ・コントローラ
+class UAWinController: NSWindowController {
+    @objc func cancel(_ sender: Any?) {
+        close()
+    }
+}

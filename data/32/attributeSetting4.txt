@@ -1,0 +1,12 @@
+NSMutableAttributedString *atrStr = [[NSMutableAttributedString alloc]
+                                     initWithString:@"涙さしぐみかえり来ぬ"];
+NSFont* font = [NSFont fontWithName:@"HiraKakuProN-W6" size:20];
+[atrStr addAttribute:NSFontAttributeName 
+               value:font
+               range:NSMakeRange(0, [atrStr length])];
+[atrStr addAttribute:NSExpansionAttributeName
+               value:@0.5f 
+               range:NSMakeRange(0, 5)];
+[atrStr addAttribute:NSExpansionAttributeName
+               value:@-0.5f
+               range:NSMakeRange(5, 5)];

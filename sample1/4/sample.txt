@@ -1,0 +1,18 @@
+//チェック対象の文字列のCharacterSetを取得する
+NSCharacterSet *inputCharSet = [NSCharacterSet characterSetWithCharactersInString:string];
+
+//許容する文字列のCharacterSetを取得する：半角数字はOKのとき
+NSCharacterSet *digitCharSet =
+[NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+
+//許容する文字列のCharacterSetを取得する：半角数字/全角数字はOKのとき
+//NSCharacterSet *digitCharSet = [NSCharacterSet decimalDigitCharacterSet];
+
+//チェックを行う
+if ([digitCharSet isSupersetOfSet:inputCharSet]){
+    //OK
+    NSLog(@"数値です. %@", string);
+}else{ 
+    //NG
+    NSLog(@"数値以外が含まれています. %@", string);
+}

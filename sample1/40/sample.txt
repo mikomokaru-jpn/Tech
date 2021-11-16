@@ -1,0 +1,61 @@
+selectorの指定方法の違い
+Swiftではターゲットメソッドに@objcディレクティブが必要
+
+//----------------------------------------------------------------------
+// Swift プログラムからボタンを作成する。
+//----------------------------------------------------------------------
+func applicationDidFinishLaunching(_ aNotification: Notification) {
+    let button: NSButton = NSButton.init(frame: NSMakeRect(30, 20, 100, 40))
+    button.bezelStyle = .regularSquare
+    button.title = "Click Me"
+    button.target = self
+    button.action = #selector(self.buttonClicked(_:))
+    window.contentView?.addSubview(button)
+}
+@objc func buttonClicked(_ sender: NSButton){
+    let alert = NSAlert()
+    alert.messageText = "プログラムからアクションを設定する"
+    alert.informativeText = "ボタンがクリックされた"
+    alert.alertStyle = .informational
+    alert.runModal()
+}
+
+//----------------------------------------------------------------------
+// Objective-C プログラムからボタンを作成する。
+//----------------------------------------------------------------------
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    NSButton *button = [[NSButton alloc] initWithFrame: NSMakeRect(30, 20, 100, 40)];
+    button.bezelStyle = NSBezelStyleRegularSquare;
+    button.title = @"Click Me";
+    button.target = self;
+    button.action = @selector(buttonClicked:);
+    [_window.contentView addSubview:button];
+}
+-(void)buttonClicked:(id)sender{
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = @"プログラムからアクションを設定する";
+    alert.informativeText = @"ボタンがクリックされた";
+    alert.alertStyle = NSAlertStyleInformational;
+    [alert runModal];
+}
+
+//----------------------------------------------------------------------
+// Swift keyEquivalent
+//----------------------------------------------------------------------
+//リターンキー
+button.keyEquivalent = "\r"
+
+//command+o
+button.keyEquivalentModifierMask = .command
+button.keyEquivalent = "o"
+
+//----------------------------------------------------------------------
+// Objective-C keyEquivalent
+//----------------------------------------------------------------------
+//リターンキー
+button.keyEquivalent = @"\r";
+
+//command+o
+button.keyEquivalentModifierMask = NSEventModifierFlagCommand;
+button.keyEquivalent = @"o";
+

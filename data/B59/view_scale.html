@@ -1,0 +1,104 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューのフレームを拡大・縮小・移動する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+ビューのフレームを拡大・縮小・移動する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B59/view_scale.mp4&title=view_scale&width=700" target="_new">
+<img class="lm80 tm10 bm0" src="view_scale.png" alt="[view_scale]" width="300"></a>
+<div class="lm100 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<div class="lm70 tm20 rm60">
+ビューの矩形の四隅の点をドラッグすれば矩形が縦横方向に拡大・縮小する。四辺の線をドラッグすれば縦または横方向に拡大・縮小する。それ以外の矩形の領域のどこかをドラッグすれば矩形はそれに合わせて移動する。
+</div>
+<h3 class="lm70 tm20 bm0">
+ビューのフレーム
+</h3>
+<div class="lm70 tm0 rm60">
+原点の座標（NSPoint）と原点からの幅と高さ（NSSize）で表される。幅や高さはマイナス値を持つこともできる。
+</div>
+
+<h3 class="lm70 tm20 bm0">
+利用方法
+</h3>
+<div class="lm70 tm0 rm60">
+拡大・縮小・移動を行うビューのオブジェクトを作成し親ビューに貼り付ける。マウスのドラッグ操作に応じた各イベントプロシージャから対応するメソッド（select、scale）を呼ぶ。
+</div>
+
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B59/UAView.swift" width="580" height="470"></iframe>
+
+
+<h3 class="lm70 tm20 bm0">
+実装の要点
+</h3>
+<div class="lm70 tm0 rm60">
+ビューの拡大・縮小・移動は、マウスのドラッグに合わせて、ビューのフレームの値を変化させることによって実現する。
+</div>
+<div class="lm70 tm10 rm60">
+点・線をマウスのクリックで選択するとき、クリックした点に隣接するある範囲の点までを選択領域とする。そうしないと、点・線の選択をピンポイントで行う必要があり、操作性に欠ける。
+</div>
+
+<h3 class="lm70 tm10 bm0">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B59/source/UAScaledView.swift&title=UAScaledView" target="_new">UAScaledView.swift</a>　
+</div>
+
+<h3 class="lm70 tm30 bm0">
+フレームの拡大・縮小に合わせて中のビューも拡大・縮小する
+</h3>
+<div class="lm70 tm0" style="width:580px; border-top:solid 2px #909090;"></div>
+
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B59/view_scale2.mp4&title=view_scale2&width=700" target="_new">
+<img class="lm80 tm20 bm0" src="view_scale2.png" alt="[view_scale2]" width="300"></a>
+<div class="lm100 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<div class="lm70 tm10 rm60">
+前掲で示したビューの中に、棒グラフもどきを表示している。棒グラフのそれぞれの要素は NSViewオブジェクトとして作成し、外側のビューに貼り付けている。UAScaledViewクラスのサブクラスとして実装することにより、ビューの拡大・縮小・移動の機能を継承している。
+
+</div>
+<div class="lm70 tm10 rm60">
+ビューの変化は NSViewクラスの通知 frameDidChangeNotification により受け取ることができる。外側のビューをマウスのドラッグで拡大・縮小・移動した時点で通知が発生するので、それに合わせて内側のビューの大きさ・位置を変化させる。
+</div>
+<div class="lm70 tm10 rm60">
+しかしながら、この通知はサブビューを含めた全てのビューの変化を拾いあげるため、内側の棒グラフの大きさを変えるプログラムの動き対しても反応してしまい、同じ処理が無駄に繰り返されることになる。見た目に影響するような深刻な負荷が生じることはなさそうだが、ちょっと面白くない。
+</div>
+<h3 class="lm70 tm10 bm0">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B59/source/UAGraphView.swift&title=UAGraphView" target="_new">UAGraphView.swift</a>　
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

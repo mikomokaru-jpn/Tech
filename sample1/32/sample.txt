@@ -1,0 +1,4 @@
+//NSViewのサブクラスに記述する
+override func acceptsFirstMouse(for event: NSEvent?) -> Bool{
+    return true
+}

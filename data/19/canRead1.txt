@@ -1,0 +1,16 @@
+if ([_pasteboard 
+     canReadItemWithDataConformingToTypes:@[@"public.image"]]){
+    NSLog(@"canReadItem:image");
+}
+if ([_pasteboard 
+     canReadItemWithDataConformingToTypes:@[@"public.tiff"]]){
+    NSLog(@"canReadItem:tiff");
+}
+if ([_pasteboard
+     canReadItemWithDataConformingToTypes:@[@"public.url"]]){
+    NSLog(@"canReadItem:url");
+}
+if ([_pasteboard 
+     canReadItemWithDataConformingToTypes:@[@"public.file-url"]]){
+    NSLog(@"canReadItem:file-url");
+}

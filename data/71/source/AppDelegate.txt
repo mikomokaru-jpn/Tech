@@ -1,0 +1,29 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var tableView1: NSTableView!
+    @IBOutlet weak var tableView2: NSTableView!
+    //表示データ
+    let array : Array = [["key":1, "value":"大島桜"],
+                         ["key":2, "value":"深山桜"],
+                         ["key":3, "value":"霞桜"]]
+    //テーブルビューコントローラ
+    let ctrl1: TVCtrlCell
+    let ctrl2: TVCtrlView
+    //イニシャライザ
+    override init() {
+        ctrl1 = TVCtrlCell.init(array: array)
+        ctrl2 = TVCtrlView.init(array: array)
+        super.init()
+    }
+    //アプリケーション起動後（xibロード後）
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        //CellBased 委託
+        tableView1.dataSource = ctrl1
+        //ViewBased 委託
+        tableView2.dataSource = ctrl2
+        tableView2.delegate = ctrl2
+    }
+}

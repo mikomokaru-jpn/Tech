@@ -1,0 +1,194 @@
+<!-- 
+19 CopyPaste 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>コピー＆ペースト</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm100 tm30 rm60 bm0">コピー＆ペースト</h2>
+<h3 class="lm100 tm0 rm60 bm0">UTI（uniform type identifier）</h3>
+<h2 class="lm100 tm20 bm0 rm60">
+ペースト（貼り付け）処理
+</h2>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+① イメージエディタ（Preview, Grab）に表示されている画像をコピーし、本アプリのビュー上にペーストして画像を表示する。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/19/19_copyPaste1.png&title=コピー＆ペースト&width=800" target="_new">
+<img class="lm110 tm10 bm0" src="19_copyPaste1.png" alt="[コピー＆ペースト]" width="400"></a>
+<div class="lm100 tm20 rm60">
+② ブラウザ（Safari）に表示されている画像をコピーし、本アプリのビュー上にペーストして画像を表示する。URLアドレスをテキストビューに表示する。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/19/19_copyPaste2.png&title=コピー＆ペースト&width=800" target="_new">
+<img class="lm110 tm10 bm0" src="19_copyPaste2.png" alt="[コピー＆ペースト]" width="400"></a>
+<div class="lm100 tm20 rm60">
+③ Finderの画像ファイル（jpeg, png）をコピーし、本アプリのビュー上にペーストして画像を表示する。URLアドレスをテキストビューに表示する。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/19/19_copyPaste3.png&title=コピー＆ペースト&width=800" target="_new">
+<img class="lm110 tm10 bm0" src="19_copyPaste3.png" alt="[コピー＆ペースト]" width="400"></a>
+<h3 class="lm100 tm30 rm60 bm5">
+アプリケーションの実装
+</h3>
+<div class="lm100 tm0 rm60">
+(1) ペーストボード（NSPasteboardクラス）の取得
+</div>
+<div class="lm100 tm5 rm60">
+アプリケーション間を移動するオブジェクトは、システムにひとつだけ存在するペーストボードオブジェクトを仲介して受け渡される。ペーストボードは用途によりいくつかの種類があるが、Copy&Pasteで使用するのは、generalPasteboard である。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/19/getInstance.txt&font=font100" width="550" height="40"></iframe>
+<div class="lm100 tm20 rm60">
+(2) ペーストボードに格納されているオブジェクトの種類を知る
+</div>
+<div class="lm100 tm10 rm60">
+オブジェクトの種類を指定する方法は２通りある。
+</div>
+<div class="lm90 tm5 rm60">
+（A）UTIによる指定
+</div>
+<div class="lm100 tm5 rm60">
+<a href="https://ja.wikipedia.org/wiki/Uniform_Type_Identifier"  target="_new">UTI（uniform type identifier）</a>は、オブジェクトの種類を特定の文字列で表現したもので、形式はURLアドレスのドメインに似ている。
+「public.item」を頂点とした階層構造になっていて、階層が細分化するに従い具体的なオブジェクトタイプになる。<a href="https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html#//apple_ref/doc/uid/TP40009259" target="_new">CocoaフレームワークにおけるUTI一覧</a> に全種類を示す。これを利用すれば、あらゆる種類のオブジェクトを個別に、または集合的に指定することができる。
+</div>
+<div class="lm100 tm10 rm60">
+<a href="https://developer.apple.com/documentation/appkit/nspasteboardtype?language=objc" target="_new">NSPasteboardType</a>は、プログラムで使用頻度の高い代表的なUTIをCocoaフレームワークの中で定数に定義したものである。
+</div>
+<div class="lm100 tm20 rm60">
+ペーストボードに指定した種類のオブジェクトがあるか判定する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/19/canRead1.txt" width="550" height="300"></iframe>
+<div class="lm100 tm15 rm60">
+[ 補足 ]
+</div>
+<div class="lm100 tm0 rm60">
+UTIは階層構造になっているので、public.imageからpublic.tiffが派生し、public.urlからpublic.file-urlが派生する。
+</div>
+<div class="lm100 tm10 rm60">
+Cocoaフレームワークでは、ペーストボードに取り込まれた画像イメージはtiff形式のオブジェクトに変換される。
+UTIを指定してペーストボードから読み込むときは、public.tiffを指定しなくてはならない。（スーパクラスのpublic.imageでは読み込めない）
+</div>
+<div class="lm90 tm20 rm60">
+（B）Class型による指定
+</div>
+<div class="lm100 tm5 rm60">
+オブジェクトの種類をCocoaフレームワークのクラスで指定する。オブジェクトをそのクラスのオブジェクトとして扱うことができる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/19/canRead2.txt" width="550" height="140"></iframe>
+<div class="lm100 tm20 rm60">
+(2) ペーストボードからオブジェクトを読み込む
+</div>
+<div class="lm100 tm5 rm60">
+(A) UTIを指定して読み込む方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/19/readData.txt" width="550" height="170"></iframe>
+<div class="lm100 tm20 rm60">
+(B) クラスを指定して読み込む方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/19/readClass.txt" width="550" height="210"></iframe>
+<div class="lm100 tm10 rm60">
+[ 補足 ]
+</div>
+<div class="lm100 tm0 rm60">
+クラスを指定する方法は操作の汎用性に優れている。NSImageクラスは、イメージファイルの種類の違いをカプセル化しているので、"tiff" という意識をすることなくオブジェクトを読み込むことができる。
+</div>
+<div class="lm100 tm20 rm60">
+URLオブジェクトを読み込む簡単な方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/19/readURL.txt" width="550" height="40"></iframe>
+<div class="lm100 tm20 rm60">
+(3) ペーストボードから読み込んだURLからオブジェクトを読み込む
+</div>
+<div class="lm100 tm5 rm60">
+Finderのファイル名をコピーしてペーストすると、ペーストボードからURLオブジェクトのみが読み込まれる。
+URLのファイルの種類を判定する。ファイルがUTI（public.image）に適合していればファイルオブジェクトを読み込む。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/19/readFromURL.txt" width="550" height="230"></iframe>
+<div class="lm100 tm10 rm60">
+[ 補足 ]
+</div>
+<div class="lm100 tm0 rm60">
+ファイルのUTIを調べる
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/19/readUTI.txt" width="550" height="190"></iframe>
+<div class="lm100 tm0 rm60">
+UTIの判定はファイル名の拡張子に基づいている。拡張子を（mv、cpコマンドで）変えたり削除したりすると機能しなくなる。
+</div>
+
+<h2 class="lm100 tm20 bm0 rm60">
+コピー処理
+</h2>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+アプリケーションの仕様
+</div>
+<div class="lm100 tm0 rm60">
+ビュー上のイメージオブジェクトをペーストボードに書き出す。テキストビューにURLアドレスが表示されていたらURLオブジェクトに変換しペーストボードに書き出す。コピー＆ペーストを実装しているアプリケーションはそれらをペーストボードから読み込むことができる。
+</div>
+<div class="lm100 tm20 rm60">
+① ビュー上のイメージをコピーし、リッチテキストエディタ（テキストエディット）へペーストする。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/19/19_copyPaste4.png&title=コピー＆ペースト&width=800" target="_new">
+<img class="lm110 tm0 bm0" src="19_copyPaste4.png" alt="[コピー＆ペースト]" width="400"></a>
+<div class="lm100 tm20 rm60">
+② ビュー上のイメージとURLオブジェクトをコピーし、Finderの特定のディレクトリへペーストする。ファイルのコピーと同じ。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/19/19_copyPaste5.png&title=コピー＆ペースト&width=900" target="_new">
+<img class="lm110 tm10 bm0" src="19_copyPaste5.png" alt="[コピー＆ペースト]" width="450"></a>
+<div class="lm120 tm10 rm60 font90">
+* Finderの仕様では、URLオブジェクトのみ使用しているようだ。
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+アプリケーションの実装
+</h3>
+<div class="lm100 tm5 rm60">
+(1) ペーストボード（NSPasteboardクラス）の取得
+</div>
+<div class="lm100 tm5 rm60">
+(2) ペーストボードにオブジェクトを書き出す
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/19/write.txt" width="550" height="270"></iframe>
+<h3 class="lm100 tm20 bm5 rm60">
+ソースコード
+</h3>	
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/19/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegateクラス</a>　コピー＆ペースト処理</div>	
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/19/source/CPView.txt&title=CPView" target="_new">
+CPViewクラス</a>　コンテントビュー（コンテキストメニューを表示する）
+</div>
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/19/source/UAView.txt&title=UAView" target="_new">
+UAViewクラス</a>　イメージを表示するビュー（ドラッグ＆ドロップ機能）
+</div>
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/19/source/NSViewUAViewDelegate.txt&title=NSView+UAViewDelegate" target="_new">
+NSView+UAViewDelegate</a>　ドラッグ＆ドロップで使用するカテゴリ
+</div>
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

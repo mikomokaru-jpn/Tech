@@ -1,0 +1,21 @@
+let formatter: DateFormatter = DateFormatter()
+formatter.dateFormat = "Gyy_MM_dd HH-mm-ss"
+formatter.calendar = Calendar.init(identifier: .japanese)
+let dateString1 = "昭和39_10_1 0-15-59"
+if let date = formatter.date(from: dateString1) 
+    print(formatter.string(from: date))
+
+    formatter.dateStyle = .full
+    formatter.timeStyle = .full
+    print(formatter.string(from: date))
+
+    formatter.calendar = Calendar.current //カレンダーをグレゴリオ暦に変更
+    formatter.dateStyle = .full
+    formatter.timeStyle = .full
+    print(formatter.string(from: date))
+}
+
+//結果
+昭和39_10_01 00-15-59
+昭和39年10月1日木曜日 0時15分59秒 GMT+09:00
+1964年10月1日木曜日 0時15分59秒 GMT+09:00

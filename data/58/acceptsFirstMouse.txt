@@ -1,0 +1,3 @@
+- (BOOL) acceptsFirstMouse:(NSEvent *)e {
+    return YES;
+}

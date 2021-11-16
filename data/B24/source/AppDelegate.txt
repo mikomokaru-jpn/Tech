@@ -1,0 +1,262 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate,
+                             NSTableViewDataSource,
+                             NSTableViewDelegate,
+                             NSWindowDelegate,
+                             NSTextFieldDelegate,
+                             UATextFieldDelegate{
+    @IBOutlet weak var window: NSWindow!                  //ウィンドウ
+    @IBOutlet weak var tableView: NSTableView!            //テーブルビュー
+    var teamList: Array<UATeam> = []                      //チームリスト
+    var resultList: Dictionary<String, Array<Int>> = [:]  //成績表
+    //var resultList = [String: [Int]]()
+    var constantItems: Array<Array<String>> = []          //定型データ
+    //--------------------------------------------------------------------------
+    // アプリケーション起動時
+    //--------------------------------------------------------------------------
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        //定型データ
+        constantItems = [["巨人", "giants", "https://www.giants.jp/top.html"],
+                         ["DeNA", "baystars", "https://www.baystars.co.jp"],
+                         ["阪神", "tigers", "https://hanshintigers.jp"],
+                         ["広島", "carp", "https://www.carp.co.jp"],
+                         ["中日", "dragons", "https://dragons.jp"],
+                         ["ヤクルト", "swallows", "https://www.yakult-swallows.co.jp"]]
+        //保存データの読み込み
+        let ud: UserDefaults = UserDefaults.standard
+        if let saveData = ud.dictionary(forKey: "SAVE_DATA")
+                          as? Dictionary<String, Array<Int>>{
+            resultList = saveData
+        }else {
+            resultList["巨人"] = [0, 0, 0]
+            resultList["阪神"] = [0, 0, 0]
+            resultList["DeNA"] = [0, 0, 0]
+            resultList["中日"] = [0, 0, 0]
+            resultList["広島"] = [0, 0, 0]
+            resultList["ヤクルト"] = [0, 0, 0]
+        }
+        //成績の更新
+        self.createData()
+        window.delegate = self;
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    //--------------------------------------------------------------------------
+    // NSTableViewDataSource
+    //--------------------------------------------------------------------------
+    func numberOfRows(in tableView: NSTableView) -> Int{
+        return teamList.count
+    }
+    //--------------------------------------------------------------------------
+    // NSTableViewDelegate
+    //--------------------------------------------------------------------------
+    func tableView(_ tableView: NSTableView,
+                   viewFor column: NSTableColumn?,
+                   row: Int) -> NSView?{
+        //セルビューを取得する
+        let cellView: NSTableCellView? =
+            tableView.makeView(withIdentifier: (column?.identifier)!, owner: self)
+                as? NSTableCellView
+        cellView?.textField?.stringValue = "";
+        //背景色・偶数行/奇数行で変える
+        cellView?.wantsLayer = true
+        if (row % 2) == 1{
+            cellView?.layer?.backgroundColor = NSColor.lightGray.cgColor
+        }else{
+            cellView?.layer?.backgroundColor = UAUtility.cgColor(r: 255, g: 228, b: 196)
+        }
+        //順位
+        if ((column?.identifier)!.rawValue == "ranking"){
+            cellView?.frame.size = NSMakeSize(40, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 40, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .center
+        }
+        //イメージ
+        if ((column?.identifier)!.rawValue == "image"){
+            cellView?.frame.size = NSMakeSize(80, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 80, 80)
+            (cellView?.textField as! UAIconView).teamIcon = teamList[row].image
+            cellView?.textField?.stringValue = "dummy";
+            return cellView
+        }
+        //球団名
+        if ((column?.identifier)!.rawValue == "name"){
+            cellView?.frame.size = NSMakeSize(150, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 150, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .left
+        }
+        //試合数
+        if ((column?.identifier)!.rawValue == "number"){
+            cellView?.frame.size = NSMakeSize(50, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 50, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .right
+        }
+        //勝ち
+        if ((column?.identifier)!.rawValue == "win"){
+            cellView?.frame.size = NSMakeSize(50, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 50, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .right
+            (cellView?.textField as! UATextField).teamName = teamList[row].nameString
+            cellView?.textField?.delegate = self
+            (cellView?.textField as! UATextField).uaDelegate = self
+        }
+        //負け
+        if ((column?.identifier)!.rawValue == "lose"){
+            cellView?.frame.size = NSMakeSize(50, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 50, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .right
+            (cellView?.textField as! UATextField).teamName = teamList[row].nameString
+            cellView?.textField?.delegate = self
+            (cellView?.textField as! UATextField).uaDelegate = self
+        }
+        //引き分け
+        if ((column?.identifier)!.rawValue == "draw"){
+            cellView?.frame.size = NSMakeSize(50, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 50, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .right
+            (cellView?.textField as! UATextField).teamName = teamList[row].nameString
+            cellView?.textField?.delegate = self
+            (cellView?.textField as! UATextField).uaDelegate = self
+        }
+        //勝率
+        if ((column?.identifier)!.rawValue == "rate"){
+            cellView?.frame.size = NSMakeSize(100, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 100, 80)
+            (cellView?.textField as! UATextField).dispAlignment = .right
+        }
+        //リンク
+        if ((column?.identifier)!.rawValue == "link"){
+            cellView?.frame.size = NSMakeSize(100, 80)
+            cellView?.textField?.frame = NSMakeRect(0, 0, 100, 80)
+            cellView?.addSubview(teamList[row].link!)
+            return cellView
+        }
+        //属性付き文字列の編集
+        let id: String = (column?.identifier.rawValue)!
+        let aStr = teamList[row].value(forKey: id) as! NSAttributedString
+        cellView?.textField?.attributedStringValue = aStr
+        return cellView
+    }
+    //--------------------------------------------------------------------------
+    // キストフィールドに値を入力しenterキーを押したとき
+    //--------------------------------------------------------------------------
+    func control(_ control: NSControl,
+                 textView: NSTextView,
+                 doCommandBy commandSelector: Selector) -> Bool{
+        let textField = control as? UATextField
+        if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+            let inputCharSet = CharacterSet.init(charactersIn: textView.string)
+            let digitCharSet = CharacterSet.init(charactersIn: "0123456789")
+            if digitCharSet.isSuperset(of: inputCharSet){
+                for team in teamList{
+                    if textField?.teamName == team.nameString{
+                        if textField?.identifier?.rawValue == "win"{
+                            team.winValue = Int(textView.string) ?? 0
+                        }else if textField?.identifier?.rawValue == "lose"{
+                            team.loseValue = Int(textView.string) ?? 0
+                        }else if textField?.identifier?.rawValue == "draw"{
+                            team.drawValue = Int(textView.string) ?? 0
+                        }
+                        break
+                    }
+                }
+                self.sortTeams()
+            }else{
+                print("数値以外が含まれています.")
+            }
+        }
+        return false
+    }
+    //--------------------------------------------------------------------------
+    // UATextFieldDelegate
+    //--------------------------------------------------------------------------
+    func reload(){
+        tableView.reloadData()
+    }
+    //--------------------------------------------------------------------------
+    // ウィンドウを閉じるとき：データを保存する
+    //--------------------------------------------------------------------------
+    func windowWillClose(_ notification: Notification){        
+        for team in teamList{
+            resultList[team.nameString]![0] = team.winValue
+            resultList[team.nameString]![1] = team.loseValue
+            resultList[team.nameString]![2] = team.drawValue
+        }
+        let ud: UserDefaults = UserDefaults.standard
+        ud.set(resultList, forKey: "SAVE_DATA")
+    }
+    //--------------------------------------------------------------------------
+    // ボタンアクション：URLを開く
+    //--------------------------------------------------------------------------
+    @objc func buttonClicked(_ sender: UAButton){
+        if !NSWorkspace.shared.open(URL(string:sender.urlString)!){
+            print("URLが開けません")
+        }
+    }
+    //--------------------------------------------------------------------------
+    // チームリストの作成
+    //--------------------------------------------------------------------------
+    private func createData(){
+        for record in constantItems{
+            //球団名
+            let team = UATeam.init(name: record[0])
+            guard let result = resultList[team.nameString] else{
+                print("unexpected error in createData()")
+                return
+            }
+            //勝敗表のセット
+            team.winValue = result[0]   //勝ち
+            team.loseValue = result[1]  //負け
+            team.drawValue = result[2]  //引き分け
+            //チームイメージ
+            team.image = NSImage.init(named: NSImage.Name(rawValue: record[1]))
+            //リンクボタン
+            let button: UAButton = UAButton.init(frame: NSMakeRect(30, 20, 60, 40))
+            button.bezelStyle = .regularSquare
+            button.title = ""
+            button.target = self
+            button.action = #selector(self.buttonClicked(_:))
+            button.urlString = record[2]
+            team.link = button
+            teamList.append(team)
+        }
+        self.sortTeams()
+    }
+    //--------------------------------------------------------------------------
+    // ソート
+    //--------------------------------------------------------------------------
+    private func sortTeams(){
+        //クロージャによるソート
+        teamList.sort(by:{ lTeam, rTeam -> Bool in
+            if lTeam._rateValue > rTeam._rateValue{
+                return true
+            }
+            return false
+        })
+        //Comparableプロトコルによる実装
+        //teamList.sort()
+        var ranking = 0
+        for team in teamList{
+            ranking += 1
+            team.rankingValue = ranking
+        }
+        tableView.reloadData()
+    }
+
+    //--------------------------------------------------------------------------
+    // for test
+    //--------------------------------------------------------------------------
+    @IBAction func update(_ sender:Any){
+        teamList.removeAll()
+        resultList["巨人"] = [53, 26, 0]
+        resultList["阪神"] = [41, 39, 0]
+        resultList["DeNA"] = [41, 41, 0]
+        resultList["中日"] = [39, 42, 0]
+        resultList["広島"] = [32, 44, 0]
+        resultList["ヤクルト"] = [32, 46, 0]
+        self.createData()
+        tableView.reloadData()
+    }
+}

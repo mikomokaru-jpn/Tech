@@ -1,0 +1,7 @@
+//メソッド宣言
+@interface  NSObject(FRCategory)
+//ファーストレスポンダを次のコントロールに移す。引数：依頼元のオブジェクト
+-(void)nextControlFrom:(id)object;
+//ファーストレスポンダを前のコントロールに移す。引数：依頼元のオブジェクト
+-(void)prevControlFrom:(id)object;
+@end

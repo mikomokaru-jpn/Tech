@@ -1,0 +1,1 @@
+let rect: CGRect = ... //切り取り範囲let anImage = cgImage?.cropping(to: rect)

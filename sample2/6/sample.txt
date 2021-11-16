@@ -1,0 +1,36 @@
+<?php
+//DB接続（「DBに接続する」参照のこと）
+require_once("MYDB.php");
+$pdo = db_connect(); 
+// 1.SQL文の列名をGETパラメータから取得しSQL文を作成する
+// 2.execute()メソッドでSQLを実行する
+try{
+    $sql = "SELECT id, date, upper, lower, confirm FROM blood_pressure 
+            WHERE ( id=:id ) AND ( date >=:fd AND date <=:td ); ";
+    $stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':id', $_GET['id'], PDO::PARAM_INT);	
+    $stmh->bindValue(':fd', $_GET['from_date'], PDO::PARAM_INT);
+    $stmh->bindValue(':td', $_GET['to_date'], PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー:'. $e->getMessage());
+}
+header('Content-type: application/json');
+
+// 1.fetchAllでSELECT文の結果を連想配列として取得
+//    FETCH_ASSOC は、値の参照のキーはカラム名のみとする
+// 2.json_encode で連想配列をJSON文字列に変換し出力する
+echo json_encode($stmh->fetchAll(PDO::FETCH_ASSOC));
+?>
+
+---- 入力 ----
+http://localhost/atest/php/select01.php?id=500&from_date=20181001&to_date=20181007
+
+---- 出力 ----
+[{"id":500,"date":20181001,"upper":123,"lower":95,"confirm":1},
+ {"id":500,"date":20181002,"upper":136,"lower":88,"confirm":1},
+ {"id":500,"date":20181003,"upper":132,"lower":100,"confirm":1},
+ {"id":500,"date":20181004,"upper":139,"lower":100,"confirm":1},
+ {"id":500,"date":20181005,"upper":140,"lower":97,"confirm":1},
+ {"id":500,"date":20181006,"upper":134,"lower":98,"confirm":1},
+ {"id":500,"date":20181007,"upper":125,"lower":91,"confirm":1}]

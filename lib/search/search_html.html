@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
+    <title>検索</title>
+    <link rel="stylesheet" href="/lib/document.css">
+</head>
+<body>
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<span hidden id='pgm'>/lib/search/search_html.php</span>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<input id="keyword" type="text" value='' class='lm10 font110 w400 tm10 bm5'>
+<button id="search" class="lm10 font100 w80">検索</button>
+<div>
+<input type="radio" class= "lm20 tm10" name="search_type" value=1 checked>入力した値をそのまま検索する
+<input type="radio" class= "lm10" name="search_type" value=2>入力した値をスペースで分割しAND検索する
+</div>
+<div class="lm20">大文字小文字を
+<input type="radio" class= "lm5 tm10" name="case_type" value="YES">区別する
+<input type="radio" class= "lm5" name="case_type" value="NO" checked>区別しない
+</div>
+<span id='topOfList'></span>
+<!-- 結果レコードの表示 -->
+<script type="text/javascript" src="search.js"></script>
+</body>
+</html>
+

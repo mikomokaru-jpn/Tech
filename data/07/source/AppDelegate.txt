@@ -1,0 +1,62 @@
+//------------------------------------------------------------------------------
+// メインフォーム制御　AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "SubWinCtrl.h"
+#import "ChangeColorDelegate.h"
+@interface AppDelegate : NSObject <NSApplicationDelegate, ChangeColorDelegate>
+-(IBAction)openSubWindow:(id)sender;
+@end
+//------------------------------------------------------------------------------
+// メインフォーム制御　AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTextField *text;        //表示文字列
+@property(weak) IBOutlet NSMatrix *matrix;          //処理の選択
+@property SubWinCtrl *subWinCtrl;                   //サブウインドウ・コントローラ
+@end
+
+@implementation AppDelegate
+//アプリケーション開始時
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+    _window.title = @"メインウィンドウ (デリゲート)";
+    _subWinCtrl = [[SubWinCtrl alloc] init];    //サブウィンドウオブジェクトの作成
+    _subWinCtrl.ccDelegate = self;              //プロトコルによるdelegateを引き受ける
+    _subWinCtrl.ccDelegateOfCategory = self;    //カテゴリによるdelegateを引き受ける
+}
+//サブウィンドウを開く
+-(IBAction)openSubWindow:(id)sender{
+    //サブウィンドウの表示
+    [_subWinCtrl showWindow:self];
+    //サブウィンドウの表示位置の変更
+    NSRect rect = [_window frame];
+    NSPoint point = NSMakePoint(rect.origin.x + rect.size.width - _subWinCtrl.window.frame.size.width,
+                                rect.origin.y-10);
+    [[_subWinCtrl window] setFrameTopLeftPoint:point];
+    //デリゲート種類のセット tag=1:プロトコル　tag=2：カテゴリ
+    _subWinCtrl.delegateKind = _matrix.selectedCell.tag;
+}
+
+// デリゲートメソッドの実装　by プロトコル
+-(void)changeColorByButton:(NSColor *)color{
+    _text.textColor = color;
+}
+// デリゲートメソッドの実装　by カテゴリ
+-(void)changeColorByButtonOfCategory:(NSColor *)color{
+    _text.textColor = color;
+}
+// NSWindowDelegate
+- (void)windowWillClose:(NSNotification *)notification{
+    [_subWinCtrl.window close]; //サブウィンドウを閉じる
+}
+@end
+
+
+
+
+
+
+
+

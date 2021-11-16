@@ -1,0 +1,14 @@
+//テーブルセルの削除確認時、応答を受け付ける
+class UAConfirmView: UIView {
+    //クロージャ
+    var clousure: ((CGPoint)-> Void)? = nil
+    //タッチ開始
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first! //最初にタッチした点
+        let location = touch.location(in: self)        
+        if let cls = clousure{
+            cls(location)   //クロージャの実行
+            clousure = nil  //クロージャの消去
+        }
+    }
+}

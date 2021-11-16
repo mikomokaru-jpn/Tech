@@ -1,0 +1,72 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property IBOutlet NSTextView *info;
+@property NSString *transaction;    //テキストファイルの中身
+@end
+
+@implementation AppDelegate
+//アプリケーションの起動
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    [self getInformation];
+    _info.string = [_info.string stringByAppendingFormat:@"\n\n●バンドル内のファイルを読み込む\n"];
+    _info.string = [_info.string stringByAppendingFormat:@"%@", [self getFileData]];
+}
+//情報の取得
+-(void)getInformation
+{
+    //アプリケーションバンドル
+    NSBundle *bundle = [NSBundle mainBundle];
+    //バンドルパスの表示
+    NSString* bundlePath = [NSString stringWithFormat:@"●バンドルパス\n%@",
+                            [bundle bundlePath]];
+    _info.string = bundlePath;
+    //バンドルのディレクトリ構造の表示
+    NSFileManager *fm = [NSFileManager defaultManager];   //ファイルマネージャ
+    _info.string = [_info.string stringByAppendingFormat:@"\n\n●バンドルのディレクトリ構造"];
+    //ディレクトリを再帰的に取得
+    NSDirectoryEnumerator *dirEnum = [fm enumeratorAtPath:[bundle bundlePath]];
+    NSArray *dirArray = [dirEnum allObjects];
+    for(id obj in dirArray){
+        NSString *fullPath = [NSString stringWithFormat:@"%@/%@", [bundle bundlePath], obj];
+        BOOL isDir;
+        if([fm fileExistsAtPath:fullPath isDirectory:&isDir])
+        {
+            if(isDir){
+                _info.string = [_info.string stringByAppendingFormat:@"\nD: %@", obj];
+            }else{
+                _info.string = [_info.string stringByAppendingFormat:@"\nF: %@", obj];
+            }
+        }
+    }
+}
+//アプリケーションバンドルにあるファイルを読む
+-(NSString*)getFileData
+{
+    //アプリケーションバンドルを取得する
+    NSBundle *bundle = [NSBundle mainBundle];
+    //リーソスに格納されているファイル（tanka.txt）のパスを求める
+    NSString *path = [bundle pathForResource:@"tanka"
+                                      ofType:@"txt"];
+    //NSURLに変換する
+    NSURL *url = [NSURL fileURLWithPath:path];
+    //ファイルを読み込む
+    NSString *string = [NSString stringWithContentsOfURL:url
+                                                encoding:NSUTF8StringEncoding
+                                                   error:nil];
+    return string;
+}
+@end
+

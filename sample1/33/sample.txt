@@ -1,0 +1,6 @@
+NSCursor.pointingHand.set() //指差した手
+NSCursor.closedHand.set()   //閉じた手
+NSCursor.openHand.set()     //開いた手
+NSCursor.crosshair.set()    //+印
+NSCursor.iBeam.set()        //I印 
+NSCursor.arrow.set()        //矢印（デフォルトの形）

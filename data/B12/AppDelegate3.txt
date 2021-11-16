@@ -1,0 +1,25 @@
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    let subWinController = SubWinController()
+    //イニシャライザ
+    override init() {
+        super.init()
+    }
+    @IBAction func clickOpen(_ sender: NSButton){
+        //サブウィンドウの表示位置を決める
+        let origin :CGPoint = (window?.frame.origin)!
+        let size :CGSize = (window?.frame.size)!
+        let x: CGFloat = origin.x + size.width
+        let y: CGFloat = origin.y
+            - ((subWinController.window?.frame.size.height)!
+            - size.height)
+        subWinController.window?.setFrameOrigin(CGPoint(x: x, y: y))
+        //サブウィンドウを開く   
+        subWinController.showWindow(nil)
+        let response:NSApplication.ModalResponse =
+            NSApp.runModal(for: subWinController.window!)
+        if response == .OK{
+            //戻り値に応じた処理
+        }
+    }        
+}

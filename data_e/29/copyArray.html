@@ -1,0 +1,173 @@
+<!-- 
+Ducument 29
+27 ArrayCopy
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Copy objects / Copy arrays</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">Copy objects / Copy arrays</h2>
+<h3 class="lm90 tm20 rm60 bm0">
+１-１.  Assign an object
+</h3>
+<div class="lm100 tm10 rm60">
+  When  you assign an variable refering a object to another variable, each variable is refering to the same object.
+  If a content of the object change, it will be reflected in both valiables.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/assign.txt" width="550" height="90"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy1.png&title=copy1&width=600" target="_new">
+<img class="lm100 tm5 bm10" src="/data/29/copy1.png" width="280" alt="copy1"></a>	
+<h3 class="lm90 tm20 rm60 bm0">
+  １-２. Copy an object
+  </h3>
+<div class="lm100 tm10 rm60">
+When  you copy a variable of an object to another variable,  a new object is created from source object,  and  the variable of destination  refers to this. 
+If the contents of the source object are changed , the copyed object does not change.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/copy.txt" width="500" height="90"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy2.png&title=copy2&width=600" target="_new">
+<img class="lm100 tm10 bm10" src="/data/29/copy2.png" width="300" alt="copy2"></a>	
+<h3 class="lm90 tm20 rm60 bm0">
+２-１.  Assign an arrays
+</h3>
+<div class="lm100 tm5 rm60">
+In a case of arrays, the point is how to handle element objects that  an attay hold.
+</div>
+<div class="lm100 tm10 rm60">
+Similar to the above object assignment, when an array object is assigned to another variable, 
+each assignment destination refers to the same array object.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/assign_array.txt" width="550" height="130"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.php?filename=/data/29/copy3.png&title=copy3&width=600" target="_new">
+<img class="lm100 tm10 bm10" src="/data/29/copy3.png" width="300" alt="copy3"></a>	
+<h3 class="lm100 tm10 rm60 bm0">
+２-２. Shallow copy  an array
+</h3>
+<div class="lm100 tm0 rm60">
+When an array is copied by shallow copy, a new array object that is copied from the original array is created, 
+and the variable of destination refers to this.
+Elements are added and deleted in each array individually, 
+however  since the elements are not copied, existing elements will be referred  from each array.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/copyShallow.txt" width="550" height="180"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy4.png&title=copy4&width=700" target="_new">
+<img class="lm100 tm10 bm10" src="/data/29/copy4.png" width="500" alt="copy4"></a>	
+<h3 class="lm100 tm10 rm60 bm0">
+２-３. Deep copy an array</h3>
+<div class="lm100 tm0 rm60">
+To copy the elements of an array to another array, use initializer 「initWithArray: copyItems :」 
+to create a new array from a source array  specified as an an argument of method.
+At this time, set the argument copyItems to YES. 
+If set to NO, it is the same as a shallow copy.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/copyDeep.txt" width="550" height="180"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy5.png&title=copy5&width=700" target="_new">
+<img class="lm100 tm15 bm10" src="/data/29/copy5.png" width="500" alt="copy5"></a>	
+
+<h3 class="lm90 tm20 rm60 bm0">
+3. NSCopying protocol
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copy_method.txt&font=font100" width="550" height="40"></iframe>
+
+<div class="lm100 tm10 rm60">
+To implement copying an object of custom class, you shuld write copy processing of each class element in copyWithZone method of NSCopying protocol.
+When you call a copy method of an object, copyWithZone method defined in the class will excute.
+An example of the copyWithZone method is shown below.
+</div>
+<h3 class="lm90 tm20 rm60 bm0">
+Example 1. 
+</h3>
+<div class="lm100 tm20 rm60">
+A class with  a numeric variable and a system standard class variable
+</div>
+<div class="lm100 tm0 rm60">
+Create an object of the same class as itself, copy each element  to it, and return it.
+A system standard class object is sholud to be copied by the copy method.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copyWithZone1.txt" width="550" height="320"></iframe>
+<h3 class="lm90 tm20 rm60 bm0">
+Example ２. 
+</h3>
+  <div class="lm100 tm20 rm60">
+A class with custom a class object and a its array
+</div>
+<div class="lm100 tm0 rm60">
+A custom class object is to be copied using its own copy method.
+You shoud implement your copyWithZone method of NSCopying protocol　corresponding to your class.
+If it is not implemented properly, a run-time error will occur.
+And a copy processing of arrays contain custom class objects  should  be implemented with  method「initWithArray: copyItems:」.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copyWithZone2.txt" width="550" height="380"></iframe>
+<div class="lm100 tm10 rm60">
+When a classes has hierarchical structure, the copy process is called step by step from the upper class to the lower class.
+</div>
+<h3 class="lm90 tm20 rm60 bm0">
+４. Assignment and copying of system standard classes
+</h3>
+<div class="lm100 tm5 rm60">
+確認してみたら基本クラスであるNSString型の変数とNSDate型の変数は、代入操作もコピー操作も、変数のコピーとなった。おそらく単一オブジェクトとなる基本クラスは同じ動作になると思われる。
+When I checked it, NSString type variables and NSDate type variables, which are system standard classes, 
+became copying of variables in both  assignment operation and copy operation. 
+Perhaps these classes behave the same.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copy_basic_class.txt" width="550" height="90"></iframe>
+<h3 class="lm90 tm20 rm60 bm0">
+５. Copy a multidimensional array
+</h3>
+<div class="lm100 tm5 rm60">
+When you execute a deep copy of an array which has two or more dimensions, 
+Elements of an array in first dimension are copied,  but elements of an array deeper than that are not copied. 
+If so, it is necessary to execute copy processing  in the  each loop corresponding to the dimension of the array.
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copy_multi_array.txt" width="550" height="370"></iframe>
+<h3 class="lm90 tm30 rm60 bm0">
+６. Sample programs
+</h3>
+<!--ソースコード　リンク-->
+<div class="lm100 tm5 rm60">オブジェクトのコピー/配列のコピーの確認 
+<a href="/lib/HTMLofText.html?filename=/data/29/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegateクラス</a>
+</div>
+<div class="lm100 tm0 rm60">カスタムクラス 
+<a href="/lib/HTMLofText.html?filename=/data//source/AClass.txt&title=AClass" target="_new">AClass</a>
+</div>
+<div class="lm100 tm0 rm60">配列を持ったカスタムクラス 
+<a href="/lib/HTMLofText.html?filename=/data//source/BClass.txt&title=BClass" target="_new">BClass</a>
+</div>
+
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="../index1.php">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>
+
+
+
+

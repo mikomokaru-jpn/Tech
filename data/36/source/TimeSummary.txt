@@ -1,0 +1,200 @@
+//------------------------------------------------------------------------------
+//  TimeSumary.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+#import "TimeCard.h"
+
+
+//------------------------------------------------------------------------------
+
+@interface TimeSummary : NSObject
+
+//実績リスト・コード別
+@property NSMutableArray<TimeCard *> *listByCode;
+//実績リスト・コード/日別
+@property NSMutableArray<TimeCard *> *listByCodeDay;
+
+//イニシャライザ
+-(id)initWithCardlist:(NSMutableArray<TimeCard *> *)cardList;
+//実績リストにタイムカードの作業時間を追加する
+-(BOOL)addTimeCard:(TimeCard *)timeCard;
+//実績リストの保存
+-(BOOL)write;
+//実績リストのダンプ
+-(void)log;
+
+@end
+//------------------------------------------------------------------------------
+//  TimeSumary.m
+//------------------------------------------------------------------------------
+#import "TimeSummary.h"
+#import "TimeCalc.h"
+
+@interface TimeSummary()
+@property TimeCalc *timeCalc;
+@end
+
+@implementation TimeSummary : NSObject
+//公開メソッド ------------------------------------------------------------------
+//イニシャライザ
+-(id)initWithCardlist:(NSMutableArray<TimeCard *> *)cardList
+{
+    if(![super init])
+        return nil;
+    _timeCalc = [TimeCalc shareInstance];
+    _listByCode  = [[NSMutableArray alloc] init];   //実績表
+    [self createTableByCode:cardList];
+    _listByCodeDay  = [[NSMutableArray alloc] init];   //実績表
+    [self createTableByCodeDay:cardList];
+
+    
+    return self;
+}
+//実績リストにタイムカードの作業時間を追加する
+-(BOOL)addTimeCard:(TimeCard *)tc
+{
+    BOOL exist = NO;
+    for (TimeCard* ts in _listByCode)
+    {
+        if (tc.code.intValue == ts.code.intValue){
+            //ある：加算
+            //開始日時の更新
+            [ts updateStartDateTime:tc.startDateTime];
+            //終了日時の更新
+            [ts updateEndDateTime:tc.endDateTime];
+            //経過時間の集計
+            [ts plusElaps:tc.elapsTime];
+            exist = YES;
+            break;
+        }
+    }
+    if (!exist){
+        //ない：新規作成
+        TimeCard *cardSum = [[TimeCard alloc] init];
+        cardSum.code = [tc.code copy];
+        cardSum.startDateTime = [tc.startDateTime copy];
+        cardSum.endDateTime = [tc.endDateTime copy];
+        cardSum.elapsTime = [tc.elapsTime copy];
+        [_listByCode addObject:cardSum];
+    }
+    return YES;
+}
+//実績リストの保存
+-(BOOL)write
+{
+    //ファイルパス
+    NSArray *paths = NSSearchPathForDirectoriesInDomains
+    (NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *DocumentsDirPath = [paths objectAtIndex:0];
+    NSString *pathSheet = [NSString stringWithFormat:@"%@%@",
+                           DocumentsDirPath,@"/timeSummary.txt"];
+    
+    //実績リストを文字列に変換する
+    NSString *text = @"";
+    for (TimeCard *ts in _listByCode)
+    {
+        text = [NSString stringWithFormat:@"%@%@\n",text, ts.record];
+    }
+    //ファイルに書き込む
+    NSError *error;
+    BOOL result = [text writeToFile:pathSheet atomically:YES
+                           encoding:NSUTF8StringEncoding error:&error];
+    
+    NSLog(@"%@",  error.description);
+    return result;
+}
+//実績リストのダンプ
+-(void)log
+{
+     for(TimeCard* ts in _listByCode){
+         NSString *text = [NSString stringWithFormat:@"%@ %@ %@ %@",
+                           ts.code,
+                           ts.stringStratDateTime,
+                           ts.stringEndDateTime,
+                           ts.stringElapsTime];
+         NSLog(@"%@", text);
+     }
+}
+// 内部メソッド ------------------------------------------------------------------
+//実績リストの作成
+-(void)createTableByCode:(NSMutableArray<TimeCard *> *)cardList
+{
+    TimeCard *cardSum;
+    for(TimeCard* tc in cardList){
+        //タイムカードリストを読む
+        if (tc.endDateTime == nil){
+            continue;   //稼働中は除く
+        }
+        cardSum = [self cardExistByCode:tc];
+        if (cardSum){ //ある：加算
+            //開始日時の更新
+            [cardSum updateStartDateTime:tc.startDateTime];
+            //終了日時の更新
+            [cardSum updateEndDateTime:tc.endDateTime];
+            //経過時間の集計
+            [cardSum plusElaps:tc.elapsTime];
+        }else{ //ない：新規作成
+            cardSum = [[TimeCard alloc] init];
+            cardSum.code = [tc.code copy];
+            cardSum.startDateTime = [tc.startDateTime copy];
+            cardSum.endDateTime = [tc.endDateTime copy];
+            cardSum.elapsTime = [tc.elapsTime copy];
+            [_listByCode addObject:cardSum];
+        }
+        
+    }
+}
+
+
+//新規か重複か？ コード別
+-(TimeCard*)cardExistByCode:(TimeCard*)card{
+    for (TimeCard* tc in _listByCode){
+        //実績リストを読む
+        if (tc.code.intValue == card.code.intValue){
+            return tc;
+        }
+    }
+    return nil;
+}
+
+//実績リストの作成
+-(void)createTableByCodeDay:(NSMutableArray<TimeCard *> *)cardList
+{
+    TimeCard *cardSum;
+    for(TimeCard* tc in cardList){
+        //タイムカードリストを読む
+        if (tc.endDateTime == nil){
+            continue;   //稼働中は除く
+        }
+        cardSum = [self cardExistByCodeDay:tc];
+        if (cardSum){ //ある：加算
+            //開始日時の更新
+            [cardSum updateStartDateTime:tc.startDateTime];
+            //終了日時の更新
+            [cardSum updateEndDateTime:tc.endDateTime];
+            //経過時間の集計
+            [cardSum plusElaps:tc.elapsTime];
+        }else{ //ない：新規作成
+            cardSum = [[TimeCard alloc] init];
+            cardSum.code = [tc.code copy];
+            cardSum.startDateTime = [tc.startDateTime copy];
+            cardSum.endDateTime = [tc.endDateTime copy];
+            cardSum.elapsTime = [tc.elapsTime copy];
+            [_listByCodeDay addObject:cardSum];
+        }
+        
+    }
+}
+//新規か重複か？　コード/日別
+-(TimeCard*)cardExistByCodeDay:(TimeCard*)card
+{
+    for (TimeCard* tc in _listByCodeDay){
+        //実績リストを読む
+        if ((tc.code.intValue == card.code.intValue) &&
+            [_timeCalc isEqualDay:tc.startDateTime to:card.startDateTime]){
+            return tc;
+        }
+    }
+    return nil;
+}
+@end

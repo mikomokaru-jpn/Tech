@@ -1,0 +1,33 @@
+NSDate* now = [NSDate date]; //現在日の取得
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+
+//現在日付・時刻 custom style
+formatter.dateFormat = @"yyyyねん MMがつ ddにち HHじ mmふん ssびょう E曜日";
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//現在日付・時刻　full style
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//現在日付・時刻　long style
+formatter.dateStyle = NSDateFormatterLongStyle;
+formatter.timeStyle = NSDateFormatterLongStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//現在日付・時刻　medium style
+formatter.dateStyle = NSDateFormatterMediumStyle;
+formatter.timeStyle = NSDateFormatterMediumStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//現在日付・時刻　short style
+formatter.dateStyle = NSDateFormatterShortStyle;
+formatter.timeStyle = NSDateFormatterShortStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//結果
+2021ねん 02がつ 19にち 07じ 29ふん 39びょう 金曜日
+2021年2月19日金曜日 7時29分39秒 日本標準時
+2021年2月19日 7:29:39 JST
+2021/02/19 7:29:39
+2021/02/19 7:29

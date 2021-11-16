@@ -1,0 +1,6 @@
+func readFile(){
+    let url = NSURL.fileURL(withPath: NSHomeDirectory() + "/Pictures/sakura.jpg")
+    if let cgImageSource = CGImageSourceCreateWithURL(url as CFURL, nil){
+        cgOriginalImage = CGImageSourceCreateImageAtIndex(cgImageSource, 0, nil)
+    }
+}

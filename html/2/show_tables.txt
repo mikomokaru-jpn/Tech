@@ -1,0 +1,1 @@
+SHOW TABLES;+------------------+| Tables_in_health |+------------------+| blood_pressure   || user             |+------------------+

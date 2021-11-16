@@ -1,0 +1,9 @@
+NSString* getMIMEString(NSString* path){
+    NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];
+    NSString *utiStr = [workSpace typeOfFile:path error:nil];
+    CFStringRef utiCStr = (__bridge CFStringRef)utiStr;;
+    CFStringRef mimeCStr = UTTypeCopyPreferredTagWithClass(utiCStr,
+                                               kUTTagClassMIMEType);
+    return (__bridge_transfer NSString*)mimeCStr;;
+}
+// return -> "image/jpeg"

@@ -1,0 +1,34 @@
+//---- View1.h ----
+#import <Cocoa/Cocoa.h>
+@interface View1 : NSView
+-(id)initWithFrame:(NSRect)dirtyRect attributedString:(NSAttributedString*)aString;
+@end
+
+//---- View1.m ----
+#import "View1.h"
+@interface View1()
+@property NSAttributedString *attributedString;
+@end
+
+@implementation View1
+//イニシャライザ
+-(id)initWithFrame:(NSRect)dirtyRect attributedString:(NSAttributedString*)aString{
+    if (![super initWithFrame:dirtyRect])
+        return nil;
+    //属性付き文字列
+    _attributedString = aString;
+    //枠線
+    self.wantsLayer = YES;
+    self.layer.borderWidth = 1.0;
+    self.layer.borderColor = [NSColor grayColor].CGColor;
+    return self;
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //属性付き文字列を描画する：矩形の原点を指定
+    float x = (dirtyRect.size.width / 2) - (_attributedString.size.width / 2);
+    float y = (dirtyRect.size.height / 2) - (_attributedString.size.height / 2);
+    [_attributedString drawAtPoint:NSMakePoint(x, y)];
+}
+@end

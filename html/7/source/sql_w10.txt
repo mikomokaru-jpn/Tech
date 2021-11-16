@@ -1,0 +1,74 @@
+<?php
+require_once("init.php");
+require_once("MYDB.php"); // DB接続
+$pdo = db_connect(); 
+// POSTデータ（Json）の取得
+$json_post = file_get_contents('php://input');
+$json_string = mb_convert_encoding($json_post, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+$array = json_decode($json_string, true);
+
+//DB更新の繰り返し
+foreach($array as $record){
+    update($record);
+}
+// エラーがないとき戻り値=0の返却
+$res = array(0);
+header('Content-type: application/json');
+echo json_encode($res);
+
+//DB更新
+function update($record){
+    global $pdo;
+    $year = $record['year'];
+    $income = $record['income'];
+    $spending = $record['spending'];
+    $amount = $record['amount'];
+    $unit = $record['unit'];
+    $population = $record['population'];
+    // レコードを求める
+    try{
+        $sql = "SELECT COUNT(*) as count FROM settlement WHERE year=:year;";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':year', $year, PDO::PARAM_INT);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー1:'. $e->getMessage());
+    }
+    // 件数を取得
+    while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+        $count = ($row["count"]);
+    }
+    if ($count > 0){ // あれば UPDATE
+        try{
+            $sql = "UPDATE settlement 
+                    SET income=:income, spending=:spending, amount=:amount, 
+                        unit=:unit, population=:population WHERE year=:year;";
+            $stmh = $pdo->prepare($sql);
+            $stmh->bindValue(':year', $year, PDO::PARAM_INT);
+            $stmh->bindValue(':income', $income, PDO::PARAM_INT);
+            $stmh->bindValue(':spending', $spending, PDO::PARAM_INT);
+            $stmh->bindValue(':amount', $amount, PDO::PARAM_INT);
+            $stmh->bindValue(':unit', $unit, PDO::PARAM_INT);
+            $stmh->bindValue(':population', $population, PDO::PARAM_INT);
+            $stmh->execute();
+        }catch (PDOException $e) {
+            die('エラー2:'. $e->getMessage());
+        }
+    }else{ // なければ INSERT
+        try{
+            $sql = "INSERT INTO settlement 
+                    VALUES (:year, :income, :spending, :population, :unit, :population);";
+            $stmh = $pdo->prepare($sql);
+            $stmh->bindValue(':year', $year, PDO::PARAM_INT);
+            $stmh->bindValue(':income', $income, PDO::PARAM_INT);
+            $stmh->bindValue(':spending', $spending, PDO::PARAM_INT);
+            $stmh->bindValue(':amount', $amount, PDO::PARAM_INT);
+            $stmh->bindValue(':unit', $unit, PDO::PARAM_INT);
+            $stmh->bindValue(':population', $population, PDO::PARAM_INT);
+            $stmh->execute();
+        }catch (PDOException $e) {
+            die('エラー3:'. $e->getMessage());
+        }
+    }
+}
+?>

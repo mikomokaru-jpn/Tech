@@ -1,0 +1,11 @@
+//URLの取得
+NSString *folder = [NSString stringWithFormat:@"%@/Documents",
+                    NSHomeDirectory()];
+NSString *path = [folder stringByAppendingString:@"/picture01.jpg"];
+NSURL *url = [NSURL fileURLWithPath:path];
+
+//イメージファイルを読み込み、CGImageRefに格納する
+CGImageSourceRef src; 
+src = CGImageSourceCreateWithURL((__bridge CFURLRef)url, nil);
+CGImageRef imageRef; 
+imageRef = CGImageSourceCreateImageAtIndex(src, 0, NULL);

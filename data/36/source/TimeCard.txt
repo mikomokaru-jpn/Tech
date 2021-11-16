@@ -1,0 +1,167 @@
+//------------------------------------------------------------------------------
+//  TimeCard
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+
+@interface TimeCard : NSObject
+@property NSNumber *code;               //コード
+@property NSDate *startDateTime;        //開始日付時刻
+@property NSDate *endDateTime;          //終了日付時刻
+@property NSDate *elapsTime;            //経過時間
+
+-(BOOL)calcElaps;                       //経過時間の計算
+-(BOOL)calcElapsUntil:(NSDate*)dt;      //指定日時までの経過時間の計算
+-(BOOL)sumElaps:(NSDate*)time;          //経過時間の加算（サマリーで使用）
+-(BOOL)updateStartDateTime:(NSDate*)dt; //開始日付時刻をより早い日時に置き換える（サマリーで使用）
+-(BOOL)updateEndDateTime:(NSDate*)dt;   //終了日付時刻よより遅い日時に置き換える（サマリーで使用）
+
+//TimeCardオブジェクトの比較メソッド：code->startDateTime
+- (NSComparisonResult) compareByCode:(TimeCard*)tc;
+//TimeCardオブジェクトの比較メソッド：startDateTime
+- (NSComparisonResult) compareByDate:(TimeCard*)tc;
+//TimeCardオブジェクトの比較メソッド：startDateTime->code
+- (NSComparisonResult) compareByDateCode:(TimeCard*)tc;
+
+//日付・時間の表示
+-(NSString*) stringStratDateTime;
+-(NSString*) stringEndDateTime;
+-(NSString*) stringElapsTime;
+//レコードの文字列表現
+-(NSString *)record;
+
+@end
+//------------------------------------------------------------------------------
+//  TimeCard
+//------------------------------------------------------------------------------
+#import "TimeCard.h"
+#import "TimeCalc.h"
+
+@interface TimeCard()
+@property TimeCalc *timeCalc;
+
+@end
+
+@implementation TimeCard
+
+//イニシャライザ
+-(id)init
+{
+    if (![super init])
+        return nil;
+    _timeCalc = [TimeCalc shareInstance];
+    return self;
+}
+//経過時間の計算
+-(BOOL)calcElaps
+{
+    self.elapsTime = [_timeCalc dateEraFrom:self.startDateTime to:self.endDateTime];
+    if (self.elapsTime){
+        return YES;
+    }
+    return NO;
+}
+//指定日時までの経過時間の計算
+-(BOOL)calcElapsUntil:(NSDate*)dt
+{
+    self.elapsTime = [_timeCalc dateEraFrom:self.startDateTime to:dt];
+    if (self.elapsTime){
+        return YES;
+    }
+    return NO;
+}
+
+//経過時間の加算：サマリーで使用
+-(BOOL)sumElaps:(NSDate*)time
+{
+    self.elapsTime = [_timeCalc addTime:self.elapsTime plus:time];
+    if (self.elapsTime){
+        return YES;
+    }
+    return NO;
+}
+//開始日時の更新：サマリーで使用
+-(BOOL)updateStartDateTime:(NSDate*)dt
+{
+    if ([self.startDateTime compare:dt] == NSOrderedDescending){
+        self.startDateTime = [dt copy];
+    }
+    if(self.startDateTime){
+        return YES;
+    }
+    return NO;
+}
+//終了日時の更新：サマリーで使用
+-(BOOL)updateEndDateTime:(NSDate*)dt
+{
+    if ([self.endDateTime compare:dt] == NSOrderedAscending){
+        self.endDateTime = [dt copy];
+    }
+    if(self.endDateTime){
+        return YES;
+    }
+    return NO;
+}
+//TimeCardオブジェクトの比較メソッド：code(昇順)->startDateTime(降順)
+- (NSComparisonResult) compareByCode:(TimeCard*)tc
+{
+    NSComparisonResult result;
+    result = [_code compare:tc.code];
+    if (result == NSOrderedSame)
+    {
+        result = [_startDateTime compare:tc.startDateTime];
+    }
+    return result;
+}
+//TimeCardオブジェクトの比較メソッド：startDateTime(降順)
+- (NSComparisonResult) compareByDate:(TimeCard*)tc
+{
+    NSComparisonResult result;
+    result = [_timeCalc compareByDay:_startDateTime to:tc.startDateTime];
+    return -result;
+}
+//TimeCardオブジェクトの比較メソッド：startDateTime(降順)->code(昇順)
+- (NSComparisonResult) compareByDateCode:(TimeCard*)tc
+{
+    NSComparisonResult result;
+    result = [_timeCalc compareByDay:_startDateTime to:tc.startDateTime];
+    if (result == NSOrderedSame)
+    {
+        result = [_code compare:tc.code];
+        return result;
+    }
+    return -result;
+}
+//日数・時間の表示
+-(NSString*) stringStratDateTime{
+    return [_timeCalc stringDateTime:self.startDateTime];
+}
+-(NSString*) stringEndDateTime{
+    return [_timeCalc stringDateTime:self.endDateTime];
+}
+-(NSString*) stringElapsTime{
+    return [_timeCalc stringErapsTime:self.elapsTime];
+}
+//レコードの文字列表現
+-(NSString *)record
+{
+    NSString *text = [NSString stringWithFormat:@"%@;%@;%@;%@",
+                      _code,
+                      [_timeCalc stringDateTime:_startDateTime ],
+                      [_timeCalc stringDateTime:_endDateTime],
+                      [_timeCalc stringErapsTime:_elapsTime]];
+    return text;
+}
+//オブジェクトの文字列表現
+-(NSString *)description
+{
+    NSString *text = [NSString stringWithFormat:@"%@ %@ 〜 %@  %@",
+                      _code,
+                      [_timeCalc stringDateTime:_startDateTime ],
+                      [_timeCalc stringDateTime:_endDateTime],
+                      [_timeCalc stringErapsTime:_elapsTime]];
+    return text;
+}
+
+
+
+@end

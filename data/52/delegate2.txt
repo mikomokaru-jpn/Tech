@@ -1,0 +1,4 @@
+-(void)controlTextDidEndEditing:(NSNotification *)notification{
+    [self updataData];
+    return;
+}

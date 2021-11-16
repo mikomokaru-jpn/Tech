@@ -1,0 +1,17 @@
+let now = Date.init()
+let range = Calendar.current.range(of: .day, in: .month, for: now)
+let lastday: Int = range?.count ?? 0 //月末日
+var dComp = Calendar.current.dateComponents([.year, .month, .day],
+                                            from: now)
+dComp.day = lastday
+//月末日の日付オブジェクト
+if let lastDate = Calendar.current.date(from: dComp){
+    let formatter: DateFormatter = DateFormatter()
+    formatter.locale = Locale.init(identifier: "ja_JP")
+    formatter.dateStyle = .full
+    formatter.timeStyle = .full
+    print(formatter.string(from: lastDate))
+}
+
+//結果
+2021年10月31日 日曜日 0時00分00秒 日本標準時

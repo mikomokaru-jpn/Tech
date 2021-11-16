@@ -1,0 +1,7 @@
+@IBOutlet weak var contextMenu: NSMenu!
+
+func applicationDidFinishLaunching(_ aNotification: Notification) {
+    ....
+    contextMenu.autoenablesItems = false
+    contextMenu.item(withTitle: "黒")?.isEnabled = false
+}

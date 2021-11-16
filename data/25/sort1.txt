@@ -1,0 +1,15 @@
+-(IBAction)sort1:(id)sender{
+    NSSortDescriptor *descript;
+    if (_sort1Button.tag == YES){
+        descript = [NSSortDescriptor sortDescriptorWithKey:@"code" 
+                    ascending:NO];
+        _sort1Button.tag = NO;
+    }else{
+        descript = [NSSortDescriptor sortDescriptorWithKey:@"code" 
+                    ascending:YES];
+        _sort1Button.tag = YES;
+    }
+    _menuList = [[_menuList sortedArrayUsingDescriptors:@[descript]]
+                                                        mutableCopy];
+    [_tableView reloadData];
+}

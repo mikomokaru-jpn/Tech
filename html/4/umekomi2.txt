@@ -1,0 +1,31 @@
+let idx = 0;
+positions　= []; //td要素参照テーブルのクリア
+for (let i=0; i<rowCount; i++){
+    if (!isLargeTable && i==5){
+            table.rows[i].hidden = true;
+            break;
+    }
+    table.rows[i].hidden = false;
+    for (let j=0; j<cellCount; j++){
+        let cell = table.rows[i].cells[j];
+        
+        cell.addEventListener('click', dateClicked);
+        positions.push(cell); //td要素への参照の確保
+        cell.firstChild.textContent = daysList[idx].date;  //日付のセット
+        let value = '';  
+        //休日
+        if (daysList[idx].day == 'sunday' || daysList[idx].holiday !== ""){
+            value = 'holiday';
+        }else if  (daysList[idx].day == 'saturday'){
+            value = 'saturday';
+        }
+        //当月日
+        if (daysList[idx].month == 'this'){
+            value += ' largeFont';
+        }else{
+            value += ' smallFont';
+        }
+        cell.setAttribute('class', value);
+        idx++;
+    }
+}     

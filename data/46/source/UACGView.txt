@@ -1,0 +1,274 @@
+//------------------------------------------------------------------------------
+// 描画ビュークラス　UACGView.h
+//------------------------------------------------------------------------------
+
+#import <Cocoa/Cocoa.h>
+
+@interface UACGView : NSView
+//コントロール接続
+@property (weak) IBOutlet NSMatrix *matrixThickness;    //線の太さの選択
+@property (weak) IBOutlet NSMatrix *matrixColor;        //線の色の選択
+@property (weak) IBOutlet NSButton *btnClear;           //クリアボタン
+@property (weak) IBOutlet NSButton *btnCapture;         //画像のキャプチャボタン
+//プロパティ
+@property NSInteger lineWidthCode;  //線の太さ（コード）
+@property NSInteger colorCode;      //線の色（コード）
+
+@end
+//------------------------------------------------------------------------------
+//  UACGView.m
+//------------------------------------------------------------------------------
+#import "UACGView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "NSBezierPath+MyBezierPath.h"
+#import "UAElapse.h"
+#import "UAShapeListMgr.h"
+
+@interface UACGView()
+//drawRectでaddするCAShapeLayerオブジェクト
+@property NSMutableArray<CAShapeLayer*> *latestShapes;
+//shapeLayerオブジェクトの保存リスト
+@property UAShapeListMgr *shapeListMgr;
+
+//マウスクリックの位置
+@property CGPoint startPoint;
+@property CGPoint endPoint;
+//クリア矩形領域（矩形の対角の２点）
+@property CGPoint startPoint2;
+@property CGPoint endPoint2;
+//クリア矩形領域（shapeLayerオブジェクト）
+@property CAShapeLayer *rectShape;
+
+@end
+
+@implementation UACGView
+//------------------------------------------------------------------------------
+// Delegate / Override
+//------------------------------------------------------------------------------
+//初期化
+-(void)awakeFromNib
+{
+    WATCH_START();
+    self.wantsLayer = YES;
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;  //背景色
+    //shapeオブジェクト配列の作成
+    _shapeListMgr = [[UAShapeListMgr alloc] init];
+    
+    //線の太さ・初期化
+    [_matrixThickness selectCellWithTag:1];
+    _lineWidthCode = 1;
+    [_matrixThickness setAction:@selector(btnThickness:)]; //アクションの設定
+    //線の色・初期化
+    [_matrixColor selectCellWithTag:1];
+    _colorCode = 1;
+    [_matrixColor setAction:@selector(btnColor:)]; //アクションの設定
+    //クリア・アクションの設定
+    [_btnClear setAction:@selector(clearButton:)];
+    //画像の出力・アクションの設定
+    [_btnCapture setAction:@selector(captureButton:)];
+
+}
+//ファーストレスポンダーを受け付ける
+- (BOOL)acceptsFirstResponder
+{
+    return YES; // default NO
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [super drawRect:dirtyRect];
+    //線を引く：線は点(CAShapeLayerオブジェクト)の集合
+    for(CAShapeLayer *shapeLayer in _latestShapes)
+    {
+        [self.layer addSublayer:shapeLayer];
+    }
+    //クリア矩形を消去する
+    if(_rectShape)
+    {
+        [self.layer addSublayer:_rectShape];
+    }
+}
+//ウィンドウが非アクティブな状態でもマウスイベントが発生する
+- (BOOL) acceptsFirstMouse:(NSEvent *)e {
+    return YES;
+}
+//マウスダウン
+- (void)mouseDown:(NSEvent *)event{
+    //線の始点
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    _startPoint = point;
+    if (_rectShape){
+        [_rectShape removeFromSuperlayer];
+        _rectShape = nil;
+    }
+}
+//マウスドラッグ
+- (void)mouseDragged:(NSEvent *)event{
+    //線の中間点
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    _endPoint = point;
+    //線を引く
+    _latestShapes = [_shapeListMgr addShapesStart:_startPoint end:_endPoint view:self];
+    self.needsDisplay = YES;
+    _startPoint = point;
+}
+//マウスアップ
+- (void)mouseUp:(NSEvent *)event{
+    //線の終点
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    _endPoint = point;
+    //線を引く
+    _latestShapes = [_shapeListMgr addShapesStart:_startPoint end:_endPoint view:self];
+    self.needsDisplay = YES;
+}
+//右マウスダウン
+- (void)rightMouseDown:(NSEvent *)event{
+    //クリア矩形の対角線の始点
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    _startPoint2 = point;
+}
+//右マウスドラッグ
+- (void)rightMouseDragged:(NSEvent *)event{
+    //クリア矩形の対角線の途中
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    _endPoint2 = point;
+    [self enclose]; //矩形を描画する（中間のイメージ）
+}
+//右マウスアップ
+- (void)rightMouseUp:(NSEvent *)event{
+    //クリア矩形の対角線の終点
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    _endPoint2 = point;
+    [self enclose]; //矩形を描画する（最終のイメージ）
+}
+//command+z
+-(void)keyDown:(NSEvent *)event
+{
+    NSInteger flags = [[NSApp currentEvent] modifierFlags];
+    if (flags & NSEventModifierFlagCommand)
+    {
+        if (event.keyCode == 6){
+            //Undo：描画の取り消し
+            _latestShapes = [_shapeListMgr undo];
+            self.needsDisplay = YES;
+        }
+    }
+}
+//線の太さの変更（ラジオボタン）
+-(void)btnThickness:(id)sender
+{
+    NSMatrix *matrix = sender;
+    _lineWidthCode = matrix.selectedCell.tag;
+
+}
+//線の色の変更（ラジオボタン）
+-(void)btnColor:(id)sender
+{
+    NSMatrix *matrix = sender;
+    _colorCode = matrix.selectedCell.tag;
+}
+//線の消去（ボタン）
+-(void)clearButton:(id)sender
+{
+   if (isZero(_startPoint2) && isZero(_endPoint2))
+       return;
+    // 線分（CAShapeLayerオブジェクト）の消去
+    [_shapeListMgr clearShapesRectFrom:_startPoint2 to:_endPoint2];
+    //クリア範囲の四角を消す
+    if (_rectShape){
+        [_rectShape removeFromSuperlayer];
+        _rectShape = nil;
+    }
+    _startPoint2 = CGPointMake(0, 0);
+    _endPoint2 = CGPointMake(0, 0);
+}
+//ビューをpngファイルに保存する（ボタン）
+-(void)captureButton:(id)sender
+{
+    [self capture];
+}
+
+//Internal Method -------------------------------------------------------------
+//クリア領域を四角で囲む
+-(void)enclose
+{
+    //マウスの右ボタンによるドラッグで、矩形の始点座標と終点座標を指定する。座標はpropertyに持つ。
+    //始点座標と終点座標の位置関係を補正する。原点に近い方を始点とする。
+    float xPos = 0.0;
+    float yPos = 0.0;
+    BOOL flg = NO;
+    if (_startPoint2.x < _endPoint2.x && _startPoint2.y < _endPoint2.y)
+        {xPos = _startPoint2.x; yPos = _startPoint2.y; flg=YES;}
+    if (_startPoint2.x > _endPoint2.x && _startPoint2.y < _endPoint2.y)
+        {xPos = _endPoint2.x; yPos = _startPoint2.y; flg=YES;}
+    if (_startPoint2.x > _endPoint2.x && _startPoint2.y > _endPoint2.y)
+        {xPos = _endPoint2.x; yPos = _endPoint2.y; flg=YES;}
+    if (_startPoint2.x < _endPoint2.x && _startPoint2.y > _endPoint2.y)
+        {xPos = _startPoint2.x; yPos = _endPoint2.y; flg=YES;}
+    if (!flg)  //矩形にならない
+        return;
+    //矩形の大きさを求める
+    float width = fabs(_startPoint2.x - _endPoint2.x);
+    float height = fabs(_startPoint2.y - _endPoint2.y);
+    //表示済みの矩形があったら消去する
+    if (_rectShape){
+        [_rectShape removeFromSuperlayer];
+    }
+    //矩形に対応したCAShapeLayerオブジェクトを作成する
+    _rectShape = [CAShapeLayer layer];
+    NSBezierPath *rectBezier = [NSBezierPath bezierPathWithRect:
+                                NSMakeRect(0, 0, width, height)];
+    _rectShape.path = rectBezier.cgPath;
+    _rectShape.lineWidth = 1;                               //線の幅
+    _rectShape.strokeColor = [NSColor grayColor].CGColor;   //線の色
+    _rectShape.fillColor = [NSColor grayColor].CGColor;     //塗りつぶしの色
+    _rectShape.opacity = 0.3;                               //透明度
+    _rectShape.position = NSMakePoint(xPos, yPos);          //矩形の位置
+    self.needsDisplay = YES;
+    
+}
+//ビューをpngファイルに出力する
+-(void)capture
+{
+    //出力領域と同じ大きさのBitmapコンテキストを作成する
+    CGContextRef newContext = NULL;
+    CGColorSpaceRef imageColorSpace = CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );
+    newContext = CGBitmapContextCreate (NULL,
+                                        (int)self.bounds.size.width,
+                                        (int)self.bounds.size.height,
+                                        8,
+                                        (int)self.bounds.size.width * 4,
+                                        imageColorSpace, kCGImageAlphaPremultipliedLast);
+    [[[self layer] presentationLayer] renderInContext:newContext];
+    CGImageRef img = CGBitmapContextCreateImage(newContext);
+    NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithCGImage:img];
+    NSData *exportedData = [bitmap representationUsingType:NSBitmapImageFileTypePNG
+                                             properties:[[NSDictionary alloc] init]];
+    //ファイルを保存する
+    NSSavePanel *savepanel = [NSSavePanel savePanel];
+    savepanel.title = @"ファイルを保存する";
+    [savepanel setAllowedFileTypes:[NSArray arrayWithObject:@"png"]];
+    [savepanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
+     {
+         if (NSFileHandlingPanelOKButton == result)
+         {
+             NSURL* fileURL = [savepanel URL];
+             
+             if ([fileURL.pathExtension isEqualToString:@""])
+                 fileURL = [fileURL URLByAppendingPathExtension:@"png"];
+             
+             [exportedData writeToURL:fileURL atomically:YES];
+         }
+     }];
+}
+//Pointがゼロ
+bool isZero(CGPoint p1)
+{
+    if (p1.x == 0 && p1.y == 0)
+        return true;
+    return false;
+}
+
+
+
+@end

@@ -1,0 +1,66 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "Sokutei.h"
+#import "Test.h"
+
+@interface AppDelegate ()
+
+@property (weak) IBOutlet NSWindow *window;
+@end
+
+@implementation AppDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    SKTInit();
+}
+
+-(IBAction)op1:(id)sender
+{
+    SKTLog(@"ループ処理　始まる");
+    long num = 0;
+    for (NSInteger i=0; i<100; i++)
+    {
+        [NSThread sleepForTimeInterval:0.01];
+        num = i+1;
+    }
+    SKTLog(@"ループ処理　終わる");
+    SKTClose();
+}
+//マルチスレッド・非同期
+-(IBAction)op2:(id)sender
+{
+    SKTLog(@"メインスレッド処理　始まる");
+    dispatch_queue_t queue;
+    //queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL); //SERIAL
+    queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_CONCURRENT); //CONCURRENT
+    dispatch_async(queue, ^{
+        [self testProcess];
+    });
+    dispatch_async(queue, ^{
+        [self testProcess];
+    });
+    SKTLog(@"メインスレッド処理　終わる");
+}
+-(IBAction)opClose:(id)sender
+{
+    SKTClose();
+}
+
+-(void)testProcess
+{
+    Test *test1 = [[Test alloc] init];
+    [test1 op1];
+}
+
+@end

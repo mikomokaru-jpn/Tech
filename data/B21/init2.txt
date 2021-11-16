@@ -1,0 +1,16 @@
+class UAView: NSView {
+    //プロパティ
+    var myProperty:String
+    //イニシャライザ
+    override init(frame frameRect: NSRect) {
+        //プロパティの初期化はスーパクラスのイニシャライズの前に行う。
+        myProperty = "..."
+        //スーパクラスのイニシャライズ
+        super.init(frame: frameRect)
+    }
+    //イニシャライザ２
+    required init?(coder aDecoder: NSCoder) {
+        //起動することはない
+        fatalError("init(coder:) has not been implemented");
+    }
+}

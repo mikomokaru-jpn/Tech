@@ -1,0 +1,19 @@
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //背景色
+    [[NSColor blackColor] set];
+    NSBezierPath *path1 = [NSBezierPath bezierPathWithRect:dirtyRect];
+    [path1 fill];
+    //枠線
+    [[NSColor lightGrayColor] set];
+    NSFrameRectWithWidth(dirtyRect, 20.0); //Convenience Functions
+    //円
+    [[NSColor greenColor] set];
+    NSRect rect = NSMakeRect(35, 35,
+                             dirtyRect.size.width-70,
+                             dirtyRect.size.height-70);
+    NSBezierPath *path2 = 
+                  [NSBezierPath bezierPathWithOvalInRect:rect];
+    path2.lineWidth = 30.0;
+    [path2 stroke];
+}

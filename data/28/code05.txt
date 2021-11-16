@@ -1,0 +1,12 @@
+NSDate* now = [NSDate date]; //現在日の取得
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+//カレンダー（和暦）
+NSCalendar *calendarJpn = [[NSCalendar alloc]
+                           initWithCalendarIdentifier:
+                           NSCalendarIdentifierJapanese];
+formatter.calendar = calendarJpn;
+formatter.dateFormat = @"Gyy年MM月dd日 HH時mm分ss秒";
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//結果・OSが令和に未対応
+平成33年02月19日 09時19分33秒

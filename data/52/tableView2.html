@@ -1,0 +1,161 @@
+<!-- 
+21 TableView2
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>View Based テーブルビュー・データを更新する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">View Based テーブルビュー・データを更新する</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/52/tableView.png&title=テーブルビュー&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="tableView.png" alt="[テーブルビュー]" width="500"></a>
+
+<h3 class="lm70 tm20 bm0 rm60">
+<a href="/lib/HTMLofVideo.html?filename=/data/52/tableView.mp4&title=healthCalendar&width=700" target="_new">
+動画はこちら
+</a>
+</h3>
+<div class="lm70 tm5 rm60">
+<a href='/data/22/tableView.html' target="_blank">テーブルビューにデータを表示する（View Based）<a>に更新機能を追加する。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+仕様
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 bm0 rm60">
+勝ち数、負け数、引き分けをクリックすると値の変更が可能となる。enterキーの押下により入力値が確定し、勝率の再計算を行い勝率の高い順にチームを並べ替える。変更内容を永続化するために、成績データはユーザデフォルトとしてファイルに保存する。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+データオブジェクトの構造
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/52/22_tableView03.png&title=データ・オブジェクトの構造&width=900" target="_new">
+<img class="lm90 tm10 bm0" src="22_tableView03.png" alt="[データ・オブジェクトの構造]" width="580"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+実装のポイント
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+勝/負/引き分けのセルを編集可能にする
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/52/セル編集可能.png&title=セル編集可能&width=800" target="_new">
+<img class="lm80 tm0 bm0" src="セル編集可能.png" alt="[セル編集可能]" width="580"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+セルに入力された値をデータソースに更新する
+</h3>
+<div class="lm70 tm5 bm0 rm60">
+NSTextFieldDelegateプロトコルを実装する。
+</div>
+<div class="lm70 tm5 bm0 rm60">
+次のメソッドはコントロールキー（enterやtabなど）が押されたときに起動する。勝/負/引き分け数が入力され enterキーが押されたときに、入力値のニューメリックチェックおよびデータソースへの更新行う。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/delegate1.txt" width="580" height="490"></iframe>
+<div class="lm70 tm5 bm0 rm60">
+テキストフィールドのセルの位置は引数に渡って来ないため、行の判定のためにサブクラスUATextFieldのプロパティにチーム名を持ち、列の判定のためにテキストフィールドのidentifireに列名を持つ。
+</div>
+<div class="lm70 tm20 bm0 rm60">
+テキストフィールドからフォーカスが外れたとき、テーブルビューを再表示させるために次のデリゲートメソッドを実装する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/delegate2.txt" width="580" height="100"></iframe>
+<div class="lm70 tm5 bm0 rm60">
+テキストフィールドで編集中の文字列はString型（AttributedString型ではない）になる。編集中に値を更新することなく他のフォーカスに移った場合、そのテキストフィールドに属性のつかない素の文字列が設定されてしまう。これを避けるためにフォーカスが外れたとき必ずデータの再表示を行うようにしている。
+</div>
+<h4 class="lm70 tm20 rm60 bm0">
+【補足】
+</h4>
+<div class="lm70 tm0 bm0 rm60">
+ViewBasedなテーブルビューであれば、セルの値が更新されたとき NSTableViewDlegateメソッドが起動する。これは引数に列オブジェクトと行のインデックスが渡ってきて使いやすいものであるが、CellBasedのテーブルビューではサポートされていない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/delegate3.txt" width="580" height="130"></iframe>
+<h3 class="lm70 tm30 rm60 bm0">
+ユーザデフォルト（NSUserDefaults）
+</h3>
+<div class="lm70 tm5 rm60">
+ウィンドウを閉じるときに成績データをユーザデフォルトに保存する。保存するオブジェクトは辞書とし、キーはチーム名の文字列、値は、勝/負/引き分け数（NSNumberオブジェクト）を要素とした配列とする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/UserDefaults1.txt" width="580" height="150"></iframe>
+<div class="lm70 tm20 rm60">
+アプリケーション起動時にユーザデフォルトを読み込みデータソースに展開する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/UserDefaults2.txt" width="580" height="350"></iframe>
+<div class="lm70 tm5 rm60">
+mutableなオブジェクトは、ユーザーデフォルトに保存するとimmutableに変わるので、再度読み込んだ後は、mutableに変換する必要がある。
+</div>
+<h3 class="lm70 tm30 rm60 bm0">
+チーム成績をカスタムクラス化する
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/UATeam.h.txt" width="580" height="520"></iframe>
+<div class="lm70 tm5 rm60">
+勝/負/引き分け数のsetterメソッドを実装する。これらの値を更新したとき、勝率の再計算を行い表示オブジェクト（属性付き文字列）を再作成する。
+</div>
+<div class="lm70 tm20 rm60">
+KVC の valueForKey を利用してチーム成績クラスのメンバを取得する。メンバ名に文字列リテラルではなく、列オブジェクトが保持する変数名を指定できることができる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/52/kvc.txt&font=font100" width="580" height="60"></iframe>
+<h3 class="lm70 tm30 bm0">
+クラス一覧
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/UATableView.txt&title=UATableView" target="_new">UATableView</a>　列見出しの編集
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/UATableHeaderCell.txt&title=UATableHeaderCell" target="_new">UATableHeaderCell</a>　列見出しの編集
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/UATextField.txt&title=UATextField" target="_new">UATextField</a>　セルの編集：属性付き文字列
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/IconView.txt&title=IconView" target="_new">IconView</a>　セルの編集：画像イメージ
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/UAButton.txt&title=UAButton" target="_new">UAButton</a>　カスタムボタン
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/UAUtility.txt&title=UAUtility" target="_new">UAUtility</a>　ユーティリティ・メソッド
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/52/source/UATeam.txt&title=UATeam" target="_new">UATeam</a>　チーム成績
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/C21-2_TableView" target="_new">mikomokaru-jpn/C21-2_TableView</a>
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

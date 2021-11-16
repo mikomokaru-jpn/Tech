@@ -1,0 +1,2 @@
+//x1(最低血圧) x2(最低血圧) x3(余白) の長さとする。
+graphBoxRef.style.gridTemplateColumns = `${x1}fr ${x2}fr ${x3}fr`;

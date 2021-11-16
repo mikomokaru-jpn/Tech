@@ -1,0 +1,21 @@
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    NSSize viewSize = dirtyRect.size;
+    NSSize imageSize = _image.size;
+    NSSize newSize;
+    if (imageSize.width >= imageSize.height){
+        //横長
+        newSize.width = viewSize.width;
+        newSize.height = 
+            imageSize.height * (viewSize.width / imageSize.width);
+        dirtyRect.origin.y = (viewSize.height - newSize.height) /2;
+    }else{
+        //縦長
+        newSize.width = 
+            imageSize.width * (viewSize.height / imageSize.height);
+        newSize.height = viewSize.height;
+        dirtyRect.origin.x = (viewSize.width - newSize.width) /2;
+    }
+    dirtyRect.size = newSize;
+    [_image drawInRect:dirtyRect];
+}

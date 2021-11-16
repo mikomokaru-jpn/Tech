@@ -1,0 +1,22 @@
+//------------------------------------------------------------------------------
+//  履歴レコード UAHistroryItem.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+
+@interface UAHistroryItem : NSObject
+
+@property int operation;  //1:add  0:clear
+@property NSInteger regNumber;
+@property NSArray<NSNumber *>* objNumbers;
+
+
+
+@end
+//------------------------------------------------------------------------------
+//  履歴レコード UAHistroryItem.m
+//------------------------------------------------------------------------------
+#import "UAHistroryItem.h"
+
+@implementation UAHistroryItem
+
+@end

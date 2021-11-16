@@ -1,0 +1,51 @@
+//---- 一般的な for in ---- 
+for i in 1...6 { ... }
+for _ in 0..<31 { ... }   //ループ変数を使用しないとき
+for obj in objList{ ... }     
+
+//---- for in stride ----
+//配列を逆順に読む
+let array = ["A", "B", "C", "D", "E"]
+for i in stride(from: 4, to: -1, by: -1){
+    print(array[i])
+}
+-> E D C B A
+
+//任意の値（小数）を増分しながら繰り返す
+for value in stride(from: 0, to: 100, by: 23.4){
+    print("\(value)")
+}
+-> 0.0  23.4  46.8  70.2  93.6
+
+//構造体を要素に持った配列に対する処理
+struct Record{
+    var name: String
+    var value: Int
+}
+let array = [Record.init(name: "A", value: 10),
+             Record.init(name: "B", value: 20),
+             Record.init(name: "C", value: 30)]
+
+//---- for in ----
+var sum = 0
+for rec in array{
+    sum += rec.value
+}
+print(sum) -> 60
+
+//---- forEach ---- 
+sum = 0
+array.forEach{(rec) in
+    sum += rec.value + 1
+}
+print(sum) -> 63
+
+//Swiftらしい関数
+//---- map ----
+sum = 0
+array.map{ sum += $0.value * 2 }
+print(sum) -> 120
+
+//---- filter ----
+let subArray = array.filter{ $0.value > 10 }
+subArray.map{ print($0.name)} -> B C

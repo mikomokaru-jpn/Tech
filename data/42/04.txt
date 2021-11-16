@@ -1,0 +1,39 @@
+// ---- インタフェース宣言 ----
+@interface AppDelegate ()
+@property NSTimer *timer; //タイマーオブジェクトの定義
+@end
+
+// ---- 実装 ----
+@implementation AppDelegate
+//タイマーを起動
+-(IBAction)start:(id)sender
+{
+    //付加情報
+    NSDictionary *info = @{@"parameter":@"any information"};
+    //タイマーオブジェクトを作成
+    _timer =[NSTimer
+             scheduledTimerWithTimeInterval:0.5f
+             target:self
+             selector:@selector(displayLog:)
+             userInfo:info
+             repeats:YES];
+    //タイマーを起動
+    [_timer fire];
+}
+//タイマーを停止
+-(IBAction)stop:(id)sender
+{
+    [_timer invalidate];
+}
+//タイマーから起動する処理
+-(void)displayLog:(NSTimer*)tm
+{
+    NSDictionary* info = tm.userInfo;
+    for (id key in info.allKeys){
+        NSLog(@"%@ is %@", key, info[key]);
+    }
+    if ([[NSThread currentThread] isMainThread]) {
+        NSLog(@"I'm in main thread");
+    }
+}
+@end

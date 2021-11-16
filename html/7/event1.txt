@@ -1,0 +1,10 @@
+const item2 =  document.createElement('input');
+item2.setAttribute('type', 'text');
+
+//フォーカスが当たったとき。カンマを削除する。
+item2.addEventListener('focus', h_delComma); 
+
+//フォーカスが外れたとき。カンマを追加する。金額を再計算し再表示する。
+item2.addEventListener('blur', 
+                        function(){ this.value = addComma(this.value); 
+                                    reCalc(); });

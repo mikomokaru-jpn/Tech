@@ -1,0 +1,155 @@
+       IDENTIFICATION             DIVISION.
+       PROGRAM-ID.                TEST001.
+       ENVIRONMENT                DIVISION.
+       INPUT-OUTPUT               SECTION.
+       FILE-CONTROL.
+      * 入力ファイル 行順編成ファイル(テキストファイル)   
+       SELECT  F1  ASSIGN  TO  "/Users/itohisao/Desktop/COBOL/F001.txt"
+       ORGANIZATION IS LINE SEQUENTIAL
+       ACCESS  MODE  IS  SEQUENTIAL  STATUS FST1.  
+      * 出力ファイル 行順編成ファイル(テキストファイル)  
+       SELECT  F2  ASSIGN  TO  "/Users/itohisao/Desktop/COBOL/F002.txt"
+       ORGANIZATION IS LINE SEQUENTIAL
+       ACCESS  MODE  IS  SEQUENTIAL  STATUS FST2.  
+       
+       DATA                     DIVISION.
+       FILE                     SECTION.
+      * 入力ファイル
+       FD  F1.
+       01  F1R.
+           05  YMD.           
+               10  YYYY            PIC 9(4). 
+               10  MM              PIC 9(2). 
+               10  DD              PIC 9(2). 
+           05  SALES               PIC 9(10).
+      * 出力ファイル
+       FD  F2.
+       01  F2R                  PIC X(18).
+       
+       WORKING-STORAGE         SECTION.
+       01  END-FLG                 PIC 9(01).
+       01  FST1                    PIC X(02).
+       01  FST2                    PIC X(02).
+      * 保存キー（年月日） 
+       01  SAVE-KEY-1              PIC 9(8).
+      * 保存キー（年月）
+       01  SAVE-KEY-2.
+           05  YYYY                PIC 9(4). 
+           05  MM                  PIC 9(2).
+      * 保存キー（年）
+       01 SAVE-YYYY                PIC 9(04).     
+      * 出力レコード                      
+       01  SUB-TOTAL-RECORD.
+           05  YMD.           
+               10  YYYY            PIC 9(4). 
+               10  MM              PIC 9(2).
+               10  MM-R            REDEFINES MM.
+                   15 MM-CHAR      PIC X(02).  
+               10  DD              PIC 9(2).
+               10  DD-R            REDEFINES DD.
+                   15 DD-CHAR      PIC X(02). 
+           05  SALES               PIC ZZZZZZZZZ9.
+      * 合計                             
+       01  TOTAL                   PIC 9(10).
+      * 日次計 
+       01  SUB-TOTAL-DAY           PIC 9(10).
+      * 月次計
+       01  SUB-TOTAL-MONTH         PIC 9(10). 
+
+       PROCEDURE                DIVISION.
+      ******************************************************************
+      * 主処理 
+      ****************************************************************** 
+       PERFORM INIT-RTN
+       PERFORM LOOP-RTN UNTIL END-FLG NOT = 0
+       PERFORM END-RTN
+       STOP RUN.
+      ******************************************************************
+      * 前処理 
+      ******************************************************************
+       INIT-RTN.
+      *    初期化 
+           MOVE 0 TO END-FLG
+           OPEN INPUT F1
+           OPEN OUTPUT F2
+           INITIALIZE TOTAL SUB-TOTAL-DAY SUB-TOTAL-MONTH
+      * 1件目のレコード
+           PERFORM READ-RTN
+      *    キーの保存１ 年月日     
+           MOVE YMD OF F1R TO SAVE-KEY-1.
+      *    キーの保存２ 年月     
+           MOVE YYYY OF F1R TO YYYY OF SAVE-KEY-2.
+           MOVE MM OF F1R TO MM OF SAVE-KEY-2.
+      *    年の保存     
+           MOVE YYYY OF F1R TO SAVE-YYYY.
+       INIT-RTN-EX. 
+           EXIT.
+      ******************************************************************
+      * 繰り返し処理 
+      ******************************************************************
+       LOOP-RTN.
+      *    月次繰り返し処理 ここから--- 
+           PERFORM UNTIL YYYY OF F1R NOT = YYYY OF SAVE-KEY-2 OR 
+                         MM OF F1R NOT = MM OF SAVE-KEY-2 
+      *        日次繰り返し処理 ここから---
+               PERFORM UNTIL YMD OF F1R NOT = SAVE-KEY-1
+      *            金額の加算
+                   ADD SALES OF F1R TO TOTAL SUB-TOTAL-DAY 
+                                             SUB-TOTAL-MONTH
+      *            レコードの入力             
+                   PERFORM READ-RTN
+               END-PERFORM
+      *        日次繰り返し処理 ここまで---         
+      *        日次出力・出力レコードの編集
+               INITIALIZE SUB-TOTAL-RECORD     
+               MOVE SAVE-KEY-1 TO YMD OF SUB-TOTAL-RECORD
+               MOVE SUB-TOTAL-DAY TO SALES OF SUB-TOTAL-RECORD  
+      *        ファイル出力     
+               WRITE F2R FROM SUB-TOTAL-RECORD
+      *        集計エリアのクリア    
+               INITIALIZE SUB-TOTAL-DAY
+      *        キーの保存(年月日)     
+               MOVE YMD OF F1R TO SAVE-KEY-1
+           END-PERFORM
+      *    月次繰り返し処理 ここまで--- 
+      *    月次計出力・出力レコードの編集 
+           INITIALIZE SUB-TOTAL-RECORD     
+           MOVE YYYY OF SAVE-KEY-2 TO YYYY OF SUB-TOTAL-RECORD
+           MOVE MM OF SAVE-KEY-2 TO MM OF SUB-TOTAL-RECORD
+           MOVE "  " TO DD-CHAR OF SUB-TOTAL-RECORD
+           MOVE SUB-TOTAL-MONTH TO SALES OF SUB-TOTAL-RECORD 
+      *    ファイル出力     
+           WRITE F2R FROM SUB-TOTAL-RECORD
+      *    集計エリアのクリア    
+           INITIALIZE SUB-TOTAL-MONTH
+      *   キーの保存(年月)     
+           MOVE YYYY OF F1R TO YYYY OF SAVE-KEY-2
+           MOVE MM OF F1R TO MM OF SAVE-KEY-2.      
+       LOOP-RTN-EX. 
+           EXIT.
+      ******************************************************************
+      * 後処理 
+      ******************************************************************
+       END-RTN.
+      *    合計出力     
+           INITIALIZE SUB-TOTAL-RECORD     
+           MOVE SAVE-YYYY TO YYYY OF SUB-TOTAL-RECORD
+           MOVE "  " TO MM-CHAR OF SUB-TOTAL-RECORD
+           MOVE "  " TO DD-CHAR OF SUB-TOTAL-RECORD
+           MOVE TOTAL TO SALES OF SUB-TOTAL-RECORD 
+           WRITE F2R FROM SUB-TOTAL-RECORD
+      *    ファイルクローズ     
+           CLOSE  F1  F2.
+       END-RTN-EX.
+           EXIT.
+      ******************************************************************
+      * 入力処理  
+      ******************************************************************
+       READ-RTN.
+           READ  F1 
+               AT END
+                   ADD 1 TO END-FLG
+                   MOVE HIGH-VALUE TO YMD OF F1R
+           END-READ.
+       READ-RTN-EX.
+           EXIT.

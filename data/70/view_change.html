@@ -1,0 +1,97 @@
+<!-- 
+NewPractice_Swift/01 MyCalendar 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>複数のビューを切り替える</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs6.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">複数のビューを切り替える</h2>
+<div class="lm70 tm10 rm60">
+ひとつのウィンドウの中で複数のビューを切り替えて表示する。ブラウザでタブをクリックしてウィンドウを切り替えるようなもの。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/70/view_change.png&title=view_change&width=750" target="_new">
+<img class="lm70 tm0 bm0" src="view_change.png" alt="[view_change]" width="500"></a>
+<h3 class="lm70 tm20 bm0 rm60">
+アプリケーションの仕組み
+</h3>
+<div class="lm70 tm5 rm60">
+ビューはインタフェースビルダにより作成し、xibファイルに格納する。
+</div>
+<div class="lm70 tm0 rm60">
+xibファイルの定義ではビューオブジェクトのFile’s Owner は、ウィンドウコントローラクラスにする。File’s Owner の viewプロパティをビューオブジェクトにOutlet接続しておくこと。
+</div>
+<a href="/lib/HTMLofImage.html?filename=/data/70/view_change3.png&title=view_change3&width=750" target="_new">
+<img class="lm70 tm0 bm0" src="view_change3.png" alt="[view_change3]" width="500"></a>
+<h3 class="lm70 tm30 bm0 rm60">
+クラス関連図
+</h3>
+<a href="/lib/HTMLofImage.html?filename=/data/70/view_change2.png&title=view_change2&width=700" target="_new">
+<img class="lm100 tm10 bm0" src="view_change2.png" alt="[view_change2]" width="400"></a>
+<h3 class="lm70 tm30 bm0 rm60">
+ビューコントローラ
+</h3>
+<div class="lm70 tm5 rm60">
+それぞれのビューごとにビューコントローラを作成し、ビューのロードや各種コントロールの制御を行う。ビューコントローラは、NSViewControllerクラスのサブクラスとなる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/70/UAViewController1.txt" width="580" height="670"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+ビューコントローラが共用するデータオブジェクト
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/70/UASharedData.txt" width="580" height="200"></iframe>
+<div class="lm70 tm10 rm60">
+それぞれのビューコントローラは、ビュー間で共用するデータを参照・更新する。データオブジェクトはAppDelegateが所有者となり、各ビューコントローラは循環参照を避けるため弱い参照（weak）でオブジェクトを所有する。
+</div>
+<div class="lm70 tm10 rm60">
+ビューはテキストフィールドにデータオブジェクトのデータを表示する。データは編集可能とする。テキストフィールドとデータオブジェクトはバインドし、テキストフィールドの編集の結果が自動的に更新されるようにする。
+</div>
+<h3 class="lm70 tm30 bm0 rm60">
+AppDelegate
+</h3>
+<div class="lm70 tm5 rm60">
+AppDelegateクラスはウィンドウコントローラを保持し、ビューの切り替えの指示により所有するビューを交互に表示する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/70/AppDelegate.txt" width="580" height="870"></iframe>
+<div class="lm70 tm10 rm60">
+例えばビュー２を表示するとは、ウィンドウのcontentViewに、ビュー２をaddSubviewメソッドで追加することである。そのとき、それまで表示していたビュー１はremoveFromSuperViewにより contentViewから外す。（そうしないとビューが限りなく蓄積されてしまう）
+</div>
+<div id="content">
+<h2 class="lm70 tm20 bm5">複数のビューを切り替える Swift版</h2>
+<!--ソースコードリンク-->
+<div class="lm80 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/70/source/AppDelegate.swift&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm80 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/70/source/UAViewController1.swift&title=UAViewController1" target="_new">UAViewController1</a>
+</div>
+<div class="lm80 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/70/source/UASharedData.swift&title=UASharedData" target="_new">UASharedData</a>
+</div>
+<div class="lm70 tm10 rm60">
+Swift版における注意点
+</div>
+<div class="lm70 tm0 rm60">
+本題から外れるが、変数をバインドするとき、Swiftのコードで特有の記法がある。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/70/bind.txt" width="580" height="190"></iframe>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

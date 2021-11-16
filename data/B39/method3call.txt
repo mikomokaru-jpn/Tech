@@ -1,0 +1,7 @@
+let objcLib = ObjcLib.init()
+let valueOut2 = objcLib.method3(123)
+if let value2 = valueOut2{
+    print("method3 \(value2) \(type(of: valueOut2))")
+}
+//結果
+method3 369 Optional<NSNumber>

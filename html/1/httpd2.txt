@@ -1,0 +1,40 @@
+#-----------------------------------------------------------------------
+# ドキュメントルート
+# クライアントからのリクエストに応答するコンテンツ（HTMLファイルなど）を置く最上位の
+# ディレクトリ。
+#-----------------------------------------------------------------------
+DocumentRoot "/Library/WebServer/Documents"
+#-----------------------------------------------------------------------
+# Documentsの下にサブディレクトリを作成し、そこにファイルをおいても良い。
+# 例えば、 Documents/subdir ディレクトリに request.php をおけば次のURLで起動する。
+#         http://xxx.xxx.xxx.xxx/subdir/request.php
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# ドキュメントルート・ディレクトリ属性（サブディレクトリを含む）
+#  Option
+#  ・Indexes:ディレクトリのファイルの一覧を表示する
+#  ・FollowSymLinks:シンボリックリンクファイルを認識する
+#      Documentsの下に、シンボリックリンクで特定のディレクトリを指定し、そこに
+#      ファイルをおいても良い。
+#      シンボリックリンクの作成 ln -s /Users/user/Desktop/subdir_ln subdir    
+#      /Users/user/Desktop/subdir_ln ディレクトリに request.php をおけば
+#      次のURLで起動する。 
+#      http://xxx.xxx.xxx.xxx/subdir/request.php
+#  ・Multiviews:コンテントネゴシエーションをサポートする
+#  ・ExecCGI:CGIの実行を可能とする
+#  Require はアクセス制御を行う
+#  ・all granted:全てのアクセスを許可 
+#  AddHandler
+#    cgi-script .cgi .py 
+#      サフィックスが cgi, py はCGIスクリプトとして動作する
+#    application/x-httpd-php .php 
+#      サフィックスが php はPHPスクリプトとして動作する
+#-----------------------------------------------------------------------
+<Directory "/Library/WebServer/Documents">
+    Options Indexes FollowSymLinks Multiviews ExecCGI
+    MultiviewsMatch Any
+    Require all granted
+    AddHandler cgi-script .cgi .py 
+    AddHandler application/x-httpd-php .php
+</Directory>

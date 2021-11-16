@@ -1,0 +1,4 @@
+//返還後のイメージのサイズ。 NSZeroSizeならCGImageRefのサイズになる
+NSSize size = NSMakeSize(400, 300);
+NSImage *image = [[NSImage alloc] 
+                  initWithCGImage:imageRef size:rect.size];

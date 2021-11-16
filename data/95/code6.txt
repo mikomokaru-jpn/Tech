@@ -1,0 +1,11 @@
+func applicationDidFinishLaunching(_ aNotification: Notification) {
+    ...
+    outlineView.action = #selector(itemClicked) //クリックイベント
+}
+//action
+@objc private func itemClicked() {
+    let item = outlineView.item(atRow: outlineView.clickedRow) as! Node
+    let alert = NSAlert()
+    alert.messageText = item.url!.path
+    alert.runModal()
+}

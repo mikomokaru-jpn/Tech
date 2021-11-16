@@ -1,0 +1,158 @@
+//---- UAView.h ----
+#import <Cocoa/Cocoa.h>
+//プロトコル宣言
+@protocol UAViewDelegate <NSObject>
+//
+-(void)resetImageListTo:(NSInteger)toNumber from:(NSInteger)fromNumber;
+@end
+//インタフェース宣言
+@interface UAView : NSView <NSDraggingSource>
+@property NSInteger index;     //ロケーション番号
+@property NSString* number;     //文字列
+@property NSAttributedString* atributedString;  //属性付き文字列
+@property NSFont *font;         //表示文字列のフォント
+@property BOOL highlightTo;     //ドラッグ先になったときの背景色
+@property BOOL highlightFrom;   //ドラッグ元になったときの背景色
+//デリゲートオブジェクトへの参照
+@property(weak, nonatomic) id<UAViewDelegate> uaDelegate;
+//イニシャライザ
+-(id)initWithIndex:(NSInteger)index number:(NSString*)num;
+@end
+
+//---- UAView.m ----
+#import "UAView.h"
+@implementation UAView
+//イニシャライザ
+-(id)initWithIndex:(NSInteger)index number:(NSString*)num{
+    if(![super init])
+        return nil;
+    //プロパティの設定
+    _index = index;
+    _number = num;
+    _font = [NSFont fontWithName:@"YuKyo-Bold" size:40];
+    //背景色
+    _highlightTo = NO;
+    _highlightFrom = NO;
+    self.wantsLayer = YES;
+    //ドラッグの受け入れオブジェクトの宣言
+    [self registerForDraggedTypes:@[@"public.text"]];
+    return self;
+}
+//ビューの再表示
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //文字列の表示
+    _atributedString = [[NSAttributedString alloc]
+                        initWithString:_number
+                        attributes:@{NSFontAttributeName:_font}];
+    NSSize stringSize = _atributedString.size;
+    NSPoint point = NSMakePoint(dirtyRect.size.width/2 - stringSize.width/2,
+                                dirtyRect.size.height/2 - stringSize.height/2);
+    [_atributedString drawAtPoint:point];
+    //背景色の変更
+    if (_highlightTo){
+        self.layer.backgroundColor = [[NSColor yellowColor] CGColor];
+    }else if(_highlightFrom){
+        self.layer.backgroundColor = [[NSColor lightGrayColor] CGColor];
+    }else{
+        self.layer.backgroundColor = [[NSColor whiteColor] CGColor];
+    }
+}
+//NSDraggingDestination --------------------------------------------------------
+//ドラッグによりオブジェクトがビューに入る
+- (NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender{
+    //他アプリケーションから
+    if(!sender.draggingSource)
+        return NSDragOperationNone;
+    //sourceのViewでない
+    if ((UAView*)sender.draggingSource != self){
+        _highlightTo = YES;
+        self.needsDisplay = YES;
+    }
+    return NSDragOperationGeneric;
+}
+//ドラッグによりオブジェクトがビューから出る
+- (void)draggingExited:(id<NSDraggingInfo>)sender{
+    //sourceのViewでない
+    if ((UAView*)sender.draggingSource != self){
+        _highlightTo = NO;
+        self.needsDisplay = YES;
+    }
+}
+//ドロップの準備
+- (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)info{
+    //sourceのViewでない
+    if ((UAView*)info.draggingSource != self){
+        _highlightTo = NO;
+        self.needsDisplay = YES;
+    }
+    return YES;
+}
+//ドロップの実行
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)info{
+    //sourceとdestinationが同じ
+    if ([info draggingSource] == self){
+        return NO;
+    }
+    /*
+    NSArray *objects = [[info draggingPasteboard]
+                        readObjectsForClasses:@[[NSString class]]
+                        options:nil];
+    if (objects.count > 0){
+        NSString *itemdumy  = [objects objectAtIndex:0];
+        NSLog(@"%@", item);
+    }
+    */
+    //イメージリストの再配置
+    [_uaDelegate resetImageListTo:_index
+                             from:[[info draggingSource] index]];
+    return YES;
+}
+//NSDraggingSource -------------------------------------------------------------
+//ドラッグセッションを開始する
+-(void)mouseDown:(NSEvent *)theEvent{
+    //ペーストボードに格納
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    [items addObject:[[NSDraggingItem alloc]
+                      initWithPasteboardWriter:_number]];
+    //ドラッグイメージの作成
+    NSPoint dragStratPoint;
+    dragStratPoint.x = (self.frame.size.width / 2.0)
+                       - (_atributedString.size.width / 2.0);
+    dragStratPoint.y = (self.frame.size.height / 2.0)
+                       - (_atributedString.size.height / 2.0);
+    NSRect dragImageRect;
+    dragImageRect.origin = dragStratPoint;
+    dragImageRect.size = _atributedString.size;
+    //修飾文字列をイメージに出力する
+    NSColor *color =  [NSColor blackColor];
+    color = [color colorWithAlphaComponent:0.5];
+    NSAttributedString *aString =
+        [[NSAttributedString alloc] initWithString:_number
+          attributes:@{NSFontAttributeName:_font,
+          NSForegroundColorAttributeName:color}];
+    NSImage *image =
+        [[NSImage alloc] initWithSize:_atributedString.size];
+    [image lockFocus];
+    [aString drawAtPoint:NSMakePoint(0, 0)];
+    [image unlockFocus];
+    [items[0] setDraggingFrame:dragImageRect contents:image];
+    //ドラッグセッションの開始
+    [self beginDraggingSessionWithItems:items
+                                  event:theEvent source:self];
+    self.highlightFrom = YES;
+    self.needsDisplay = YES;
+}
+//オペレーションタイプの宣言
+-(NSDragOperation)draggingSession:(NSDraggingSession *)session
+sourceOperationMaskForDraggingContext:(NSDraggingContext)context{
+    return NSDragOperationCopy;
+}
+//ドロップの完了
+- (void)draggingSession:(NSDraggingSession *)session
+           endedAtPoint:(NSPoint)screenPoint
+              operation:(NSDragOperation)operation{
+    self.highlightFrom = NO;
+    self.needsDisplay = YES;
+}
+@end

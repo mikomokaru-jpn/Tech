@@ -1,0 +1,246 @@
+<!-- 
+23 thread
+24 threadClassical
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>マルチスレッド基礎編</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm90 tm20 bm10">マルチスレッド基礎編</h2>
+<div class="lm100 tm10 rm60">
+マルチスレッドは、メインスレッッドで行う必要のない、時間のかかるバッチ的な処理をバックグラウンドで行うときに利用する。メインスレッドから別スレッドを起動し、そこで処理を行う。メインスレッドと並行して処理を行うので、効率の良い処理方式となる。メインスレッッドとの関係で、非同期処理と同期処理に分けられる
+</div>		
+<h3 class="lm100 tm20 rm60 bm5">
+非同期処理
+</h3>		
+<div class="lm100 tm5 rm60">
+メインスレッドの処理(A)から、別スレッドの処理(B)を起動する。メインスレッドの次の処理(C)は、処理(B)の終了を待たず、並行してに実行される。起動元がRunLoopであれば、受付たUIイベント(D)も即時に実行される。別スレッドの処理(B)と同期をとりたいメインスレッドの処理(E)があれば、コールバックにより実行する。
+</div>			
+<div class="lm100 tm10 rm60">
+メインスレッドとの連携（同期）は、ブロックオブジェクトによるコールバック、デリゲート、セマフォ（後述）といった技法を使うことで実現することができる。		
+</div>	
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/27/async.png&title=非同期処理&width=800" target="_new">
+<img class="lm130 tm0 bm10" src="async.png" width="400" align="top" alt="非同期処理" ></a>	
+<h3 class="lm100 tm10 rm60 bm5">
+同期処理
+</h3>		
+<div class="lm100 tm5 rm60">
+メインスレッドの処理(A)から、別スレッドで処理(B)を起動する。メインスレッドの次の処理(C)は、処理(B)が終了するまで待ち状態になる。起動元がRunLoopであれば、受付たUIイベント(D)は、別スレッッドの処理(B)及び、待たされていたメインスレッドの処理(C)が終了するまで待たされる
+</div>	
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/27/sync.png&title=同期処理&width=800" target="_new">
+<img class="lm130 tm0 bm10" src="sync.png" width="400" align="top" alt="同期処理" ></a>	
+<h4 class="lm100 tm5 rm60 bm0">
+設計の考え方
+</h4>		
+<div class="lm100 tm5 rm60">
+UIアプリケーションでは、一般的には非同期処理が望ましい。メインスレッッド（Run Loop）は、イベントドリブンなシステムの本来の目的から、可能な限りアイドル状態になっていることが求められる。同期処理によってメインスレッドが長時間占有されることは避けなければならない。また、同期処理では異常時に処理がフリーズしてしまう危険性も残る。
+</div>		
+<h3 class="lm100 tm30 rm60 bm5">
+GCDによりスレッドを起動して処理を実行する方法
+</h3>		
+<div class="lm100 tm5 rm60">
+GCD(Grand Central Dispatch)のキューイング機能を利用する。アプリケーションはスレッドの種類に応じたキューオブジェクト（処理の待ち行列）を取得し、そこに処理コード（ブロッックオブジェクト）を登録する。システムはキューに入っている処理を取り出し実行する、という流れになる。処理の種類により次のいずれかの関数を使用する。
+</div>		
+<div class="lm100 tm10 rm60">
+同期処理		
+</div>		
+<div class="lm130 tm0 rm60">
+dispatch_sync(queue, ^{ …処理... })
+</div>		
+<div class="lm100 tm10 rm60">
+非同期処理		
+</div>		
+<div class="lm130 tm0 rm60">
+dispatch_async(queue, ^{ …処理... })
+</div>		
+<div class="lm100 tm10 rm60">
+引数には、キューオブジェクトと、スレッドで実行する処理コード（ブロックオブジェクト）を記述する。
+</div>		
+<h4 class="lm100 tm20 rm60 bm5">
+キューオブジェクトの取得
+</h4>		
+<div class="lm100 tm5 rm60">
+次の関数を使用してキューオブジェクト（dispatch_queue_t&thinsp;型）を取得する。
+</div>		
+<div class="lm100 tm10 rm60">
+<a href="https://developer.apple.com/documentation/dispatch/1452927-dispatch_get_global_queue" target="_new">dispatch_get_global_queue(...)</a>
+</div>		
+<div class="lm100 tm5 rm60">
+システムが提供するキューで、全アプリケーションが共有して使用する。引数で実行時の優先度を指定する。キュー属性はコンカレントとなる。
+</div>
+<div class="lm100 tm10 rm60">
+<a href="https://developer.apple.com/documentation/dispatch/1453030-dispatch_queue_create
+" target="_new">dispatch_queue_create(...)</a>
+</div>
+<div class="lm100 tm5 rm60">
+アプリケーション独自のキューを作成する。キューの属性としてシリアル（デフォルト） または コンカレントを選ぶことができる。
+</div>		
+<div class="lm100 tm10 rm60">
+シリアルキューは、キューに投入した処理は必ず投入順に起動される。コンカレントキューは、キューに投入した処理はランダムに起動する。状態によっては後から投入した処理が先に起動することがある。
+</div>		
+<div class="lm100 tm10 rm60">
+<a href="https://developer.apple.com/documentation/dispatch/1452921-dispatch_get_main_queue
+" target="_new">dispatch_get_main_queue(...)</a>
+</div>		
+<div class="lm100 tm5 rm60">
+メインスレッドキューを取得する。キュー属性はシリアルとなる。
+</div>		
+<div class="lm100 tm10 rm60">
+このキューは使用目的が少々異なる。ウインドウアプリケーションのUI操作はメインスレッッドで実行しなくてはならない。そのため、別スレッッドで起動中の処理がUI操作を行うときは、このキューを経由して、メインスレッドで処理を行う必要がある。これを一般的にコールバック処理という。例えば、処理の途中経過をプログレスバーに刻々と表示するというようなときである。
+</div>		
+<div class="lm100 tm10 rm60">
+なお、メインスレッッドにおいて、このキューに対して同期処理（dispatch_sync）を呼んでははならない。メインスレッド内でデッドロックとなり処理が固まってしまう。
+</div>		
+
+<h3 class="lm100 tm20 rm60 bm0">
+実装方法
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<h2 class="lm100 tm10 rm60 bm5">
+非同期なマルチスレッッド処理を行う
+</h2>
+<div class="lm100 tm5 rm60">
+①&thinsp;メインスレッド(メインウィンドウのRun Loop）から別スレッドを起動し、そこでカウンタを１づつアップする処理を繰り返し行う。
+</div>
+<div class="lm100 tm10 rm60">
+②&thinsp;処理の途中経過として、カウンタの値をWindow上ラベルとプログレスバーにリアルタイムに出力する。
+</div>
+<div class="lm100 tm10 rm60">
+③&thinsp;中止ボタンにより処理を途中で中止する。クラスのプロパティにキャンセルフラグを定義し、UIイベントを受け付けるメインスレッドと、カウントアップを行う別スレッッドの両者から参照できるようにする。繰り返し処理は、キャンセルフラグ監視し、キャンセルフラグが設定されたら処理を中断する。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/27/window1.png&title=カウンタ&width=800" target="_new">
+<img class="lm190 tm20 bm0" src="window1.png" width="250" align="top" alt="カウンタ" ></a>	
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/27/sample.png&title=カウンタ&width=600" target="_new">
+<img class="lm130 tm0 bm0" src="sample.png" width="400" align="top" alt="カウンタ" ></a>	
+<h3 class="lm100 tm20 rm60 bm0">
+ GCD(Grand Central Dispatch) による実装
+</h3>
+<div class="lm100 tm5 rm60">
+dispatch_async関数により別スレッドを起動し、非同期な処理を行う。ブロックオブジェクトによるコールバックを行う。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm10 bm10" src="/lib/HTMLofText.html?filename=/data/27/dispatch_async.txt" width="550" height="890"></iframe>
+<h3 class="lm100 tm20 rm60 bm0">
+GCD以前の実装方法
+</h3>
+<div class="lm100 tm5 rm60">
+別スレッッドで非同期処理を起動するには、NSThreadクラスのdetachNewThreadSelector:toTarget:withObject:メソッドを呼ぶ。起動する処理を引数にSelector型で指定する。
+</div>
+<div class="lm100 tm10 rm60">
+メインスレッッドでコールバック処理を行うには、NSObjectクラスのperformSelectorOnMainThread:withObject:waitUntilDone:メソッッドを呼ぶ。起動する処理を引数にSelector型で指定する。waitUntilDone（BOOL)により処理の同期/非同期を選択できる。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm10 bm20" src="/lib/HTMLofText.html?filename=/data/27/NSThreadMethod.txt" width="550" height="670"></iframe>
+<h3 class="lm100 tm20 rm60 bm0">
+GCD(Grand Central Dispatch) による実装(その２)
+</h3>
+<div class="lm100 tm5 rm60">
+コールバックを行うクラス（<a href="/lib/HTMLofText.html?filename=/data/27/source/CountNumber.txt&indent=20" target="_new">CountNumber</a>）を作成する。コールバック処理本体はAppDelegateに実装し、delegateにより実行する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm10 bm0" src="/lib/HTMLofText.html?filename=/data/27/dispatch_async2.txt" width="550" height="300"></iframe>
+<h3 class="lm100 tm30 rm60 bm0">
+ソースコード
+</h3>
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/27/source/AppDelegate.txt&indent=20" target="_new">AppDelegateクラス</a>
+</div>
+<h2 class="lm100 tm30 rm60 bm5">
+セマフォを組み合わせて同期処理を実現する
+</h2>
+<div class="lm100 tm5 rm60">
+GCD(Grand Central Dispatch)が提供する通知機能の一種であるセマフォ(semaphore)を利用する。手順は以下の通り。
+</div>
+<div class="lm100 tm10 rm60">
+①&thinsp;スレッド間の通知のやりとりを管理するセマフォオブジェクトを作成する。
+</div>
+<div class="lm100 tm10 rm60">
+②&thinsp;メインスレッドは別スレッドで処理を起動したあと待ち状態になる。
+</div>
+<div class="lm130 tm0 rm60">
+dispatch_semaphore_wait
+</div>
+<div class="lm130 tm5 rm60">
+別スレッドのメインスレッドへのコールバック、RunLoopが受け付けたイベントの処理も待ち状態となる。
+</div>
+<div class="lm100 tm10 rm60">
+③&thinsp;別スレッドは、処理の終了等任意のタイミングで、メインスレッドに対して待ちを解除する通知を送る。dispatch_semaphore_signal
+</div>
+<div class="lm100 tm10 rm60">
+④&thinsp;メインスレッドは、通知を受け取った位置から以降の処理を再開する。
+</div>		
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/27/semaphore.png&title=セマフォ&width=800" target="_new">
+<img class="lm130 tm10 bm10" src="semaphore.png" width="400" align="top" alt="セマフォ" ></a>	
+<!--ソースコード-->
+<iframe class="lm100 tm0 bm20" src="/lib/HTMLofText.html?filename=/data/27/semaphore.txt" width="550" height="600"></iframe>
+<h2 class="lm100 tm20 rm60 bm5">
+処理パターンを確認するためのサンプル集
+</h2>
+<div class="lm100 tm5 rm60">
+起動したスレッドの種類と処理のタイミング（前後関係）がわかるログを吐き出す。処理の途中でクリックするとログを出力するイベントハンドラを起動する。
+</div>
+<div class="lm100 tm0 rm60">
+（詳細はソースコードを参照のこと）
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/27/window2.png&title=サンプル集&width=600" target="_new">
+<img class="lm160 tm10 bm0" src="window2.png" width="250" align="top" alt="サンプル集" ></a>	
+<div class="lm100 tm20 rm60">
+サンプルプログラムのソースコード
+</div>
+<div class="lm100 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/27/source/AppDelegate2.txt&title=AppDelegate" target="_new">AppDelegateクラス</a>
+</div>
+<h3 class="lm100 tm30 bm5 rm60">
+備忘録
+</h3>
+<div class="lm100 tm5 rm60">
+(1) メインスレッドの直列処理では、ボタンのenabled属性の更新が遅延する
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/27/topic1.txt" width="550" height="280"></iframe>
+<div class="lm100 tm20 rm60">
+上記のプログラムは、開始ボタンをクリックした後、ボタンを使えないようにするためグレーアウトしようとしているが出来ない。無効化（enabled属性をNOにする）の効果が現れるのは、次のFor文の終了後になってしまう。UIの実際の更新は遅延するようだ。
+</div>
+<div class="lm100 tm10 rm60">
+このようなことを可能にするには、処理の本体（For文）を別スレッッドで実行する必要がある。		
+</div>
+<div class="lm100 tm20 rm60">
+(2) NSAlertクラスでアラートパネルを表示すると、デバッグウィンドウに警告メッセージが表示される
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/27/topic2.txt&font=font100" width="550" height="260"></iframe>
+<div class="lm100 tm20 rm60">
+macOS 10.12 のバグのようである。処理自体は問題ない。
+</div>
+<div class="lm100 tm0 rm60">
+<a href="https://openradar.appspot.com/28700495" target="_new">openradar.appspot.com/28700495</a>
+</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+

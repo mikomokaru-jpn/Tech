@@ -1,0 +1,25 @@
+-(void)makeFileList{
+    NSString *dirPath =
+      [NSString stringWithFormat:@"%@/Documents/ViewerPictiures/",
+       NSHomeDirectory()];
+    NSURL *url = [NSURL URLWithString:dirPath];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error;
+    NSArray<NSURL *>*arrayOfURL=
+      [fm contentsOfDirectoryAtURL:url
+        includingPropertiesForKeys:nil
+        options:NSDirectoryEnumerationSkipsHiddenFiles
+                             error:&error];
+    if (error){
+        NSLog(@"%@", error);
+        return;
+    }
+    //イメージファイル（JPEG, PNG）を取得する
+    for (NSURL *aURL in arrayOfURL){
+        NSString* uti=[[NSWorkspace sharedWorkspace] 
+                       typeOfFile:[aURL path] error:nil];
+        if (UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeJPEG) ||
+            UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypePNG)){
+        }
+    }
+}

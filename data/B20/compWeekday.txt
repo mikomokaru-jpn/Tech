@@ -1,0 +1,12 @@
+let now = Date.init()
+let dComp = Calendar.current.dateComponents([.weekday], from: now)
+let weekday: Int = dComp.weekday ?? 0
+let formatter: DateFormatter = DateFormatter()
+formatter.locale = Locale.init(identifier: "ja_JP")
+print(String(format:"%ld %@ %@",
+             weekday,
+             formatter.weekdaySymbols[weekday - 1],
+             formatter.shortWeekdaySymbols[weekday - 1]))
+
+//結果
+7 土曜日 土

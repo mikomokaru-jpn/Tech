@@ -1,0 +1,8 @@
+-(IBAction)openWindow3:(id)sender
+{
+    NSRect rect = [_window frame];
+    NSPoint point = NSMakePoint(rect.origin.x + rect.size.width, 
+                                rect.origin.y + rect.size.height);
+    [[_winCtrl3 window] setFrameTopLeftPoint:point]; //表示位置の変更
+    [_winCtrl3 showWindow:self];  //ウィンドウの表示 
+}  

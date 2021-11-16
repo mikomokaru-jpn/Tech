@@ -1,0 +1,1 @@
+override func draw(_ dirtyRect: NSRect) {    let context:CGContext? = NSGraphicsContext.current?.cgContext    context?.addRect(shapeRect)    context?.setLineWidth(lineWidth)    context?.setStrokeColor(lineColor)    context?.strokePath()}

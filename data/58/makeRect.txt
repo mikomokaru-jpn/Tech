@@ -1,0 +1,26 @@
+-(void)makeRect{
+    //始点と終点が同じとき何もしない。
+    if (NSEqualPoints(_startPoint, _endPoint) ){
+        return;
+    }
+    //直前の矩形（CALayerオブジェクト）を消す
+    [_rectShape removeFromSuperlayer];
+
+     //矩形の位置とサイズを決める
+    _width = _endPoint.x - _startPoint.x;
+    _height = _endPoint.y - _startPoint.y;
+    CGRect rect = CGRectMake(_startPoint.x, _startPoint.y,
+                             _width, _height);
+    NSBezierPath *rectBezier = [NSBezierPath bezierPathWithRect:rect];
+
+    //ShapeLayerオブジェクトを作成する
+    _rectShape = [CAShapeLayer layer];
+    _rectShape.lineWidth = 1;                              //枠線の太さ
+    _rectShape.strokeColor = [NSColor whiteColor].CGColor; //枠線の色
+    _rectShape.fillColor = [NSColor clearColor].CGColor;   //塗りつぶし透明
+    _rectShape.path = rectBezier.cgPath;
+    //_rectShape.position = NSZeroPoint; //No need
+
+    //ShapeLayerオブジェクトを親ビューに追加する
+    [self.layer addSublayer:_rectShape];
+}

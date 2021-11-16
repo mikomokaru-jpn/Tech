@@ -1,0 +1,84 @@
+<!-- 
+NewPractice_Swift/IOS02
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>スマホ版 血圧管理カレンダー（Swift）</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">スマホ版 血圧管理カレンダー</h2>
+<div class="lm70 tm0 rm60">
+macOS Sierra 10.12.6 / Xcode 9.2 / Swift 4.0
+</div>
+<div class="lm70 tm0 rm60">
+iPhone 8 Plus
+</div>
+<div class="lm70 tm10 rm60">
+OSX Swift4で作成した<a href='/data/B18/calendar_swift.html' target="_blank">血圧管理カレンダー</a>（グラフ表示を除く） iOSアプリに移行してみた。
+</div>
+<!-- 動画 -->
+<h3 class="lm70 tm10 bm0 rrm60">
+<a href="/lib/HTMLofVideo.html?filename=/data/85/movie.mp4&title=healthCalendar&width=300" target="_new">
+サンプル動画
+</a>
+</h3>
+<div class="table lm70 tm20 rm60">
+<div class="table_cell">
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/85/image01.png&title=カレンダー&width=500" target="_new">
+<img class="lm10 tm0 bm0" src="image01.png" alt="[カレンダー]" width="250"></a>
+</div>	
+<div class="table_cell">
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/85/image02.png&title=データ入力&width=500" target="_new">
+<img class="lm40 tm0 bm0" src="image02.png" alt="[データ入力]" width="250"></a>
+</div>
+</div>
+<div class="lm70 tm20 rm60">
+初めてiOSのアプリケーションを作成してみた。StoryBoardがいまいちよく解らないので、カスタムビューやコントロールはPC版と同じように ViewControllerにの中にプログラムで直接作成した。 
+</div>
+<div class="lm70 tm10 rm60">
+全体的には、MacOSよりiOSの方が素直にプログラミングできるように思う。一例あげれば、iOSではビューの背景色を変えるには UIView.backgroundcolorプロパティを変えれば簡単にできる。MacOSではそのようなプロパティがなく、ビューのサブクラスを作成してグラフィックを描画するか、CALayerオブジェクトを利用するしかなかった。
+</div>
+<div class="lm70 tm10 rm60">
+スマホ独自の機能の追加以外にも、MacOS版フレームワークでは諦めていただろう短所や不親切な点をかなり改善してきた印象がある。
+</div>
+
+<div class="lm70 tm20 rm60">
+当たり前のことをことさら取り上げることもないだろうが、MacOSから来た者にとって、ちょっと物珍しかったので UIイベント操作の一例をあげておく。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/85/swipe1.swift" width="580" height="370"></iframe>
+<!--ソースコード-->
+<iframe class="lm70 tm20" src="/lib/HTMLofText.html?filename=/data/85/tap1.swift" width="580" height="210"></iframe>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/ios_i01_MyHealthCalendar" target="_new">mikomokaru-jpn/ios_i01_MyHealthCalendar</a>
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+クラス構造図
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/85/85_calendar01.png&title=クラス構造図&width=1000" target="_new">
+<img class="lm50 tm10 bm0" src="85_calendar01.png" alt="[クラス構造図]" width="600"></a>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="../index3.php">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>

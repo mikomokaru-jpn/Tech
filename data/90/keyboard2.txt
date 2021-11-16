@@ -1,0 +1,1 @@
+func textFieldShouldReturn(_ textField: UITextField) -> Bool {    textField.resignFirstResponder() //ファーストレスポンダーの解放    return true}

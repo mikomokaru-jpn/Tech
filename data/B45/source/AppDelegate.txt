@@ -1,0 +1,105 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate{
+
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var view1: UAView!
+    @IBOutlet weak var view2: UAView!
+    @IBOutlet weak var editMenu: NSMenu!
+    @IBOutlet weak var contextMenu: NSMenu!
+    
+    let pasteboard = NSPasteboard.general       //Generalペーストボード
+    let typeFileURL = kUTTypeFileURL as String  //"public.file-url"
+    let typeTIFF = kUTTypeTIFF as String        //"public.tiff"
+    let typePNG = kUTTypePNG as String          //"public.png"
+    let typeJPEG = kUTTypeJPEG as String        //"public.jpeg"
+    var objectType = ""                         //オブジェクトの種類
+    
+    //アプリケーション起動時
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        self.window?.makeFirstResponder(view1) //ファーストレスポンダ
+    }
+    //--------------------------------------------------------------------------
+    // ドロップ後処理・移動元のオメージを消す
+    //--------------------------------------------------------------------------
+    func imageDropped(_ view: UAView){
+        if view == view1{
+            view2.image = nil
+            view2.needsDisplay = true
+        }else{
+            view1.image = nil
+            view1.needsDisplay = true
+        }
+    }
+    //--------------------------------------------------------------------------
+    // メニュー動作・貼り付け
+    //--------------------------------------------------------------------------
+    @IBAction func paste(_ sender: NSMenuItem){
+        //ファーストレスポンダーのあるビューに対してイメージを貼り付ける
+        if let view = self.window.firstResponder as? UAView{
+            if self.objectType == typeFileURL{
+                view.pasteImageFromURL()
+            }else{
+                view.pasteImage()
+            }
+        }
+    }
+    //--------------------------------------------------------------------------
+    // メニュー動作・コピー
+    //--------------------------------------------------------------------------
+    @IBAction func copy(_ sender: NSMenuItem){
+        if let view = self.window.firstResponder as? UAView{
+            view.copyImage()
+        }
+    }
+    //--------------------------------------------------------------------------
+    // メニュー動作・切り取り
+    //--------------------------------------------------------------------------
+    @IBAction func cut(_ sender: NSMenuItem){
+        if let view = self.window.firstResponder as? UAView{
+            view.cutImage()
+        }
+    }
+    //--------------------------------------------------------------------------
+    // メニューの編集・メニューが開いたとき
+    //--------------------------------------------------------------------------
+    func menuWillOpen(_ menu: NSMenu){
+        menu.item(withTitle: "Paste")?.isEnabled = false
+        //貼り付けるイメージがペーストボードにあるか
+        if pasteboard.canReadItem(withDataConformingToTypes: [typeTIFF]){
+            menu.item(withTitle: "Paste")?.isEnabled = true
+            self.objectType = typeTIFF
+        }else if pasteboard.canReadItem(withDataConformingToTypes: [typeFileURL]){
+            //ペーストボードからオブジェクトを取得する
+            if let objects = pasteboard.readObjects(forClasses:[NSURL.self] , options: [:]),
+                objects.count > 0,
+                let fileURL = objects[0] as? URL{
+                //UTIによるファイルタイプのチェック
+                if let value = try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]) {
+                    //個別チェック
+                    if value.typeIdentifier == typePNG || value.typeIdentifier == typeJPEG{
+                        menu.item(withTitle: "Paste")?.isEnabled = true
+                        self.objectType = typeFileURL
+                    }
+                    /* 包括チェック
+                     if UTTypeConformsTo(value.typeIdentifier! as CFString, kUTTypeImage){
+                     menu.item(withTitle: "Paste")?.isEnabled = true
+                     self.objectType = typeFileURL
+                     }
+                     */
+                }
+            }
+        }
+        //コピー/切り取りするイメージが表示中か
+        if let view = self.window.firstResponder as? UAView{
+            if view.image != nil{
+                menu.item(withTitle: "Cut")?.isEnabled = true
+                menu.item(withTitle: "Copy")?.isEnabled = true
+            }else{
+                menu.item(withTitle: "Cut")?.isEnabled = false
+                menu.item(withTitle: "Copy")?.isEnabled = false
+            }
+        }
+    }
+}

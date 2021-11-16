@@ -1,0 +1,35 @@
+<?php
+
+//DB接続
+require_once("MYDB.php");
+$pdo = db_connect(); 
+// 1.SQL文の列名をGETパラメータから取得しSQL文を作成する
+// 2.execute()メソッドでSQLを実行する
+try{
+    $sql = "SELECT id, date, upper, lower, confirm FROM blood_pressure 
+            WHERE ( id=:id ) AND ( date >=:fd AND date <=:td ); ";
+    $stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':id', $_GET['id'], PDO::PARAM_INT);	
+    $stmh->bindValue(':fd', $_GET['from_date'], PDO::PARAM_INT);
+    $stmh->bindValue(':td', $_GET['to_date'], PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー:'. $e->getMessage());
+}
+header('Content-type: application/json');
+// 1.fetchでSELECT文の結果を1レコードづつ読み込む
+//    FETCH_ASSOC は、値の参照のキーはカラム名のみとする
+while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+		print ($row['date'].' '.$row['upper'].' '.$row['lower']."\n");
+	}	
+?>
+
+---- 入力 ----
+http://localhost/atest/php/select02.php?id=500&from_date=20180501&to_date=20180531
+
+---- 出力 ----
+20180518 120 100
+20180522 23 10
+20180523 123 65
+20180530 120 10
+20180531 200 100

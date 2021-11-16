@@ -1,0 +1,10 @@
+<?php
+$uploaddir = dirname(__FILE__) . "/data/";
+$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
+    $ret = "file upload was successful";
+} else {
+    $ret = "file upload failed";
+}
+echo $ret;
+?>

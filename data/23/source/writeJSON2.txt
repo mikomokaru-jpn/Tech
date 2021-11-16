@@ -1,0 +1,17 @@
+-(void)writeJsonJis:(NSArray<NSDictionary*>*)itemList{
+    //出力ファイルパス
+    NSString *outPath = [NSHomeDirectory() 
+      stringByAppendingString:@"/Desktop/sumoJis2.txt"];
+    //辞書の配列 -> NSData
+    NSData *data = [NSJSONSerialization dataWithJSONObject:itemList
+                    options:NSJSONWritingPrettyPrinted
+                    error:nil];
+    //UTF-8でエンコードされているNSDataから文字列を作成する。
+    NSString *string = [[NSString alloc] initWithData:data
+                        encoding:NSUTF8StringEncoding];
+    //文字列をShift-JISにエンコードしてファイルに書き出す。
+    NSError *error;
+    [string writeToFile:outPath atomically:YES 
+            encoding:NSShiftJISStringEncoding 
+            error:&error];
+}

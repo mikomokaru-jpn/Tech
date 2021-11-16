@@ -1,0 +1,53 @@
+let objA = NSView.init(frame: NSZeroRect)
+let objB = NSTextField.init(frame: NSZeroRect)
+let objC = "ABC"
+let objD = String.init("XYZ")
+
+//---- is演算子 ----
+if (objA is NSView){
+    print("(1) objA is a subclass of NSView") //true
+}
+if (objB is NSView){
+    print("(1) objB is a subclass of NSView") //true
+}
+if (objC is NSView){
+    print("(1) objB is a subclass of NSView") //false
+}
+
+//---- as演算子 ----
+if let obj = objA as? NSView{
+    print("(2) objA is a subclass of NSView")  //true
+}
+if let obj = objB as? NSView{
+    print("(2) objB is a subclass of NSView")  //true
+}
+if let obj = objC as? NSView{
+    print("(2) objC is a subclass of NSView")  //false
+}
+
+//---- type of関数 ----
+// オブジェクトからクラスを判定する
+// func type<T, Metatype>(of value: T) -> Metatype
+// 戻り値はクラスのメタタイプ・クラス名.self でも取得できる
+
+if (type(of: objA) == NSView.self){
+    print("(3) objA is NSView")  //true
+}
+if (type(of: objB) == NSView.self){
+    print("(3) objB is NSView")  //false
+}
+if (type(of: objC) == NSView.self){
+    print("(3) objC is NSView")  //false
+}
+
+//---- クラス名の文字列取得 ----
+print(NSStringFromClass(type(of: objA)))     // "NSView"
+print(String(describing: type(of: objB)))    // "NSTextField"
+print(String(describing: type(of: objC)))    // "String" 
+//print(NSStringFromClass(type(of: objC)))   コンパイルエラー
+
+//[定義] func NSStringFromClass(_ aClass: AnyClass) -> String
+//引数にAnyClassを要求するが、Stringはクラスではなく構造体であった
+
+//[定義] String.init<Subject>(describing instance: Subject)
+//こちらは引数は構造体も可のようだ

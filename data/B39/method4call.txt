@@ -1,0 +1,18 @@
+let objcLib = ObjcLib.init()
+let array = [1, 2, 3, 4, 5];
+    if let arrayOut =  objcLib.method4(array){
+        print("method4")
+        for num in arrayOut{
+            if let value = num as? Int{
+                print("\(value) \(num) \(type(of: num))")
+            }
+        }
+    }
+}
+//結果
+method4
+10 10 __NSCFNumber
+20 20 __NSCFNumber
+30 30 __NSCFNumber
+40 40 __NSCFNumber
+50 50 __NSCFNumber

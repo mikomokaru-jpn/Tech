@@ -1,0 +1,26 @@
+//UTI文字列定数
+let typeFileURL = kUTTypeFileURL as String  //"public.file-url" 
+let typePNG = kUTTypePNG as String          //"public.png"
+let typeJPEG = kUTTypeJPEG as String        //"public.jpeg"
+
+//メニューが開いたとき
+func menuWillOpen(_ menu: NSMenu){
+    menu.item(withTitle: "Paste")?.isEnabled = false
+    if pasteboard.canReadItem(withDataConformingToTypes: [typeFileURL]){
+        //ペーストボードからオブジェクトを取得する
+        if let objects = pasteboard.readObjects(forClasses:[NSURL.self] , 
+                                                options: [:]),
+            objects.count > 0,
+            let fileURL = objects[0] as? URL{
+            //ファイルタイプのチェック
+            if let value = try? fileURL.resourceValues(forKeys: 
+                                        [.typeIdentifierKey]) {
+                //個別チェック
+                if value.typeIdentifier == typePNG || 
+                   value.typeIdentifier == typeJPEG{
+                    menu.item(withTitle: "Paste")?.isEnabled = true
+                }
+            }
+        }
+    }
+}

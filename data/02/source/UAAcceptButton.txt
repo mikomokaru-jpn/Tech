@@ -1,0 +1,31 @@
+#import <Cocoa/Cocoa.h>
+//------------------------------------------------------------------------------
+// 確定チェックボックス
+//------------------------------------------------------------------------------
+@protocol UAAcceptButtonDelegate <NSObject>
+@optional
+-(void)KeyDownFromUAButton:(id)sender event:(NSEvent *)theEvent;
+@end
+@interface UAAcceptButton : NSButton
+@property(weak) id<UAAcceptButtonDelegate> delegate;  //デリゲート変数の宣言
+@end
+
+//------------------------------------------------------------------------------
+// 確定チェックボックス
+//------------------------------------------------------------------------------
+#import "UAAcceptButton.h"
+@implementation UAAcceptButton
+//ファーストレスポンダーを受け入れる
+- (BOOL)acceptsFirstResponder{
+    return YES;
+}
+//確定チェックボックスの操作
+-(void)keyDown:(NSEvent *)theEvent{
+    //NSLog(@"UAAcceptButton keyDown:%d", theEvent.keyCode);
+    if (theEvent.keyCode == 48 || theEvent.keyCode == 36){
+        [_delegate KeyDownFromUAButton:self event:theEvent];
+    }else{
+        [super keyDown:theEvent];
+    }
+}
+@end

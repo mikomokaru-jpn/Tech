@@ -1,0 +1,4 @@
+[self addObserver:self forKeyPath:@"counter"
+          options:NSKeyValueObservingOptionNew |
+                  NSKeyValueObservingOptionOld
+          context:nil];

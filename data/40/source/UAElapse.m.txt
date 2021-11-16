@@ -1,0 +1,220 @@
+//------------------------------------------------------------------------------
+//  UAElapse.m
+//------------------------------------------------------------------------------
+#import "UAElapse.h"
+#include <pthread.h>
+//------------------------------------------------------------------------------
+// ストップウォッチ機能
+//------------------------------------------------------------------------------
+double starting_time;   //起点時刻
+//計測開始
+void WATCH_START(void)
+{
+    //精度の取得
+    struct timespec ts;
+    clock_getres(CLOCK_REALTIME, &ts);
+    //時刻の取得
+    clock_gettime(CLOCK_REALTIME, &ts);
+    double under_digit = (float)ts.tv_nsec / 1000000000.0; //少数以下
+    starting_time = ts.tv_sec + under_digit;               //開始時刻の設定
+}
+//スプリットタイム
+double WATCH_SPLIT(void)
+{
+    //時刻の取得
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    double under_digit = (float)ts.tv_nsec / 1000000000.0;  //少数以下
+    double present = ts.tv_sec + under_digit;               //現在時刻
+    return present - starting_time;                         //スプリットタイム
+}
+//ラップタイム
+double WATCH_LAP(void)
+{
+    //時刻の取得
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    double under_digit = (float)ts.tv_nsec / 1000000000.0;  //少数以下
+    double present = ts.tv_sec + under_digit;               //現在時刻
+    double lap = present - starting_time;                   //ラップタイム
+    starting_time = present;
+    return lap;
+}
+//------------------------------------------------------------------------------
+// 経過時間の計測（マルチスレッッド対応）
+//------------------------------------------------------------------------------
+//測定データ構造体
+struct _sokutei {
+    long thisTime1;           //時刻・秒
+    long thisTime2;           //時刻・秒未満
+    mach_port_t tid;          //スレッッドID
+    char text[64];            //コメント
+};
+typedef struct _sokutei sokutei_t;
+
+//静的変数の宣言
+sokutei_t **list;             //測定データ格納リスト
+int counter = 0;              //レコードカウンタ
+int limit = 0;                //測定データ格納リストの上限
+int NUM = 100;                //測定データ格納リストの確保単位
+long res = 0;                 //時刻の精度（ナノ秒×精度=最小単位）
+dispatch_queue_t sokutei_queue;  //シリアルキュー
+
+//内部ルーチン宣言
+void registerLog(sokutei_t *sokutei );
+void closeProc(void);
+int compSokutei(const void *refa, const void *refb);
+
+//初期化
+void ELAPSE_INIT(void)
+{
+    //キューの取得（シリアルキュー）
+    sokutei_queue = dispatch_queue_create("com.mikomokaru.sokutei", DISPATCH_QUEUE_SERIAL);
+    //測定データ格納リストの確保（初期値）
+    limit = NUM;
+    list = malloc(sizeof(sokutei_t*) * limit);
+    counter = 0;
+    //時刻の精度を求める
+    struct timespec ts;
+    clock_getres(CLOCK_REALTIME, &ts);
+    res = ts.tv_nsec;
+    //printf("res :    %10ld.%09ld CLOCK_REALTIME\n", ts.tv_sec, ts.tv_nsec);
+}
+//ログ出力
+void ELAPSE_LOG(NSString *text)
+{
+    //時刻の取得
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    
+    //スレッドIDの取得
+    mach_port_t tid = pthread_mach_thread_np(pthread_self());
+    
+    //測定データ領域の確保と作成
+    sokutei_t *rec = (sokutei_t *)malloc(sizeof(sokutei_t));
+    rec->thisTime1 = ts.tv_sec;
+    rec->thisTime2 = ts.tv_nsec;
+    rec->tid = tid;
+    strcpy(rec->text, [text UTF8String]);
+    
+    //測定データをテーブルに出力する。（シリアル処理）
+    dispatch_async(sokutei_queue, ^{
+        registerLog(rec);
+    });
+    
+}
+//経過時間の計算・出力
+void ELAPSE_CLOSE(void)
+{
+    closeProc();
+}
+//---- 内部関数 -----
+//測定データ登録処理
+void registerLog(sokutei_t *rec)
+{
+    //測定データ格納リストが満杯のとき、領域を再確保する
+    if (counter >= limit)
+    {
+        limit += NUM;
+        sokutei_t **temp = realloc(list, sizeof(sokutei_t*) * limit);
+        if (!temp)
+        {
+            free(list);
+            return;
+        }
+        list = temp;
+        //NSLog(@"realloc list %ld", sizeof(list));
+    }
+    //レコードを測定データ格納リストに追加する
+    list[counter++] = rec;
+}
+//経過時間の計算・出力の本体
+void closeProc(void)
+{
+    long thisTime[2];           //時刻
+    long preTime[2];            //前の時刻
+    long interval[2];           //経過時間
+    char text[43] = {0};        //コメント
+    //精度の桁数を求める
+    unsigned digit=0;
+    long num = res;
+    while(num!=0){
+        num/= 10;
+        digit++;
+    }
+    //ソート：スレッドID->時刻の昇順
+    qsort(list, counter, sizeof(sokutei_t*), compSokutei);
+    //時刻のリストを順次に読み込み、前後の時刻の差（Elaps）を計算する。
+    for(int i=0; i<counter; i++)
+    {
+        if (i==0 || (i>0 && (list[i]->tid != list[i-1]->tid))) {
+            //if (i==0) {
+            //時刻 char* -> long
+            thisTime[0] = list[i]->thisTime1;      //秒
+            thisTime[1] = list[i]->thisTime2;      //ナノ秒
+            interval[0] = 0;
+            interval[1] = 0;
+        }else{
+            //時刻 char* -> long
+            thisTime[0] = list[i]->thisTime1;      //秒
+            thisTime[1] = list[i]->thisTime2;      //ナノ秒
+            //前の時刻 char* -> long
+            preTime[0] = list[i-1]->thisTime1;;    //秒
+            preTime[1] = list[i-1]->thisTime2;     //ナノ秒
+            
+            //経過時間の計算
+            if (preTime[1] > thisTime[1]){
+                //秒未満の繰り下がり
+                interval[0] = thisTime[0] - preTime[0] - 1;
+                interval[1] = thisTime[1] + (1000000000) - preTime[1];
+            }else{
+                interval[0] = thisTime[0] - preTime[0];
+                interval[1] = thisTime[1] - preTime[1];
+            }
+        }
+        //測定データの出力
+        strcpy(text, list[i]->text);
+        printf("%02ld:%02ld:%02ld.%0*ld ThreadID:%08d Elapse:%3ld.%0*ld %s\n",
+               (thisTime[0] / 3600 + 9) % 24,   //時
+               (thisTime[0] / 60) % 60,         //分
+               (thisTime[0]) % 60,              //秒
+               9-(digit-1),                     //精度以下の桁を非表示
+               thisTime[1]/res,                 //秒未満
+               list[i]->tid,                    //スレッドID
+               interval[0],                     //経過時間・秒
+               9-(digit-1),                     //精度以下の桁を非表示
+               interval[1]/res,                 //経過時間・秒未満
+               text);
+        
+    }
+    counter = 0;
+}
+
+//測定データ（sokutei_t構造体）の大小比較関数
+int compSokutei(const void *refa, const void *refb)
+{
+    //[測定データ（sokutei_t構造体）へのポインタ]のポインタが渡される
+    sokutei_t *a = *(sokutei_t **)refa;
+    sokutei_t *b = *(sokutei_t **)refb;
+    
+    //スレッドIDの比較
+    if (a->tid > b->tid)
+        return 1;
+    else if (a->tid < b->tid)
+        return -1;
+    else{
+        //時刻・秒の比較
+        if (a->thisTime1 > b->thisTime1)
+            return 1;
+        else if  (a->thisTime1 < b->thisTime1)
+            return -1;
+        else{
+            //時刻・秒未満の比較
+            if (a->thisTime2 > b->thisTime2)
+                return 1;
+            else if  (a->thisTime2 < b->thisTime2)
+                return -1;
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,9 @@
+-(NSArray*)contentsOfDirectoryOfURL:(NSURL*)url
+{
+    NSArray* array =  [[NSFileManager defaultManager]
+                       contentsOfDirectoryAtURL:url
+                       includingPropertiesForKeys:nil
+                       options:NSDirectoryEnumerationSkipsHiddenFiles
+                       error:nil];
+    return array;
+}

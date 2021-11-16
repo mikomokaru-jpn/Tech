@@ -1,0 +1,7 @@
+.chart { /* 一覧表 */
+    display: grid; 
+    grid-template-columns: 40px 40px 50px 50px 400px ; /* 1行に5列配置する */
+    grid-auto-rows:  22px; /*行の高さ */
+    width: 900px;
+    margin-top: 0px;
+} 

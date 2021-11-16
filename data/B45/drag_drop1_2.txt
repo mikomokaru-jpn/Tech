@@ -1,0 +1,3 @@
+override func draggingEntered(_ info: NSDraggingInfo) -> NSDragOperation{
+    return .generic
+}

@@ -1,0 +1,7 @@
+NSWorkspace * ws = [NSWorkspace sharedWorkspace];
+BOOL ret = [ws openFile:@“Users/user/Documents/サンプル.txt"
+            withApplication:@"/Applications/mi.app" 
+            andDeactivate:YES];
+if (ret == NO){
+    NSLog(@"ファイルが開けません");
+}

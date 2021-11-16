@@ -1,0 +1,18 @@
+// Windowコントーラの開始
+- (void)windowDidLoad {
+    [super windowDidLoad];
+    
+    //線の間隔10ピクセル、線の太さ0.2ピクセルの格子を描くCAShapeLayerオブジェクト
+    CAShapeLayer* line1 = 
+      [CAShapeLayer layerGridInRect:self.window.contentView.frame
+                         atInterval:10    //線の間隔 
+                              width:0.2]; //線の太さ
+    //線の間隔50ピクセル、線の太さ1.0ピクセルの格子を描くCAShapeLayerオブジェクト
+    CAShapeLayer* line2 = 
+      [CAShapeLayer layerGridInRect:self.window.contentView.frame
+                         atInterval:50    //線の間隔 
+                              width:1.0]; //線の太さ
+    //コンテント・ビューに格子を描く 
+    [self.window.contentView.layer addSublayer:line1];  //細線の格子
+    [self.window.contentView.layer addSublayer:line2];  //太線の格子
+}

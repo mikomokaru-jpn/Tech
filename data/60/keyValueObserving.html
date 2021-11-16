@@ -1,0 +1,104 @@
+<!-- 
+45 KVO Sample
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>キー値監視（Key Value Observing）</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm100 tm20 bm0">キー値監視（Key Value Observing）</h2>
+<div class="lm100 tm20 bm0 rm60">
+キー値監視（Key Value Observing）とは、特定のプロパティの値の変化を監視すること。値の変化をきっかけに、あらかじめ定義しておいた処理（コールバック）を起動させることができる。なお、監視できるキー値は、数値型の値と文字列（NSStringオブジェクト）である。この動きををアプリケーションに実装してみた。
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/60/image.png&title=image&width=600" target="_new">
+<img class="lm100 tm20 bm0" src="image.png" alt="[image]" width="200"></a>
+<!-- 動画 -->
+<a class="lm10 tm20 bm0" href="/lib/HTMLofVideo.html?filename=/data/60/movie.mp4&title=動画&width=500" target="_new">
+<div class="lm110 tm10 bm0 rm60 font120">
+動画です
+</div>
+</a>
+<h3 class="lm100 tm30 bm0">
+キー値監視によるコールバック処理の起動
+</h3>
+<div class="lm100 tm5 bm0 rm60">
+プロパティ counter（NSInteger）を1秒ごとに1づつインクリメントし、その値の変化をテキストフィールドに表示する。
+</div>
+<div class="lm100 tm10 bm0 rm60">
+プロパティの定義
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/60/property.txt" width="550" height="40"></iframe>
+<div class="lm100 tm20 bm0 rm60">
+キー値監視の開始
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/60/addObserver.txt" width="550" height="90"></iframe>
+<div class="lm100 tm5 bm0 rm60">
+※ 監視するプロパティは、参照している他のオブジェクトのプロパティでもかまわない。Outlet接続したコントロールのプロパティでも可能。
+</div>
+<div class="lm100 tm20 bm0 rm60">
+プロパティの値が変化したら以下のメソッドが自動的に起動する。プロパティの変更前と変更後の値を左側のテキストフィールドに出力する。
+</div>
+<div class="lm100 tm10 bm0 rm60">
+引数keyPathにはプロパティ名、objectには監視対象オブジェクト（ここではself）、changeにはプロパティの変更前後の値が辞書形式で取得できる。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/60/callback.txt" width="550" height="230"></iframe>
+<div class="lm100 tm20 bm0 rm60">
+処理イメージ
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/60/60_KVO01.png&title=図1&width=700" target="_new">
+<img class="lm90 tm0 bm0" src="60_KVO01.png" alt="[図1]" width="450"></a>
+<h3 class="lm100 tm30 bm0 rm60">
+バインドしたキー値の更新
+</h3>
+<div class="lm100 tm5 bm0 rm60">
+コントロールが特定のプロパティをバインドしているとき、そのプロパティの値の変化を、バインド元に即時に反映させることができる。
+</div>
+<div class="lm100 tm10 bm0 rm60">
+アプリケーション例では、右側のテキストフィールドがプロパティ counter をバインドしているので、カウントのインクリメントに従いテキストフィールドの値が更新される。
+</div>
+<div class="lm100 tm20 bm0 rm60">
+インタフェース・ビルダのバインド定義
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/60/60_KVO03.png&title=インタフェースビルダ&width=800" target="_new">
+<img class="lm100 tm0 bm0" src="60_KVO03.png" alt="[インタフェースビルダ]" width="450"></a>
+<div class="lm100 tm30 bm0 rm60">
+プロパティの更新前後を次のメソッドで囲むことによって、更新した値がバインド元のコントロール（テキストフィールド）の値に反映される。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/60/bind.txt" width="550" height="80"></iframe>
+<div class="lm100 tm20 bm0 rm60">
+処理イメージ
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/60/60_KVO02.png&title=図2&width=700" target="_new">
+<img class="lm90 tm0 bm0" src="60_KVO02.png" alt="[図2]" width="500"></a>
+<!--ソースコード-->
+<h3 class="lm100 tm15 bm0 rm60">	
+全ソースコード　
+</h3>
+<div class="lm100 tm0 bm0 rm60">
+<a href="/lib/HTMLofText.php?filename=/data/60/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="AppDelegate/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="AppDelegate/access/access2.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+//値の単位は、NSInteger
+CGImageRef imageRef = ...;
+NSLog(@"CGImageRef %ld:%ld", CGImageGetWidth(imageRef),
+                             CGImageGetHeight(imageRef));

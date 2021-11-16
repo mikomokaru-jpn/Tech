@@ -1,0 +1,1 @@
+-(void)changeColorByButtonOfCategory:(NSColor *)color{    _text.textColor = color;  //テキストフィールドの文字色を変更する}

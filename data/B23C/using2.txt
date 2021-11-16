@@ -1,0 +1,1 @@
+NSString* url = @"http://192.168.11.3/doc_health_calendar/php/sql_r12_json.php";NSDictionary* param = @{@"id":@500, @"from_date":@20180910, @"to_date":@20181231};NSArray<NSDictionary *>* list = [UAServerRequest postSyncJ:url                                                     param:param];

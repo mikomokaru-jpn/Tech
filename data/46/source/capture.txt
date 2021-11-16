@@ -1,0 +1,37 @@
+-(void)capture
+{
+    // (1)
+    CGContextRef newContext = NULL;
+    CGColorSpaceRef imageColorSpace = CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );
+    newContext = CGBitmapContextCreate (NULL,
+                                        (int)self.bounds.size.width,
+                                        (int)self.bounds.size.height,
+                                        8,
+                                        (int)self.bounds.size.width * 4,
+                                        imageColorSpace, kCGImageAlphaPremultipliedLast);
+    // (2)
+    [[[self layer] presentationLayer] renderInContext:newContext];
+    // (3)
+    CGImageRef img = CGBitmapContextCreateImage(newContext);
+    // (4)
+    NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithCGImage:img];
+    // (5)
+    NSData *exportedData = [bitmap representationUsingType:NSBitmapImageFileTypePNG
+                                             properties:[[NSDictionary alloc] init]];
+    // (6)
+    NSSavePanel *savepanel = [NSSavePanel savePanel];
+    savepanel.title = @"ファイルを保存する";
+    [savepanel setAllowedFileTypes:[NSArray arrayWithObject:@"png"]];
+    [savepanel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
+     {
+         if (NSFileHandlingPanelOKButton == result)
+         {
+             NSURL* fileURL = [savepanel URL];
+             
+             if ([fileURL.pathExtension isEqualToString:@""])
+                 fileURL = [fileURL URLByAppendingPathExtension:@"png"];
+             
+             [exportedData writeToURL:fileURL atomically:YES];
+         }
+     }];
+}

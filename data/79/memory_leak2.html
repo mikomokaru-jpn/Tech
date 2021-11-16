@@ -1,0 +1,83 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>CoreGraphicsのメモリ管理</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">
+CoreGraphicsのメモリ管理
+</h2>
+<div class="lm70 tm10 rm60">
+Core Foundationの一種であるCore Graphicsオブジェクトは獲得したオブジェクトが不要になったとき自前で解放しなくてはならない。
+</div>
+<div class="lm70 tm10 rm60">
+次の例は、pngファイルをCore Graphicsオブジェクトに読み込み、ビューに表示するプログラムである。
+</div>
+<div class="lm70 tm10 rm60">
+メモリの解放の効果をわかりやすく見せるためにループの中でオブジェクトの取得処理を500回繰り返している。メモリの解放を適切に行うケースと、行わないケースについて、それぞれ profileによりメモリ・リークの測定を行い、結果を検証してみた。行わないケースでは巨大なメモリ・リークが発生することがわかる。
+
+</div>
+<h3 class="lm70 bm0 tm10 rm60">
+メモリの解放を適切に行なうケース
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofTextNoEsc.html?filename=/data/79/valid.txt" width="580" height="540"></iframe>
+<div class="lm70 tm10 rm60">
+オブジェクトをを取得する処理は二つのステップからなる。最初に、CGImageSourceCreateWithURLメソッドでCGImageSourceRefオブジェクトを取得し、次に、CGImageSourceCreateImageAtIndexメソッドでCGImageRefオブジェクトを取得し、プロパティに設定している。
+</div>
+<div class="lm70 tm10 rm60">
+最初に取得したCGImageSourceRefオブジェクトは、保持する必要のない一時オブジェクトなので、使用後はメモリを解放する必要がある。また、CGImageRefオブジェクトを保持するプロパティも、新しいオブジェクトを取得して代入する場合は、それまで保持していたオブジェクトを解放する必要がある。
+</div>
+<div class="lm70 tm10 rm60">
+オブジェクトの解放は、CFReleaseメソッドにより行う。実際に行っているのは retainカウントのデクリメントで、ARC以前のCocoaオブジジェクトのメモリ管理方式と同等の仕組みとなっている。
+</div>
+<div class="lm70 tm10 rm60">
+[補足] CGImageRelease と CFRelease は同じなのでどちらを使っても良い。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/79/ok.png&title=メモリの解放を適切に行うケース&width=950" target="_new">
+<img class="lm60 tm5 bm0" src="ok.png" alt="[メモリの解放を適切に行うケース]" width="500"></a>
+
+<h3 class="lm70 bm0 tm20 rm60">
+メモリの解放を適切に行わないケース（1）
+</h3>
+<div class="lm70 tm0 rm60">
+CGImageSourceRefオブジェクトを解放しない
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofTextNoEsc.html?filename=/data/79/invalid1.txt" width="580" height="330"></iframe>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/79/no_src.png&title=メモリの解放を適切に行わなかったケース１&width=950" target="_new">
+<img class="lm60 tm20 bm0" src="no_src.png" alt="[メモリの解放を適切に行わなかったケース１]" width="500"></a>
+
+<h3 class="lm70 bm0 tm20 rm60">
+メモリの解放を適切に行わないケース（2）
+</h3>
+<div class="lm70 tm0 rm60">
+CGImageRefオブジェクトを解放しない
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofTextNoEsc.html?filename=/data/79/invalid2.txt" width="580" height="330"></iframe>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/79/no_image.png&title=メモリの解放を適切に行わなかったケース２&width=950" target="_new">
+<img class="lm60 tm20 bm0" src="no_image.png" alt="[メモリの解放を適切に行わなかったケース２]" width="500"></a>
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

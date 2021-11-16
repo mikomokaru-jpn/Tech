@@ -1,0 +1,80 @@
+//------------------------------------------------------------------------------
+// UAView.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface UAView : NSView
+@end
+
+
+//------------------------------------------------------------------------------
+// UAView.m
+//------------------------------------------------------------------------------
+#import "UAView.h"
+#import "UAShapeManager.h"
+#import <QuartzCore/QuartzCore.h>
+
+@interface UAView()
+@property IBOutlet NSButton *rectangle; //四角ボタン
+@property UAShapeManager *shapeMng;     //図形管理オブジェクト
+@end
+
+@implementation UAView
+//初期処理
+-(void)awakeFromNib{
+    //キャンバスの外観
+    self.wantsLayer = YES;
+    self.layer.borderColor = [NSColor grayColor].CGColor;
+    self.layer.borderWidth = 1.0;
+    self.layer.backgroundColor =[NSColor whiteColor].CGColor;
+    _shapeMng = [[UAShapeManager alloc] init];  //図形管理オブジェクトの初期化
+}
+//ビューの再表示
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+}
+//ドラッグ開始
+- (void)mouseDown:(NSEvent *)event{
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    if (_rectangle.state){
+        //描画ボタンON
+        [_shapeMng createStart:point];
+        [self.layer addSublayer:_shapeMng.selectedShapelayer];
+    }else{
+        //描画ボタンOFF
+        [_shapeMng start:point];
+    }
+}
+//ドラッグ中
+- (void)mouseDragged:(NSEvent *)event{
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    if(_rectangle.state){
+        //描画ボタンON
+        [_shapeMng createGoing:point];
+    }else{
+        //描画ボタンOFF
+        [_shapeMng going:point];
+    }
+}
+//ドラッグ終了
+- (void)mouseUp:(NSEvent *)event{
+    CGPoint point = [self convertPoint:event.locationInWindow fromView:nil];
+    if(_rectangle.state){
+        //描画ボタンON
+        [_shapeMng createStop:point];
+        _rectangle.state = NO;
+        //for(CALayer *layer in self.layer.sublayers){NSLog(@"%@", layer);}
+    }else{
+        //描画ボタンOFF
+        [_shapeMng stop:point];
+    }
+}
+//図形の削除：コンテキストニュー
+-(IBAction)delete:(id)sender{
+    [self deleteShape];
+}
+//図形の削除
+-(void)deleteShape{
+    [_shapeMng.selectedShapelayer removeFromSuperlayer];
+    [_shapeMng delete]; //削除フラグの設定
+}
+@end

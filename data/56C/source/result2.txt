@@ -1,0 +1,9 @@
+Array
+(
+    [title] => 国宝松本城
+    [mime_data] => ********
+    [MAX_FILE_SIZE] => 10000000
+    [file_name] => Matsumoto_Castle.jpg
+    [file_type] => image/jpeg
+)
+file upload was successful

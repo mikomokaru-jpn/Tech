@@ -1,0 +1,25 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate{
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var counterText: NSTextField!
+    var subWinController: SubWinController  
+    //シンングルトンオブジェクトの取得
+    <span class="redcolor">var singleton = Singleton.sharedInstance</span> 
+    //var singleton = Singleton() コンパイルエラー
+    //イニシャライザ
+    override init() {
+        subWinController = SubWinController()
+        super.init()
+    }
+    //サブウィンドウを開く
+    @IBAction func open(_ sender: NSButton){
+        subWinController.showWindow(self)
+    }
+    //カウンタを加算する
+    @IBAction func button(_ sender: NSButton){
+        singleton.counter += 1
+        counterText.integerValue = singleton.counter
+    }
+}

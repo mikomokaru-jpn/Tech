@@ -1,0 +1,3 @@
+- (BOOL)prepareForDragOperation:(id<NSDraggingInfo>)info{
+    return YES; //処理の継続. NOにすればドロップ操作が無効になる.
+}

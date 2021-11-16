@@ -1,0 +1,181 @@
+<!-- 
+44 imageView3
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>表示イメージの拡大/縮小/移動 〜アフィン変換〜</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">表示イメージの拡大/縮小/移動 〜アフィン変換〜</h2>
+<!--div class="lm90 tm2\10" style="width:540px; border-top:solid 1px #606060;"></div-->
+<h3 class="lm90 tm20 bm0 rm60">
+画像を1/2に縮小する
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/57/imageview01.png&title=imageview01&width=900" target="_new">
+<img class="lm80 tm0" src="imageview01.png" alt="[imageview01]" width="500"></a>
+<h3 class="lm90 tm20 bm0 rm60">
+画像を2倍に拡大する
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=57/imageview02.png&title=imageview02&width=900" target="_new">
+<img class="lm80 tm0" src="imageview02.png" alt="[imageview02]" width="500"></a>
+<!--div class="lm90 tm20" style="width:540px; border-top:solid 1px #606060;"></div-->
+<h3 class="lm90 tm30 bm0 rm60">
+縮小した画像を右上に移動する
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/57/imageview03.png&title=imageview03&width=900" target="_new">
+<img class="lm80 tm0" src="imageview03.png" alt="[imageview03]" width="500"></a>
+<h3 class="lm90 tm20 bm0 rm60">
+拡大した画像を左下に移動する
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/57/imageview04.png&title=imageview04&width=900" target="_new">
+<img class="lm80 tm0" src="imageview04.png" alt="[imageview04]" width="500"></a>
+<div class="lm70 tm20 bm0 rm60">
+初期状態で、イメージファイルから読み込まれた 800x600ピクセルの画像が表示される。
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+画像の拡大/縮小
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+ビューの右クリックでコンテキストメニューが表示される。2倍の拡大、または、1/2の縮小を行うことができる。画像の原点は、ビューの左下とする。
+</div>
+<div class="lm70 tm5 bm10 rm60">
+画像上で、マウスホイールを回転させる。向こうに回転すれば画像を拡大、手前に回転すれば縮小することができる。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+画像の移動
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+画像をマウスでクリックし選択状態にし、ドラッグによりでカーソルをビューの任意の位置まで移動させる。移動の軌跡は直線として表示される。マウスを離すとそこに画像が移動する。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+実装方法
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm10 bm0 rm60">
+画像はCALayerオブジェクトに描画し、親ビューに追加する方法をとる。800x600ピクセルの画像を同じサイズのビューに表示することを想定。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+NSImageオブジェクトのサイズは、オブジェクトをNSImageRep型に変換し、プロパティ pixelsWide/pixelsHigh で求める。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+画像の拡大/縮小の起点は、CALayerクラスの anchorPointプロパティで変更することができる。本アプリケーションでは左下を起点とした。（デフォルトは中央）
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/57/imageview08.png&title=imageview08&width=800" target="_new">
+<img class="lm70 tm10" src="imageview08.png" alt="[imageview08]" width="450"></a>
+<div class="lm70 tm10 bm0 rm60">
+!!注意!!
+</div>
+<div class="lm70 tm0 bm0 rm60">
+anchorPointの設定は、frameプロパティの設定の「前」に行わないといけない。後で行うと表示画像の位置がずれる。
+本処理では、画像の左下の原点がビューの中央に来てしまう。理由は不明。使い方に間違いがあるのか？
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofText.html?filename=/data/57/initialImage.txt" width="580" height="370"></iframe>
+<div class="lm70 tm20 bm0 rm60">
+画像の拡大/縮小、移動は、CALayerクラスのアフィン変換機能を使用する。オリジナル画像に、アフィン変換をかけることによって、変換後の画像が得られる。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+アフィン変換の操作には、変換の種類ごとに関数が用意されている。関数の引数には変換量を指定する。戻り値の CATransform3D変数を CAlayerオブジェクトの transformプロパティにセットする。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+画像の拡大/縮小
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+引数に拡大/縮小の倍率を X, Y, Z軸ごとに指定する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/57/transform1.txt" width="580" height="110"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+画像の移動
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+引数に画像を移動する距離（ピクセル数）を X, Y, Z軸ごとに指定する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/57/transform2.txt" width="580" height="120"></iframe>
+<div class="lm70 tm15 bm0 rm60">
+変換後の画像はあくまで一時的に表示するだけであり、オリジナル画像の内容が変わることはない。
+</div>
+<div class="lm70 tm20 bm0 rm60">
+画像の拡大/縮小と移動を同時に行う　!!実装上の注意点!!
+</div>
+<div class="lm70 tm5 bm0 rm60">
+次の例では、1/2のサイズの画像（倍率0.5）を、ドラッグで指定した方向（ x方向400ピクセル、y方向300ピクセル）に移動する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/57/imageview06.png&title=imageview06&width=500" target="_new">
+<img class="lm70 tm10" src="imageview06.png" alt="[imageview06]" width="280"></a>
+<div class="lm70 tm10 bm0 rm60">
+この変換を行うには、オリジナル画像に対して、倍率0.5でサイズを変更するscaling変換と、指定方向に画像を移動するtranlation変換を同時に行う必要がある。これは、CATransform3DConcat関数によって複数の変換処理を連結（concatinate）することで可能となる。このとき注意するのは、連結の順番を次のようにすることである。
+</div>
+<div class="lm70 tm5 bm0 rm60">
+1. scaling変換（拡大/縮小）
+</div>
+<div class="lm70 tm0 bm0 rm60">
+2. tranlation変換（移動）
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofText.html?filename=/data/57/transform3.txt" width="580" height="100"></iframe>
+<div class="lm70 tm20 bm0 rm60">
+これを逆にすると、縮小は正しく行われるが、移動の距離が 指定の半分になってしまう。（x方向200ピクセル、y方向150ピクセル）
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofText.html?filename=/data/57/transform4.txt&font=font100" width="580" height="40"></iframe>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/57/imageview07.png&title=imageview07&width=500" target="_new">
+<img class="lm70 tm20" src="imageview07.png" alt="[imageview07]" width="280"></a>
+<div class="lm70 tm20 bm0 rm60">
+どのようなアルゴリズムでこうなってしまうのか、よくわからない。似たような状況に出くわしたら、試行錯誤してみるしかないと思う。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+サブレイヤーの階層化
+</h3>
+<div class="lm70 tm5 bm0 rm60">
+画像を移動するときに、マウスをドラッグしている間、画像と同じ大きさの黄色の半透明な矩形を画像の上に重ねることで、画像をハイライトさせている。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+これは、親画像のレイヤーに半透明の矩形を子レイヤーとして追加することで実現している。子レイヤーのframeプロパティは、親画像のframeプロパティを参照しているので、親画像の位置やサイズが変わったとき、
+連動して子レイヤーにも反映される。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10" src="/lib/HTMLofText.html?filename=/data/57/subLayer.txt" width="580" height="370"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+マウスのホイールの回転イベント
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+次のメソッドをオーバーライドする。向こう側に回転する正の数、手前側に回転すると負の数が得られる。本アプリケーショんでは、回転数に従って表示倍率の増減を行っている。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/57/scrollWheel.txt" width="580" height="90"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+ソースコード
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">	
+カスタムビュークラス　
+<a href="/lib/HTMLofText.html?filename=/data/57/source/UAView.txt&indent=20" target="_new">UAView</a>
+</div>
+<div class="bm40"></div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

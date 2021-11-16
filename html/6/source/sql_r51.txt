@@ -1,0 +1,72 @@
+<?php
+//日記帳テーブルの指定された期間のデータからキーワードにマッチしたデータを読み込む。
+//キーワードが複数ある場合は、OR検索を行う。
+//DB接続
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect();
+//パラメータの編集：空白文字で区切る　/u 必須
+$wordArray = preg_split('/[\s|　]+/u', $_POST['keyword']);
+$resultArray = array(); //連想配列の初期化
+foreach($wordArray as $keyword){
+    try{
+        $sql = "SELECT date, text FROM diary_text 
+                WHERE (text LIKE :keyword) AND (date >=:from AND date <=:to) 
+                ORDER BY date ASC;";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':from', $_POST['from_date'], PDO::PARAM_INT);
+        $stmh->bindValue(':to', $_POST['to_date'], PDO::PARAM_INT);
+        $stmh->bindValue(':keyword', '%'.$keyword.'%', PDO::PARAM_STR);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー:'. $e->getMessage());
+    }
+    while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+        if (duplicated($row)){
+            //重複レコードは除外
+            continue;
+        }
+        $resultArray[] = $row;
+        /*
+        echo "<pre>";
+        var_dump($row['date']);
+        echo "</pre>";
+        */
+    }
+}
+//データの返却・JSON形式で出力 (json_encode 関数)
+header('Content-type: application/json');
+echo json_encode($resultArray);
+
+/*
+if (isset($_POST['write_print'])){
+    //------------------------------------------------------------------------------
+    print('<DOCTYPE HTML>');
+    print('<html id="mainhtml">');
+    print('<head>');
+    print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
+    print('<title>Test</title>');
+    print('</head>');
+    print('<body>');
+    foreach($resultArray as $row){
+        print ($row['date'].' '.$row['text'].'<br />');
+    }
+    print('</body>');
+    print('</html>');
+}else{
+    // JSON形式で出力 (json_encode 関数)
+    header('Content-type: application/json');
+    echo json_encode($resultArray);
+}
+*/
+//日付の重複チェック
+function duplicated($row){
+    global $resultArray;
+    foreach ($resultArray as $record){
+        if ($row['date']  == $record['date']){
+            return true;
+        } 
+    }
+    return false;
+}
+?>

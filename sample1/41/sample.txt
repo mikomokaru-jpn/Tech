@@ -1,0 +1,13 @@
+//--------------------------------------------------------------------------
+// テキストフィールドの入力中、returnキーで改行する
+// UIControl -> UITextFieldDelegate
+//--------------------------------------------------------------------------
+func control(_ control: NSControl,
+             textView: NSTextView,
+             doCommandBy commandSelector: Selector) -> Bool{
+    if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+        textView.insertNewlineIgnoringFieldEditor(self)
+        return true
+    }
+    return false
+}

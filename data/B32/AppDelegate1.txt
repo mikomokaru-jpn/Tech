@@ -1,0 +1,23 @@
+//gridCol3：最高血圧の列
+var gridCol3 = GridCol(identifire: "upper", width: 100.0)
+gridCol3.fontSize = 18
+gridCol3.align = .right
+gridCol3.title = "　最高血圧"
+gridCol3.headerAlign = .left
+gridCol3.sort = true
+
+//クロージャの実装
+gridCol3.dynamicBackColor2 = { (vals:[String:Any]) -> GridColor in
+    var color: GridColor = .white
+    if let lower = vals["lower"] as? Int {
+        if let upper = vals["upper"] as? Int{
+            if upper >= 135 {
+                color = .yellow
+                if lower >= 85{
+                    color = .red    //背景色
+                }
+            }
+        }
+    }
+    return color
+}

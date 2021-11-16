@@ -1,0 +1,23 @@
+@IBOutlet weak var contextMenu: NSMenu!
+
+@IBAction func switchColor(_ sender: NSMenuItem){
+    switch sender.title {
+    case "白":
+        view?.layer?.backgroundColor = NSColor.white.cgColor
+    case "黒":
+        view?.layer?.backgroundColor = NSColor.black.cgColor
+    case "赤":
+        view?.layer?.backgroundColor = NSColor.red.cgColor
+    case "青":
+        view?.layer?.backgroundColor = NSColor.blue.cgColor
+    default:
+        break
+    }
+    for item in contextMenu.items{
+        if item.title == sender.title{
+            item.state = .on
+        }else{
+            item.state = .off
+        }
+    }
+}

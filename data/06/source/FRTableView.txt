@@ -1,0 +1,78 @@
+//------------------------------------------------------------------------------
+// インタフェース宣言
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface FRTableView : NSTableView
+@property(weak) id frDelegate;  //デリゲート変数の宣言
+@end
+
+//------------------------------------------------------------------------------
+// クラス実装
+//------------------------------------------------------------------------------
+#import "FRTableView.h"
+#import "FRCategory.h"
+
+@interface FRTableView()
+@property CGColorRef color;
+@end
+
+@implementation FRTableView
+
+//オブジェクトの初期化
+-(id)initWithCoder:(NSCoder *)coder
+{
+    if (![super initWithCoder:coder])
+        return nil;
+    _color = [NSColor blackColor].CGColor;    //背景色を変える
+    return self;
+}
+//初期表示
+-(void)awakeFromNib
+{
+    self.layer.borderWidth = 2.0;
+    self.needsDisplay = YES;
+}
+
+//ファーストレスポンダーになった
+- (BOOL)becomeFirstResponder {
+    _color = [NSColor orangeColor].CGColor;   //背景色を変える（選択中）
+    self.needsDisplay = YES;
+    return YES;
+}
+//ファーストレスポンダーを放棄する
+- (BOOL)resignFirstResponder
+{
+    _color = [NSColor blackColor].CGColor;    //背景色を変える
+    self.needsDisplay = YES;
+    return YES;
+}
+//ビューの描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+
+    self.layer.borderColor = _color;
+}
+//KeyDownイベント
+-(void)keyDown:(NSEvent *)event
+{
+    NSInteger flags = [[NSApp currentEvent] modifierFlags];
+    if (event.keyCode == 48){
+        if (flags & NSEventModifierFlagShift){
+            //shit+tabキーでファーストレスポンダを移動する
+            if ([_frDelegate respondsToSelector:@selector(prevControlFrom:)]){
+                [_frDelegate prevControlFrom:self];
+            }else{
+                NSLog(@"nextControlFrom: not found");
+            }
+        }else{
+            //tabキーでファーストレスポンダを移動する
+            if ([_frDelegate respondsToSelector:@selector(nextControlFrom:)]){
+                [_frDelegate nextControlFrom:self];
+            }else{
+                NSLog(@"prevControlFrom: not found");
+            }
+        }
+    }
+}
+
+@end

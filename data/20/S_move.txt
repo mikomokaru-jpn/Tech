@@ -1,0 +1,4 @@
+- (void)draggingSession:(NSDraggingSession *)session
+           movedToPoint:(NSPoint)screenPoint{
+    //same operation
+}

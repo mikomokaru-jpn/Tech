@@ -1,0 +1,96 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューの位置を取得する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">ビューの位置を取得する</h2>
+<div class="lm70 tm10 rm60">
+ビューの矩形の位置の求め方について説明する。ユーザインタフェース構成要素は、スクリーン、スクリーンの中のアプリケーションウィンドウ、ウィンドウの中のビューからなる。それぞれ位置情報の取得方法は異なる。
+</div>
+<h2 class="lm70 tm10 rm60 bm0">
+スクリーン上のウィンドウの位置
+</h2>
+<div class="lm70 tm0 rm60">
+スクリーン上のウィンドウの位置は NSWindowオブジェクトのconvertToScreenメソッドにより得ることができる。
+引数にコンテントビューのframeプロパティを指定して実行すると、戻り値のNSRect構造体のorignプロパティにスクリーン上の座標が返ってくる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B36/B36-1.png&title=B36-1&width=600" target="_new">
+<img class="lm70 tm5 bm0" src="B36-1.png" alt="[B36-1]" width="350"></a>
+<h4 class="lm70 tm10 rm60 bm0">
+ウィンドウの位置を求める
+</h4>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B36/window1.txt" width="580" height="230"></iframe>
+
+<h4 class="lm70 tm20 rm60 bm0">
+コンテントビューのスーパービュー
+</h4>
+<div class="lm70 tm0 rm60">
+ウィンドウの位置と大きさとは、実際にはコンテントビュー位置と大きさのことである。また、コンテントビューのスーパービューは、コンテントビューにタイトルバーの高さ(通常22ピクセル)を含めたビューのことである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B36/window2.txt" width="580" height="130"></iframe>
+<h2 class="lm70 tm20 rm60 bm0">
+ウィンドウの中のビューの位置
+</h2>
+<div class="lm70 tm0 rm60">
+ビューの位置と大きさはビューのフレーム(frame)プロパティに保持される。コンテントビューの位置は原点（0,0）となり、コンテントビューに含まれるビューの位置はこの原点からの相対位置で表される。ビューが階層化されている場合、あるビューの位置はそれを保持するビュー（superView）が基準となる。例でいえば青いビュー（view2）の位置の座標は、濃いグレーのビュー（view1）の原点からの相対位置となる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B36/B36-2.png&title=B36-2&width=700" target="_new">
+<img class="lm70 tm20 bm0" src="B36-2.png" alt="[B36-2]" width="450"></a>
+<!-- ソースコード -->
+<iframe class="lm70 tm20" src="/lib/HTMLofText.html?filename=/data/B36/view1.txt" width="580" height="400"></iframe>
+<div class="lm70 tm20 rm60">
+階層化されたビューの位置の座標を、ある特定のビューからの相対位置に変換するには、NSViewクラスのconvertメソッドを利用する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B36/B36-3.png&title=B36-3&width=600" target="_new">
+<img class="lm70 tm10 bm0" src="B36-3.png" alt="[B36-3]" width="350"></a>
+<div class="lm70 tm10 rm60">
+次のコードは、階層化されているビュー view2のフレームの位置をコンテントビューを基準にしたものに変換している。コードの意味はview1が基準となっているview2の原点の座標を、コンテントビューを基準にしたものに変換せよということ。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B36/view2.txt" width="580" height="150"></iframe>
+<h3 class="lm70 tm30 rm60 bm0">
+ビューの boundsプロパティ
+</h3>
+<div class="lm70 tm0 rm60">
+boundsプロパティは、ビュー位置を原点（0, 0）として保持するものである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B36/bounds.txt" width="580" height="110"></iframe>
+<h2 class="lm70 tm30 rm60 bm0">
+ビューの位置をスクリーン上の位置に変換する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B36/B36-4.png&title=B36-4&width=600" target="_new">
+<img class="lm70 tm5 bm0" src="B36-4.png" alt="[B36-4]" width="350"></a>
+<div class="lm70 tm10 rm60">
+スクリーン上のコンテントビューの位置と、コンテントビュー上の特定ビューの位置を合成する。次のコードは、それぞれのビューの位置をスクリーンの原点からの相対位置に換算したものである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B36/view3.txt" width="580" height="640"></iframe>
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

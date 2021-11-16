@@ -1,0 +1,192 @@
+<!-- 
+90 drawLine
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>超簡単お絵かきソフト　〜ビューに線を引く応用編〜</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<!----------------------------------------------->
+<h2 class="lm70 tm20 bm10">超簡単お絵かきソフト　〜ビューに線を引く応用編〜</h2>
+<div class="table tm20 lm70 rm40">
+  <div class="table_cell">
+  <!--画像-->
+    <a href="/lib/HTMLofImage.html?filename=/data/46/dora1.png&title=ドラえもん1&width=400" target="_new">
+    <img src="dora1.png" alt="[ドラえもん1]" width="300" align="middle"></a>
+  </div>
+  <div class="table_cell">
+    <div class="lm20 tm20">	
+マウスのドラッグにより線を引くことができる。線の太さ、色を選択できる。
+    </div>
+    <div class="lm20 tm20">	
+指定した範囲の線を消すことができる。範囲はマウスの右ボタンのドラッグで作成した四角形の中の線となる。
+    </div>
+    <div class="lm20 tm20">	
+表示中の画像をpngファイルとして出力することができる。
+    </div>
+    <div class="lm20 tm20">	
+直前の操作（線の描画及びクリア）を取り消すことができる。Undo機能
+    </div>
+  </div>
+</div>
+<!-- 動画 -->
+<h3 class="lm70 tm20 bm0 rrm60">
+<a href="/lib/HTMLofVideo.html?filename=/data/46/henoheno.mp4&title=healthCalendar&width=500" target="_new">
+サンプル動画
+</a>
+</h3>
+<!----------------------------------------------------------------------------->
+<h4 class="lm70 tm30 bm5 rm60">
+トピックス
+</h4>
+<h3 class="lm70 tm5 bm0 rm60">
+線をクリアする
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+マウスの右ボタンを押しながらドラッグし、薄いグレーで囲まれた矩形を作成する。Clearボタンをクリックすると矩形の中の線がクリアされる。
+</div>
+<div class="table tm10 lm70 rm40">
+  <div class="table_cell">
+  <!--画像-->
+    <a href="/lib/HTMLofImage.html?filename=/data/46/dora2.png&title=ドラえもん2&width=400" target="_new">
+    <img src="dora2.png" alt="[ドラえもん2]" width="220" align="middle"></a>
+  </div>
+  <div class="table_cell">
+  <!--画像-->
+    <img class="tm50" src="46_allow.png" width="70" align="middle"></a>
+  </div>
+  <div class="table_cell">
+  <!--画像-->
+    <a href="/lib/HTMLofImage.html?filename=/data/46/dora3.png&title=ドラえもん3&width=400" target="_new">
+    <img src="dora3.png" alt="[ドラえもん3]" width="220" align="middle"></a>
+  </div>
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+線の長さの単位
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+線は１ピクセルの長さのCAShapeLayerオブジェクトの集合として描画する。これにより線のクリアを滑らかに行うことができる。
+</div>
+<div class="lm70 tm10 rm60">
+マウスのドラッグでは、マウスを素早く動かした場合、開始から終了ポイントまで、数十ピクセルになることがある。仮に、これを１つのCAShapeLayerオブジェクトで表すとすると、線のクリアは特定の矩形範囲に含まれる線（オブジェクト）を全て消去することになるので、場合によっては範囲外の線まで消えてしまうことになり見た目に違和感がある。これを避けるために、1ピクセル以上の長さを持った線は1ピクセル単位の線オブジェクトの集合として生成する。
+</div>
+<div class="lm70 tm10 rm60">
+線をプロットする位置は、線をベクトルとしたときの単位ベクトルの積み上げと同じである。下記の例では、座標(100, 50)から座標(104, 53)までドラッグした場合で、長さ1ピクセルの線（CAShapeLayerオブジェクト）を5個作成する。（割り切れない場合は最後の線は1ピクセル未満になる。）
+</div>
+ <!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/46/46_vector.png&title=プロット&width=600" target="_new">
+<img class="lm70 tm10" src="46_vector.png" alt="[プロット]" width="300" align="middle"></a>
+<h3 class="lm70 tm30 bm0 rm60">
+Undo機能の実装
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+redoに対応できておらず、かなり不器用な方法だと思うが、ひとまず思いつくままに作成してみた。
+</div>
+<div class="lm70 tm10 rm60">
+線を引く、線をクリアするをひとつの操作の単位として履歴レコードを作成し、スタックリストに追加していく。undoを要求されたら最後に追加された履歴レコードを取り出し、それにもとに操作の取り消し（実際は逆の操作）を行う。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+ビューのイメージをファイルに出力する
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+ <!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/46/doraPNG.png&title=ファイル出力&width=600" target="_new">
+<img class="lm70 tm10" src="doraPNG.png" alt="[ファイル出力]" width="300" align="middle"></a>
+<h4 class="lm70 tm20 bm0 rm60">
+処理の流れ
+</h4>
+<div class="lm70 tm0 rm60">
+(1) ビットマップコンテキスト（CGBitmapContext）を作成する
+</div>
+<div class="lm70 tm0 rm60">
+(2) 自身の画像イメージ（レイヤーオブジェクト）をビットマップコンテキストに描画する
+</div>
+<div class="lm70 tm0 rm60">
+(3) ビットマップコンテキストからCGImageを作成する
+</div>
+<div class="lm70 tm0 rm60">
+(4) CGImageからNSBitmapImageオブジェクトを作成する
+</div>
+<div class="lm70 tm0 rm60">
+(5) NSBitmapImageオブジェクトをPNG形式のNSDataオブジェクトに変換する
+</div>
+<div class="lm70 tm0 rm60">
+(6) NSDataオブジェクトをファイルに出力する
+</div>
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/capture.txt&indent=20" target="_new">UACGViewクラスの　captureメソッド</a>
+</div>
+<h3 class="lm70 tm40 bm0 rm60">
+クラス構造図
+</h3>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/46/46_Class.png&title=クラス構造図&width=900" target="_new">
+<img class="lm90 tm0" src="46_Class.png" alt="[クラス構造図]" width="560" align="middle"></a>
+<div class="lm70 tm5 rm60">
+UAShapeクラスは、CAShapeLayerオブジェクトへの参照、オブジェクト番号、始点座標と終点座標を属性として持つ。
+</div>
+<div class="lm70 tm10 rm60">
+UAShapeListMgrクラスは、線（UAShapeオブジェクト）を作成するメソッドを提供し、作成したオブジェクトを配列に保持する。また線をクリアするメソッドを提供する。
+</div>
+<div class="lm70 tm10 rm60">
+UAHistoryItemクラスは一つの操作を記録する。
+</div>
+<div class="lm70 tm10 rm60">
+UAHisoryMgrクラスはUAHistoryItemオブジェクトを保持し、操作の履歴を管理する。
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+ソースコード
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UACGView.txt&title=UACGView" target="_new">UACGView</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAShapeListMgr.txt&title=UAShapeListMgr" target="_new">UAShapeListMgr</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAShape.txt&title=UAShape" target="_new">UAShape</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAHistoryMgr.txt&title=UAHistoryMgr" target="_new">UAHistoryMgr</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/46/source/UAHistoryItem.txt&title=UAHistoryItem" target="_new">UAHistoryItem</a>
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/C90_drawLine" target="_new">mikomokaru-jpn/C90_drawLine</a>
+</div>
+
+<!----------------------------------------------->
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+$ cd ~/ChatServer
+$ swift package init
+$ ls -la
+
+drwxr-xr-x   7 itohisao  staff   224  6 22 19:10 .
+drwxr-xr-x+ 24 itohisao  staff   768  6 22 19:09 ..
+-rw-r--r--   1 itohisao  staff    53  6 22 19:10 .gitignore
+-rw-r--r--   1 itohisao  staff  1031  6 22 19:10 Package.swift
+-rw-r--r--   1 itohisao  staff    45  6 22 19:10 README.md
+drwxr-xr-x   3 itohisao  staff    96  6 22 19:10 Sources
+drwxr-xr-x   4 itohisao  staff   128  6 22 19:10 Tests
+
+# Package.swift の編集 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+// swift-tools-version:5.1
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
+import PackageDescription
+
+let package = Package(
+    name: "ChatServer",
+    products: [
+        // Products define the executables and libraries produced by a package, and make them visible to other packages.
+        .library(name: "ChatServer",
+            targets: ["ChatServer"]),
+    ],
+    dependencies: [
+         //!!!! 次の一行を追加 !!!! 
+        .package(url: "https://github.com/apple/swift-nio.git", from: "1.0.0")
+    ],
+    targets: [
+        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
+        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
+        .target(
+            name: "ChatServer",
+            dependencies: []),
+        .testTarget(
+            name: "ChatServerTests",
+            dependencies: ["ChatServer"]),
+    ]
+)
+↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+$ swift build
+
+# サーバの開始/ポート番号 9999
+$ swift run NIOChatServer
+Server started and listening on [IPv6]::1/::1:9999
+# Control+c で終了
+
+# パッケージのクリア
+$ swift package clean

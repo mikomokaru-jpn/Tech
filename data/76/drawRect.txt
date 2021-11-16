@@ -1,0 +1,12 @@
+@property CGRect shapeRect;
+@property CGFloat lineWidth;
+@property CGColorRef lineColor;
+
+- (void)drawRect:(NSRect)dirtyRect {
+    CGContextRef context =
+        [[NSGraphicsContext currentContext] CGContext];
+    CGContextAddRect(context, _shapeRect);
+    CGContextSetLineWidth(context, _lineWidth);
+    CGContextSetStrokeColorWithColor(context, _lineColor);
+    CGContextStrokePath(context);
+}

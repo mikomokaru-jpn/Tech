@@ -1,0 +1,8 @@
+- (void)mouseUp:(NSEvent *)event{
+    //終点を決める
+    _endPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    //矩形の選択が完了した
+    _selectedFlg = YES;
+    //矩形を表示する
+    [self makeRect];
+}

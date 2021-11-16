@@ -1,0 +1,19 @@
+#import "UAConstants.h"
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+  //文字列定数1
+    NSLog(@"%@", TITLE1);
+    TITLE1 = @"aaaa"; //代入可
+    NSLog(@"%@", TITLE1);
+  //文字列定数2
+    NSLog(@"%@", TITLE2);
+    //TITLE2 = @"aaaa"; //代入不可
+    /*コンパイルエラー
+     Cannot assign to variable 'TITLE' with const-qualified type 'NSString *const __strong'
+     */
+  //数値定数
+    NSLog(@"%f", WIDTH);
+  //列挙型定数
+    NSLog(@"%ld",FIRST_DATE);
+}
+@end

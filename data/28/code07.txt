@@ -1,0 +1,9 @@
+NSDate* now = [NSDate date]; //現在日の取得
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//結果
+Friday, February 19, 2021 at 9:31:24 AM Japan Standard Time

@@ -1,0 +1,114 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューの間でイメージをコピー＆ペーストする</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">ビューの間でイメージをコピー＆ペーストする</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B48/copy_paste2.mp4&title=copy_paste2&width=900" target="_new">
+<img class="lm70 tm20 bm0" src="copy_paste2.png" alt="[copy_paste2]" width="550"></a>
+<div class="lm100 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<div class="lm70 tm20 rm60">
+本例では、ビューに表示しているイメージオブジェクトをコピーし、同一アプリケーションの異なるビューに貼り付けたり、異なるアプリケーションである「テキストエディット」のビューに貼り付けている。オブジェクトの受け渡しはGenaralペーストボードを介して行われる。    
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+  ペーストボードのイメージ
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B47/pasteboard.png&title=copy_paste1pasteboard&width=700" target="_new">
+<img class="lm70 tm5 bm0" src="/data/B47/pasteboard.png" alt="[pasteboard]" width="350"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+Generalペーストボードへの接続
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B48/copy_paste2_1.txt" width="580" height="40"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+コピー処理
+</h3>
+<div class="lm70 tm0 rm60">
+メニュー copyのアクション（AppDelegateに実装する）
+</div>
+<div class="lm70 tm0 rm60">
+ファーストレスポンダーのビューに対して表示中のイメージをペーストボードにコピーする処理を依頼する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B48/copy_paste2_2.txt" width="580" height="110"></iframe>
+<div class="lm70 tm20 rm60">
+NSViewサブクラスの実装。ビューに表示中のイメージをペーストボードにコピーする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B48/copy_paste2_3.txt" width="580" height="130"></iframe>
+<div class="lm70 tm10 rm60">
+切り取り（cut）処理は、コピー処理のあとに表示中のイメージを消去するだけである。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+貼り付け（paste）処理
+</h3>
+<div class="lm70 tm5 rm60">
+基本的な手順は <a href='/data/B47/copy_paste1.html' target="_blank">Finderからイメージファイルをコピーし、ビューに表示する</a>の貼り付け処理と同じである。
+</div>
+<div class="lm70 tm10 rm60">
+AppDelegateにメニューのアクションを実装する。メニューアイテムの pasteが選択が選択されたときビューオブジェクトの貼り付け処理を実行する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B48/copy_paste2_4.txt" width="580" height="110"></iframe>
+<div class="lm70 tm10 rm60">
+ペーストボードからイメージを読み込み、ビューに表示する。NSViewクラスのサブクラスに実装する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B48/copy_paste2_5.txt" width="580" height="250"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+オブジェクト有無の事前チェック
+</h3>
+<div class="lm70 tm5 rm60">
+メニューが開いた時に、ペーストボードに貼り付け可能なイメージがあるか、ビューにコピー/切り取りが可能なイメージがあるかチェックし、メニューの アイテムの編集を行う。オブジェクトがあれば アイテムを有効とし、なければ無効としメニューから選択できないようにする。
+</div>
+<div class="lm70 tm10 rm60">
+AppDelegateの中で NSMenuDelegateプロトコルの menuWillOpen(_:)メソッドを実装する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B48/copy_paste2_6.txt" width="580" height="330"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+ソースコード
+</h3>
+<div class="lm70 tm5 rm60">
+ドラッグ＆ドロップ、コピー＆ペーストの全ての処理を網羅した共通のアプリケーションとなっている。
+</div>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B45/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>　アプリケーション制御
+</div>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B45/source/UAView.txt&title=UAView" target="_new">UAView</a>　NSViewクラスのサブクラス
+</div>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B45/source/NSView_imageDisplay.txt&title=NSView+imageDisplay" target="_new">NSView+imageDisplay</a>　イメージの表示サイズを変更するユーティリティ
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

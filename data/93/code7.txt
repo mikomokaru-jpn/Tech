@@ -1,0 +1,8 @@
+//テキストビュー（住所）のテキストに変更があった（UITextViewDelegate）
+func textViewDidChange(_ textView: UITextView) {
+    if isModified(){
+         updateBarButtonItem.isEnabled = true
+    }else{
+         updateBarButtonItem.isEnabled = false
+    }
+}

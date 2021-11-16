@@ -1,0 +1,1 @@
+func draggingSession(_ session: NSDraggingSession,                     sourceOperationMaskFor context: NSDraggingContext)                      -> NSDragOperation {    return  NSDragOperation.generic}

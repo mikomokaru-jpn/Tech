@@ -1,0 +1,218 @@
+<!-- 47 buttons -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>プッシュ型のボタンをプログラムより作成する</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs4.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">プッシュ型のボタンをプログラムより作成する</h2>
+<div class="lm70 tm5 rm60">
+（チェックボックス、ラジオボタン、ポップアップボタンを除く）
+</div>
+<div class="lm100 tm10 rm60">
+NSButtonオブジェクトの主な構成要素は、ボタンの外観（スタイル）とボタンの動作（タイプ）である。
+</div>
+<div class="lm100 tm10 rm60">
+サンプルアプリケーションに13種類のスタイルのボタンを作成してみた。また、5種類（実質3種類）のボタンタイプを選べるようにした。タイプはコンボボックスから選択し、ボタンをクリックするとそのタイプで動作する。
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/66/buttons01.png&title=buttons01&width=650" target="_new">
+<img class="lm100 tm10 bm0" src="buttons01.png" alt="[buttons01]" width="300"></a>
+<h3 class="lm100 tm20 bm0 rm60">
+ボタンのスタイル
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+ボタンのスタイルは bezelStyleプロパティで定義する。
+</div>
+<h3 class="lm100 tm5 bm0 rm60">
+プッシュボタン
+</h3>
+<div class="lm130 tm0 rm60">
+NSBezelStyleRounded
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleRegularSquare
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleShadowlessSquare
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleCircular
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleTexturedSquare
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleSmallSquare
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleTexturedRounded
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleRoundRect
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleRecessed
+</div>
+<div class="lm130 tm0 rm60">
+NSBezelStyleInline
+</div>
+<div class="lm130 tm10 rm60">
+以上のボタンはサイズをframeプロパティの設定によって変えることができる。ただし、NSBezelStyleTexturedRoundedとNSBezelStyleRoundRectボタンはサイズの高さを変えても見かけの高さは変わらない（30ピクセル程度？）
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+ヘルプボタン
+</h3>
+<div class="lm130 tm0 rm60">
+NSBezelStyleHelpButton
+</div>
+<div class="lm130 tm0 rm60">
+動作は基本的なプッシュボタンと同じ。クエスチョンマークが表示される。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+矢印の方向が変わるボタン
+</h3>
+<div class="lm130 tm0 rm60">
+NSBezelStyleDisclosure
+</div>
+<div class="lm130 tm0 rm60">
+右矢印と下矢印が切り替わる。例えば、XcodeのProject Navigatorのフォルダの表示/非表示を切り替えるようなボタン（NSOutlineViewクラス）
+</div>
+<div class="lm130 tm10 rm60">
+NSBezelStyleRoundedDisclosure
+</div>
+<div class="lm130 tm0 rm60">
+上矢印と下矢印が切り替わる。例えばをテーブルビューのヘッダをクリックして列のソートを行うとき、昇順/降順を示す矢印にあたる。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+ボタンのタイプ
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+ボタンのタイプは setButtonTypeメソッドで指定するNSButtonType定数に定義する。
+</div>
+<div class="lm100 tm10 rm60">
+例えば、プッシュボタンボタンはクリックしたときに背景色が変わるが、この変わり方がボタンのタイプにとって異なる。変化の仕方によってボタンタイプは次の三つのグループに分かれる。
+</div>
+<h3 class="lm100 tm10 bm0 rm60">
+タイプ１（PushIn型）
+</h3>
+<div class="lm130 tm1\0 rm60">
+NSButtonTypeMomentaryPushIn
+</div>
+<div class="lm130 tm0 rm60">
+NSButtonTypeMomentaryLight も同じ動作
+</div>
+<div class="lm130 tm10 rm60">
+クリックでマウスボタンを押すとボタンの背景色が変わり、離すと元に戻る。デフォルトの背景色が白色のボタンは、青色（NSBezelStyleRoundedボタン）またはグレーに変わる。背景色がグレーのボタンは、より濃いグレーに変わる。
+</div>
+<div class="lm130 tm5 rm60">
+なお、矢印ボタンの方向は変わらない。
+</div>
+<h3 class="lm100 tm10 bm0 rm60">
+タイプ２
+</h3>
+<div class="lm130 tm0 rm60">
+NSButtonTypeMomentaryChange
+</div>
+<div class="lm130 tm5 rm60">
+クリックしても形状に何の変化もない。
+</div>
+<h3 class="lm100 tm10 bm0 rm60">
+タイプ３（OnOff型）
+</h3>
+<div class="lm130 tm0 rm60">
+NSButtonTypePushOnPushOff
+</div>
+<div class="lm130 tm0 rm60">
+NSButtonTypeOnOff も同じ動作
+</div>
+<div class="lm130 tm5 rm60">
+ボタンをクリックするごとに、ボタンのstateプロパティに連動して背景色が切り替わる。背景色の変化の仕方は、プロパティがNOのときはデフォルトの色、YESのときはタイプ１と同ようにグレー/青色に変わる。背景色は次にクリックするまで変わらない。
+</div>
+<div class="lm110 tm20 rm60">
+stateプロパティがYESのときのボタンの背景色/形状
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/66/buttons02.png&title=buttons02&width=650" target="_new">
+<img class="lm100 tm0 bm0" src="buttons02.png" alt="[buttons02]" width="300"></a>
+<h3 class="lm100 tm30 bm0 rm60">
+stateプロパティ
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+ボタンオブジェクトのstateプロパティは、NSBottonクラスに定義されたBOOL型の変数である。ボタンをクリックするたびに、フリップフロップ的にYES/NOの値が切り替わる。
+</div>
+<div class="lm100 tm10 rm60">
+タイプ３（OnOff型）のボタンではプロパティのYES/NO値に連動してボタンの外観が変わり、処理の分岐の判定も行うので不可欠のプロパティである。（１/タイプ２ではあまり使い道がなさそう）
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+ボタンをクリックしたときのアクション
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+プログラムでアクションを定義するには、setActionメソッドによりボタンをクリックしたときに起動するメソッド名（シグネチャ）を指定する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/66/setAction.txt" width="550" height="60"></iframe>
+<div class="lm100 tm15 rm60">
+メソッドの実装
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/66/buttnClick.txt" width="550" height="180"></iframe>
+<div class="lm100 tm15 rm60">
+ボタンをクリックする場所について
+</div>
+<div class="lm100 tm0 rm60">
+矢印ボタン、ヘルプボタンはボタンのサイズ（frame.size）を大きくしても、表示されるボタンの大きさは変わらない。しかしボタンの実サイズは指定したサイズなので、表示されているボタンの外側をクリックしたときアクションが起動することがある。
+</div>
+<div class="lm100 tm10 rm60">
+テーブルトビューのヘッダをクリックしたとき、ソートの矢印の向きが変わるのは、これを利用したものであろう。
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/66/buttons03.png&title=buttons03&width=800" target="_new">
+<img class="lm100 tm10 bm0" src="buttons03.png" alt="[buttons03]" width="500"></a>
+<h3 class="lm100 tm30 bm0 rm60">
+ソースコード
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/66/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm100 tm5 rm60">	
+<a href="/lib/HTMLofText.html?filename=/data/66/source/UAView.txt&title=UAView" target="_new">UAView</a>
+　ボタンを配置するビュー
+</div>
+<h4 class="lm100 tm30 bm0 rm60">
+[補足]
+</h4>
+<div class="lm100 tm0 rm60">
+インタフェースビルダで作成するボタンについて
+</div>
+<div class="lm100 tm5 rm60">
+オブジェクトライブラリから追加できるボタンの属性は、ここで紹介したボタンのデフォルトの設定と異なっていることは留意されたい。
+</div>
+<div class="lm100 tm10 rm60">
+例えば頻繁に利用される、Pushボタン（Style : Push, Type : Momentary Push In）は、動作はNSBezelStyleRoundedボタンと同じだが、サイズの高さが変更不可になっている。
+</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+<!--
+http://localhost/50_test/upload.html
+-->

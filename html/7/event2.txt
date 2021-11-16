@@ -1,0 +1,18 @@
+//---- カンマ追加 ----
+function addComma(value){
+    if (value == ''){
+        return '';
+    }
+    return String(value).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,'); 
+}
+
+//--- カンマ削除 ----
+function h_delComma(){
+    this.value = delComma(this.value) 
+} 
+function delComma(value){
+    if (value == ''){
+        return '';
+    }
+    return value.replace( /,/g, '');
+}

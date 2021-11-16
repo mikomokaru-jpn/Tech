@@ -1,0 +1,99 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ウィンドウのサイズに連動しビューのサイズを変更する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+ウィンドウのサイズに連動しビューのサイズを変更する
+</h2>
+<div class="lm70 tm5 rm60">
+ユーザが操作するウィンドウのサイズの変更に連動して内包するビューのサイズを自動的に変更する。同時にビューの表示している文字のフォントサイズも変更する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B63/flexibleView1.mp4&title=flexibleView1&width=550" target="_new">
+<img class="lm80 tm10 bm0" src="flexibleView1.png" alt="[flexibleView1]" width="250"></a>
+<div class="lm90 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+
+<h3 class="lm70 tm20 bm0">
+クラス関連図
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B63/flexibleView3.png&title=flexibleView3&width=850" target="_new">
+<img class="lm60 tm10 bm0" src="flexibleView3.png" alt="[flexibleView3]" width="550"></a>
+
+<h3 class="lm70 tm20 bm0">
+実装手順
+</h3>
+<div class="lm70 tm0 rm60">
+ContentViewのサイズはウィンドウのサイズを変更すると自動的に変わる。親ビューは autoresizingMaskにより自身と ContentViewのサイズを連動させる。親ビューはキーバリュー監視機能を利用して自身のビューサイズの変更を監視し、変更されたら増減率を計算、それに基づいて親ビューが保持している全ての子ビューのサイズと表示位置を変更する。また子ビューが表示している文字列のフォントサイズも増減率に合わせて変更する。フォントサイズの倍率 ＝ ( 縦の増減率 x 横の増減率 ) の平方根 
+</div>
+
+<h3 class="lm70 tm10 bm0">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/AppDelegate.swift&title=AppDelegate" target="_new">AppDelegate.swift</a>　
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/UAViewM.swift&title=UAViewM" target="_new">UAViewM.swift</a>　親ビュー
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/UAViewS.swift&title=UAViewS" target="_new">UAViewS.swift</a>　子ビュー
+</div>
+<h3 class="lm70 tm30 bm0">
+３階層のビュー構造
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B63/flexibleView2.mp4&title=flexibleView2&width=550" target="_new">
+<img class="lm70 tm0 bm0" src="flexibleView2.png" alt="[flexibleView2]" width="250"></a>
+<div class="lm90 tm0 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<div class="lm70 tm20 rm60">
+親・子・孫の３階層のビュー構造を作成する。親ビューの下に４個の子ビューを配置し、それぞれその下に数字を表示する９個の孫ビューを配置する。ウィンドウのサイズを変更すると、３層のビューが連動してサイズを変更する。基本の実装を機械的に積み上げるだけで階層はいくらでも増やすことができる。
+</div>
+<h3 class="lm70 tm10 bm0">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/AppDelegate2.swift&title=AppDelegate" target="_new">AppDelegate.swift</a>　
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/UAViewL2.swift&title=UAViewL" target="_new">UAViewL.swift</a>　親ビュー
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/UAViewM2.swift&title=UAViewM" target="_new">UAViewM.swift</a>　子ビュー
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B63/source/UAViewS2.swift&title=UAViewS" target="_new">UAViewS.swift</a>　孫ビュー
+</div>
+
+
+
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

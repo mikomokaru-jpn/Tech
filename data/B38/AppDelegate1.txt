@@ -1,0 +1,24 @@
+//選択値のリスト
+let itemList = [" 1月 睦月", " 2月 如月", " 3月 弥生", " 4月 卯月",
+                " 5月 皐月", " 6月 水無月", " 7月 文月", " 8月 葉月",
+                " 9月 長月", "10月 神無月", "11月 霜月", "12月 師走"]
+
+//コンボボックス・オブジェクトの作成
+let comboBox = ComboBox.init(frame: NSMakeRect(10, 10, 110, 22))
+
+//アプリケーション開始時
+func applicationDidFinishLaunching(_ aNotification: Notification) {
+    //選択値リストの設定
+    comboBox.itemList = self.itemList
+    //コンボボックスをビューに追加
+    self.window.contentView?.addSubview(comboBox)
+}
+
+//選択値の表示
+@IBAction func display(_ sendrt: Any?){
+    let alert = NSAlert()
+    alert.informativeText = String(format:"index: %ld",  
+                                   comboBox.selectedIndex)
+    alert.messageText = itemList[comboBox.selectedIndex]
+    alert.runModal()
+}

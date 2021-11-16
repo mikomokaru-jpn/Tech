@@ -1,0 +1,1 @@
+メインプログラムのコンパイルと実行ファイルの作成cobc -x MAIN01.cbl -o mainサブプログラムのコンパイルと共用オブジェクト（.dylib）の作成cobc -m SUB01.cbl実行./main

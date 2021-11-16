@@ -1,0 +1,27 @@
+NSDate *now = [NSDate date];
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+NSDateComponents *dComp = [[NSDateComponents alloc] init];
+dComp.year = 1;
+dComp.month = 2;
+dComp.day = 3;
+NSDate *futureDate = [[NSCalendar currentCalendar]
+                      dateByAddingComponents:dComp 
+                      toDate:now options:0];
+NSLog(@"%@", [formatter stringFromDate:futureDate]);
+
+dComp.year = -1;
+dComp.month = -2;
+dComp.day = -3;
+NSDate *pastDate = [[NSCalendar currentCalendar]
+                    dateByAddingComponents:dComp 
+                    toDate:now options:0];
+NSLog(@"%@", [formatter stringFromDate:pastDate]);
+
+//結果
+2021年2月19日金曜日 11時26分08秒 日本標準時
+2022年4月22日金曜日 11時26分08秒 日本標準時
+2019年12月16日月曜日 11時26分08秒 日本標準時

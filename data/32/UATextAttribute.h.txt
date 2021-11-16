@@ -1,0 +1,34 @@
+#import <Cocoa/Cocoa.h>
+@interface UATextAttribute : NSObject
+//----------------------------------------------------------
+// 属性の辞書（NSDictionary）を返す
+//----------------------------------------------------------
+//[フォント名指定], [フォントサイズ指定], [文字色指定]
++(NSDictionary*)makeAttributesFontName:(NSString*)fontName
+                              FontSize:(float)size
+                             ForeColor:(NSColor*)color;
+//Arial, 12, 黒
++(NSDictionary*)makeAttributes;
+//Arial, [フォントサイズ指定], 黒
++(NSDictionary*)makeAttributesFontSize:(float)size;
+//Arial, 12, [文字色指定]
++(NSDictionary*)makeAttributesForeColor:(NSColor*)color;
+//Arial, [フォントサイズ指定], [文字色指定]
++(NSDictionary*)makeAttributesFontSize:(float)size
+                             ForeColor:(NSColor*)color;
+//----------------------------------------------------------
+// 属性付き文字列（NSMutableAttributedString）を返す
+//----------------------------------------------------------
+//[フォント名指定], [フォントサイズ指定], [文字色指定]
++(NSMutableAttributedString*)attributedString:(NSString*)str
+                                     FontName:(NSString*)name
+                                     FontSize:(float)size
+                                    ForeColor:(NSColor*)color;
+//Arial, [フォントサイズ指定], 黒
++(NSMutableAttributedString*)attributedString:(NSString*)str
+                                     FontSize:(float)size;
+//Arial, [フォントサイズ指定], [文字色指定]
++(NSMutableAttributedString*)attributedString:(NSString*)str
+                                     FontSize:(float)size
+                                    ForeColor:(NSColor*)color;
+@end

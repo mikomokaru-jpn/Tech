@@ -1,0 +1,129 @@
+//---- UATeam.swift ----
+import Cocoa
+class UATeam: NSObject, Comparable {
+    var _nameString: String = ""        //球団名
+    var _rankingValue: Int = 0          //順位
+    var _numberValue: Int = 0           //試合数
+    var _winValue: Int = 0              //勝ち
+    var _loseValue: Int = 0             //負け
+    var _drawValue: Int = 0             //引き分け
+    var _rateValue: Float = 0.0         //勝率
+    //属性付き文字列
+    @objc var name:NSAttributedString?        //球団名（表示）
+    @objc var ranking:NSAttributedString?     //順位（表示）
+    @objc var number:NSAttributedString?      //試合数（表示）
+    @objc var win:NSAttributedString?         //勝ち（表示）
+    @objc var lose:NSAttributedString?        //負け（表示）
+    @objc var draw:NSAttributedString?        //引き分け（表示）
+    @objc var rate:NSAttributedString?        //勝率（表示）
+    @objc var image:NSImage?                  //イメージ
+    @objc var link:UAButton?                  //リンクボタン
+    //--------------------------------------------------------------------------
+    // イニシャライザ
+    //--------------------------------------------------------------------------
+    init(name: String) {
+        super.init()
+        self.nameString = name
+        self.rankingValue = 0
+    }
+    //--------------------------------------------------------------------------
+    // 球団名
+    //--------------------------------------------------------------------------
+    var nameString:String{
+        get {
+            return _nameString
+        }
+        set{
+            _nameString = newValue
+            name = UAUtility.attributed(string: _nameString,
+                                          size: 30, color: NSColor.black)
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 順位
+    //--------------------------------------------------------------------------
+    var rankingValue: Int{
+        get{
+            return _rankingValue
+        }
+        set{
+            _rankingValue = newValue
+            ranking = UAUtility.attributed(string: String(format: "%d", _rankingValue),
+                                             size: 24, color: NSColor.black)
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 勝ち
+    //--------------------------------------------------------------------------
+    var winValue: Int{
+        get{
+            return _winValue
+        }
+        set{
+            _winValue = newValue
+            self.setup()
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 負け
+    //--------------------------------------------------------------------------
+    var loseValue: Int{
+        get{
+            return _loseValue
+        }
+        set{
+            _loseValue = newValue
+            self.setup()
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 引き分け
+    //--------------------------------------------------------------------------
+    var drawValue: Int{
+        get{
+            return _drawValue
+        }
+        set{
+            _drawValue = newValue
+            self.setup()
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 成績を再計算し、表示オブジェクト（属性付き文字列）を更新する
+    //--------------------------------------------------------------------------
+    private func setup(){
+        _numberValue = _winValue + _loseValue + _drawValue      //試合数
+        _rateValue = Float(_winValue) / Float(_numberValue)     //勝率
+        //試合数
+        number = UAUtility.attributed(string: String(format: "%d", _numberValue),
+                                      size: 20, color: NSColor.black)
+        //勝ち
+        win = UAUtility.attributed(string: String(format: "%d", _winValue),
+                                   size: 24, color: NSColor.black)
+        //負け
+        lose = UAUtility.attributed(string: String(format: "%d", _loseValue),
+                                    size: 24, color: NSColor.black)
+        //引き分け
+        draw = UAUtility.attributed(string: String(format: "%d", _drawValue),
+                                    size: 24, color: NSColor.black)
+        //勝率
+        rate = UAUtility.attributed(string: String(format: "%.3f", _rateValue),
+                                    size: 24, color: NSColor.black)
+    }
+    //--------------------------------------------------------------------------
+    //Comparableプロトコルの実装
+    //--------------------------------------------------------------------------
+    static func < (lTeam: UATeam, rTeam: UATeam) -> Bool {
+        if lTeam._rateValue > rTeam._rateValue{
+            return true
+        }
+        return false
+    }
+    static func == (lTeam: UATeam, rTeam: UATeam) -> Bool {
+        if lTeam._rateValue == rTeam._rateValue{
+            return true
+        }
+        return false
+    }
+
+}

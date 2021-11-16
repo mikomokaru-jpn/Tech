@@ -1,0 +1,180 @@
+//------------------------------------------------------------------------------
+// AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+// AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "AClass.h"
+#import "BClass.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property AClass *objectA1;
+@property AClass *objectA2;
+@property NSMutableArray<AClass*> *array1;
+@property NSMutableArray<AClass*> *array2;
+@property BClass *objectB1;
+@property BClass *objectB2;
+@property NSMutableArray<NSMutableArray<AClass*>*> *multiArray1;
+@property NSMutableArray<NSMutableArray<AClass*>*> *multiArray2;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+    //コピー元の2次元配列の作成と初期化
+    NSMutableArray<NSMutableArray<AClass*>*> *multiArray1;
+    multiArray1 = [[NSMutableArray alloc] init];
+    for (int i=0; i<10; i++){
+        NSMutableArray* sourceSubArray = [[NSMutableArray alloc] init];
+        for (int j=0; j<10; j++){
+            AClass *objA = [[AClass alloc] initWithNumber:i*j text:@"A"];
+            [sourceSubArray addObject:objA];
+        }
+        [multiArray1 addObject:sourceSubArray];
+    }
+    //コピー先の2次元配列の作成
+    NSMutableArray<NSMutableArray<AClass*>*> *multiArray2;
+    multiArray2 = [[NSMutableArray alloc] init];
+    //配列のコピー
+    for (NSMutableArray<AClass*>* subArray in multiArray1){
+        NSMutableArray* copySubArray =
+        [[NSMutableArray alloc] initWithArray:subArray copyItems:YES];
+        [multiArray2 addObject:copySubArray];
+    }
+
+    for (NSMutableArray *array1 in multiArray2){
+        for (AClass *obj in array1){
+            NSLog(@"%ld %@", obj.number, obj.text);
+        }
+    }
+    NSLog(@"**** 代入****");
+    [self initData];
+    [self testAssign];
+    NSLog(@"**** コピー ****");
+    [self initData];
+    [self testCopy];
+}
+
+//初期化
+-(void)initData{
+    _objectA1 = [[AClass alloc] initWithNumber:1 text:@"A"];
+    
+    AClass *obj1 = [[AClass alloc] initWithNumber:2 text:@"B"];
+    AClass *obj2 = [[AClass alloc] initWithNumber:3 text:@"C"];
+    _array1 = [@[obj1, obj2] mutableCopy];
+    
+    AClass *obj3 = [[AClass alloc] initWithNumber:4 text:@"D"];
+    AClass *obj4 = [[AClass alloc] initWithNumber:5 text:@"E"];
+    AClass *obj5 = [[AClass alloc] initWithNumber:6 text:@"F"];
+    _objectB1 = [[BClass alloc] initWithObject:obj3
+                                         array:[@[obj4, obj5] mutableCopy]];
+    
+    AClass *obj7 = [[AClass alloc] initWithNumber:7 text:@"G"];
+    AClass *obj8 = [[AClass alloc] initWithNumber:8 text:@"H"];
+    AClass *obj9 = [[AClass alloc] initWithNumber:9 text:@"I"];
+    AClass *obj10 = [[AClass alloc] initWithNumber:10 text:@"J"];
+    NSMutableArray *subArray1 = [@[obj7, obj8] mutableCopy];
+    NSMutableArray *subArray2 = [@[obj9, obj10] mutableCopy];
+    _multiArray1 = [@[subArray1, subArray2] mutableCopy];
+}
+//代入テスト
+-(void)testAssign{
+    NSLog(@"* 基本クラスの変数を持ったカスタムクラス");
+    _objectA2 = _objectA1;
+    [self log1from:_objectA1 To:_objectA2 ];
+    _objectA1.number = 9;
+    _objectA1.text = @"X";
+    NSLog(@"- 元データを更新後");
+    [self log1from:_objectA1 To:_objectA2 ];
+    NSLog(@"* カスタムクラスの変数の配列");
+    _array2 = _array1;
+    [self log2from:_array1 To:_array2];
+    _array1[0].number = 9;
+    _array1[0].text = @"X";
+    NSLog(@"- 元データを更新後");
+    [self log2from:_array1 To:_array2];
+    NSLog(@"* カスタムクラスの変数と、カスタムクラスの配列を持ったカスタムクラス(1)");
+    _objectB2 = _objectB1;
+    [self log3from:_objectB1 To:_objectB2];
+    _objectB1.object.number = 99;
+    _objectB1.object.text = @"XX";
+    _objectB1.array[0].number = 999;
+    _objectB1.array[0].text = @"XXX";
+    NSLog(@"- 元データを更新後");
+    [self log3from:_objectB1 To:_objectB2];
+    NSLog(@"* カスタムクラスの変数の二次元配列");
+    _multiArray2 = _multiArray1;
+    [self log4from:_multiArray1 To:_multiArray2];
+    _multiArray1[0][0].number = 99;
+    _multiArray1[0][0].text = @"XX";
+    NSLog(@"- 元データを更新後");
+    [self log4from:_multiArray1 To:_multiArray2];
+}
+//コピーテスト
+-(void)testCopy{
+    NSLog(@"* 基本クラスの変数を持ったカスタムクラス");
+    _objectA2 = [_objectA1 copy];
+    [self log1from:_objectA1 To:_objectA2 ];
+    _objectA1.number = 9;
+    _objectA1.text = @"X";
+    NSLog(@"- 元データを更新後");
+    [self log1from:_objectA1 To:_objectA2 ];
+    NSLog(@"* カスタムクラスの変数の配列");
+    //NG _array2 = [_array1 mutableCopy];
+    //NG _array2 = [[NSMutableArray alloc] initWithArray:_array1 copyItems:NO];
+    _array2 = [[NSMutableArray alloc] initWithArray:_array1 copyItems:YES];
+    [self log2from:_array1 To:_array2];
+    _array1[0].number = 9;
+    _array1[0].text = @"X";
+    NSLog(@"- 元データを更新後");
+    [self log2from:_array1 To:_array2];
+    NSLog(@"* カスタムクラスの変数と、カスタムクラスの配列を持ったカスタムクラス(1)");
+    _objectB2 = [_objectB1 copy];
+    [self log3from:_objectB1 To:_objectB2];
+    _objectB1.object.number = 99;
+    _objectB1.object.text = @"XX";
+    _objectB1.array[0].number = 999;
+    _objectB1.array[0].text = @"XXX";
+    NSLog(@"- 元データを更新後");
+    [self log3from:_objectB1 To:_objectB2];
+    NSLog(@"* カスタムクラスの変数の二次元配列");
+    //NG _multiArray2 = [[NSMutableArray alloc] initWithArray:_multiArray1 copyItems:YES];
+    _multiArray2 = [[NSMutableArray alloc] init];
+    for (NSMutableArray<AClass*>* subArray in _multiArray1){
+        NSMutableArray* copySubArray =
+        [[NSMutableArray alloc] initWithArray:subArray copyItems:YES];
+        [_multiArray2 addObject:copySubArray];
+    }
+    [self log4from:_multiArray1 To:_multiArray2];
+    _multiArray1[0][0].number = 99;
+    _multiArray1[0][0].text = @"XX";
+    NSLog(@"- 元データを更新後");
+    [self log4from:_multiArray1 To:_multiArray2];
+}
+//ログ出力
+-(void)log1from:(AClass*)obj1 To:(AClass*)obj2{
+    NSLog(@"  %ld -> %ld",obj1.number, obj2.number);
+    NSLog(@"  %@ -> %@",obj1.text, obj2.text);
+}
+-(void)log2from:(NSMutableArray<AClass*>*)array1 To:(NSMutableArray<AClass*>*)array2{
+    NSLog(@"  %ld -> %ld",array1[0].number, array2[0].number);
+    NSLog(@"  %@ -> %@",array1[0].text, array2[0].text);
+}
+-(void)log3from:(BClass*)obj1 To:(BClass*)obj2{
+    NSLog(@"  %ld -> %ld",obj1.object.number, obj2.object.number);
+    NSLog(@"  %@ -> %@",obj1.object.text, obj2.object.text);
+    NSLog(@"  %ld -> %ld",obj1.array[0].number, obj2.array[0].number);
+    NSLog(@"  %@ -> %@",obj1.array[0].text, obj2.array[0].text);
+}
+-(void)log4from:(NSMutableArray*)array1 To:(NSMutableArray*)array2{
+    AClass* obj1 = array1[0][0];
+    AClass* obj2 = array2[0][0];
+    NSLog(@"  %ld -> %ld",obj1.number, obj2.number);
+    NSLog(@"  %@ -> %@",obj1.text, obj2.text);
+}
+@end

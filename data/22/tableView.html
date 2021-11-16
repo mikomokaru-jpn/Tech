@@ -1,0 +1,344 @@
+<!-- 
+21 TableView
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>View Based テーブルビュー・データを表示する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">View Based テーブルビュー・データを表示する</h2>
+<!-- div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/tableView.png&title=テーブルビュー&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="tableView.png" alt="[テーブルビュー]" width="500"></a>
+<h3 class="lm70 tm30 rm60 bm0">
+この章で作成するテーブルビューの仕様
+</h3>
+<div class="lm70 tm5 rm60">
+表示するオブジェクトは属性付き文字列、イメージ、ボタンとする。文字列の表示位置は縦/横方向で調整する。行の背景色を偶数行/奇数行で変える。列見出しはフォントサイズを変える。
+</div>
+<div class="lm70 tm10 rm60">
+データはプロ野球セリーグの勝敗表である。ボタンをクリックすると球団の公式ホームページをブラウザに表示する。
+</div>
+<div class="lm70 tm10 rm60">
+本章ではViewBasedのテーブルビューを採用する。CellBasedテーブルビューとの違いは、テーブル上の各要素（セル）に表示するオブジェクト種類、およびセット方法の違いである。ViewBasedは表示オブジェクトとしてNSViewクラスから派生したオブジェクトを使用するもので、文字列、コントロール、イメージなどが表示可能である。
+</div>
+<div class="lm70 tm10 rm60">
+CellBasedは表示に NSCellクラスから派生したオブジェクトを使用する。なお確認した限りでは、データソース・プロトコルの仕様により表示できるのは文字列のみのようである。
+</div>
+<div class="lm70 tm10 rm60">
+なお以後の説明では、セルという用語はテーブル（表）の要素という意味で使用する。CellBasedの「Cell」とは意味が違うので混同しないように。
+</div>
+<H3 class="lm70 tm20 bm0 rm60">
+ViewBased テーブルビューのクラス構造
+</h3>
+<div class="lm70 tm5 bm0 rm60">
+<span class='redcolor'>UATabakeView</span> : NSTableView　テーブルビュー本体
+</div>
+<div class="lm120 tm0 bm0 rm60">
+NSTableColumn　列オブジェクト
+</div>
+<div class="lm140 tm0 bm0 rm60">
+NSTableCellView　列ごとのセルに対応したビュー
+</div>
+<div class="lm160 tm0 bm0 rm60">
+<span class='redcolor'>UATextField</span> : NSTextField　セルの中に文字列を表示する
+</div>
+<div class="lm160 tm0 bm0 rm60">
+<span class='redcolor'>IconView</span> : NSTextField　セルの中にイメージを表示する
+</div>
+<div class="lm70 tm5 bm0 rm60">
+<span class='redcolor font90' >（赤字はカスタムクラス）</span>
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/tableView02.png&title=クラス構造&width=800" target="_new">
+<img class="lm90 tm10 bm0" src="tableView02.png" alt="[クラス構造]" width="520"></a>
+<h3 class="lm70 tm30 bm0 rm60">
+実装方法
+</h3>
+<h3 class="lm70 tm0 bm0 rm60">
+テーブルビューのレイアウトを定義する
+</h3>
+<div class="lm70 tm5 rm60 font90">
+ここではインタフェースビルダーにより行う。
+</div>
+
+<h4 class="lm70 tm10 rm60 bm0">
+列の識別名を入力する （TableColumn の Identifier）
+</h4>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/Identifier.png&title=Identifier&width=500" target="_new">
+<img class="lm70 tm0 bm0" src="Identifier.png" alt="[Identifier]" width="300"></a>
+<h4 class="lm70 tm20 rm60 bm0">
+
+<h4 class="lm70 tm10 rm60 bm0">
+列の幅 （TableColumn の Width）
+</h4>
+<div class="lm70 tm0 rm60">
+ユーザに幅の変更を許さないときは、最大幅/最小幅を同じにしておく。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/列の幅.png&title=列の幅&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="列の幅.png" alt="[列の幅]" width="300"></a>
+<h4 class="lm70 tm20 rm60 bm0">
+セルの大きさ （TableCellView の size） 
+</h4>
+<div class="lm70 tm0 rm60">
+原点は列の並びにより自動的に決まる</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/セルの大きさ.png&title=セルの大きさ&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="セルの大きさ.png" alt="[セルの大きさ]" width="300"></a>
+<h4 class="lm70 tm20 rm60 bm0">
+テキストフィールドの原点と大きさ（TextField の origin と size）
+</h4>
+<div class="lm70 tm0 rm60">
+文字列またはイメージを表示するNSTextFieldのサブクラス
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/テキストフィールドの大きさ.png&title=テキストフィールドの大きさ&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="テキストフィールドの大きさ.png" alt="[テキストフィールドの大きさ]" width="300"></a>
+<h4 class="lm70 tm20 rm60 bm0">
+行の高さ (TableViewのRow Height）
+</h4>
+<div class="lm70 tm0 rm60 bm0">
+指定しなければ上で定義したセルの高さと等しくなる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/行の高さ.png&title=行の高さ&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="行の高さ.png" alt="[行の高さ]" width="300"></a>
+
+<h4 class="lm70 tm20 rm60 bm0">
+選択行のハイライトをしない (TableViewのRow Highlight）
+</h4>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/ハイライト.png&title=ハイライト&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="ハイライト.png" alt="[ハイライト]" width="300"></a>
+<div class="lm70 tm40" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+プロトコルに準じたメソッドを実装する
+</h3>
+<div class="lm70 tm0 rm60">
+NSTableViewDataSource、NSTableViewDelegateプロトコルを実装することにより、テーブルビューの特定のセルに表示したいオブジェクトを描き出す。プロトコルを採用した AppDelegateクラスに次の2つのメソッドを実装する。
+</div>
+<div class="lm70 tm20 rm60">
+テーブルの件数（行数）を返す。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/numberOfRows.txt" width="580" height="80"></iframe>
+<div class="lm70 tm10 rm60">
+引数columnとrow により特定されるセルに表示するオブジェクト（NSViewのサブクラス）を返す。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/delegate1.txt" width="580" height="270"></iframe>
+<div class="lm70 tm５ rm60">
+makeViewWithIdentifier:owner:メソッドにより、当該セルのTableCellViewオブジェクトが得られる。このオブジェクトのプロパティに表示するオブジェクトを設定して戻り値として返す。内部処理ではオブジェクトがなければ作成し、あればそればそれが使い回されるようだ。
+</div>
+<h3 class="lm70 tm30 rm60 bm0">
+セルに文字列を表示する
+</h3>
+<div class="lm70 tm5 rm60">
+TableCellViewオブジェクトは、TextFieldオブジェクトをプロパティとして保持しているので、これの stringValue または attributedStringValue に文字列または属性付き文字列を代入すればテーブルビューに表示される。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/displayString.txt" width="580" height="80"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+セルにイメージを表示する
+</h3>
+<div class="lm70 tm5 rm60">
+イメージを表示するセルは、NSTextFieldのサブクラスである IconViewクラスとして定義する。このクラスはプロパティにNSImageオブジェクトを保持し、ビューの再描画メソッド（drawRect）により指定した範囲に出力するようにしている。
+</div>
+<div class="lm70 tm10 rm60">
+インタフェースビルダで「Table View Cell」オブジェクトのクラスをIconViewにしておく。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/IconViewクラス設定.png&title=IconViewクラス設定&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="IconViewクラス設定.png" alt="[IconViewクラス設定]" width="500"></a>
+<div class="lm70 tm20 rm60">
+デリゲートで取得するTableCellViewオブジェクトにはIconViewオブジェクトが格納さるので、teamIconプロパティに表示イメージを設定すればよい。  
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/displayImage.txt" width="580" height="120"></iframe>
+<div class="lm70 tm0 rm60">
+（注１）cellViewオブジェクトのstringプロパティに文字列を代入している。
+</div>
+<div class="lm70 tm0 rm60">
+tableView の reloadDataメソッドは、テーブルの全セルを再表示するもので、データソースが変更されたとき、変更内容を反映させるために呼び出す。このメソッドは TableCellViewが保持する NSTexFieldの「本来の」プロパティに値が設定されている場合だけ、そのセルの再表示を行う仕様になているらしい。
+</div>
+<div class="lm70 tm10 rm60">
+IconViewクラスのイメージを保持するプロパティは、サブクラスに追加したものなので、これだけでは再表示の対象とならない。このプログラムでは特に問題ないが、仮にイメージをプログラム内で動的に変え、テーブルビューに反映させたい場合はうまくいかない。それを回避するためには、ダミーの文字列をstringプロパティに代入しておく必要がある。
+</div>
+<div class="lm70 tm5 rm60">
+（NSTextFieldクラスには本来imageプロパティがあるが、そこにイメージを代入してもnilになってしまい表示されない。なぜだろう？）
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm20 bm10" src="/lib/HTMLofText.html?filename=/data/22/iconView.txt" width="580" height="490"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+セルにボタンを表示する
+</h3>
+<div class="lm70 tm5 rm60">
+ここではNSButonオブジェクトを作成し取得したNSTableCellViewオブジェクトに貼り付け返している。NSButonオブジェクトを直接返してもいいが、ベースとなるセルのビューは表示されない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/displayButton.txt" width="580" height="100"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+文字列の表示を上下で中央揃えにする方法
+</h3>
+<div class="lm70 tm5 rm60">
+TableCellViewオブジェクトが保持するTextFieldオブジェクトに文字列を書き込んだとき、デフォルトでは文字列は上揃えの表示になる。これを変えるにはいくつか方法がある。    
+</div>
+<div class="lm70 tm10 rm60">
+第一に、TextFieldオブジェクトの表示領域（frameプロパティ）の値を変えることによって、表示文字列の位置を変えることができる。下図はインタフェースビルダーによって表示領域を縦方向に20ピクセル下げた例である。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/中央揃え.png&title=中央揃え&width=800" target="_new">
+<img class="lm70 tm5 bm0" src="中央揃え.png" alt="[中央揃え]" width="400"></a>
+<div class="lm70 tm10 rm60">
+ただし、この方法では文字列の上方の高さを固定的に変えるだけである。表示する文字列の大きさが変わっても常に行の中央に揃えるための方法は次の通り。
+</div>
+<div class="lm70 tm30 rm60">
+NSTextFieldのサブクラスのUATextFieldを作成し、文字列を表示するセルのクラスとする。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/UATextFieldクラス設定.png&title=UATextFieldクラス設定&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="UATextFieldクラス設定.png" alt="[UATextFieldクラス設定]" width="500"></a>
+<div class="lm70 tm20 rm60">
+ビューを再表示するメソッド（drawRect）をオーバーライドする。この中で自身のフレームサイズとプロパティに保持する表示文字列のサイズから表示すべき位置を割り出しそこに文字列を描画する。なおsuperクラスのdrawRectは文字列の二重表示になってしまうので実行しない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/22/drawRect.txt" width="580" height="420"></iframe>
+<div class="lm70 tm5 rm60">
+この例では、水平方向の位置もプロパティの指定に従って、右/中央/左揃えをしている。（水平方向は、属性付き文字列であればパラグラフ属性の指定で変えることもできる。）
+</div>
+<div class="lm70 tm10 rm60">
+インタフェースビルダで「Table View Cell」オブジェクトのクラスを UATextField にしておく。これによりTableCellViewオブジェクトの実体は UATextFieldオブジェクトとなる。UATextFieldクラスとして操作するには次のようにキャストする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/cast.txt" width="580" height="130"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+行ごとに背景色を変える
+</h3>
+<div class="lm70 tm5 rm60">
+取得したTableCellViewオブジェクトのレイヤーの背景色を変えることで、セルごとに背景色を設定することができる。row（行）の値で偶数行/奇数行を判定できる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/backgroundColor.txt" width="580" height="190"></iframe>
+<div class="lm70 tm5 rm60">
+TableCellViewオブジェクトのbackgroundColorプロパティで変更することもできる。だだし本アプリでは、drawRecをオーバーライドして super の drawRect を呼ばないようにしているので動作しない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/backgroundColor2.txt&font=font100" width="580" height="60"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+列見出しを編集する
+</h3>
+<div class="lm70 tm5 rm60">
+列の見出しはNSCellクラスから派生するNSTableHeaderCellクラスのオブジェクトとして実装されている。
+</div>
+<div class="lm70 tm10 rm60">
+Cellオブジェクトは、自身と一対になるViewオブジェクトに含まれ、共同してビューへの描画を行う。内部的にはViewオブジェクトの描画メソッドの後に、Cellオブジェクトの描画メソッドが実行されるようだ。このような仕組みになったのは歴史的な経緯によるもよう。通常、描画を行うにはViewオブジェクトの操作だけだで済み、Cellオブジェクトを操作することはほとんどない。しかし列の見出しはCellオブジェクトとして実装されているので見出しの編集にはこのクラスを直接扱う必要がある。
+</div>
+<div class="lm70 tm10 rm60">
+列見出しのNSTableHeaderCellオブジェクトは、列を構成するTableColumnオブジェクトに直接組み込まれている。見出しの文字列を設定するには、このオブジェクトを取得し、stringプロパティまたは attributedStringプロパティに文字列または属性付き文字列を代入すればよい。
+</div>
+<div class="lm70 tm10 rm60">
+ただし縦方向の表示位置は上揃えになるので、そこをを変えたいときはNSTableHeaderCellクラスのサブクラスを作成して、その中で表示位置を指定して文字列を描画する必要がある。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/tableHeaderCell.txt" width="580" height="270"></iframe>
+<div class="lm70 tm10 rm60">
+NSTableHeaderCellクラスのサブクラス
+</div>
+<div class="lm70 tm0 rm60">
+描画メソッド drawWithFrame:inView:をオーバーライドする。NSCellクラス自身は表示領域の情報を持たず、対応するNSViewクラスの領域を共有する。引数cellFrameにより得られるビューの描画領域(NSRect構造体）を元に文字列の表示位置を調整することができる。また、横方向の文字揃えも追加したプロパティの指定により調整している。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/22/tableHeaderCell2.txt" width="580" height="660"></iframe>
+<div class="lm70 tm5 rm60">
+背景色の変更
+</div>
+<div class="lm70 tm0 rm60">
+cellの背景色は、backgroundColorプロパティを指定しても、行の高さをデフォルトより高くした場合なぜかその分だけ色が反映しない。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/22/見出しNG.png&title=見出しNG&width=800" target="_new">
+<img class="lm70 tm5 bm0" src="見出しNG.png" alt="[見出しNG]" width="400"></a>
+<div class="lm70 tm20 rm60">
+背景色を変えるために新規のcellオブジェクトを作成して、backgroundColorプロパティに背景色を設定し、drawWithFrameメソッドで描画している。（やや苦し紛れの方法か）
+</div>
+
+<h3 class="lm70 tm30 bm0">
+クラス一覧
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/UATableView.txt&title=UATableView" target="_new">UATableView</a>　列見出しの編集
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/UATableHeaderCell.txt&title=UATableHeaderCell" target="_new">UATableHeaderCell</a>　列見出しの編集
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/UATextField.txt&title=UATextField" target="_new">UATextField</a>　セルの編集：属性付き文字列
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/IconView.txt&title=IconView" target="_new">IconView</a>　セルの編集：画像イメージ
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/UAButton.txt&title=UAButton" target="_new">UAButton</a>　カスタムボタン
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/22/source/UAUtility.txt&title=UAUtility" target="_new">UAUtility</a>　ユーティリティ・メソッド
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+パフォーマンスに関する考察
+</h3>
+<div class="lm70 tm5 rm60">
+データソースおよびデリゲートメソッドはフレームワークが自動的に起動するもので、アプリケーションがそれを制御することはできない。
+</div>
+<div class="lm70 tm10 rm60">
+例えば、tableView:viewForTableColumn:rowメソッドは、表の要素数分だけ毎回起動するので相当の回数となるはずである。この点についてどこまでパフォーマンスを考慮した実装にすべきか？
+</div>
+<div class="lm70 tm10 rm60">
+一般的には、コンパイラなどによる最適化の効果により繰り返し処理に対する効率化はかなりのレベルにある。メモリの中で完結する処理であれば、ほとんど気にする必要はないかもしれない。
+</div>
+<div class="lm70 tm10 rm60">
+ただし、データソースとなるデータの取得のために、ファイルのIO、データベースに対する読み書き、ネットワークへの送受信といった外部ノードとのやり取りが必要になるとしたら、これらの対しては最適化の応用に限界もあるので、パフォーマンスを考慮した実装が必要であろう。
+</div>
+<div class="lm70 tm10 rm60">
+メソッドが１回起動するたびに、外部ノードとのやり取りが発生するのでは、非常に効率が悪い。極力外部ノードとのやり取りを減らすことが肝要である。
+</div>
+<div class="lm70 tm10 rm60">
+一般的な方法は、データソースの取得は初期処理で一度のみ行い、メモリ上にオブジェクトとして保持しておき、必要にたびにこのオブジェクトを読み込むことにする。これで外部ノードとのやり取りは一回で済む。
+</div>
+<div class="lm70 tm10 rm60">
+ただし、元データが変更されたとき、その変更をオブジェクトに反映する必要が生じた場合、対応はやや複雑になるだろう。
+</div>
+<div class="lm70 tm10 rm60">
+※いずれにしろ設計の妥当性については、定量的な検証が前提となる。
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,2 @@
+print("\(String(describing: obj))")  //nilのとき”nil”が返る
+print("\(obj?.description ?? “nil")")

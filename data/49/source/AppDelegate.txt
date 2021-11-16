@@ -1,0 +1,338 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#include <dirent.h>   //ディレクトリ内のファイルリストを得る（POSIX）
+#include <sys/stat.h> //ファイル・ディレクトリに関する情報を取得（POSIX）
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTextField *pathName;    //検索フォルダ
+@property (weak) IBOutlet NSTextField *keyword;     //検索キーワード
+@property (weak) IBOutlet NSTableView *tableView;   //結果一覧表
+@property (weak) IBOutlet NSTextField *hitCount;    //該当ファイル数
+@property NSMutableArray *resulList;                //結果リスト
+@end
+
+@implementation AppDelegate
+//アプリケーション起動時
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [_tableView setTarget:self];
+    [_tableView setDoubleAction:@selector(openFileByMi)];
+    //初期フォルダ
+    _pathName.stringValue = [NSHomeDirectory() stringByAppendingString:@"/Desktop/DocumentsOfCaledar"];
+    //結果リスト
+    _resulList = [[NSMutableArray alloc] init];
+    _hitCount.stringValue = @"";
+}
+//ディレクトリを選択する
+-(IBAction)btnOpen:(id)sender{
+    //オープンパネルオブジェクトの生成
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    //パネルの設定
+    [openPanel setCanChooseFiles:NO];               //ファイル選択可能
+    [openPanel setCanChooseDirectories:YES];        //ディレクトリ選択不可
+    [openPanel setAllowsMultipleSelection:NO];      //複数選択不可
+    [openPanel setMessage:@"ディレクトリを指定する"];   //ウィンドウのタイトル
+    //最初に位置付けるディレクトリパス
+    NSURL *url = [NSURL URLWithString:_pathName.stringValue];
+    [openPanel setDirectoryURL:url];
+    //オープンパネルを開く（ハンドラ定義）
+    [openPanel beginSheetModalForWindow:_window
+                      completionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton){
+            //OKボタン
+            NSURL *url = openPanel.URLs[0]; //選択されたファイルパス
+            NSString *pathName;
+            [url getResourceValue:&pathName forKey:NSURLPathKey error:nil];
+            _pathName.stringValue = pathName;
+        }
+    }];
+}
+//キーワードで検索する
+-(IBAction)btnSearch:(id)sender{
+    [self search];
+}
+//履歴を出力
+-(IBAction)btnOutput:(id)sender{
+    [self outputHistory];
+}
+//履歴をクリア
+-(IBAction)btbClear:(id)sender{
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert addButtonWithTitle:@"OK"];
+    [alert addButtonWithTitle:@"キャンセル"];
+    NSArray<NSButton*>*buttons = [alert buttons];
+    buttons[0].keyEquivalent = @"";
+    buttons[1].keyEquivalent = @"\r";
+    alert.messageText = @"検索履歴を削除しますか？";
+    alert.informativeText = @"完全に削除されて元に戻すことはできません";
+    alert.alertStyle = NSAlertStyleCritical;
+    NSModalResponse ret = [alert runModal];
+    if (ret == NSAlertFirstButtonReturn){
+        //OK
+        [self clearHistory];
+        NSAlert *alert = [[NSAlert alloc] init];
+        alert.messageText = @"検索履歴を削除しました";
+        [alert runModal];
+    }
+}
+
+//NSTableViewDataSource --------------------------------------------------------
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tv{
+    //NSLog(@"numberOfRowsInTableView");
+    return [_resulList count];
+}
+- (id)tableView:(NSTableView *)tv
+      objectValueForTableColumn:(NSTableColumn *)column
+                            row:(NSInteger)row{
+    NSArray* record = _resulList[row];
+    if ([[column identifier] isEqualToString:@"folder"]){
+        return record[0];
+    }else if ([[column identifier] isEqualToString:@"file"]){
+        return record[1];
+    }else if ([[column identifier] isEqualToString:@"count"]){
+        return record[2];
+    }else if ([[column identifier] isEqualToString:@"size"]){
+        return record[3];
+    }else{
+        return nil;
+    }
+}
+//内部メソッド -------------------------------------------------------------------
+//フォルダの階層下にあるファイルに対してキーワードで全文検索する
+-(void)search{
+   //該当件数のクリア
+    _hitCount.stringValue = @"";
+    //テーブルビューのクリア
+    [_resulList removeAllObjects]; //データソースをクリアする
+    [_tableView reloadData];
+    //ファイル名を再帰的に取得する
+    NSMutableArray* fileNameArray = [[NSMutableArray alloc] init];
+    traverse([_pathName.stringValue UTF8String], fileNameArray);
+    //キーワードの空白トリミング
+    NSString *keyword = [_keyword.stringValue stringByTrimmingCharactersInSet:
+                         [NSCharacterSet whitespaceCharacterSet]];
+    if (keyword.length == 0 ){
+        return;  //キーワード未入力
+    }
+    //キーワード検索
+    NSError *error;
+    NSStringEncoding enc = 0;
+    char charPath[4096];         //パス名の格納バッファ　最大長4096バイト
+    struct stat status;
+    for (NSString *path in fileNameArray){
+        //ファイルタイプの判定（kUTTypeText is "public.text"）
+        NSString* uti=[[NSWorkspace sharedWorkspace] typeOfFile:path error:nil];
+        if (!UTTypeConformsTo((__bridge CFStringRef)uti, kUTTypeText)){
+            //テキストファイルでなければ読み飛ばす
+            continue;
+        }
+        //ファイルを読み込む
+        NSString *text = [NSString stringWithContentsOfFile:path
+                                               usedEncoding:&enc
+                                                      error:&error];
+        //エンコーディングの自動判定ができなければ、UTF8で読んでみる。
+        if (error != nil && [error code] == 264){
+            error = nil;
+            text = [[NSString alloc] initWithContentsOfFile:path
+                                                   encoding:NSUTF8StringEncoding
+                                                      error:&error];
+            if (error != nil){
+                continue; //ファイルを読み込めなければ読み飛ばす
+            }
+        }
+        //---- 文字列マッチング ----
+        NSRange range= NSMakeRange(0, 0);
+        NSRange result = NSMakeRange(0, 0);
+        int resultCount = 0;
+        do{
+            range.location = result.location+result.length;
+            range.length = [text length] - (result.location+result.length);
+            result = [text rangeOfString:keyword
+                                 options:NSLiteralSearch|NSCaseInsensitiveSearch
+                                   range:range];
+            if(result.location != NSNotFound){
+                resultCount++;
+            }
+        } while(result.location != NSNotFound);
+        if (resultCount > 0){
+            //ヒット・結果リストに追加
+            NSString *file = [path lastPathComponent]; //ファイル
+            NSString *folder = [path stringByDeletingLastPathComponent]; //フォルダ
+            strcpy(charPath, [path UTF8String]);
+            stat(charPath, &status);
+            //パスの編集
+            NSString *baseFolder = [NSString stringWithFormat:@"%@", _pathName.stringValue];
+            NSRange range = NSMakeRange(0, baseFolder.length);
+            folder = [folder stringByReplacingOccurrencesOfString:baseFolder
+                                                       withString:@"" options:0 range:range];
+            folder = [folder  stringByAppendingString:@"/"];
+            NSArray *record = @[folder, file, @(resultCount), @(status.st_size)];
+            [_resulList addObject:record];
+        }
+    }
+    _hitCount.stringValue = [NSString stringWithFormat:@"該当ファイル数 = %ld", _resulList.count];
+    [_tableView reloadData];
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:0];
+    [_tableView selectRowIndexes:indexes byExtendingSelection:YES];
+    //履歴に記録する
+    [self writeLogForKeyword:keyword count:_resulList.count];
+}
+
+// 再帰的にディレクトリをトラバースしファイル名を取得する
+// 引数 directory:検索ディレクトリ, array:ファイル名を格納する配列
+void traverse(const char* directory, NSMutableArray* array) {
+    DIR* dir = opendir(directory);   //検索ディレクトリをオープンする
+    struct dirent* entry;            //ノード（ファイルorディレクトリ）情報
+    char newPath[4096];              //パス名の格納バッファ [最大長4096バイト]
+    if (dir) {
+        for(;;) {
+            if ((entry = readdir(dir)) == NULL) { //ノードを読み込む
+                break;
+            }
+            //パス名の編集
+            strcpy(newPath, directory);     //検索ディレクトリ名
+            strcat(newPath, "/");
+            strcat(newPath, entry->d_name); //ノード名（ファイルorディレクトリ）
+            NSString* strPath = [NSString stringWithCString:newPath
+                                               encoding:NSUTF8StringEncoding];
+            if (entry->d_type == DT_DIR) {  //種別の判定
+                //ディレクトの場合
+                if (strcmp(entry->d_name, ".")==0 || strcmp(entry->d_name, "..")==0) {
+                    //カレントディレクトリ(.)、親ディレクトリ(..)はスキップ
+                }else {
+                    //ディレクトリなら自身を呼び出す（再帰）
+                    traverse(newPath, array);
+                }
+            } else {
+                //ファイルの場合、ファイル名配列に格納
+                [array addObject:strPath];
+            }
+        }
+    }
+    closedir(dir);  //ディレクトリをクローズする
+}
+//検索したファイルをエディター（mi）で開く
+-(void)openFileByMi{
+    NSInteger idx = _tableView.selectedRow;
+    NSArray *record = _resulList[idx];
+    NSString *path = [NSString stringWithFormat:@"%@/%@/%@",
+                      _pathName.stringValue,record[0], record[1]];
+    NSWorkspace * ws = [NSWorkspace sharedWorkspace];
+    [ws openFile:path withApplication:@"/Applications/mi.app" andDeactivate:YES];
+}
+//履歴に記録する
+-(void)writeLogForKeyword:(NSString*)kw count:(NSInteger)cnt{
+    //実行日付時刻の取得
+    NSDateFormatter *formatMisc =  [[NSDateFormatter alloc] init];
+    formatMisc.dateStyle = NSDateFormatterMediumStyle;
+    formatMisc.timeStyle = NSDateFormatterMediumStyle;
+    NSDate* today = [NSDate date]; //現在日
+    NSString *dateString = [formatMisc stringFromDate:today];
+    //実行日付時刻、キーワード、該当ファイル数
+    NSString *record = [NSString stringWithFormat:@"%@ %@ %ld", dateString, kw, cnt];
+    //UserDefaultsから履歴オブジェクト（NSArray）を読む
+    NSArray *historyList;
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    if ([ud arrayForKey:@"historyList"]){
+        historyList = [ud arrayForKey:@"historyList"];
+    }else{
+        historyList = [[NSArray alloc] init];
+    }
+    //検索結果を履歴オブジェクトに追加する
+    NSMutableArray *tmpArray = [historyList mutableCopy];
+    [tmpArray addObject:record];
+    historyList = [tmpArray copy];
+    [ud setObject:historyList forKey:@"historyList"];
+    [ud synchronize];
+}
+//履歴を出力する
+-(void)outputHistory{
+    //ユーザデフォルトの取得
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    BOOL errorFlg = NO;
+    NSArray *historyList;
+    if ([ud arrayForKey:@"historyList"]){
+        historyList = [ud arrayForKey:@"historyList"]; //履歴オブジェクトの取得
+        if (historyList.count == 0){
+            errorFlg = YES;
+        }
+    }else{
+        errorFlg = YES;
+    }
+    if (errorFlg){
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:@"検索履歴がありません"];
+        [alert runModal];
+        return;
+    }
+    //セーブパネルオブジェクトの生成
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    [savePanel setMessage:@"検索履歴ファイルを出力する"];
+    NSURL *url = [NSURL URLWithString:[NSHomeDirectory()
+                                       stringByAppendingString:@"/Desktop"]];
+    [savePanel setDirectoryURL:url];
+    [savePanel setNameFieldStringValue:@"history.txt"];
+    //セーブパネルを開く
+    [savePanel beginSheetModalForWindow:_window
+                      completionHandler:^(NSInteger result){
+        //ボタンクリック後のハンドラ
+        if (result == NSFileHandlingPanelOKButton){
+            //OKボタン
+            NSURL *url = savePanel.URL; //指定された出力ファイルパス
+            NSString *text = @"";
+            for (NSString *record in historyList){
+                text = [text stringByAppendingString:record];
+                text = [text stringByAppendingString:@"\n"];
+            }
+            //ファイル出力
+            NSError *error = nil;
+            [text writeToURL:url atomically:YES
+                    encoding:NSUTF8StringEncoding
+                    error:&error];
+            //完了ダイアログの表示
+            if (error){
+                NSAlert *alert = [NSAlert alertWithError:error];
+                [alert runModal];
+            }else{
+                NSAlert *alert = [[NSAlert alloc] init];
+                alert.messageText = @"検索履歴ファイルを出力しました";
+                alert.informativeText = [url path];
+                alert.suppressionButton.title = @"検索履歴ファイルをエディターで開く";
+                alert.suppressionButton.state = NSControlStateValueOff;
+                alert.showsSuppressionButton = YES;
+                 
+                [alert runModal];
+                //検索履歴ファイルをエディターで開く
+                if (alert.suppressionButton.state == NSControlStateValueOn){
+                    NSWorkspace * ws = [NSWorkspace sharedWorkspace];
+                    [ws openFile:[url path] withApplication:@"/Applications/mi.app" andDeactivate:YES];
+                }
+            }
+        }
+    }];
+}
+//履歴を削除する
+-(void)clearHistory{
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    if ([ud arrayForKey:@"historyList"]){
+        [ud removeObjectForKey:@"historyList"];
+    }
+}
+//ウィンドウの再表示
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender
+                    hasVisibleWindows:(BOOL)flag {
+    if (!flag){
+        [sender.windows[0] makeKeyAndOrderFront:self];
+    }
+    return YES;
+}
+
+@end

@@ -1,0 +1,13 @@
+-(void)writeJson:(NSArray<NSDictionary*>*)itemList
+{
+    //出力ファイルパス
+    NSString *outPath = [NSHomeDirectory() stringByAppendingString:
+                         @"/Desktop/sumo2.txt"];
+    //辞書の配列 -> JNSData
+    //option：テキストを改行やインデントで整形する
+    NSData *data = [NSJSONSerialization dataWithJSONObject:itemList
+                    options:NSJSONWritingPrettyPrinted
+                    error:nil];
+    //ファイルの書き出し
+    [data writeToFile:outPath atomically:YES];
+}

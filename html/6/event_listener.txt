@@ -1,0 +1,1 @@
+okButton.removeEventListener('click', update); //未登録でもエラーにならないokButton.addEventListener('click', update);

@@ -1,0 +1,8 @@
+-(id)initWithFrame:(NSRect)rect startPoint:(CGPoint)point{
+    //引数 rect は親ビューの bounds を措定する。
+    if(![super initWithFrame:rect]){
+        return nil;
+    }
+    ...
+    return self;
+}

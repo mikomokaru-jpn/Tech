@@ -1,0 +1,30 @@
+//---- TVCtrlCell.swift -----
+// CellBased TableView
+import Cocoa
+class TVCtrlCell: NSObject, NSTableViewDataSource {
+    let itemList: Array<Any> //data source
+
+    init(array: Array<Any>){
+        itemList = array //SwiftではArrayは値渡し
+        super.init()
+    }
+    //NSTableView DataSource
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return itemList.count
+    }
+    func tableView(_ tv: NSTableView,
+                   objectValueFor tableColumn: NSTableColumn?,
+                   row: Int) -> Any?{
+        let items = itemList[row] as! Dictionary<String,Any>
+        guard let column = tableColumn else { return nil }
+        
+        if column.identifier.rawValue == "key"{
+            //return 1
+            return items[column.identifier.rawValue] //SwiftはInt型を返せる
+        }else if column.identifier.rawValue == "value"{
+            return items[column.identifier.rawValue]
+        }else{
+            return nil
+        }
+    }
+}

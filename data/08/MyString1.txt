@@ -1,0 +1,4 @@
+#import <Foundation/Foundation.h>
+@interface NSString (MyString)
+-(NSString*)reverse; //文字列を反転する
+@end

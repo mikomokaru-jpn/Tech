@@ -1,0 +1,10 @@
+override func draw(_ dirtyRect: NSRect) {
+    if let context = NSGraphicsContext.current?.cgContext{
+        if let image = cgNewImage{
+            let x = Int(dirtyRect.width / 2  - CGFloat(image.width / 2))
+            let y = Int(dirtyRect.height / 2  - CGFloat(image.height / 2))
+            context.draw(image, in: CGRect(x: x, y: y, 
+                                           width: image.width, height: image.height))
+        }
+    }
+}

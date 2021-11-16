@@ -1,0 +1,33 @@
+func grayScaleImage(){
+    var bitmapContext: CGContext?
+    let dataSize = cgOriginalImage!.width * cgOriginalImage!.height * 4 //ピクセル数x4バイト(RGBA)
+    var pixelData = [UInt8](repeating: 0, count: Int(dataSize))
+    let colorSpace = CGColorSpaceCreateDeviceRGB()
+    //変換用コンテキストの生成・入力イメージと同じ大きさ
+    bitmapContext = CGContext(data: &pixelData,
+                             width: Int(cgOriginalImage!.width),
+                            height: Int(cgOriginalImage!.height),
+                  bitsPerComponent: 8,
+                       bytesPerRow: 4 * Int(cgOriginalImage!.width),
+                             space: colorSpace,
+                        bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)
+    //変換用コンテキストにイメージオブジェクトを描画する
+    let rect = CGRect(x: 0, y: 0, width: cgOriginalImage!.width, height: cgOriginalImage!.height)
+    bitmapContext?.draw(cgOriginalImage!, in: rect)
+    //bindMemoryによりコンテキストのデータをポインタ経由で参照する
+    let count = Int(cgOriginalImage!.width) * Int(cgOriginalImage!.height)
+    if let buffer = bitmapContext?.data?.bindMemory(to: UInt8.self, capacity: count){
+        //グレースケール変換
+        for i in stride(from:0, to: dataSize-1, by:4){
+            //グレースケール変換 HDTV係数
+            let grayInt = UInt8(0.2126 * CGFloat(buffer[i]) +
+                                0.7152 * CGFloat(buffer[i+1])  +
+                                0.0722 * CGFloat(buffer[i+2]))
+            buffer[i] = grayInt
+            buffer[i+1] = grayInt
+            buffer[i+2] = grayInt
+        }
+    }
+    cgNewImage = bitmapContext?.makeImage()
+    self.needsDisplay = true
+}

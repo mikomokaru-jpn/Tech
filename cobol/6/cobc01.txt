@@ -1,0 +1,8 @@
+サブプログラムのコンパイル（.oファイルの作成）
+gcc -fPIC -c sublib.c
+
+メインプログラムのコンパイルとサブプログラムのリンク
+cobc -x MAIN01.cbl sublib.o
+
+実行
+./MAIN01

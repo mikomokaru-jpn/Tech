@@ -1,0 +1,26 @@
+//---- UATableHeaderCell.swift ----
+import Cocoa
+class UATableHeaderCell: NSTableHeaderCell {
+    var dispAlignment :NSTextAlignment = .left      //文字列の文字揃え
+    var dispBackColor :NSColor = NSColor.white      //背景色
+    //------------------------------------------------------------------------------
+    //  ビューの再表示
+    //------------------------------------------------------------------------------
+    override func draw(withFrame cellFrame: NSRect, in controlView: NSView){
+        let y = cellFrame.size.height / 2 - self.attributedStringValue.size().height / 2
+        var x:CGFloat = 10.0
+        if self.dispAlignment == .center{
+            x = cellFrame.size.width / 2 - self.attributedStringValue.size().width / 2
+        }
+        if self.dispAlignment == .right{
+            x = cellFrame.size.width - self.attributedStringValue.size().width
+        }
+        let newPoint = NSMakePoint(cellFrame.origin.x + x, cellFrame.origin.y + y)
+        let cell = NSTextFieldCell.init()
+        cell.drawsBackground = true
+        cell.backgroundColor = dispBackColor
+        cell.stringValue = ""
+        cell.draw(withFrame: cellFrame, in: controlView)
+        self.attributedStringValue.draw(at: newPoint)
+    }
+}

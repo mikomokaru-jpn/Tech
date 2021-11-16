@@ -1,0 +1,7 @@
+//デリゲートの設定：プロトコル ComboBoxDelegate
+comboBox.delegate = self
+
+//デリゲートメソッド
+func selectedIndex(_ index: Int){
+    print("<<<< \(index) selectd >>>>")
+}

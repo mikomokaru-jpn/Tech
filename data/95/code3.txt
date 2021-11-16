@@ -1,0 +1,4 @@
+func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
+    let node = item as! Node
+    return !node.isFile        
+}

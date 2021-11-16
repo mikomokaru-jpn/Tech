@@ -1,0 +1,125 @@
+<!-- 
+
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title> テーブルビューをプログラムにより作成する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10"> テーブルビューをプログラムにより作成する</h2>
+
+<div class="lm70 tm5 rm60">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0
+</div>
+
+<div class="lm70 tm20 rm60">
+テーブルビューをインタフェースビルダーを使わず、全てプログラムのコードにより作成してみた。これによって、テーブルビューの機能は活用しつつ、主にテーブルビューの外観について、比較的自在に調整・変更が可能になる。
+</div>
+
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B67/custom_tableview.mp4&title=custom_tableview&width=700" target="_new">
+<img class="lm70 tm0 bm0" src="custom_tableview.png" alt="[custom_tableview]" width="400"></a>
+
+<div class="lm70 tm10 rm60">
+本例では、行の高さとフォント変え、セルの枠に罫線を引く。現在行を行の先頭の青色ハイライトで示す。列見出しの高さと背景色とフォントを変える、といったカスタマイズを行った。
+</div>
+<div class="lm70 tm10 rm60">
+また、列見出しをクリックするとその列をキーにデータをソートするようにしているので、列見出しの中にソートの方向を示すインディケータ表示する。
+</div>
+<div class="lm70 tm10 rm60">
+なお、コードによる実装化のメリットは、処理方式、UIデザインの「標準化」を容易にすることである。これはインタフェースビルダーを使ったUIオブジェクトの作成より優れたやり方だと思う。（あまり想像できないが）もし、Macをクライアント端末とした大規模な業務系のシステムを構築することがあれば、このような方法を取り入れることについて十分検討されるべきだろう。
+</div>
+
+<h2 class="lm70 tm30 bm0">
+クラス構成
+</h2>
+
+<a href="/lib/HTMLofImage.html?filename=/data/B67/class.png&title=クラス構成図&width=900" target="_new">
+<img class="lm70 tm20 bm0" src="class.png" alt="[クラス構成図]" width="500"></a>
+
+<div class="lm70 tm20 rm60">
+コントローラクラス（UATablaManager）は、テーブルビューオブジェクトを作成し、テーブルビューのDelegateとDarasouceとしてオブジェクトの動きを制御する。なお、テーブルビューとは、NSTableViewオブジェクとそれを内包するNSScrollViewオブジェクトを組み合わせたものを指す。
+</div>
+<div class="lm70 tm10 rm60">
+図中の赤文字で記したクラスは、そこから派生してサブクラスを作成している。（NSTextField → UATextField 等）
+</div>
+<div class="lm70 tm10 rm60">
+本サンプルは、日々の血圧値の一覧を表示する。APPDelegateクラスは UATablaManagerオブジェクトを作成・保持し、DBから取得したデータを渡すという仕組みになっている。
+</div>
+
+<h3 class="lm70 tm30 bm0">
+気になる点
+</h3>
+<div class="lm70 tm5 rm60">
+表示に関しては基本的には Viewベースが一般的になってきた流れの中で、列見出しを表示するクラス NSTableHeaderCellは NSCellクラスに基づいている。それが原因と思われるが、列見出しの表示とデータセルの表示が微妙にズレる。具体的には、縦の罫線は、太さ、色、表示位置とも BeziePathにより全く同じように描画しているのだが、よく見ると微妙に異なっている。細かいことではあるが気持ちが良くない。（私の実装方法が間違っているのだろうか？いずれにしろ、列見出しも Viewベースの表示方式がサポートされると良いのだが）
+</div>
+
+
+<h2 class="lm70 tm30 bm0">
+ソースコード
+</h2>
+
+<!-- ソースコード　リンク -->
+
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/UATableManager.swift&title=>UATableManager" target="_new">UATableManager</a>　コントローラ
+</div>
+
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/UATableColumn.swift&title=UATableColumn" target="_new">UATableColumn</a>　列オブジェクト
+</div>
+
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/UATableCellView.swift&title=UATableCellView" target="_new">UATableCellView</a>　セルオブジェクト
+</div>
+
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/UATextField.swift&title=UATextField" target="_new">UATextField</a>　セルの中のテキストフィールド
+</div>
+
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/UATableRowView.swift&title=UATableRowView" target="_new">UATableRowView</a>　行オブジェクト
+</div>
+
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/UATableHeaderCell.swift&title=UATableHeaderCell" target="_new">UATableHeaderCell</a>　列見出しオブジェクト
+</div>
+
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B67/source/AppDelegate.swift&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+
+<h2 class="lm70 tm20 bm0 rm60">
+GitHub
+</h2>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S_CustomTableview" target="_new">mikomokaru-jpn/macOS_S_CustomTableview</a>
+</div>
+
+
+<div class="lm70 tm5 rm60">
+※ AppDelegate データを取得する処理はコメントアウトしている。辞書の定義に従い各自作成してください。
+</div>
+
+<div class="bp40"></div>
+<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

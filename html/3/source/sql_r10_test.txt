@@ -1,0 +1,40 @@
+<?php
+/* 指定した日付の範囲の血圧レコードを読み込みHTMLに出力する */
+//DB接続
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect();
+// SQLの実行 
+try{
+    $sql = "SELECT id, date, upper, lower, confirm FROM blood_pressure 
+            WHERE  ( id=:id ) AND ( date >=:fd AND date <=:td ); ";
+    $stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':id', $_POST['id'], PDO::PARAM_INT);	
+    $stmh->bindValue(':fd', $_POST['from_date'], PDO::PARAM_INT);
+    $stmh->bindValue(':td', $_POST['to_date'], PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー:'. $e->getMessage());
+}
+if (isset($_POST['write_print'])){
+    print('<DOCTYPE HTML>');
+    print('<html id="mainhtml">');
+    print('<head>');
+    print('<meta http-equiv="Content-Type" 
+           content="text/html; charset=utf-8">');
+    print('<title>Test</title>');
+    print('</head>');
+    print('<body>');
+    print('<div>ID date upper lower confirm </div>');
+    while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+        print($row['id'].' '.$row['date'].'   '.$row['upper'].' '.
+              $row['lower'].' '.$row['confirm'].'<br />');
+    }
+    print('</body>');
+    print('</html>');
+}else{
+    //JSON形式で出力 
+    header('Content-type: application/json');
+    echo json_encode($stmh->fetchAll(PDO::FETCH_ASSOC));
+}
+?>

@@ -1,0 +1,22 @@
+print(String(format:"contentView frame %.0f:%.0f %.0f:%.0f",
+             window.contentView!.frame.origin.x, 
+             window.contentView!.frame.origin.y,
+             window.contentView!.frame.size.width, 
+             window.contentView!.frame.size.height))
+
+print(String(format:"view1 frame on contentView %.0f:%.0f %.0f:%.0f",
+             view1.frame.origin.x,  
+             view1.frame.origin.y,
+             view1.frame.size.width,
+             view1.frame.size.height))
+
+print(String(format:"view2 frame on view1 %.0f:%.0f %.0f:%.0f",
+             view2.frame.origin.x, 
+             view2.frame.origin.y,
+             view2.frame.size.width, 
+             view2.frame.size.height))
+
+//result
+contentView frame           0:0     400:200
+view1 frame on contentView  100:50  200:100
+view2 frame on view1        50:25   100:50

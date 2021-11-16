@@ -1,0 +1,29 @@
+---- NSString+Search.h ----
+#import <Foundation/Foundation.h>
+@interface NSString (NSString_Search)
+-(NSArray*)rangeListOfString:(NSString*)keyword
+                     options:(NSStringCompareOptions)mask;
+@end
+
+---- NSString+Search.m ----
+@implementation NSString (NSString_Search)
+-(NSArray*)rangeListOfString:(NSString*)keyword
+                     options:(NSStringCompareOptions)mask{
+    NSMutableArray *resultList = [[NSMutableArray alloc] init];
+    NSRange range= NSMakeRange(0, 0);
+    NSRange result = NSMakeRange(0, 0);
+    do{
+        range.location = result.location+result.length;
+        range.length = [self length] - (result.location+result.length);
+        result = [self rangeOfString:keyword
+                             options:mask
+                               range:range];
+        if(result.location != NSNotFound){
+            NSNumber *location = @(result.location);
+            NSNumber *length = @(result.length);
+            [resultList addObject:@[location, length]];
+        }
+    } while(result.location != NSNotFound);
+    return resultList;    
+}
+@end

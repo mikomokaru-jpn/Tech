@@ -1,0 +1,1 @@
+func tableView(_ tableView: UITableView, cellForRowAt                indexPath: IndexPath) -> UITableViewCell {    if let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell")                             as? UATableViewCell {        //セルオブジェクトの操作         return cell    }    return UITableViewCell()}

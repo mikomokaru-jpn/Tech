@@ -1,0 +1,1 @@
+8.Call to function 'CGImageCreateWithImageInRect' returns a Core Foundation object of type CGImageRef _Nullable with a +1 retain count9.Object leaked: allocated object is not referenced later in this execution path and has a retain count of +1

@@ -1,0 +1,63 @@
+#import "UAItemView.h"
+#import <QuartzCore/QuartzCore.h>
+#import "NSBezierPath+MyBezierPath.h"
+
+@interface UAItemView()
+@property CAShapeLayer *shape1;             //図形１
+@property CAShapeLayer *shape2;             //図形２
+@property NSAttributedString *atrString;    //装飾文字列
+@end
+
+@implementation UAItemView
+//イニシャライザ
+-(id)initWithFrame:(NSRect)frameRect
+{
+    if(![super initWithFrame:frameRect])
+        return nil;
+    self.wantsLayer = YES;                                      //必須
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;  //背景色
+
+    //装飾文字列の定義
+    NSFont* font = [NSFont fontWithName:@"Helvetica" size:100];
+    NSDictionary *attributes = @{NSFontAttributeName:font};
+    self.atrString = [[NSAttributedString alloc]
+                       initWithString:@"ABC" attributes:attributes];
+
+    //CAShapeLayerオブジェクトの作成・緑の円
+    _shape1 = [CAShapeLayer layer];
+    //NSBezierPathによる図形の描画
+    NSBezierPath *path1 =
+      [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(0,0,100,100)];
+    //図形をレイヤーに追加する
+    _shape1.path = path1.cgPath;
+    _shape1.position = NSMakePoint(50, 65);                 //位置
+    _shape1.fillColor =  [NSColor greenColor].CGColor;      //色
+    _shape1.opacity = 0.5;                                  //半透明
+    
+    //CAShapeLayerオブジェクトの作成・青の四角
+    _shape2 = [CAShapeLayer layer];
+    //NSBezierPathによる図形の描画
+    NSBezierPath *path2 =
+      [NSBezierPath bezierPathWithRect:NSMakeRect(0,0,70,70)];
+    //図形をレイヤーに追加する
+    _shape2.path = path2.cgPath;
+    _shape2.position = NSMakePoint(130, 30);                //位置
+    _shape2.fillColor =  [NSColor blueColor].CGColor;       //色
+    return self;
+}
+
+//ビューの再表示
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //装飾文字列の描画・ビューの中央に配置
+    NSPoint centerPoint = NSMakePoint(dirtyRect.size.width/2, 
+                                      dirtyRect.size.height/2);
+    NSSize strSize = [_atrString size];
+    NSPoint strPoint = NSMakePoint(centerPoint.x-strSize.width/2, 
+                                   centerPoint.y-strSize.height/2);
+    [_atrString drawAtPoint:strPoint];
+    //CALayerオブジェクトを自身のレイヤーの上に重ねる
+    [self.layer addSublayer:_shape1];
+    [self.layer addSublayer:_shape2];
+}
+@end

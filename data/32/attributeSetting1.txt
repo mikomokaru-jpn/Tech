@@ -1,0 +1,1 @@
+NSMutableAttributedString *atrStr = [[NSMutableAttributedString alloc]                                     initWithString:@"山のあなたの空遠く"];NSFont* font = [NSFont fontWithName:@"YuKyo-Bold" size:20];[atrStr addAttributes:@{NSFontAttributeName:font}        range:NSMakeRange(0, [atrStr length])];

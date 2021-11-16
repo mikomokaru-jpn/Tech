@@ -1,0 +1,22 @@
+//---------------------------------------------------------------------
+// Swift
+//---------------------------------------------------------------------
+let path = NSHomeDirectory()+"/Desktop/com01.txt"
+NSWorkspace.shared.openFile(path,
+                            withApplication: "/Applications/Visual Studio Code.app",
+                            andDeactivate: true) //自身を非アクティブ化する
+
+if let url = URL.init(string: "https://cookpad.com"){
+    NSWorkspace.shared.open(url)
+}
+  
+//---------------------------------------------------------------------
+// Objective-C
+//---------------------------------------------------------------------
+NSString *path = [NSString stringWithFormat:@"%@%@",NSHomeDirectory(), @"/Desktop/com01.txt"];
+[[NSWorkspace sharedWorkspace] openFile:path
+                        withApplication:@"/Applications/Visual Studio Code.app"
+                            andDeactivate:YES];　 //自身をアクティブ化する
+
+NSURL *url = [NSURL URLWithString:@"https://www.google.co.jp"];
+[[NSWorkspace sharedWorkspace] openURL:url];

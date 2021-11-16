@@ -1,0 +1,19 @@
+-(IBAction)remove:(id)sender{
+    NSInteger count = [self.arrangedObjects count];
+    if (count == 0){
+        return;
+    }
+    NSInteger idx = self.selectionIndex;
+    [self removeObjects:self.selectedObjects];
+    if (count == 1){
+        return;
+    }
+    if (idx > 0){
+        [self setSelectionIndex:idx-1];
+    }else{
+        [self setSelectionIndex:0];
+    }
+    [_tableView selectRowIndexes:[NSIndexSet 
+                                  indexSetWithIndex:self.selectionIndex]
+            byExtendingSelection:NO];
+}

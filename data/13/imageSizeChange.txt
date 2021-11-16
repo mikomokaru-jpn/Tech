@@ -1,0 +1,12 @@
+GFloat newWidth = 400;
+GFloat newHeight = 300;
+GColorSpaceRef imageColorSpace = CGColorSpaceCreateWithName(
+                                   kCGColorSpaceGenericRGB);
+GContextRef newContext = CGBitmapContextCreate(
+                           NULL,
+                           (int)newWidth,
+                           (int)newHeight,
+                           8,
+                           (int)newWidth * 4,
+                           imageColorSpace,
+                           kCGImageAlphaPremultipliedLast);

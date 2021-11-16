@@ -1,0 +1,259 @@
+<!-- 
+14-3 CustomizedView
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューに文字列/イメージ/図形を描く</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">ビューに文字列/イメージ/図形を描く</h2>
+<div class="lm100 tm10 rm40">
+ウィンドウの要素であるボタン、テキストフィールド、テーブルビュー、コンボボックス、イメージを表示するカスタムビューなどは、すべてNSViewクラスをのサブクラスである。NSViewクラスのサブクラスを新たに作成することによって、アプリケーション独自のビューを作成することができる。
+</div>
+<div class="lm100 tm10 rm40">
+カスタマイズしたビューには、文字列（NSString, NSAtributedstring）、イメージ（NSImage）、図形（NSBezierPath, NSLayer, CoreGraphics）を表示できる。また、ビューの背景色や枠線の形状、色を変えることができる。
+</div>
+<h3 class="lm100 tm20 rm40 bm0">
+ビューの基礎
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+ビューは矩形である。
+</div>
+<div class="lm100 tm10 rm60">
+ビューは階層構造である。基底となるビューはウィンドウと同じ大きさのコンテントビューで、その上にビューが重なっていく。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/04/04_viewCustomize1.png&title=ビューの階層&width=600" target="_new">
+<img class="lm190 tm10 bm0" src="04_viewCustomize1.png" width="250" align="top" alt="ビューの階層" >
+</a>
+<div class="lm100 tm10 rm60">
+ビューのframeプロパティは、ビューの位置と大きさを持つ。ビューの位置は、ベースとなるビューの原点からビューの原点までの距離の座標（x, y）となる。なおビューの座標系の原点はデフォルトの設定では左下となる。ビューのザイズは、幅（width）と高さ（height）をピクセル単位で表す。
+</div>
+<div class="lm100 tm10 rm60">
+下の例でいえば、ビューの矩形の原点は（10, 20）、サイズは、60 x 40 となる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/04/04_viewCustomize3.png&title=ビューの作成&width=600" target="_new">
+<img class="lm170 tm10 bm5" src="04_viewCustomize3.png" width="300" align="top" alt="ビューの作成" >
+</a>
+<h2 class="lm100 tm20 rm40 bm0">
+drawRectメソッドでビューに描画する
+</h2>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/04/04_viewCustomize5.png&title=04_viewCustomize5&width=700" target="_new">
+<img class="lm100 tm10 bm5" src="04_viewCustomize5.png" width="500" align="top" alt="04_viewCustomize5" >
+</a>
+<div class="lm100 tm20 rm60">
+ビューの描画で一番重要なメソッドは、NSViewクラスのdrawRectメソッドである。ビューに何らかのコンテンツを描画するときは、カスタムクラスを作成して、このメソッドをオーバーライドする。
+</div>
+<div class="lm100 tm10 rm60">
+引数のNSRect構造体には、ビューの領域情報（矩形の原点と大きさ）が渡ってくる。この矩形の範囲の中で描画を行う。
+</div>
+<div class="lm100 tm10 rm60">
+ビューに文字列やイメージを描画するときに、drawRectメソッドの中で、drawdrawAtPoint または drawInRectメソッドを実行する。
+</div>
+<h3 class="lm100 tm20 rm40 bm0">
+属性付き文字列を表示する（左側のビュー）
+</h3>
+<div class="lm100 tm5 rm60">
+drawdrawAtPointメソッドは、文字列オブジェクトをビューの中央に表示する。メソッドの引数に、文字列の矩形領域の原点を指定する。原点は、ビューの大きさと文字列の矩形の大きさから計算する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view1.txt" width="530" height="220"></iframe>
+<h3 class="lm100 tm20 rm40 bm0">
+イメージを表示する（中央のビュー）
+</h3>
+<div class="lm100 tm5 rm60">
+drawInRectメソッドにより、イメージをビューの中央に表示する。メソッドの引数に、イメージを表示する矩形領域のサイズと位置（NSRect構造体）を指定する。表示する矩形領域のサイズは、元のイメージのサイズと縦横の比率は同じにする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view2.txt" width="530" height="440"></iframe>
+<h3 class="lm100 tm20 rm40 bm0">
+図形を表示する（右側のビュー）
+</h3>
+<div class="lm100 tm5 rm60">
+NSBezierPathクラスにより、背景色、円を描画する。Convenience Functionによりビューの枠線を描画する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view3.txt" width="530" height="370"></iframe>
+<h3 class="lm100 tm20 rm40 bm0">
+サブクラスの初期化
+</h3>
+<div class="lm100 tm5 rm60">
+以上の例は、NSViewクラスのサブクラスのオブジェクトを作成・初期化し、ベースとなるビュー（例えばコンテントビュー）に追加するという方法をとる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/addSubview.txt" width="530" height="130"></iframe>
+<div class="lm100 tm20 rm60">
+サブクラスのイニシャライザ
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view1init.txt" width="530" height="160"></iframe>
+<div class="lm100 tm20 rm60">
+Inteface Builderでビューオブジェクトを作成し、ビューのクラスにサブクラスを指定した場合、オブジェクトの初期化は awakeFromNibメソッドの中で行う必要がある。
+</div>
+<h3 class="lm100 tm20 rm40 bm0">
+ビューの再描画のタイミング
+</h3>
+<div class="lm100 tm5 rm60">
+drawRectメソッドは、ビューのプロパティを変更したときなど、ビューの再描画が必要になるたびに自動的に呼ばれる。アプリケーションが直接呼び出してはならない。ただしアプリケーションが表示コンテンツを変更するなどして強制的に再描画させたいときは、ビューの needsDisplayプロパティを更新する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm5" src="/lib/HTMLofText.html?filename=/data/04/needsDisplay.txt&font=font100" width="530" height="40"></iframe>
+<h3 class="lm100 tm20 bm0 rm60">
+ソースコード
+</h3>
+<!-- ソースコード リンク -->
+<div class="lm110 tm0 rm60">アプリケーション制御　 
+<a href="/lib/HTMLofText.html?filename=/data/04/source/NSView_AppDelegate.txt&title=AopDelegate" target="_new">AopDelegate</a>
+</div>
+<div class="lm110 tm0 rm60">属性付き文字列を表示する　
+<a href="/lib/HTMLofText.html?filename=/data/04/source/NSView_View1.txt&title=View1" target="_new">View1</a>
+</div>
+<div class="lm110 tm0 rm60">イメージを表示する　
+<a href="/lib/HTMLofText.html?filename=/data/04/source/NSView_View2.txt&title=View2" target="_new">View2</a>
+</div>
+<div class="lm110 tm0 rm60">図形を表示する　
+<a href="/lib/HTMLofText.html?filename=/data/04/source/NSView_View3.txt&title=View3" target="_new">View3</a>
+</div>
+<h2 class="lm100 tm30 rm40 bm0">
+CALayer にコンテンツを描画する
+</h2>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/04/04_viewCustomize6.png&title=04_viewCustomize6&width=700" target="_new">
+<img class="lm100 tm10 bm5" src="04_viewCustomize6.png" width="500" align="top" alt="04_viewCustomize6" >
+</a>
+<div class="lm100 tm10 rm60">
+ビューは、自身に対応するレイヤー（CALayerオブジェクト）を持つ。Core Animationフレームワークの一部であるCALayerクラスは、豊富な二次元グラフィック機能を提供する。レイヤーに対する描画によって、ビューに対する描画と同じことを行うことができる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/04/04_viewCustomize7.png&title=04_viewCustomize7&width=500" target="_new">
+<img class="lm200 tm5 bm5" src="04_viewCustomize7.png" width="250" align="top" alt="04_viewCustomize7" >
+</a>
+<div class="lm100 tm5 rm60">
+レイヤーに画像を表示するには、CALayerクラスのオブジェクトを作成し、表示コンテンツをプロパティに代入する。イニシャライザ等の初期処理でCALayerオブジェクトを自身のレイヤに一度だけ追加すればよい。
+</div>
+<div class="lm100 tm10 rm60">
+Core Animationフレームワークを利用するには次の宣言ファイルをインポートすること。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/QuartzCore.txt&font=font100" width="570" height="40"></iframe>
+<h3 class="lm100 tm20 rm40 bm0">
+属性付き文字列を表示する（左側のビュー）
+</h3>
+<div class="lm100 tm5 rm60">
+CALayerクラスのサブクラスのCATextLayerクラスを使用する。stringプロパティに属性付き文字列を代入する。※文字の輪郭がぼやける気がする
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view4.txt" width="570" height="420"></iframe>
+<h3 class="lm100 tm20 rm40 bm0">
+イメージを表示する（中央のビュー）
+</h3>
+<div class="lm100 tm5 rm60">
+CALayerクラスのcontentsプロパティにNSImageオブジェクトを代入する。ただし、OS10.5以前であれば、CGImageRefを代入すること。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view5.txt" width="570" height="620"></iframe>
+<div class="lm120 tm10 rm60">
+ビューにイメージを描画するには、CoreGraphicsを使用することもできる。豊富な機能を利用してイメージの拡大・縮小・移動、切り取りやカラー調整といった操作をすることができる。
+<a href='/data/42/core_graphics.html' target="_new">画像当てクイズ（初歩のCore Graphics）</a>で取り上げた。
+</div>
+<h3 class="lm100 tm20 rm40 bm0">
+図形を表示する（右側のビュー）
+</h3>
+<div class="lm100 tm5 rm60">
+図形を作成するには、CALayerクラスのサブクラスのCAShapeLayerクラスを使用し、pathプロパティにNSBezierPathオブジェクトを代入する。
+</div>
+<div class="lm100 tm10 rm60">
+ビューの背景色や枠線（太さ、色、丸み）は、レイヤーのプロパティの設定により変更することができる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/04/view6.txt" width="570" height="380"></iframe>
+<div class="lm120 tm10 rm60">
+ビューの中に図形を描画する方法は、<a href='/data/05/view_drawing.html' target="_new">ビューをデザインする</a> でも取り上げた。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+ソースコード
+</h3>
+<!-- ソースコード リンク -->
+<div class="lm110 tm0 rm60">アプリケーション制御　 
+<a href="/lib/HTMLofText.html?filename=/data/04/source/CALayer_AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm110 tm0 rm60">属性付き文字列を表示する　
+<a href="/lib/HTMLofText.html?filename=/data/04/source/CALayer_View4.txt&title=View4" target="_new">View4</a>
+</div>
+<div class="lm110 tm0 rm60">イメージを表示する　
+<a href="/lib/HTMLofText.html?filename=/data/04/source/CALayer_View5.txt&title=View5" target="_new">View5</a>
+</div>
+<div class="lm110 tm0 rm60">図形を表示する　
+<a href="/lib/HTMLofText.html?filename=/data/04/source/CALayer_View6.txt&title=View6" target="_new">View6</a>
+</div>
+<h2 class="lm100 tm20 rm40 bm0">
+ビューの座標系を変換する
+</h2>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+MacOSXのビューの座標系（左図）は左下が原点となる。Windows等他の多くのシステムの座標系（右図）のように原点をビューの左上にするには、
+NSViewクラスのサブクラスで、isFlippedメソッドをオーバーライドする。
+</div>
+<div class="lm130 tm10 rm40">
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.php?filename=04/04_viewCustomize4.png&title=座標系&width=700" target="_new">
+<img class="lm120 tm0 bm0" src="04_viewCustomize4.png" width="500" align="top" alt="座標系" >
+</a>
+<!-- ソースコード -->
+<iframe class="lm100 tm10 bm10" src="/lib/HTMLofText.html?filename=/data/04/isFlipped.txt" width="530" height="110"></iframe>
+<h2 class="lm100 tm20 rm40 bm0">
+ビューに対するイベントを補足する
+</h2>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+ボタンオブジェクトと同じようにビューの中でマウスをクリックしたときに特定のメソッドを起動してみる。
+</div>
+<div class="lm100 tm10 rm60">
+ビューに対するマウスイベント（mouseUpなど）やキーボードイベント（keyDownなど）の実装を行えばよい。
+</div>
+<div class="lm100 tm10 rm60">
+NSViewのサブクラスを作成し、丸いボタンをデザインする。ボタンをクリックするとカウンタが増え、shitキー押しながらクリックすると減る。ビューのタイトルにカウンタ値を表示し、円の大きさはカウンタの値に合わせて変化する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/04/04_viewCustomize2.png&title=ビューのカスタマイズ&width=700" target="_new">
+<img class="lm130 tm0 bm0" src="04_viewCustomize2.png" width="400" align="top" alt="ビューのカスタマイズ" >
+</a>
+<h3 class="lm100 tm5 bm0 rm60">
+<!-- ソースコード リンク -->
+ソースコード
+</h3>
+<div class="lm100 tm5 rm60">
+<!-- ソースコード リンク -->
+<a href="/lib/HTMLofText.html?filename=/data/04/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+　アプリケーション制御
+</div>
+<div class="lm100 tm0 rm60">
+<!-- ソースコード リンク -->
+<a href="/lib/HTMLofText.html?filename=/data/04/source/CustomizedView.txt&title=CustomizedView" target="_new">CustomizedView</a>
+　ボタンビュー</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

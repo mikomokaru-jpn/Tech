@@ -1,0 +1,14 @@
+//セルの一部となる削除確認ボタン（ビュー）
+var deleteAgree = UADeleteAgreeView()   
+
+//テーブルビューのセルのボタンをタップした
+@objc private func buttonTapped(_ btn: UIButton){
+    if kind == 0{ //既存の削除
+        selectedCell = true
+        //レイアウトの変更・削除確認ビューの表示
+        NSLayoutConstraint.deactivate(constraints1)
+        NSLayoutConstraint.activate(constraints2)
+        delegate?.deletePrepare(self)
+        deleteAgree.setNeedsDisplay()
+    }
+}

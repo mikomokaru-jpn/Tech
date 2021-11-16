@@ -1,0 +1,6 @@
+① NSView.AutoresizingMask.minXMargin = 1    //左側マージン可変
+② NSView.AutoresizingMask.width = 2         //幅可変
+③ NSView.AutoresizingMask.maxXMargin = 4    //右側マージン可変
+④ NSView.AutoresizingMask.minYMargin = 8    //下側マージン可変
+⑤ NSView.AutoresizingMask.heigh = 16        //高さ可変
+⑥ NSView.AutoresizingMask.maxYMargin = 32   //上側マージン可変

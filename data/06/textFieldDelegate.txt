@@ -1,0 +1,16 @@
+- (BOOL)control:(NSControl *)control 
+                   textView:(NSTextView *)textView
+        doCommandBySelector:(SEL)command
+{
+    //引数commandに、tabキーやreturnキー等のキーボードコマンド値が渡る
+    if (command == @selector(insertTab:)){   
+        //tabキーを押されたとき、ファーストレスポンダを前に移す。
+        [self nextControlFrom:control];
+        return YES;
+    }else if (command == @selector(insertBacktab:)){ 
+        //shift+tabキーを押されたとき、ファーストレスポンダを後ろに移す。
+        [self prevControlFrom:control];
+        return YES;
+    }
+    return NO;
+}

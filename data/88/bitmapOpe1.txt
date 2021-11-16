@@ -1,0 +1,17 @@
+let openPanel = NSOpenPanel.init()
+//... openPanelの設定 ...
+//オープンパネルを開く
+openPanel.beginSheetModal(for: self.window, 
+    completionHandler: { (result) in
+    if result == .OK{
+        //ディレクトリの選択
+        let url: URL = openPanel.urls[0]
+        if let cgImageSource = CGImageSourceCreateWithURL(
+                               url as CFURL, nil){
+            if let cgImage = CGImageSourceCreateImageAtIndex(
+                             cgImageSource, 0, nil){
+                self.view.setUp(cgImage:cgImage)
+            }
+        }
+    }
+})

@@ -1,0 +1,104 @@
+//------------------------------------------------------------------------------
+// インタフェース宣言
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSTextFieldDelegate>
+
+-(IBAction)button:(id)sender;
+
+@end
+
+//------------------------------------------------------------------------------
+// クラス実装
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "FRButton.h"
+#import "FRView.h"
+#import "FRView2.h"
+#import "FRTableView.h"
+
+//*** 宣言 ***
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTextField *frTextField;
+@property (weak) IBOutlet FRTableView *frTableView;
+@property (weak) IBOutlet FRView *frView;
+@property (weak) IBOutlet FRView2 *frView2;
+@property (weak) IBOutlet FRButton *frButton;
+@end
+
+//*** 実装 ***
+@implementation AppDelegate
+
+//初期表示
+-(void)awakeFromNib
+{
+    //delegateを引き受ける
+    [_frButton setFrDelegate:self];     //FRCategory
+    [_frView setFrDelegate:self];       //FRCategory
+    [_frTableView setFrDelegate:self];  //FRCategory
+    [_frTextField setDelegate:self];    //NSTextFieldDelegate
+    //最初のファーストレスポンダー
+    [_window makeFirstResponder:_frButton];
+}
+
+//NSTextFieldデリゲートメソッドの実装
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView
+                          doCommandBySelector:(SEL)command
+{
+    if (command == @selector(insertTab:)){   //tabキーを押された
+        [self nextControlFrom:control];
+        return YES;
+    }else if (command == @selector(insertBacktab:)){ //shift+tabキーを押された
+        [self prevControlFrom:control];
+        return YES;
+    }
+    return NO;
+}
+
+//デリゲートメソッドの実装：ファーストレスポンダを前進させる
+-(void)nextControlFrom:(id)object
+{
+    //起動元コントロールを判定し、次のコントロールにファーストレスポンダを移す
+    if (object == _frButton){
+        //ボタン -> カスタムビュー
+        [_window makeFirstResponder:_frView];
+    }else if (object == _frView){
+        //カスタムビュー -> テーブルビュー
+        [_window makeFirstResponder:_frTableView];
+    }else if (object == _frTableView){
+        //テーブルビュー -> テキストフィールド
+        [_window makeFirstResponder:_frTextField];
+    }else if (object == _frTextField){
+        //テキストフィールド -> ボタン
+        [_window makeFirstResponder:_frButton];
+    }
+}
+
+//デリゲートメソッドの実装：ファーストレスポンンダを後退させる
+-(void)prevControlFrom:(id)object
+{
+    //起動元コントロールを判定し、次のコントロールにファーストレスポンダを移す
+    if (object == _frButton){
+        //ボタン -> テキストフィールド
+        [_window makeFirstResponder:_frTextField];
+    }else if (object == _frView){
+        //カスタムビュー -> ボタン
+        [_window makeFirstResponder:_frButton];
+    }else if (object == _frTableView){
+        //テーブルビュー -> カスタムビュー
+        [_window makeFirstResponder:_frView];
+    }else if (object == _frTextField){
+        //テキストフィールド -> テーブルビュー
+        [_window makeFirstResponder:_frTableView];
+    }
+}
+
+//ボタンをクリック
+-(IBAction)button:(id)sender
+{
+    //ボタンをファーストレスポンダにする。
+    [_window makeFirstResponder:sender];
+}
+
+@end

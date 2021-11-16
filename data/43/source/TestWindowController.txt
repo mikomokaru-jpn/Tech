@@ -1,0 +1,26 @@
+//--- TestWindowController.h ---
+#import <Cocoa/Cocoa.h>
+@interface TestWindowController : NSWindowController
+@end
+
+//--- TestWindowController.m ---
+#import "TestWindowController.h"
+@interface TestWindowController ()
+@property (weak) IBOutlet NSView *view;
+@property (weak) IBOutlet NSTextField *textField;
+@property (weak) IBOutlet NSButton *button;
+@end
+@implementation TestWindowController
+-(void)awakeFromNib
+{
+    [[self window]  setTitle:@"てすとうぃんどう"]; //Windowの参照方法
+    [_textField setStringValue:@"テスト"];
+    [_button setTitle:@"Click me"];
+
+}
+-(IBAction)buttonClicked:(id)sender
+{
+    [_textField setStringValue:@"ボタンがクリックされた"];
+    [_button setEnabled:NO];    //ボタンを無効化する
+}
+@end

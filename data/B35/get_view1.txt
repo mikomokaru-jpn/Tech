@@ -1,0 +1,14 @@
+var array = [NSView]() //格納用配列
+//ビューを取得する（再帰関数呼び出し）
+self.getSubview1(self.window!.contentView!, &array)
+for view in array{
+    //ビューのプロパティを整形して出力
+}
+
+//再帰関数
+func getSubview1(_ view: NSView, _ array: inout [NSView]){
+    for view in view.subviews{
+        array.append(view)
+        self.getSubview1(view, &array)
+    }
+}

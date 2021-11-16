@@ -1,0 +1,18 @@
+ //バンドルのディレクトリ構造の表示
+NSFileManager *fm = [NSFileManager defaultManager];   //ファイルマネージャ
+_info.string = [_info.string stringByAppendingFormat:@"\n\n●バンドルのディレクトリ構造"];
+//ディレクトリを再帰的に取得
+NSDirectoryEnumerator *dirEnum = [fm enumeratorAtPath:[bundle bundlePath]];
+NSArray *dirArray = [dirEnum allObjects];
+for(id obj in dirArray){
+    NSString *fullPath = [NSString stringWithFormat:@"%@/%@", [bundle bundlePath], obj];
+    BOOL isDir;
+    if([fm fileExistsAtPath:fullPath isDirectory:&isDir])
+    {
+        if(isDir){
+            _info.string = [_info.string stringByAppendingFormat:@"\nD: %@", obj];
+        }else{
+            _info.string = [_info.string stringByAppendingFormat:@"\nF: %@", obj];
+        }
+    }
+}

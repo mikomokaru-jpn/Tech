@@ -1,0 +1,24 @@
+//---- UAUtility.swift ----
+import Cocoa
+class UAUtility: NSObject {
+    //属性付き文字列
+    static func attributed(string: String, size: CGFloat, color: NSColor)
+        -> NSAttributedString {
+        let atrStr =  NSMutableAttributedString.init(string: string)
+        //フォント
+        let font = NSFont.init(name: "Arial", size: size)!
+        atrStr.addAttribute(NSAttributedStringKey.font,
+                            value: font, range: NSMakeRange(0, atrStr.length))
+        //文字色
+        atrStr.addAttribute(NSAttributedStringKey.foregroundColor,
+                                value: color, range: NSMakeRange(0, atrStr.length))
+        return atrStr
+    }
+    //RGBからCGColoを作成する
+    static func cgColor(r: CGFloat, g:CGFloat, b:CGFloat) -> CGColor{
+        let space = CGColorSpaceCreateDeviceRGB()
+        let color: CGColor =  CGColor(colorSpace: space,
+                                      components: [r/255, g/255, b/255, 1.0])!
+        return color
+    }
+}

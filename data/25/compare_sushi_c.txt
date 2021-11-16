@@ -1,0 +1,16 @@
+//---- Sushi.h ----
+NSComparisonResult funcCompareKana(Sushi *sushi1, 
+                                   Sushi *sushi12, 
+                                   void *context);
+//---- Sushi.m ----
+NSComparisonResult funcCompareKana(Sushi *sushi1, 
+                                   Sushi *sushi12,  
+                                   void *context){
+    //context 1:昇順  0:降順
+    NSComparisonResult result = [sushi1.kana compare:sushi12.kana];
+    if ((NSInteger)context == 1){
+        return result;
+    }else{
+        return -result;
+    }
+}

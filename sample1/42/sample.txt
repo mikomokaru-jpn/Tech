@@ -1,0 +1,77 @@
+/*----------------------------------------------------------------------
+配列宣言の２通りの方法
+var array: array<型>
+var array: [型]
+要素の型はジェネリクスのパラメータとして明示的に指定すること
+どちらも同じで下は簡易的な書き方。
+----------------------------------------------------------------------*/
+//配列の宣言と初期化
+var array1: [String] = ["A", "BB", "123"]
+
+//初期化子により型が自動的に決まるときは宣言は不要
+var array1 = ["A", "BB", "123"]
+
+//空の配列の作成
+var array1a: [String] = []
+var array1b = [String]()
+
+//Objective-Cと違って基本数値型を要素に持てる
+var array2: [Int] = [1, 25, 500]
+
+//イニシャライザを初期化の要素にできる
+var array3: Array<NSButton> = [NSButton(), NSButton()]
+var array4 = [Date(), Date().addingTimeInterval(60 * 60 * 24) ]
+
+//型の混在も可能。明示的にAny型の配列として宣言すること
+var array5: Array<Any> = [1, "A", NSButton()]
+
+//要素数と同一の初期値を指定して作成する。
+var tupleList = [(Int, Int)](repeating:(0,0), count:10) //要素はタプル
+
+//2次元配列
+var array6: [[String]] = [["A", "B", "C"], ["D", "E", "F"]]
+
+/*----------------------------------------------------------------------
+Swiftの配列は mutableであり、imutableという属性は存在しない。
+imutableにするには letで宣言する。
+----------------------------------------------------------------------*/
+let array7: [String] = ["A", "BB", "123"]
+//array7.append("XXX") コンパイルエラー
+
+//要素の追加
+array1.append("XXX")
+array1 += ["YYY"]
+
+//指定インデックスの要素の削除
+array1.remove(at: 1)
+
+//全てのの要素の削除
+array1.removeAll()
+
+/*----------------------------------------------------------------------
+Swiftの配列は値型である。
+配列のコピーでは要素が全てコピーされる（いわゆるdeep copy）
+-----------------------------------------------------------------------*/
+var array8 = array1
+array1[0] = "変更"
+//結果
+array1: ["変更", "BB", "123", "XXX", "YYY"]
+array8: ["A", "BB", "123", "XXX", "YYY"]
+
+//mapメソッド
+let arrayA = [1, 2, 3, 4, 5]
+let arrayB = arrayA.map{$0 * 2}
+print(arrayB)
+//result: [2, 4, 6, 8, 10]
+
+//flatMapメソッド  N次元 -> N-1次元
+let arrayA: [[Int]] = [[1, 2], [3, 4], [5]]
+let arrayB = arrayA.flatMap{ $0 }
+print(arrayB)
+//result: [1, 2, 3, 4, 5]
+
+//N次元 -> N-2次元
+let arrayC: [[[Int]]] = [[[1, 2], [3, 4], [5]]]
+let arrayD = arrayC.flatMap{ $0 }.flatMap{ $0 }
+print(arrayD)
+//result: [1, 2, 3, 4, 5]

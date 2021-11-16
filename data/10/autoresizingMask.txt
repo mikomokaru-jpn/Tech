@@ -1,0 +1,6 @@
+① NSViewMinXMargin = 1       //左側マージン可変
+② NSViewWidthSizable = 2     //幅可変
+③ NSViewMaxXMargin = 4       //右側マージン可変
+④ NSViewMinYMargin = 8       //下側マージン可変
+⑤ NSViewHeightSizable = 16   //高さ可変
+⑥ NSViewMaxYMargin = 32      //上側マージン可変

@@ -1,0 +1,14 @@
+- (void)browser:(NSBrowser*)sender willDisplayCell:(id)cell
+          atRow:(NSInteger)row column:(NSInteger)column{
+    //行に対応するノードのURLを得る
+    NSURL *url = [_arrayOfURL objectAtIndex:row];
+    //セルにファイル名/ディレクトリ名をセットする。
+    NSString *item;
+    [url getResourceValue:&item
+                   forKey:NSURLNameKey
+                    error:nil];
+    [cell setStringValue:item]; 
+    //セルにアイコンを設定する（クラスの規定の機能）
+    [cell setImage:getIcon(url.path)];
+    [cell setLoaded:YES];
+}

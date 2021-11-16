@@ -1,0 +1,62 @@
+<?php
+/* 血圧測定データをDBに書き出す。*/
+// DB接続
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect(); 
+// POSTデータの取得
+$id = $_POST['id'];           /* ユーザID INT */
+$date = $_POST['date'];       /* 年月日(YYYYMMDD) INT */
+$lower = $_POST['lower'];     /* 最低血圧値 INT */
+$upper = $_POST['upper'];     /* 最高血圧値 INT */
+$confirm = $_POST['confirm']; /* 確定フラグ boolean */
+// レコードを求める
+try{
+    $sql = "SELECT COUNT(*) as count FROM blood_pressure 
+            WHERE id=:id AND date=:date;";
+    $stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmh->bindValue(':date', $date, PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー1:'. $e->getMessage());
+}
+// 件数を取得
+while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+    $count = ($row["count"]);
+}
+if ($count > 0){ // あれば UPDATE
+    try{
+        $sql = "UPDATE blood_pressure 
+                SET lower=:lower, upper=:upper, confirm=:confirm
+                WHERE id=:id AND date=:date;";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmh->bindValue(':date', $date, PDO::PARAM_INT);
+        $stmh->bindValue(':lower', $lower, PDO::PARAM_INT);
+        $stmh->bindValue(':upper', $upper, PDO::PARAM_INT);
+        $stmh->bindValue(':confirm', $confirm, PDO::PARAM_INT);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー2:'. $e->getMessage());
+    }
+}else{ // なければ INSERT
+    try{
+        $sql = "INSERT INTO blood_pressure 
+                VALUES (:id, :date, :lower, :upper, :confirm);";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmh->bindValue(':date', $date, PDO::PARAM_INT);
+        $stmh->bindValue(':lower', $lower, PDO::PARAM_INT);
+        $stmh->bindValue(':upper', $upper, PDO::PARAM_INT);
+        $stmh->bindValue(':confirm', $confirm, PDO::PARAM_INT);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー3:'. $e->getMessage());
+    }
+}
+// 戻り値の返却
+$res = array(1);
+header('Content-type: application/json');
+echo json_encode($res);
+?>

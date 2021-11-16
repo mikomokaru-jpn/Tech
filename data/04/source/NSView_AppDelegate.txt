@@ -1,0 +1,50 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "View1.h"
+#import "View2.h"
+#import "View3.h"
+
+@interface AppDelegate ()
+
+@property (weak) IBOutlet NSWindow *window;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    _window.contentView.layer.backgroundColor = [NSColor whiteColor].CGColor;
+    NSSize size = NSMakeSize(490, 170);
+    [_window setContentSize:size];    
+    [self drawingView];
+}
+//NSView
+-(void)drawingView{
+    //属性付き文字列の表示 ---------------------------------------------------------
+    NSString *string = @"猪突猛進";
+    NSFont *font = [NSFont fontWithName:@"YuKyo_Yoko-Bold" size:32]; //游教科書体 横用 Bold
+    //NSFont *font = [NSFont boldSystemFontOfSize:44]; //システムフォントの太字
+    NSColor *color = [NSColor blueColor];
+    NSAttributedString *atributedString =
+    [[NSAttributedString alloc] initWithString:string
+                                    attributes:@{NSFontAttributeName:font,
+                                                 NSForegroundColorAttributeName:color}];
+    View1 *view1 = [[View1 alloc] initWithFrame:NSMakeRect(10 ,10, 150, 150)
+                               attributedString:atributedString];
+    [_window.contentView addSubview:view1];    
+    //イメージの表示 --------------------------------------------------------------
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *path = [bundle pathForResource:@"piyopiyo"
+                                      ofType:@"jpg"];
+    NSImage *image = [[NSImage alloc] initWithContentsOfFile:path];
+    View2 *view2 = [[View2 alloc] initWithFrame:NSMakeRect(170, 10, 150, 150) image:image];
+    [_window.contentView addSubview:view2];
+    //図形の描画 -----------------------------------------------------------------
+    View3 *view3 = [[View3 alloc] initWithFrame:NSMakeRect(330, 10, 150, 150)];
+    [_window.contentView addSubview:view3];
+    view3.needsDisplay = YES;    
+}
+@end

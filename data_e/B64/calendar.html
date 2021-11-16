@@ -1,0 +1,130 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Simple Calender & Annual calendar</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+Simple Calender 
+</h2>
+
+<div class="lm70 tm5 rm60">
+Display an one-month calendar.
+The latest version of a series of making calendars that started with Objective-C.
+As an additional feature, the calendar size is scaled up or down as the window size changes.
+And I  reviewed the design to reduce a number of classes, and aimed for concise and easy-to-understand code.
+</div>
+<div class="lm70 tm10 rm60">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0
+</div>
+
+<div class="lm70 tm5 rm60">
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B64/calendar.mp4&title=calendar&width=700" target="_new">
+<img class="lm10 tm0 bm0" src="/data/B64/calendar.png" alt="[カレンダー画像1]" width="250"></a>
+</div>	
+<div class="lm100 tm5 rm60">
+Click the image to see the video
+</div>
+
+<h3 class="lm70 tm30 bm0 rm60">
+Implementation points
+</h3>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm10 bm0 rm60">
+  Enlarge and reduce a view
+</h3>
+<div class="lm70 tm0 rm60">
+Apply <a href='/data/B63/flexibleView.html' target="_blank">View Techniques: Resize the view to fit the window size</a>
+The calendar view holds many subviews these are  buttons, labels,  views that display dates.
+As the size of the calendar view changes, so does the size of those subviews  at the same rate.
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+Key value observing
+</h3>
+<div class="lm70 tm0 rm60">
+I will introduce one  example of key value  observing.
+This application creates a calendar view object (UACalView2 class) in the launch processing of AppDelegate and adds it to the content view of the window.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B64/AppDelegate.swift" width="580" height="190"></iframe>
+<div class="lm70 tm20 rm60">
+A calendar view holds subviews that display dates of one month.
+In the initializer of  calender view class , the view of  day of today wil become "first responder" and  highlighted.
+</div>
+<div class="lm70 tm10 rm60">
+To make a view  a first responder, use window's makeFirstResponder method.
+However, when the initializer of calendar view is started, for  the calendar view has not been added to the window,  the window object in it  is nil,  and any window's method cannot be called.
+So what to do is to use key-value monitoring.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B64/observers.swift" width="580" height="300"></iframe>
+<div class="lm70 tm10 rm60">
+The calendar view observes a change in the state of window propertie.
+When AppDelegate adds a calendar view to the window, the closure is executed at that time,
+and it finds out which view is today in the month and make it  first responder.
+The window state changes from nil to non-nil.
+The above is a delayed execution pattern.
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+Class structure diagram
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B64/calendar2.png&title=クラス構造図&width=750" target="_new">
+<img class="lm100 tm20 bm0" src="/data/B64/calendar2.png" alt="[クラス構造図]" width="400" align="middle"></a>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/S38-FlexibleCalendar" target="_new">mikomokaru-jpn/S38-FlexibleCalendar</a>
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+Class inheritance
+</h3>
+<div class="lm70 tm0 rm60">
+The class is divided into a basic part and an extended part, and an inheritance relationship is created.
+The basic part is to move  months and select a date by clicking a mouse, and the extended part also makes it possible to operate them with a keyboard.
+I think this will give you a pretty clear code without overloading a single file.
+  </div>
+<h2 class="lm70 tm30 bm0">
+Annual calendar
+</h2>
+<div class="lm70 tm5 rm60">
+display one year calendar that contains 12 month calendars.
+The move button switches  years.
+It will automatically change the size of the calendar as the window is resized.
+</div>
+<div class="lm70 tm5 rm60">
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B64/year_calendar.mp4&title=year_calendar&width=700" target="_new">
+<img class="lm10 tm10 bm0" src="/data/B64/year_calendar.png" alt="[カレンダー画像1]" width="350"></a>
+</div>	
+<div class="lm100 tm5 rm60">
+Click the image to see the video.
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/S39_FlexibleCalendar2" target="_new">mikomokaru-jpn/S39_FlexibleCalendar2</a>
+</div>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

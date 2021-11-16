@@ -1,0 +1,34 @@
+-- リクエストヘッダ情報 --
+Host: localhost
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryL4HgNgSeeV6R0zAH
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Origin: http://localhost
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15
+Referer: http://localhost/50_test/upload.html
+Content-Length: 607181
+Accept-Language: ja-jp
+
+-- POSTパラメータ --
+date: 20200101
+intext: こんにちは
+お元気ですか
+MAX_FILE_SIZE: 10000000
+
+-- FILESパラメータ --
+Array
+(
+    [userfile] => Array
+        (
+            [name] => P2230950.JPG
+            [type] => image/jpeg
+            [tmp_name] => /private/var/tmp/phpy0vMVO
+            [error] => 0
+            [size] => 606656
+        )
+
+)
+
+アップロード成功

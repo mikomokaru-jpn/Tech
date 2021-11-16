@@ -1,0 +1,6 @@
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect]; 
+ 
+    //@property NSImage *image;
+    [_image drawInRect:dirtyRect];
+}

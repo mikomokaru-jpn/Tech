@@ -1,0 +1,7 @@
+@IBOutlet weak var menuColor: NSMenu!
+
+func applicationDidFinishLaunching(_ aNotification: Notification) {
+    ....
+    menuColor.autoenablesItems = false
+    menuColor.item(withTitle: "赤")?.isEnabled = false
+}

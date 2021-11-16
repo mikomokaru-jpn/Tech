@@ -1,0 +1,16 @@
+- (void)tableView:(NSTableView *)tableView
+  willDisplayCell:(id)cell
+   forTableColumn:(NSTableColumn *)column
+              row:(NSInteger)row{
+    //Cellオブジェクトの取得
+    NSTextFieldCell *aCell = cell;
+    aCell.drawsBackground = YES;
+    //行の背景色を偶数行・奇数行で変える
+    if ((row % 2) == 1){
+        aCell.backgroundColor = [NSColor lightGrayColor];
+    }else{
+        aCell.backgroundColor = 
+            [NSColor colorWithRed:255.0/255.0 green:228.0/255.0 
+                             blue:196.0/255.0 alpha:1.0];
+    }
+}

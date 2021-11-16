@@ -1,0 +1,41 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+#import "Yokai.h"
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@property NSMutableArray<Yokai*>* yokaiList; // バインドされる配列
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "UAArrayController.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@end
+@implementation AppDelegate
+//アプリケーション起動後
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //テーブルの作成
+    NSArray *itemList = @[@[@1, @"小豆洗い", @"アズキアライ", @30, @45],
+                          @[@2, @"座敷わらし", @"ザシキワラシ", @90, @75],
+                          @[@3, @"一反木綿", @"イッタンモメン", @40, @20],
+                          @[@4, @"ぬらりひょん", @"ヌラリヒョン", @80, @100],
+                          @[@5, @"ダイダラボッチ", @"ダイダラボッチ", @0, @100],
+                          @[@6, @"一つ目小僧", @"ヒトツメコウゾウ", @95, @50],
+                          @[@7, @"ろくろ首", @"ロクロクビ", @30, @80],
+                          @[@8, @"猫又", @"ネコマタ", @10, @30],
+                        ];
+    _yokaiList = [[NSMutableArray alloc] init];
+    //テーブル作成・バインドしているArrayControllerに対してデータの更新を通知する。
+    [self willChangeValueForKey:@"yokaiList"];
+    for (NSArray* items in itemList){
+        Yokai *yokai = [[Yokai alloc] init];
+        yokai.code = items[0];
+        yokai.name = items[1];
+        yokai.kana = items[2];
+        yokai.records.japanese = items[3];
+        yokai.records.arithmetic = items[4];
+        [_yokaiList addObject:yokai];
+    }
+    [self didChangeValueForKey:@"yokaiList"];
+}
+@end

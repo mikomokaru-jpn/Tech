@@ -1,0 +1,24 @@
+@property (weak) IBOutlet NSImageView *imageView;  //アイコン
+@property (weak) IBOutlet NSTextField *type;       //UTI
+@property (weak) IBOutlet NSTextField *typeName;   //UTIの説明
+
+//アクション：ブラウザのセルをクリックする
+-(IBAction)selectNode:(id)sender{
+    NSString *path = [sender path];
+    if ([path isEqualToString:@""]){
+        _imageView.image = nil;
+        return;
+    }
+    NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];
+    //アイコンイメージの表示
+    NSImage *iconImage = nil;
+    iconImage = [workSpace iconForFile:[sender path]]; // アイコン取得
+    [iconImage setSize:_imageView.frame.size]; //アイコンサイズの変更
+    [_imageView setImage:iconImage];
+    //UTIの表示
+    NSString *type, *typeName;
+    type = [workSpace typeOfFile:[sender path] error:nil];
+    typeName = [workSpace localizedDescriptionForType:type];
+    _type.stringValue = type;
+    _typeName.stringValue = typeName;
+}

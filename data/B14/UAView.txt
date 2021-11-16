@@ -1,0 +1,17 @@
+class UAView: NSView {
+    weak var delegate: SubWinViewDelegate?  = nil  //デリゲートへの参照
+    
+    //マウスダウン
+    override func mouseDown(with event: NSEvent) {
+        NSCursor.pointingHand.set()
+        delegate?.clickView(event: event)  //デリゲートメソッドを呼び出す
+    }
+    //マウスアップ
+    override func mouseUp(with event: NSEvent) {
+        NSCursor.arrow.set()
+    }
+    //クリックしたら即時にハンドラが起動する
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool{
+        return true
+    }
+}

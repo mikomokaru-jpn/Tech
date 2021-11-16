@@ -1,0 +1,29 @@
+//--- WinCtrl1.h ---
+#import <Cocoa/Cocoa.h>
+@interface WinCtrl1 : NSWindowController
+@end
+
+//--- WinCtrl1.m ---
+#import "WinCtrl1.h"
+@interface WinCtrl1 ()
+@property(weak) IBOutlet NSTextField *label1;
+-(IBAction)buttonOK:(id)sender;
+-(IBAction)buttonCancel:(id)sender;
+@end
+
+@implementation WinCtrl1
+- (void)windowDidLoad {
+    [super windowDidLoad];
+    _label1.stringValue = @"モーダルなシート";
+}
+//シートを閉じる（OK）
+-(IBAction)buttonOK:(id)sender{
+    [self.window.sheetParent endSheet:self.window
+                           returnCode:NSModalResponseOK];
+}
+//シートを閉じる（キャンセル）
+-(IBAction)buttonCancel:(id)sender{
+    [self.window.sheetParent endSheet:self.window
+                           returnCode:NSModalResponseCancel];
+};
+@end

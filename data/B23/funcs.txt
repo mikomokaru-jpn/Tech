@@ -1,0 +1,1 @@
+class func postSync(urlString:String, param:String)->Any 

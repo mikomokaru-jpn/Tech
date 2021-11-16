@@ -1,0 +1,29 @@
+NSString* text =
+@"______japan___________________________________________________________"
+ "_________________Japan________________________________________________"
+ "_______日本____________________________________________________________"
+ "___________________________________JAPAN______________________________"
+ "__________日___本______________________________________________________"
+ "________________________________________日本___________________________";
+
+NSArray *reslultList;
+reslultList = [text rangeListOfString:@"japan" options:0];
+[self display:reslultList]; // {6, 5} 
+
+reslultList = [text rangeListOfString:@"japan" 
+                              options:NSCaseInsensitiveSearch];
+[self display:reslultList]; // {6, 5} {87, 5} {244, 5} 
+
+reslultList = [text rangeListOfString:@"日本" options:0];
+[self display:reslultList]; // {147, 2} {388, 2} 
+
+//コンソール表示
+-(void)display:(NSArray*)resultList{
+    NSString *disp = @"";
+    for(NSArray* result in resultList){
+        disp = [disp stringByAppendingString:
+                [NSString stringWithFormat:@"{%@, %@} ", 
+                result[0], result[1]]];
+    }
+    NSLog(@"%@", disp);
+}

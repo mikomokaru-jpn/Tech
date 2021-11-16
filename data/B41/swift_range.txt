@@ -1,0 +1,29 @@
+import Foundation
+extension String {
+    //キーワードによる検索：range(of:)
+    //String.range(of:)メソッドでテキスト検索を行う。
+    //結果をNSrangeオブジェクトに変換する
+    func rangeList(of searchString: String,
+                  options mask: NSString.CompareOptions = [],
+                  locale: Locale? = nil) -> [NSRange]{
+        let ranges = self.ranges(of: searchString, 
+                                 options: mask, locale: locale)
+        return ranges.map { rangeList(from: $0) }
+    }
+    //以下は内部で使用する関数
+    func ranges(of searchString: String,
+                        options mask: NSString.CompareOptions = [],
+                        locale: Locale? = nil) -> [Range<String.Index>]{
+        var ranges: [Range<String.Index>] = []
+        while let range = self.range(of: searchString,
+                                     options: mask,
+                                     range: (ranges.last?.upperBound ?? startIndex)..<endIndex,
+                                     locale: locale){
+            ranges.append(range)
+        }
+        return ranges
+    }
+    func rangeList(from range: Range<String.Index>) -> NSRange{
+        return NSRange.init(range, in: self) //String の extention
+    }
+}

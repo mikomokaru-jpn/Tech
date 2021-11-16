@@ -1,0 +1,3 @@
+let typeFileURL = kUTTypeFileURL as String  //uti定数 file URL
+self.registerForDraggedTypes(
+     [NSPasteboard.PasteboardType(rawValue: typeFileURL])

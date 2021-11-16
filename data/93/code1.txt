@@ -1,0 +1,25 @@
+func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool{
+    //スクロールビューの現在オフセットY点を保存
+    savedOffsetY = scrollView.contentOffset.y
+    //self.viewを基準とした編集開始時のテキストフィールドのY点を取得
+    if textField.tag == fieldOfItemTag{
+        //スクロールビューの上のテキストフィールドのY点
+        selectedYpos = textField.frame.origin.y + scrollView.frame.origin.y 
+                     - scrollView.contentOffset.y
+        //テキストフィールドの高さ             
+        selectedFieldHeight = textField.frame.height
+    }else if textField.tag == fieldOfTableCellTag{
+        //スクロールビューの上のテーブルビューの中のテキストフィールドのY点
+        if let cell = textField.superview as? UATableViewCell{
+            if cell.tag == teleTableViewTag{
+                selectedYpos = cell.frame.origin.y + teleTableView.frame.origin.y 
+                             + scrollView.frame.origin.y - scrollView.contentOffset.y
+            }else{
+                selectedYpos = cell.frame.origin.y + mailTableView.frame.origin.y 
+                             + scrollView.frame.origin.y - scrollView.contentOffset.y
+            }
+            selectedFieldHeight = textField.frame.height
+        }
+    }
+    return true
+}

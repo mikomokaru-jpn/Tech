@@ -1,0 +1,15 @@
+let now = Date.init()
+var dComp = DateComponents()
+dComp.year = 2025
+dComp.month = 4
+dComp.day = 13
+if let toDate = Calendar.current.date(from: dComp){
+    let period = Calendar.current.dateComponents(
+        [.year, .month, .day], from: now, to: toDate)
+    print(String(format:"大阪万博まであと %ld年%ld月%ld日",
+                 period.year ?? 0, period.month ?? 0, period.day ?? 0))
+
+}
+
+//結果
+大阪万博まであと 3年5月20日

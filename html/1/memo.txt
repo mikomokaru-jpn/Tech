@@ -1,0 +1,25 @@
+設定ファイルの場所
+/etc/apache2/httpd.conf
+( /etc -> /private/etc のリンク )
+
+apachectl -t
+# 設定ファイル（httpd.conf）のシンタックスチェック
+
+/usr/sbin/apachectl start
+# Apacheの起動
+
+/usr/sbin/apachectl stop
+# Apacheの終了
+
+ps aux | grep httpd
+# Apacheプロセス実行中の確認
+# 実行中なら以下が表示される
+_www              684   0.0  0.0  2655796    940   ??  S     3:41PM   0:00.00 /usr/sbin/httpd -D FOREGROUND
+root              680   0.0  0.2  2656052  15100   ??  Ss    3:41PM   0:00.18 /usr/sbin/httpd -D FOREGROUND
+
+
+# シンボリックリンク
+cd /Library/WebServer/Documents
+sudo ln -s /Users/itohisao/Desktop/mikomokaru/data data
+ls -l 
+data -> /Users/itohisao/Desktop/mikomokaru/data

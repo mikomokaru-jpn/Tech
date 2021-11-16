@@ -1,0 +1,1 @@
+SHOW DATABASES;+--------------------+| Database           |+--------------------+| information_schema || diary              || health             || mysql              || newspaper          || performance_schema || schedule           || sys                |+--------------------+

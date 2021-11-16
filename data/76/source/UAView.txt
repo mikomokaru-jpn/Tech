@@ -1,0 +1,69 @@
+//-----------------------------------------------------------------------------
+//  UAView.h
+//-----------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface UAView : NSView
+@end
+
+//-----------------------------------------------------------------------------
+//  UAView.m
+//-----------------------------------------------------------------------------
+#import "UAView.h"
+#import "UAShapeManager.h"
+
+@interface UAView()
+@property IBOutlet NSButton *rectangle; //四角ボタン
+@property UAShapeManager *shapeMng;     //図形管理オブジェクト
+@end
+
+@implementation UAView
+//初期処理
+-(void)awakeFromNib{
+    //キャンバスの外観
+    self.layer.borderColor = [NSColor grayColor].CGColor;
+    self.layer.borderWidth = 1.0;
+    self.layer.backgroundColor =[NSColor whiteColor].CGColor;
+    _rectangle.state = NO;
+    _shapeMng = [[UAShapeManager alloc] initWithBounds:self.bounds];  //図形管理オブジェクトの初期化
+}
+//ドラッグ開始
+-(void)mouseDown:(NSEvent *)event{
+    CGPoint startPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    if (_rectangle.state){
+        //描画中
+        [_shapeMng createStart:startPoint];
+        [self addSubview:_shapeMng.selectedItem]; //CoreGraphics
+    }else{
+        //描画中以外
+        [_shapeMng start:startPoint];
+    }
+}
+//ドラッグ中
+-(void)mouseDragged:(NSEvent *)event{
+    CGPoint endPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    if (_rectangle.state){
+        //描画中
+        [_shapeMng createGoing:endPoint];
+    }else{
+        //描画中以外
+        [_shapeMng going:endPoint];
+    }
+}
+//ドラッグ終了
+-(void)mouseUp:(NSEvent *)event{
+    CGPoint endPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    if (_rectangle.state){
+        //描画中
+        [_shapeMng createStop:endPoint];
+        _rectangle.state = NO;
+    }else{
+        //描画中以外
+        [_shapeMng stop:endPoint];
+    }
+}
+//図形の削除：コンテキストメニュー
+-(IBAction)delete:(id)sender{
+    [_shapeMng delete]; //削除フラグの設定
+    [_shapeMng.selectedItem removeFromSuperview];
+}
+@end

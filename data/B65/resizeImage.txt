@@ -1,0 +1,18 @@
+func resizeImage(_ rate: CGFloat){
+    let w = Int((CGFloat)(cgOriginalImage!.width) * rate)
+    let h = Int((CGFloat)(cgOriginalImage!.height) * rate)
+    let newSize = CGSize(width: w, height: h)
+    let imageColorSpace = CGColorSpace(name: CGColorSpace.sRGB)
+    let newContext = CGContext.init(data: nil,
+                                    width: Int(newSize.width),
+                                    height: Int(newSize.height),
+                                    bitsPerComponent: 8,
+                                    bytesPerRow: Int(newSize.width) * 4,
+                                    space: imageColorSpace!,
+                                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+    newContext?.draw(cgOriginalImage!, in: CGRect.init(x: 0, y: 0, 
+                                                       width: newSize.width,
+                                                       height: newSize.height))
+    cgNewImage = newContext?.makeImage()
+    self.needsDisplay = true
+}

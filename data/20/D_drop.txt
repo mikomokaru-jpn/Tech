@@ -1,0 +1,48 @@
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)info{
+    [_myDelegate displayNoImage:YES];
+    [_myDelegate writeLabel:@""];
+    _url = nil;
+    //画像イメージを読む
+    self.image = nil;
+    NSArray *objects = [[info draggingPasteboard]
+                        readObjectsForClasses:@[[NSImage class]] 
+                                      options:nil];
+    if (objects.count > 0){
+        //画像あり
+        self.image = [objects objectAtIndex:0];
+        [_myDelegate displayNoImage:NO];
+    }
+    objects = [[info draggingPasteboard]
+               readObjectsForClasses:@[[NSURL class]] options:nil];
+    if (objects.count > 0){
+        //URLあり
+        _url = [objects objectAtIndex:0];
+        [_myDelegate writeLabel:[_url absoluteString]];
+    }
+    //画像なし＆URLあり
+    if (_url && !self.image){
+        NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];
+        NSString *utiType;
+        //URLのuti typeの判定
+        if ([_url getResourceValue:&utiType 
+                            forKey:NSURLTypeIdentifierKey error:nil]){
+            //Http:は、utiTypeがnullになり、読めない。
+            if (utiType){
+                //uti typeが image の場合、URL先の画像イメージを読む
+                if ([workSpace type:utiType 
+                     conformsToType:@"public.image"]) {
+                    NSImage *image = [[NSImage alloc] 
+                                      initWithContentsOfURL:_url];
+                    self.image = image;
+                }else{
+                    self.image = nil;
+                }
+            }else{
+                self.image = nil;
+            }
+        }
+    }
+    [_myDelegate displayNoImage:!self.image];
+    self.needsDisplay = YES;
+    return YES; //NOにすればドロップの実行が無効になる.
+}

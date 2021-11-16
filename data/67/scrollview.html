@@ -1,0 +1,152 @@
+<!-- 47 buttons -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>スクロールビュー</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">スクロールビュー</h2>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/67/scrollview01.png&title=scrollview01&width=600" target="_new">
+<img class="lm70 tm0 bm5" src="scrollview01.png" alt="[scrollview01]" width="400"></a>
+<div class="lm70 tm10 rm60">
+スクロールビューは、大きすぎて特定の表示領域に収まらないビューオブジェクト、例えば画像などを表示するときに使用する。
+</div>
+<div class="lm70 tm10 rm60">
+表示するのに適当なの大きさのスクロールビューを定義し、表示したい画像（ビューオブジェクト）を埋め込む。画像がスクロールビューより大きい場合、画像は一部分だけ表示される。
+</div>
+<div class="lm70 tm10 rm60">
+ユーザはスクロールビューに付属するスクロールバーを使用して画像を移動させ、任意の部分をビューに表示することができる
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+スクロールビューの構造
+</h3>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/67/scrollview02.png&title=scrollview02&width=600" target="_new">
+<img class="lm70 tm10 bm5" src="scrollview02.png" alt="[scrollview02]" width="350"></a>
+<div class="lm70 tm20 rm60">
+スクロールビューは、外側からスクロールビュー（NSScrollView）、クリップビュー（NSClipView）、表示対象のビュー（NSViewやそのサブクラス）の３層構造となる。
+</div>
+<div class="lm70 tm10 rm60">
+スクロールビューはクリップビューを保有し、ビュー全体を制御する。クリップビューは、スクロールビューからスクロールバーを除いた領域で、表示対象のビューのうち、現在表示中の部分に対応する
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+実装方法
+</h3>
+<h3 class="lm70 tm5 bm0 rm60">
+スクロールビューオブジェクトをプログラムから作成する
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/67/create_scrollview.txt" width="580" height="330"></iframe>
+
+<div class="lm70 tm20 rm60">
+スクロールビューには、ビューの領域に対し縦横が約２倍の大きさ画像を表示する。表示対象のビューオブジェクトは、documentViewプロパティにセットする。
+</div>
+<div class="lm70 tm10 rm60">
+表示画像の移動は垂直/水平スクロールバーにより行う。スクロールバーはスクロールビュークラスの組み込み機能なので、実装ではスクロールバーを使用可能にするだけで良い。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+ボタンのクリックにより画像を移動する
+</h3>
+<div class="lm70 tm0 rm60">
+例題ではボタンにより画像を上下左右の端まで移動させている。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/67/scrollPoint.txt" width="580" height="500"></iframe>
+<div class="lm70 tm10 rm60">
+クリップビューに表示されている画像の領域はクリップビューのboundsプロパティと一致する。boundsには、全体の画像ビューに対して、表示中の画像の矩形の原点と幅と高さを保持している。なお画像ビューのFlippedをYESにしておけば、矩形の原点を左上方向にすることができる。
+</div>
+<div class="lm70 tm10 rm60">
+画像を移動するには移動先の位置（座標）を指定してNSClipViewクラスのscrollPointメソッドを呼ぶ。座標は、boundsプロパティのoriginに相当する。クリップビューオブジェクトは、スクロールビューのcontentViewプロパティから参照する。
+</div>
+<div class="lm70 tm10 rm60">
+下の例でいえば、右下の画像を表示するには、座標(400, 300)を指定する。
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/67/scrollview03.png&title=scrollview03&width=700" target="_new">
+<img class="lm70 tm10 bm5" src="scrollview03.png" alt="[scrollview03]" width="500"></a>
+<h3 class="lm70 tm30 bm0 rm60">
+スクロールバーの移動およびマウスのホイールの回転により画像を移動する
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/67/notification.txt" width="580" height="280"></iframe>
+<div class="lm70 tm10 rm60">
+通知センター（NSNotificationCenterクラス）を利用して、スクロールにより画像が移動したときの通知を受け取ることができる。
+</div>
+<div class="lm70 tm0 rm60">
+例題では、クリップビュー（contentView）に表示している画像の原点をテキストフィールドに表示している。
+</div>
+<h3 class="lm70 tm30 bm0 rm60">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/67/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>　スクロールビューの作成・制御
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/67/source/UAImageView.txt&title=UAImageView" target="_new">UAImageView</a>　画像ビュー
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/67/source/UAView.txt&title=UAView" target="_new">UAView</a>　ベースビュー
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+スクロールビューをプログラムから作成する（Swift）
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/67/scrollView.txt" width="580" height="230"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+スクロールバーの幅
+</h3>
+<div class="lm70 tm5 rm60">
+スクロールビューのサイズとコンテントサイズの差となる。borderTypeによって、15〜19ピクセルになる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/67/borderSize.txt" width="580" height="280"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+テーブルビューについて
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+インタフェースビルダーでテーブルビューを作成すると、テーブルビューを含んだスクロールビューが作成される。
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/67/scrollview05.png&title=scrollview05&width=700" target="_new">
+<img class="lm70 tm5 bm5" src="scrollview05.png" alt="[scrollview05]" width="350"></a>
+<div class="lm70 tm10 rm60">
+テーブルビュー（NSTableViewクラス）は単独では動作せず、スクロールビューの要素として動作することが前提となっている。テーブルビューは列の幅や行の数が可変になることが多く、大体において限られたスペースに全ての行列を表示することが困難であり、ビューをスクロールする機能が必要となる。
+</div>
+<div class="lm70 tm10 rm60">
+方法は、本章で説明したようテーブルビューオブジェクトをスクロールビューのdocumentViewに埋め込めばよい。
+</div>
+<div class="lm70 tm10 rm60">
+次の例は、プログラムによりテーブルビューを作成したものである。左がインタフェースビルダで、右がプログラムで作成したもの。同じ形状になるようにした。
+</div>
+<!-- 画像 -->                            
+<a href="/lib/HTMLofImage.html?filename=/data/67/scrollview04.png&title=scrollview04&width=700" target="_new">
+<img class="lm70 tm5 bm5" src="scrollview04.png" alt="[scrollview04]" width="450"></a>
+<!--ソースコードリンク-->
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/67/source/AppDelegate2.txt&title=AppDelegate" target="_new">ソースコードはこちら</a>
+</div>
+<div class="lm70 tm15 rm60">
+テーブルビューは構造が複雑で、それらの設定を全てプログラムで行うのはかなり面倒そうである。あえてプログラムで作ることの必要性もあまり思いつかない。こんな構造になってますという紹介まで。
+</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+<!--
+http://localhost/50_test/upload.html
+-->

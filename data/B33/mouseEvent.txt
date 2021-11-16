@@ -1,0 +1,18 @@
+    override func mouseDown(with event: NSEvent) {
+        // do something
+    }
+    override func mouseUp(with event: NSEvent) {
+        // do something
+    }
+    override func mouseMoved(with event: NSEvent) {
+        // do something
+    }
+    override func mouseDragged(with event: NSEvent){
+        // do something
+    }
+    override func mouseEntered(with event: NSEvent){
+        // do something
+    }
+    override func mouseExited(with event: NSEvent){
+        // do something
+    }

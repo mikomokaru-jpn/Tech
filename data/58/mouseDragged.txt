@@ -1,0 +1,6 @@
+- (void)mouseDragged:(NSEvent *)event{
+    //終点を決める
+    _endPoint = [self convertPoint:event.locationInWindow fromView:nil];
+    //（選択途中の）矩形を表示する
+    [self makeRect];
+}

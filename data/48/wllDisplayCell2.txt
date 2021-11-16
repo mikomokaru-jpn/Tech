@@ -1,0 +1,16 @@
+- (void)browser:(NSBrowser*)sender willDisplayCell:(id)cell
+          atRow:(NSInteger)row column:(NSInteger)column{
+    //カスタムクラス
+    UABrowserCell *customCell = cell;
+    //行に対応するノード情報を得る
+    NSURL *url = [_arrayOfURL objectAtIndex:row];
+    NSString *item;
+    [url getResourceValue:&item
+                   forKey:NSURLNameKey
+                    error:nil];
+    //セルにファイル名/ディレクトリ名をセットする。
+    [customCell setStringValue:item]; 
+    //セルにアイコンを設定する（カスタムクラスのプロパティ）
+    customCell.iconImage  = getIcon(url.path);
+    [customCell setLoaded:YES];
+}

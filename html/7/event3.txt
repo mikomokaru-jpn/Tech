@@ -1,0 +1,6 @@
+const income = Number(delComma(row.income.value)); //input要素の値
+if (!Number.isInteger(income)){ //整数チェック
+    row.income.value = '';
+    row.income.focus();
+    return;
+}

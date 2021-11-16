@@ -1,0 +1,8 @@
+//---- Sushi.h ----
+#import <Cocoa/Cocoa.h>
+#import "Sales.h"
+@interface Sushi : NSObject
+@property NSNumber *code;   //コード
+@property NSString *name;   //名前
+@property NSString *kana;   //かな
+@property Sales *sales;     //売上

@@ -1,0 +1,1 @@
+NSURL *url = [NSURL URLFromPasteboard:_pasteboard];

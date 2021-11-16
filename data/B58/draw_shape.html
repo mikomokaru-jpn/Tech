@@ -1,0 +1,112 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューに図形を描く３種類の方法</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+ ビューに図形を描く３種類の方法
+</h2>
+<h4 class="lm70 tm10 bm0">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0    
+</h4>    
+<h2 class="lm70 tm30 bm0 id="point"">
+(1) CALayerクラスを利用する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B58/v1.png&title=v1&width=600" target="_new">
+<img class="lm80 tm5 bm0" src="/data/B58/v1.png" alt="[v1]" width="250"></a>
+<div class="lm70 tm20 rm60">
+図形を画面に貼り付けていくようなイメージである。図形も図形を貼り付ける画面もレイヤーオブジェクトの一つである。レイヤーは階層的に重ねていくことができる。
+</div>
+<div class="lm70 tm10 rm60">
+図形は、CALayerクラスから継承したCAShapeLayerオブジェクトとして作成し、描画は NSBezierPathクラスのメソッドを使う。
+</div>
+<div class="lm70 tm10 rm60">
+作成した図形のレイヤーは addSublayerメソッドにより親ビューに付属するレイヤーに貼り付ける。サンプルコードでは、図形の貼り付け先はコンテントビューのレイヤーとしている。
+</div>
+<div class="lm70 tm10 rm60">
+なお、コード中の NSBezierPathクラスの cgPathメソッドは、NSBezierPath を CGPathに変換する極めて汎用的な処理にも関わらずフレームワークで提供されていないため、自前のExtensionとして実装している。コードは <a href="https://stackoverflow.com/questions/1815568/how-can-i-convert-nsbezierpath-to-cgpath" target="_blank">stack overflow 様</a> を参考にした。
+</div>
+<div class="lm70 tm10 rm60">
+AppDelegate
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B58/method1.swift" width="580" height="420"></iframe>
+
+<h2 class="lm70 tm30 rm60 bm0">
+(2) drawメソッドをオーバーライドする
+</h2>
+<h2 class="lm100 tm0 rm60 bm0">
+NSBezierPathクラスにより描画する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B58/v2.png&title=v2&width=600" target="_new">
+<img class="lm80 tm5 bm0" src="/data/B58/v2.png" alt="[v2]" width="250"></a>
+<div class="lm70 tm20 rm60">
+NSViewクラスのサブクラスを作成し、drawメソッドの中で NSBezierPathクラスのメソッドにより図形を描画する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B58/method2.swift" width="580" height="380"></iframe>
+<div class="lm70 tm20 rm60">
+AppDelegate
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B58/method2a.swift" width="580" height="140"></iframe>
+<h2 class="lm70 tm30 rm60 bm0">
+(3) drawメソッドをオーバーライドする
+</h2>
+<h2 class="lm100 tm0 rm60 bm0">
+Core Graphics機能により描画する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B58/v3.png&title=v3&width=600" target="_new">
+<img class="lm80 tm5 bm0" src="/data/B58/v3.png" alt="[v3]" width="250"></a>
+<div class="lm70 tm20 rm60">
+NSViewクラスのサブクラスを作成し、drawメソッドの中でスクリーンの Graphic Contextを取得し、そこに CGContextクラスののメソッドを使用して図形を描画する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B58/method3.swift" width="580" height="460"></iframe>
+<div class="lm70 tm20 rm60">
+AppDelegate
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B58/method3a.swift" width="580" height="140"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+[補足]
+</h3>
+<div class="lm70 tm0 rm60">
+上記３種類のうち、いずれの方法をとるかはアプリケーションの性格次第であろう。
+</div>
+<div class="lm70 tm0 rm60">
+パフォーマンスの良さは (3) > (2) > (1) 
+</div>
+<div class="lm70 tm0 rm60">
+機能の豊富さ、使い勝手の良さから言えば (1) > (2) > (3) であろう。
+</div>
+<div class="lm70 tm20 rm60">
+多数の図形を描画する場合には、(2)の応用として、一つの図形を一つのNSViewのサブクラスに描画し、それらを親ビューに貼り付けるという方法でも可能である。CALayerクラスを利用する方法でも描画自体は NSBezierPathクラスを利用しているので、結局どちらも同じでような手順を踏んでいる。CALayerクラスの採用は、つまるところ、図形の変形や回転、アニメーション、色のグラデーションなどといった多様な機能を利用するか否かに依る。
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

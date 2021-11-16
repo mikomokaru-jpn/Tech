@@ -1,0 +1,36 @@
+//ウィンドウの原点を求める（スクリーンの原点からの距離）
+var originScreen: NSPoint = NSZeroPoint
+let rect = (self.window?.contentView?.superview?.frame)!
+if let winRect = self.window?.convertToScreen(rect){
+    print(String(format:"window in screen %.0f:%.0f %.0f:%.0f",
+                 winRect.origin.x, 
+                 winRect.origin.y,
+                 winRect.size.width, 
+                 winRect.size.height))
+    originScreen = winRect.origin
+}
+
+//ビューの原点を求める（スクリーンのの原点からの距離）
+print(String(format:"contentView in screen %.0f:%.0f %.0f:%.0f",
+             window.contentView!.frame.origin.x + originScreen.x,
+             window.contentView!.frame.origin.y + originScreen.y,
+             window.contentView!.frame.size.width, 
+             window.contentView!.frame.size.height))
+
+print(String(format:"view1 frame in screen %.0f:%.0f %.0f:%.0f",
+             view1.frame.origin.x + originScreen.x,
+             view1.frame.origin.y + originScreen.y,
+             view1.frame.size.width, view1.frame.size.height))
+
+let cnvPoint = view1.convert(view2.frame.origin, 
+                             to: self.window.contentView)
+print(String(format:"view2 frame in screen %.0f:%.0f %.0f:%.0f",
+             cnvPoint.x + originScreen.x,
+             cnvPoint.y + originScreen.y,
+             view2.frame.size.width, 
+             view2.frame.size.height))
+
+//result
+contentView in screen       200:100 400:200
+view1 frame in screen       300:150 200:100
+view2 frame in screen       350:175 100:50

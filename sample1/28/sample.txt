@@ -1,0 +1,29 @@
+if let path = Bundle.main.path(forResource: "holiday", ofType: "json"){
+    do {
+        let url:URL = URL.init(fileURLWithPath: path)
+        let data = try Data.init(contentsOf: url)
+        print("getting successfully \(data)")
+        //↓↓↓↓↓↓↓↓
+        let jsonData = try JSONSerialization.jsonObject(with: data)
+        if let dictionary = jsonData as? Dictionary<String, String>{
+            for (key, value) in dictionary{
+            print(String(format: "%@:%@", key, value))
+            }
+        }
+        //↑↑↑↑↑↑↑↑
+    }catch{
+        print("file reading error cought")
+    }
+}else{
+    print("file not found")
+}
+
+
+// JSON文字列
+{
+"20170101":"元日",
+"20170109":"成人の日",
+"20170211":"建国記念の日",
+"20170320":"春分の日",
+...
+}

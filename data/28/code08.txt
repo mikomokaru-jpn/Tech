@@ -1,0 +1,11 @@
+NSDate* now = [NSDate date]; //現在日の取得
+unsigned components = NSCalendarUnitYear | NSCalendarUnitMonth |
+                      NSCalendarUnitDay;
+NSDateComponents *dComp = [[NSCalendar currentCalendar] 
+                            components:components fromDate:now];
+NSLog(@"今日の日付：%ld年%ld月%ld日", dComp.year, dComp.month, dComp.day);
+NSLog(@"今日の時刻：%ld時", dComp.hour);
+
+//結果
+今日の日付：2021年2月19日
+今日の時刻：922372036854775807時

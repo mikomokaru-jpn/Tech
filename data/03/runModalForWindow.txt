@@ -1,0 +1,7 @@
+// _winCtrl2：サブウィンドウのウィンドウコントローラ
+-(IBAction)openWindow2:(id)sender
+{
+    NSModalResponse returnCode;
+    returnCode = [NSApp runModalForWindow:[_winCtrl2 window]];
+    NSLog(@"モーダルなウィンドウが閉じられた");
+}

@@ -1,0 +1,37 @@
+<?php
+//日記帳テーブルから指定された期間に存在するデータの日付を読み込む
+ini_set('display_errors',1);
+//DB接続
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect();
+//SQLの実行 ---------------------------------------------------------------------
+try{
+$sql = "SELECT date FROM diary_text WHERE  (date >=:from AND date <=:to) ORDER BY date ASC;";
+$stmh = $pdo->prepare($sql);
+$stmh->bindValue(':from', $_POST['from_date'], PDO::PARAM_INT);
+$stmh->bindValue(':to', $_POST['to_date'], PDO::PARAM_INT);
+$stmh->execute();
+}catch (PDOException $e) {
+    die('エラー:'. $e->getMessage());
+}
+if (isset($_POST['write_print'])){
+    //------------------------------------------------------------------------------
+    print('<DOCTYPE HTML>');
+    print('<html id="mainhtml">');
+    print('<head>');
+    print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
+    print('<title>Test</title>');
+    print('</head>');
+    print('<body>');
+    while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+        print($row['date'].'<br />');
+    }
+    print('</body>');
+    print('</html>');
+}else{
+    // JSON形式で出力 (json_encode 関数)
+    header('Content-type: application/json');
+    echo json_encode($stmh->fetchAll(PDO::FETCH_ASSOC));
+}
+?>

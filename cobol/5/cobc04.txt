@@ -1,0 +1,1 @@
+cp SUB01.dylib /usr/local/lib/環境変数の設定export COB_LIBRARY_PATH=/usr/local/lib/

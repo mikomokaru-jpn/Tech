@@ -1,0 +1,162 @@
+<!-- 
+NewPractice/57 graphicEditor1
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Simple drawing tool with CALayer </title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">Simple drawing tool with CALayer </h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor1.png&title=graphic_editor1&width=600" target="_new">
+<img class="lm200 tm10 bm0" src="/data/75/graphic_editor1.png" alt="[graphic_editor1]" width="300"></a>
+<!-- 動画 -->
+<h3 class="lm100 tm20 bm0 rrm60">
+<a href="/lib/HTMLofVideo.html?filename=/data/75/graphic_editor1.mp4&title=graphic_editor1_1&width=700" target="_new">
+click to see the movie
+</a>
+</h3>
+<h3 class="lm100 tm10 bm0 rm60">
+Draw a rectangle
+</h3>
+<div class="lm100 tm0 rm60">
+Create a rectangular CShapeALayer object and add it to a view with  "addSublayer" method.
+If you click in the created shape, it will be selected state (surrounded by  red line), and you can perform the following operations.
+If you click outside the shape, the selection state will turn off.    
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+Move a rectangle
+</h3>
+<div class="lm100 tm0 rm60">
+You can move a rectangle to any location by selecting and dragging it.
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+Scale a rectangle
+</h3>
+<div class="lm100 tm0 rm60">
+Drag a vertical line of a rectangle to scale it  horizontally.
+Drag a horizontal line of a rectangle to scale it vertically.
+Drag one of corners of a rectangle to scale it horizontally and vertically.
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+Implementation points
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm100 tm5 bm0 rm60">
+Draw a rectangle
+</h3>
+<div class="lm100 tm0 rm60">
+In this application, a rectangle is assigned an UAShapeItem class object. This class holds a CAShapeLayer object and implements various drawing operations.
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/UAShapeItem.h" width="550" height="630"></iframe>
+<div class="lm100 tm10 rm60">
+To make a CAShapeLayer object, create a rectangle with NSBezierPath  and set it in the path property of the CAShapeLayer object. A display position of a rectangle is indicated of coordinates of the parent view where the object is pasted.
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/shapeCreating.txt" width="550" height="240"></iframe>
+
+<div class="lm100 tm10 rm60">
+To display a CAShapeLayer object in a view, add the object to a layer in the parent view.
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/addSublayer.txt" width="550" height="50"></iframe>
+<div class="lm100 tm10 rm60">
+To remove it, call "removeFromSuperlayer" method of the CAShapeLayer object.
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/75/remove.txt" width="550" height="50"></iframe>
+<h3 class="lm100 tm20 bm0 rm60">
+Move, scale a rectangle
+</h3>
+<div class="lm100 tm5 rm60">
+The shape of a rectangle is determined of the position of the origin and the width and height.
+The object that represent a  rectangle have them as attributes.
+</div>
+<div class="lm100 tm10 rm60">
+moving a rectangle is to move the origin of it according to the direction and distance of dragging.    
+</div>
+<div class="lm100 tm10 rm60">
+Scaling a rectangle is to change the width and height of it according to the direction and distance of dragging.
+One of four corners of a rectangle is the origin of it.
+Therefore, as shown in the following figure, the position of origin of the rectangle may change depending on the direction of scaling it, which makes the implementation a little complicated.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor2.png&title=graphic_editor2&width=800" target="_new">
+<img class="lm90 tm10 bm0" src="/data/75/graphic_editor2.png" alt="[graphic_editor2]" width="550"></a>
+<h3 class="lm100 tm10 bm0 rm60">
+Class related diagram
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor3.png&title=graphic_editor3&width=800" target="_new">
+<img class="lm90 tm0 bm0" src="/data/75/graphic_editor3.png" alt="[graphic_editor3]" width="550"></a>
+
+<h3 class="lm100 tm0 bm0 rm60">
+Souce code
+</h3>
+<!--ソースコードリンク-->
+<div class="lm100 tm5 rrm60">
+<a href="/lib/HTMLofText.html?filename=/data/75/source/UAView.txt&title=UAView" target="_new">UAView</a>
+</div>
+<div class="lm100 tm5 rrm60">
+<a href="/lib/HTMLofText.html?filename=/data/75/source/UAShapeManager.txt&title=UAShapeManager" target="_new">UAShapeManager</a>
+</div>
+<div class="lm100 tm5 rrm60">
+<a href="/lib/HTMLofText.html?filename=/data/75/source/UAShapeItem.txt&title=UAShapeItem" target="_new">UAShapeItem</a>
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+Event and handler association
+</h3>
+
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor4.png&title=graphic_editor4&width=900" target="_new">
+<img class="lm90 tm0 bm0" src="/data/75/graphic_editor4.png" alt="[graphic_editor4]" width="550"></a>
+<h3 class="lm100 tm20 bm0 rm60">
+How to operate
+</h3>
+<div class="lm100 tm5 rm60">
+The numbers in the figure correspond to the numbers in the above table.
+</div>
+<table border='0' class="lm90 tm5 bm0">
+<tr>
+<td>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor5.png&title=graphic_editor5&width=500" target="_new">
+<img src="/data/75/graphic_editor5.png" alt="[graphic_editor5]" width="250"></a>
+</td>
+<td>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor6.png&title=graphic_editor6&width=500" target="_new">
+<img class="lm20" src="/data/75/graphic_editor6.png" alt="[graphic_editor6]" width="250"></a>
+</td>
+</tr>
+<tr>
+<td valign="top" >
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor7.png&title=graphic_editor7&width=500" target="_new">
+<img class="tm10" src="/data/75/graphic_editor7.png" alt="[graphic_editor7]" width="250"></a>
+</td>
+<td>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/75/graphic_editor8.png&title=graphic_editor8&width=500" target="_new">
+<img class="tm10 lm20" src="/data/75/graphic_editor8.png" alt="[graphic_editor8]" width="280"></a>
+</td>
+</tr>
+</table>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

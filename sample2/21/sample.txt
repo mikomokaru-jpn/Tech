@@ -1,0 +1,29 @@
+!<!DOCTYPE html>
+<html>
+<head>
+<title>js02</title>
+<link rel="stylesheet" type="text/css" href="document.css">
+</head>
+<body>
+<select>
+<option value="both">Swift / Objective-C</option>
+<option value="Swift">Swift</option>
+<option value="Objective-C">Objective-C</option>
+</select>
+
+<script>
+const language = document.querySelector('select'); 
+language.addEventListener('change', changelanguage);
+//セレクトボックスが選択されたときに起動する
+function changelanguage(){
+    console.log(language.value);
+}
+/*----- これもOK -----
+function changelanguage(event){
+    console.log(event.currentTarget.value)
+}
+*/
+</script>
+
+</body>
+</html>

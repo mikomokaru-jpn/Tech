@@ -1,0 +1,22 @@
+//--- UAConstants.h ---
+#ifndef UAConstants_h
+#define UAConstants_h
+//文字列定数
+static const NSString* TITLE1 = @"シンプルカレンダー1";
+static NSString* const TITLE2 = @"シンプルカレンダー2";  //注意：代入不可
+//数値定数
+static const CGFloat CELL_WIDTH = 40.0;           
+static const CGFloat WIDTH = CELL_WIDTH*7+10;   
+static CGFloat const HEIGHT = 10.0;
+//列挙型定数
+typedef enum : NSInteger{
+    CURRENT_DATE = 0,       
+    FIRST_DATE = 1,         
+    LAST_DATE = 2,          
+    NEXT_DATE = 3,          
+    PRE_DATE = 4,           
+} StartPosTyp;
+//NSNumber定数は不可
+//コンパイルエラー； Initializer element is not a compile-time constant
+//static NSNumber* const NUMBER = @100;
+#endif /* UAConstants_h */

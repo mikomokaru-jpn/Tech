@@ -1,0 +1,3 @@
+let typeTIFF = kUTTypeTIFF as String   //uti定数 tiff（イメージオブジェクト）
+self.registerForDraggedTypes(
+     [NSPasteboard.PasteboardType(rawValue: typeTIFF])

@@ -1,0 +1,10 @@
+//---- UASharedData.h ----
+#import <Foundation/Foundation.h>
+@interface UASharedData : NSObject
+@property NSString *text;
+@end
+
+//---- UASharedData.m ----
+#import "UASharedData.h"
+@implementation UASharedData
+@end

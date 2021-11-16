@@ -1,0 +1,134 @@
+<!-- 
+30 textFileInResource
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>バンドルのリソースにファイルを格納する</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<!----------------------------------------------->
+<h2 class="lm70 tm20 bm10">バンドルのリソースにファイルを格納する</h2>
+<div class="lm70 tm10 rm60">
+アプリケーションバンドルは、Xcodeでプロジェクトを作成したとき自動的に作成される。Finder上では、.app というサフィックスを持ったファイルに見えるが、実体はディレクトリ構造をパッケージしたもので、アプリケーションが利用するリソース（クラス、Xib、画像など）が格納されている。Contentsディレクトリをルートにした標準的なフォルダ構成を持つ。</div>
+<div class="lm70 tm10 rm60">
+ファイルのアイコンをクリックするとアプリケーションが起動する。
+</div>
+<div class="lm70 tm10 rm60">
+アプリケーションバンドル（.appファイル）は、普通のファイルと同じように、コピーや移動ができる。
+バンドルの格納パスは、移動した先のディレクトリに合わせて変更される。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+バンドル（.appファイル）の格納パスを求める
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/39/getBundlePath.txt" width="580" height="200"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+バンドル内のディレクトリ構成を確認する
+</h3>
+<div class="table lm60 rm60">
+  <div class="table_cell">
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/39/bundlePackage1.png&title=パッケージ内容の表示&width=600" target="_new">
+<img class="lm40 tm20" src="bundlePackage1.png" alt="[パッケージ内容の表示]" width="200" align="middle"></a>
+  </div>
+  <div class="table_cell">
+      <div class="lm20 tm20">
+XcodeのProject Navigatorにある .appファイルをFileメニュー→Show in Finderで開く。
+      </div> 
+  </div>
+</div>
+<div class="table lm60 rm60">
+  <div class="table_cell">
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/39/bundlePackage2.png&title=パッケージ内容の表示&width=700" target="_new">
+<img class="lm40 tm20" src="bundlePackage2.png" alt="[パッケージ内容の表示]" width="280" align="middle"></a>
+  </div>
+  <div class="table_cell">
+      <div class="lm10 tm20">
+Finderから .appファイルをコンテキストメニューで開き「パッケージ内容の表示」を選ぶ
+      </div> 
+  </div>
+</div>
+<div class="lm130 tm20 rm60">
+次のようなFinder画面が現れ、パッケージの内容を確認することができる。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/39/bundlePackage3.png&title=パッケージ内容の表示&width=900" target="_new">
+<img class="lm100 tm5" src="bundlePackage3.png" alt="[パッケージ内容の表示]" width="500" align="middle"></a>
+<!-- ソースコード　リンク -->
+<div class="lm130 tm20 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/39/source/getBundlePackage.txt&indent=0" target="_new">プログラムからバンドル内のディレクトリ構成を確認するコード</a>
+</div>
+<h3 class="lm70 tm30 bm0 rm60">
+バンドルにファイルを作成する
+</h3>
+<div class="lm70 tm5 rm60">
+アプリケーションバンドルには、読み込み専用でマスター的なデータを格納することができる。
+</div>
+<div class="lm70 tm10 rm60">
+ファイルをアプリケーションバンドルに取り込む方法
+</div>
+<div class="lm70 tm0 rm60">
+XcodeのProject Nvigator → Fileメニュー → Add Files to プロジェクト
+</div>
+<div class="lm70 tm10 rm60">
+Finderが表示されるので、任意のファイルを選択してAddを実行する。オプションでCopy items if needed をチェックするとファイル自体がバンドル内にコピーされる。チェックしないとリンクのコピーとなる。
+</div>
+<div class="lm70 tm10 rm60">
+ファイルは、Contents/Resources/ の直下に格納される。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/39/textFile2.png&title=ファイルをバンドル内に取り込む&width=900" target="_new">
+<img class="lm110 tm5" src="textFile2.png" alt="[ファイルをバンドル内に取り込む]" width="400" align="middle"></a>
+<h3 class="lm70 tm30 bm0 rm60 bm0">
+バンドル内のファイルをアプリケーションに読み込む方法
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/39/getFileInBundle.txt" width="580" height="290"></iframe>
+<div class="lm70 tm10 rm60">
+[補足]
+</div>
+<div class="lm70 tm5 rm60">
+バンドル内に書き込みしようとすると、権限がないということでエラーとなる。
+Error Domain=NSCocoaErrorDomain Code=513 You don’t have permission to save the file master.txt in the folder  Resources
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+サンプルアプリケーション
+</h3>
+<div class="lm70 tm5 rm60">
+・バンドルパス及びディレクトリ構成を表示する
+</div>
+<div class="lm70 tm0 rm60">
+・バンドル内に格納したテキストファイルを読み込む
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/39/textFileIO.png&title=textFileIO&width=900" target="_new">
+<img class="lm70 tm5" src="textFileIO.png" alt="[textFileIO]" width="400" align="middle"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+ソースコード
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/39/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/39/source/tanka.txt&title=tanka.txt" target="_new">tanka.txt</a>
+</div>
+<!----------------------------------------------->
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

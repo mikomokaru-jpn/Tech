@@ -1,0 +1,17 @@
+func tableView(_ tableView: NSTableView,
+               viewFor column: NSTableColumn?,
+               row: Int) -> NSView?{ 
+ 
+    //セルビューを取得する
+    let cellView: NSTableCellView? =
+        tableView.makeView(withIdentifier: (column?.identifier)!,
+                           owner: self) as? NSTableCellView 
+   //順位
+    if ((column?.identifier)!.rawValue == "ranking"){
+        //セルビューの位置と大きさ
+        cellView?.frame.size = NSMakeSize(40, 80)
+        //テキストフィールドの位置と大きさ 
+        cellView?.textField?.frame = NSMakeRect(0, 0, 40, 80)
+    } 
+    //...全列繰り返す
+}

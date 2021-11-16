@@ -1,0 +1,47 @@
+#import "UAItemView.h"
+
+@interface UAItemView()
+@property NSAttributedString *atrString;    //装飾文字列
+@end
+
+@implementation UAItemView
+//イニシャライザ
+-(id)initWithFrame:(NSRect)frameRect
+{
+    if(![super initWithFrame:frameRect])
+        return nil;
+    self.wantsLayer = YES;                                      //必須
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;  //背景色
+    //装飾文字列の定義
+    NSFont* font = [NSFont fontWithName:@"Helvetica" size:100];
+    NSDictionary *attributes = @{NSFontAttributeName:font};
+    self.atrString = [[NSAttributedString alloc]
+                      initWithString:@"ABC" attributes:attributes];
+    return self;
+}
+
+//ビューの再表示
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    
+    //緑の円の作成
+    [[NSColor greenColor] set]; //色の指定
+    NSBezierPath *path1 = [NSBezierPath bezierPathWithOvalInRect:
+                           NSMakeRect(50, 65, 100, 100)]; //位置と大きさ
+    [path1 fill]; //塗りつぶし
+    
+    //装飾文字列の描画・ビューの中央に配置
+    NSPoint centerPoint = NSMakePoint(dirtyRect.size.width/2, 
+                                      dirtyRect.size.height/2);
+    NSSize strSize = [_atrString size];
+    NSPoint strPoint = NSMakePoint(centerPoint.x-strSize.width/2, 
+                                   centerPoint.y-strSize.height/2);
+    [_atrString drawAtPoint:strPoint];
+    
+    //青い四角の作成
+    [[NSColor blueColor] set]; //色の指定
+    NSBezierPath *path2 = [NSBezierPath bezierPathWithRect:
+                           NSMakeRect(130, 30, 70, 70)]; //位置と大きさ
+    [path2 fill]; //塗りつぶし
+}
+@end

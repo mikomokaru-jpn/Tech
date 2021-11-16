@@ -1,0 +1,11 @@
+//属性付き文字列の作成
+let attributedText = UATextAttribute.string(
+                         "あけましておめでとう" , 
+                         size: 30, 
+                         color: NSColor.red)
+
+//属性の作成
+let attributes = UATextAttribute.attributes(
+                     name: "HiraMinPro-W3", 
+                     size: 40, 
+                     color: NSColor.brown)

@@ -1,0 +1,12 @@
+let viewRect = (self.window?.contentView?.frame)!
+if let winRect = self.window?.convertToScreen(viewRect) {
+    print(String(format:"contentview %.0f:%.0f %.0f:%.0f",
+                 viewRect.origin.x, viewRect.origin.y,
+                 viewRect.size.width, viewRect.size.height))
+    print(String(format:"contentView in screen %.0f:%.0f %.0f:%.0f",
+                 winRect.origin.x, winRect.origin.y,
+                 winRect.size.width, winRect.size.height))
+}
+//結果
+contentview 0:0 400:200
+contentView in screen 200:100 400:200

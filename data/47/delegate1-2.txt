@@ -1,0 +1,19 @@
+- (void)browser:(NSBrowser*)sender willDisplayCell:(id)cell
+          atRow:(NSInteger)row column:(NSInteger)column{
+    //行に対応するノード情報（ファイル/ディレクトリ）
+    NSURL *url = [_arrayOfURL objectAtIndex:row]; 
+    NSString *item;
+    [url getResourceValue:&item
+                   forKey:NSURLNameKey
+                    error:nil];
+    [cell setStringValue:item]; //セルにファイル名/ディレクトリ名をセットする。
+    //ノードのプロパティ（leaf of branch）
+    NSNumber *num;
+    [url getResourceValue:&num
+                   forKey:NSURLIsRegularFileKey
+                    error:nil];
+    if ([num intValue] == 1){
+        [cell setLeaf:YES]; //ファイルは子のないノード
+    }
+    [cell setLoaded:YES];
+}

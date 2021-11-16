@@ -1,0 +1,95 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>階層化したビューを再帰的に取得する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">階層化したビューを再帰的に取得する</h2>
+<div class="lm70 tm10 rm60">
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B35/subview.png&title=subview&width=500" target="_new">
+<img class="lm90 tm5 bm0" src="subview.png" alt="[subview]" width="350"></a>
+<h3 class="lm70 tm20 bm0 rm60">
+ビューを作成してウィンドウに追加する
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/B35/create_view.txt" width="580" height="660"></iframe>
+
+<h3 class="lm70 tm20 bm0 rm60">
+ビューを再帰的に取得する・パターン１
+</h3>
+<div class="lm70 tm0 rm60">
+ビュー格納用配列を関数の外側で確保し、参照渡しで関数に渡す方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/B35/get_view1.txt" width="580" height="260"></iframe>
+
+<h3 class="lm70 tm20 bm0 rm60">
+ビューを再帰的に取得する・パターン２
+</h3>
+<div class="lm70 tm0 rm60">
+取得したビューの配列を関数戻り値にする方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/B35/get_view2.txt" width="580" height="230"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+ビューを再帰的に取得する・パターン３
+</h3>
+<div class="lm70 tm0 rm60">
+Swiftらしく簡潔に書くこともできる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/B35/get_view3.txt" width="580" height="150"></iframe>
+<div class="lm70 tm20 rm60">
+flatMapメソッドは実行結果の2次元配列を1次元配列に変換（フラット化？）している。mapメソッドで書き直せば次のようになり、何をしているかいくらか理解しやすいのでは。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/B35/get_view4.txt" width="580" height="200"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+実行結果：取得したビューのframe属性を出力
+</h3>
+<div class="lm70 tm0 rm60">
+システムのデフォルトの座標系はY軸は下方向が原点となる。
+</div>
+<div class="lm70 tm0 rm60">
+内側のビューの原点は、そのビューの基となる一つ外側のビュー（super view）からみた位置となる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B35/result1.txt" width="580" height="150"></iframe>
+<h3 class="lm70 tm30 bm0 rm60">
+座標系の変更
+</h3>
+<div class="lm70 tm0 rm60">
+Y軸方向の原点を上方向に変更するにはNSViewクラスのサブクラスの中で次のプロパティをオーバーライドする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B35/flipped.txt" width="580" height="110"></iframe>
+<div class="lm70 tm10 rm60">
+本サンプルプログラムの全てのNSViewをこれに置き換えると結果は次のような上下逆転した像となる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B35/subview2.png&title=subview2&width=500" target="_new">
+<img class="lm90 tm5 bm0" src="subview2.png" alt="[subview2]" width="350"></a>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,46 @@
+#import "NSArray+Person.h"
+@implementation NSArray (Person)
+-(id)initWithPersonList{
+    //自身の初期化
+    if (![self init])
+        return nil;
+    //ファイルの読み込み
+    NSString *filePath = NSHomeDirectory();
+    filePath = [filePath stringByAppendingString:
+                @"/Documents/parsonList.txt"];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSString *inText;
+    if ([fm fileExistsAtPath:filePath]){
+        NSError *error;
+        inText = [NSString stringWithContentsOfFile:filePath
+                               encoding:NSUTF8StringEncoding
+                                                error:&error];
+        if (error != nil)
+            NSLog(@"!!! %ld !!! %@",error.code, error);
+    }else{
+        NSLog(@"File not found");
+    }
+    //PersonList（NSArrayオブジェクト）の作成
+    Person *person;
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];    
+    NSMutableArray *mutablePersonList = [[NSMutableArray alloc] init];
+    NSArray *records = [inText componentsSeparatedByString:@"\n"];
+    for (NSString *record in records){
+        NSArray *items = [record componentsSeparatedByString:@";"];
+        NSDate *date = [formatter dateFromString:trim(items[1])];
+        
+        person = [[Person alloc] initWtithName:trim(items[0])
+                                                birthday:date
+                            sex:[trim(items[2]) integerValue]];
+        [mutablePersonList addObject:person];
+    }
+    self = [NSArray arrayWithArray:mutablePersonList];
+    return self;
+}
+//文字列の前後の空白の削除
+NSString* trim(NSString *text){
+    return  [text stringByTrimmingCharactersInSet:
+             [NSCharacterSet whitespaceCharacterSet]];
+}
+@end

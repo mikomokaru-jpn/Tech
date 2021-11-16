@@ -1,0 +1,31 @@
+//------------------------------------------------------------------------------
+//  UAImageView.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface UAImageView : NSView
+@property NSSize mySize;
+@property NSImage *image;
+-(id)initWithImage:(NSImage*)image size:(NSSize)size;
+@end
+
+//------------------------------------------------------------------------------
+//  UAImageView.m
+//------------------------------------------------------------------------------
+#import "UAImageView.h"
+@implementation UAImageView
+-(id)initWithImage:(NSImage*)image size:(NSSize)size{
+    _mySize = size;
+    _image = image;
+    if (![super initWithFrame:NSMakeRect(0, 0, _mySize.width, _mySize.height)])
+        return nil;
+    return self;
+}
+- (void)drawRect:(NSRect)dirtyRect {
+    //dirtyRectは、スクロールビューのcontentViewのサイズになるので、これを使用すると画像が縮小してしまう。
+    NSRect rect = NSMakeRect(0, 0, _mySize.width, _mySize.height);
+    [_image drawInRect:rect];
+}
+-(BOOL)isFlipped{
+    return YES;
+}
+@end

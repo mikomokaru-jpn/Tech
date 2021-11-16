@@ -1,0 +1,59 @@
+$ brew install rbenv
+$ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+$ source ~/.bash_profile
+$ rbenv -v
+rbenv 1.1.2
+
+$ brew install ruby-build
+$ rbenv install 2.6.7
+$ rbenv global 2.6.7
+$ ruby -v
+ruby 2.6.7
+
+$ sudo gem install rails
+エラー
+
+Rails is not currently installed on this system. To get the latest version, simply type:
+    $ sudo gem install rails
+You can then rerun your "rails" command.
+
+https://qiita.com/w7tree/items/0860e2856f2429b20eee 
+に解決策あり。
+
+brewでインストールしたrbenvの他に、Macにプレインストールされた別のrbenvがあって、
+Railsのインストールのとき、本来使うべき前者ではなく後者が使われてしまった。
+Rubyのgemが異なっているのでエラーとなるようだ。PATHが通っていなかったことが原因。
+
+$ echo 'export PATH="$HOME/.rbenv/shims:$PATH"' >> ~/.bash_profile
+$ source ~/.bash_profile
+
+$ sudo gem install rails
+OK
+$ rails -v
+Rails 6.1.3.2
+
+$ echo $PATH
+/Users/itohisao/.rbenv/shims:/Users/itohisao/.rbenv/shims:/Users/itohisao/.pyenv/bin:/usr/local/opt/php/bin:/usr/local/bin:/usr/bin:/bin:/u
+sr/sbin:/sbin:/Users/itohisao/bat:/usr/local/mysql/bin
+
+ただし、
+/Users/itohisao/.rbenv/shims が$PATHに２回現れているが１個目のそれは最初からあった。
+それにも拘らずエラーになっていた。全く納得できないのだがとにかくできたので先に進む。
+(なぜ最初からあったのかはわからない。何かの勘違いかもしれない）
+
+$ brew install yarn
+$ yarn --verion
+yarn install v1.22.10
+
+$ mkdir rubyWork
+$ cd rubyWork/
+$ rails new atest --skip-bundle
+cd atest/
+$ bundle install
+$ rails webpacker:install
+$ rails s
+
+http://localhost:3000
+Yay! You’re on Rails! が表示される。
+
+※エラーを潰しながら行きつ戻りつしたので、処理の順番がやや心許ない。

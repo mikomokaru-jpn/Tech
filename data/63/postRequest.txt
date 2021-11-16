@@ -1,0 +1,68 @@
+-(IBAction)request:(id)sender{
+    //---------------------------------------------------------------
+    // URLRequestオブジェクトを作成し、POSTコマンドを編集する
+    //---------------------------------------------------------------
+    NSString *urlString = @"http://localhost/51_test/response02.php";
+    NSURL *url = [NSURL URLWithString:urlString]
+    //URLRequestオブジェクトの作成
+    NSMutableURLRequest *request= [NSMutableURLRequest requestWithURL:url];
+    //メソッド
+    [request setHTTPMethod:@"POST"];
+    //リクエストヘッダの受信データ形式
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    //コンテンツ種別
+    [request setValue:@"application/json"
+             forHTTPHeaderField:@"Content-Type"];
+    //POSTパラメータ（JSON）
+    NSDictionary *dict = @{@"name":_inName.stringValue};
+    NSData *data =  [NSJSONSerialization dataWithJSONObject:dict
+                              options:NSJSONWritingPrettyPrinted
+                                                      error:nil];
+    //コンテンツ長(POSTデータのバイト数)
+    [request setValue:[NSString stringWithFormat:@"%ld",[data length]]
+                       forHTTPHeaderField:@"Content-Length"];
+    //メッセージボディ
+    [request setHTTPBody:data];
+    //---------------------------------------------------------------
+    // NSURLSessionオブジェクトを作成し、GCDによりリクエストを送信する 
+    // dispatch_semaphore を使用しレスポンス受信まで waitする。
+    //---------------------------------------------------------------
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block NSArray* responseList = nil; //Blocksの中で値の変更を許可する
+    NSURLSessionConfiguration *configuration =
+    [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = [NSURLSession
+                             sessionWithConfiguration:configuration];
+    NSURLSessionDataTask *task =
+    [session dataTaskWithRequest:request
+               completionHandler:^(NSData * _Nullable data,
+                                   NSURLResponse * _Nullable response,
+                                   NSError * _Nullable error)
+    {
+        if (error) {
+            NSLog(@"%@", error);
+            dispatch_semaphore_signal(semaphore);   //taskの終了を通知する
+            return;
+        }
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode != 200) {
+            NSLog(@"statusCode:%ld", httpResponse.statusCode);
+            dispatch_semaphore_signal(semaphore);   //taskの終了を通知する
+            return;
+        }
+        responseList =
+        [NSJSONSerialization JSONObjectWithData:data
+              options:NSJSONReadingMutableContainers
+                                          error:nil];
+        dispatch_semaphore_signal(semaphore);
+    }];
+    [task resume];
+    //taskの終了を待つ
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);  
+ 
+    //受信メッセージの出力 
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = responseList[0];
+    alert.informativeText = @"サーバでメッセージを編集して返信しています。";
+    [alert runModal];
+}

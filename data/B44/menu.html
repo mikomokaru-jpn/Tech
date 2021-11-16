@@ -1,0 +1,143 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>メニューの実装方法</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">メニューの実装方法</h2>
+<h2 class="lm70 tm10 rm60 bm0">
+メインメニュー
+</h2>
+<div class="lm70 tm5 rm60">
+メインメニューにコンテントビューの背景色を変えるメニューを追加してみる。メニューアイテムの色を選択するとコンテントビューの背景色がそれに変わる。選択したアイテムにチェックをつける。特定の色を選択不可の状態（グレーアウト）にする。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B44/main.mp4&title=メインメニュー&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="menu4.png" alt="[menu4]" width="350"></a>
+<div class="lm70 tm5 rm60">
+画像をクリックすると動画になります。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+(1) メニューとメニューアイテムの作成
+</h3>
+<div class="lm70 tm5 rm60">
+インターフェイスビルダーにより作業する。メインメニューに新しいメニューを追加し、タイトルを「背景色」にする。色に対応するメニューアイテムを作成し、背景色メニューの下に吊り下げる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu1.png&title=menu1&width=900" target="_new">
+<img class="lm70 tm10 bm0" src="menu1.png" alt="[menu1]" width="550"></a>
+<div class="lm70 tm20 rm60">
+各メニューアイテムから対応するアクションに接続を行う。本例では、全てのアイテムは AppDelegateクラスの switchColorメソッドに接続することで、メニューアイテムを選択したらこのメソッドが起動することになる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu2.png&title=menu2&width=900" target="_new">
+<img class="lm70 tm5 bm0" src="menu2.png" alt="[menu2]" width="550"></a>
+<div class="lm70 tm20 rm60">
+AppDelegateクラスに定義したNSMenuクラスのプロパティを背景色メニューにアウトレット接続する。これによりプロパティ（menuColor）を通して、メニューアイテムのチェックの付け外しやアイテムの無効化（グレーアウト）の操作を行う。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu3.png&title=menu3&width=900" target="_new">
+<img class="lm70 tm5 bm0" src="menu3.png" alt="[menu3]" width="550"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+(2) アクションメソッドの実装
+</h3>
+<div class="lm70 tm5 rm60">
+メニューからメニューアイテム（色）を選択されたときのアプリケーションの動きを定義する。
+本例では、メニューアイテムのタイトルに定義した色の文字を判定して、それに応じた色をコンテントビューのレイヤーの背景色にしている。
+また、メニューアイテムのstateプロパティのオン/オフを切り替えることで、選択中の色のチェックを付け替えている。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B44/menu1.txt" width="580" height="420"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+(3) メニューアイテムの無効化
+</h3>
+<div class="lm70 tm5 rm60">
+アプリケーションの初期処理の中で、メニューアイテムの isEnabledプロパティを偽にして、当該アイテムの表示をグレーアウトさせ、対応した色を選択できないようにしている。。なおこの機能を有効にするには、メニューの autoenablesItemsプロパティを偽にする必要がある。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B44/menu2.txt" width="580" height="150"></iframe>
+<h2 class="lm70 tm30 rm60 bm0">
+コンテキストメニュー
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B44/context.mp4&title=コンテキストメニュー&width=500" target="_new">
+<img class="lm70 tm5 bm0" src="menu8.png" alt="[menu8]" width="350"></a>
+<div class="lm70 tm5 rm60">
+画像をクリックすると動画になります。
+</div>
+<div class="lm70 tm0 rm60">
+実装は基本的にメインメニューの場合と同じ。
+</div>
+<h3 class="lm70 tm10 rm60 bm0">
+(1) メニューとメニューアイテムの作成
+</h3>
+<div class="lm70 tm5 rm60">
+インターフェイスビルダーにより、新しいメニューオブジェクトを選び、xibエディターの余白のどこかにドロップする。メニューのタイトルを「背景色」にする（が、この文字列はどこにも反映されない）。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu5.png&title=menu5&width=900" target="_new">
+<img class="lm70 tm5 bm10" src="menu5.png" alt="[menu5]" width="550"></a>
+
+<div class="lm70 tm20 rm60">
+<span class="redcolor">[ここがポイント]</span> コンテキストメニューを表示するビューとメニューオブジェクトを接続する。本例ではコンテントビュー上でマウスの右クリックするとコンテキストメニューが表示されるようになる。    
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu9.png&title=menu9&width=900" target="_new">
+<img class="lm70 tm5 bm0" src="menu9.png" alt="[menu9]" width="550"></a>
+<div class="lm70 tm20 rm60">
+色に応じたメニューアイテムを作成し、メニューの下に追加する。全アイテムをAppDelegateクラスの switchColorメソッドに接続する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu6.png&title=menu6&width=900" target="_new">
+<img class="lm70 tm5 bm0" src="menu6.png" alt="[menu6]" width="550"></a>
+
+
+<div class="lm70 tm10 rm60">
+AppDelegateクラスに定義した NSMenuクラスのプロパティ（contextMenu）を背景色メニューにアウトレット接続する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B44/menu7.png&title=menu7&width=900" target="_new">
+<img class="lm70 tm5 bm0" src="menu7.png" alt="[menu7]" width="550"></a>
+
+
+<h3 class="lm70 tm20 rm60 bm0">
+(2) アクションメソッドの実装
+</h3>
+<div class="lm70 tm5 rm60">
+メインメニューの実装と同じである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B44/menu3.txt" width="580" height="420"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+(3) メニューアイテムの無効化
+</h3>
+<div class="lm70 tm5 rm60">
+メインメニューの実装と同じである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B44/menu4.txt" width="580" height="150"></iframe>
+<h2 class="lm70 tm30 rm60 bm0">
+
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

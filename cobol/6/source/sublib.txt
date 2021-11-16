@@ -1,0 +1,79 @@
+//------------------------------------------------------------------------------
+//  sublib.c
+//------------------------------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+
+#define BUFFER_LEN 64
+#define CODE_LEN 4
+#define NAME_LEN 20
+
+//バイトスワップ（As Mac OS X does not have byteswap.h）
+//2バイト
+#define bswap_16(value) \
+((((value) & 0xff) << 8) | ((value) >> 8))
+//4バイト
+#define bswap_32(value) \
+(((uint32_t)bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
+(uint32_t)bswap_16((uint16_t)((value) >> 16)))
+//8バイト
+#define bswap_64(value) \
+(((uint64_t)bswap_32((uint32_t)((value) & 0xffffffff)) << 32) | \
+(uint64_t)bswap_32((uint32_t)((value) >> 32)))
+
+//顧客マスター構造体
+struct _customer{
+    char code[CODE_LEN];
+    char name[NAME_LEN];
+};
+typedef struct _customer customer_t;
+
+//COBOLインタフェース関数
+int read_table(uint64_t *cust_count, char *cust_table){
+/* endianの判定
+    int x=1; // 0x00000001
+    if (*(char*)&x) {
+        printf("little endian\n");
+        // little endian. memory image 01 00 00 00 
+    }else{
+        printf("big endian\n");
+        // big endian. memory image 00 00 00 01 
+    }
+*/
+    //顧客マスターテーブル
+    customer_t custTable[10];
+    //ゼロクリア
+    for(int i=0; i<10; i++){
+        custTable[i] = (customer_t){0};
+    }
+    //顧客マスターファイルの読み込み
+    const char *file = "./M001.txt";
+    FILE *fp;
+    fp = fopen(file, "r");
+    char line[BUFFER_LEN];
+    unsigned short count = 0;
+    while(fgets(line, BUFFER_LEN, fp) != NULL){
+        //改行コードの削除
+        char *p = strchr(line, '\n');
+        if (p != NULL){
+            *p = '\0';
+        }
+        //顧客コード
+        strncpy(custTable[count].code, line, CODE_LEN);        
+        //顧客名
+        int nlength = strlen(line)-CODE_LEN;
+        strncpy(custTable[count].name, line+CODE_LEN, nlength);
+
+        for (int i = nlength; i < NAME_LEN; i++){
+            custTable[count].name[i] = '\0';
+        }
+        count++;
+    }
+    *cust_count = count; //顧客マスターテーブル有効件数（8バイト）
+    *cust_count = bswap_64(*cust_count); //little endian -> big endian
+    printf("%d\n", count);
+
+    memcpy(cust_table, (char*)custTable, sizeof custTable);
+    return 0;
+}

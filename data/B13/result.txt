@@ -1,0 +1,15 @@
+チーム名の昇順 ----
+Buffaloes 0.37
+Fighters 0.45
+Golden Eagles 0.48
+Hawks 0.58
+Lions 0.48
+Marines 0.54
+
+勝率の降順 ----
+Hawks 0.58
+Marines 0.54
+Golden Eagles 0.48
+Lions 0.48
+Fighters 0.45
+Buffaloes 0.37

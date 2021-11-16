@@ -1,0 +1,5 @@
+NSString *folder = [NSString stringWithFormat:@"%@/Documents",
+                    NSHomeDirectory()];
+NSString *path = [folder stringByAppendingString:@"/out03.png"];
+NSURL *url = [NSURL fileURLWithPath:path];
+[exportedData writeToURL:url atomically:YES];

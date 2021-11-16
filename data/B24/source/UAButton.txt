@@ -1,0 +1,11 @@
+//---- UAButton.swift ----
+import Cocoa
+class UAButton: NSButton {
+    var urlString = ""
+    //--------------------------------------------------------------------------
+    //  ビューの再表示
+    //--------------------------------------------------------------------------
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+    }    
+}

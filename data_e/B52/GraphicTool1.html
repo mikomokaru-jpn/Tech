@@ -1,0 +1,116 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Draw freehand lines on image</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm40 tm20 bm0">
+Draw freehand lines on image
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B52/GraphicTool1.mp4&title=GraphicTool1&width=640" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B52/GraphicTool1.png" alt="[GraphicTool1]" width="400"></a>
+<div class="lm130 tm5 rm60 font90">
+Click the image to see the video
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+Open an image file
+</h3>
+<div class="lm70 tm5 rm60">
+You specify an image file with Open Panel, load and display it in the view of the window.
+The size of the image will be 800x600 pixels.
+Depending on the size of the image, 
+there may be vertical or horizontal margins to maintain the aspect ratio of the image.
+</div>
+<h3 class="lm70 tm10 rm60 bm0">
+Draw freehand lines
+</h3>
+<div class="lm70 tm5 rm60">
+Draw a line on the view that is  corresponded to the trajectory of  mouse drag .
+</div>
+<h3 class="lm70 tm10 rm60 bm0">
+Erase lines
+</h3>
+<div class="lm70 tm5 rm60">
+You create a rectangle area that contains you would  erase ,  by dragging with right mouse button. 
+Click Clear Button to erase the lines.
+</div>
+<h3 class="lm70 tm10 rm60 bm0">
+Output an image to a file
+</h3>
+<div class="lm70 tm5 rm60">
+When you click Save Button, you can save a drawn image to a file of PNG format. 
+The output destination file path is specified with Save Panel.
+</div>
+
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Class Structure Diagram
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B52/class.png&title=クラス構造図&width=900" target="_new">
+<img class="lm100 tm0 " src="/data/B52/class.png" alt="[クラス構造図]" width="400"></a>
+
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S27_GraphicTool1" target="_new">mikomokaru-jpn/macOS_S27_GraphicTool1</a>
+</div>
+
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Implementation points
+</h3>
+<h3 class="lm70 tm5 rm60 bm0">
+Draw a line
+</h3>
+<div class="lm70 tm0 rm60">
+Draw a straight line between  specified points.
+A line is drawn directly in Graphic Context with drawing methods of  NSGraphicsContext class.
+As drawing a very short straight line each time a mouse drag event occurs,  so it visually appears to draw a freehand line. 
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B52/draw.txt&font=font100" width="580" height="920"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+Erase lines
+</h3>
+<div class="lm70 tm0 rm60">
+The erase operation erases all  lines inside a specified rectangle.
+A line is a set of lines created by the occurrence of a mouse drag event.
+Each line has a different length depending on the speed of dragging.
+So if you erase a long line, it looks like the line outside the rectangle has been erased.
+To avoid this, the line on the boundary of the rectangle leaves the outer part of the rectangle.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B52/erase.txt&font=font100" width="580" height="720"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+Output an image displayed in the view to a file
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B52/create.txt&font=font100" width="580" height="530"></iframe>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

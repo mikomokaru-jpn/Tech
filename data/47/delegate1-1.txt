@@ -1,0 +1,12 @@
+- (NSInteger)browser:(NSBrowser*)sender 
+             numberOfRowsInColumn:(NSInteger)column{
+    NSString *path;
+    if (column > 0){
+        path = [sender pathToColumn:column]; //第2階層以下の列（ノード）
+    }else{
+        path = @"/"; //最上位の列（ノード）
+    }
+    //指定したパスの直下のファイル/ディレクトリ
+    _arrayOfURL =[self contentsOfDirectoryOfPath:path];
+    return [_arrayOfURL count];
+}

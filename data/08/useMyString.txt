@@ -1,0 +1,6 @@
+#import "NSString+MyString.h"
+....
+NSString* text = @"あいうえお";
+NSString* reversedText = [text reverse];    
+NSLog(@"reversed text is %@", reversedText);
+//（出力） reversed text is おえういあ

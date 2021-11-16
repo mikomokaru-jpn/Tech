@@ -1,0 +1,14 @@
+#import "NSTextField+MyTextField.h"
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+    //テキストフィールド・オブジェクトの作成
+    NSTextField* textField = [[NSTextField alloc] init];
+    textField.font = [NSFont fontWithName:@"Arial" size:20];
+    [textField setFrame:NSMakeRect(10, 20, 0, 0)];
+    [self.window.contentView addSubview:textField];
+    //文字列の表示
+    NSString* caution = @"この席で飲み物を飲まないでください";
+    //NSString* caution = @"ABCDEFG";
+    [textField setText:caution];
+}
+@end

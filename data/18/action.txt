@@ -1,0 +1,6 @@
+-(IBAction)copy:(id)sender{
+    NSLog(@"copy");
+}
+-(IBAction)paste:(id)sender{
+    NSLog(@"paste");    
+}

@@ -1,0 +1,3 @@
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return _itemList.count; //テーブルの件数（行数）
+}

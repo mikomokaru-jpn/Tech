@@ -1,0 +1,25 @@
+#import "Singleton.h"
+- (void)makeSingletonInstance
+{
+    Singleton *aInstance1;
+    Singleton *aInstance2;
+    Singleton *aInstance3;
+ 
+    aInstance1 = [Singleton shareInstance];
+    aInstance1.counter++;
+    NSLog(@"1 counter:%d", aInstance1.counter);
+
+    aInstance2 = [Singleton shareInstance];
+    aInstance1.counter++;
+    NSLog(@"2 counter:%d", aInstance1.counter);
+    
+    aInstance3 = [Singleton shareInstance];
+    aInstance1.counter++;
+    NSLog(@"3 counter:%d", aInstance1.counter);
+
+}
+
+//実行結果
+ 1 counter:1
+ 2 counter:2
+ 3 counter:3

@@ -1,0 +1,7 @@
+NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown],
+    handler: { (event: NSEvent?) in
+        let loc = NSEvent.mouseLocation
+        print("-- GlobalMonitor --")
+        print(String(format:"%.0f:%.0f", loc.x, loc.y))
+    }
+)

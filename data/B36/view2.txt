@@ -1,0 +1,7 @@
+let cnvPoint = view1.convert(view2.frame.origin, 
+                             to: self.window.contentView)
+print(String(format:"view2 frame on contentView  %.0f:%.0f %.0f:%.0f",
+             cnvPoint.x, cnvPoint.y,
+             view2.frame.size.width, view2.frame.size.height))
+//result
+view2 frame on contentView  150:75 100:50

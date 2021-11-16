@@ -1,0 +1,62 @@
+//-------------------------------------------------
+// Objective-C
+//-------------------------------------------------
+// NSString -> NSURL -> NSString 変換
+// fileURL
+NSString *file1 = [NSString stringWithFormat:@"%@/Documents/サンプル.txt",
+                                                   NSHomeDirectory()];
+NSURL *fileURL = [NSURL fileURLWithPath:file1];  //URL作成 
+NSString *file2 = [fileURL absoluteString];      //NSStringに変換（URL形式）
+NSLog(@"file2-> %@", file2);
+NSString *file3 = [fileURL path];                //NSStringに変換（パス形式）
+NSLog(@"file3-> %@", file3);
+
+//--結果--//
+file2-> file:///Users/itohisao/Documents/%E3%82%B5%E3%83%B3%E3%83%95%E3%82%9A%E3%83%AB.txt
+file3-> /Users/itohisao/Documents/サンプル.txt
+
+// URL
+NSString *http1 = @"https://www.google.co.jp";
+NSURL *httpUrl = [NSURL URLWithString:http1];  //URL作成
+NSString *http2 = [httpUrl absoluteString];    //NSStringに変換（URL形式）
+NSLog(@"http2-> %@", http2);
+NSString *http3 = [httpUrl path];              //NSStringに変換（パス形式）は無効
+NSLog(@"http3-> %@", http3);
+
+//--結果--//
+http2-> https://www.google.co.jp
+http3->
+
+//NSURLオブジェクトからファイル情報を得る（httpに対しては無効な操作）
+//パス名
+NSString *pathName;
+[fileURL getResourceValue:&pathName forKey:NSURLPathKey error:nil];
+NSLog(@"%@", pathName); /* /Users/itohisao/Documents/サンプル.txt */
+
+//ファイル/ディレクトリ名
+NSString *fileName;
+[fileURL getResourceValue:&fileName forKey:NSURLNameKey error:nil];
+NSLog(@"%@", fileName); /* サンプル.txt */
+
+//ファイルか否か：これは通常ファイルなので1が返る
+NSNumber *num;
+[fileURL getResourceValue:&num forKey:NSURLIsRegularFileKey error:nil];
+NSLog(@"%@", num);/* 1 */
+
+//-------------------------------------------------
+// Swift
+//-------------------------------------------------
+// URLオブジェクトの作成
+let url = URL.init(string: urlString)! //return optional variable
+
+// FileURLオブジェクトの作成 
+let url = URL.init(fileURLWithPath: fileString)
+
+// URLからファイルパスの構成要素を得る
+/et path = "/Users/hoge/Documents/fuga.txt"
+let url = URL.init(fileURLWithPath: path)
+
+let file = url.lastPathComponent                        //ファイル名 fuga.txt
+let folder = url.deletingLastPathComponent().path       //フォルダ名 /Users/hoge/Documents
+let ext = url.pathExtension                             //拡張子 txt
+print("\(file)  \(folder)  \(ext)")

@@ -1,0 +1,6 @@
+# エラーログの出力先の定義
+ErrorLog "/private/var/log/apache2/error_log"
+
+# アクセスログのフォーマットと出力先の定義
+LogFormat "%h %l %u %t \"%r\" %>s %b" common
+CustomLog "/private/var/log/apache2/access_log" common

@@ -1,0 +1,28 @@
+//プロパティ
+@property NSArray<NSSortDescriptor*> *descriptors; //ソート記述子配列
+@property NSInteger saveIndex;                     //ソート前のテーブルインデックス
+
+//オブジェクトのロード時
+-(void)awakeFromNib{
+    //テーブルビューの１行目を選択
+    [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:0]
+            byExtendingSelection:YES];
+    //テーブルビューの列にソート記述子を定義する
+    //No.
+    NSSortDescriptor *descript1 =
+        [NSSortDescriptor sortDescriptorWithKey:@"code" ascending:YES];
+    [[_tableView tableColumnWithIdentifier:@"code"] 
+        setSortDescriptorPrototype:descript1];
+    //国語
+    NSSortDescriptor *descript2 =
+        [NSSortDescriptor sortDescriptorWithKey:@"records.japanese" 
+                                      ascending:YES];
+    [[_tableView tableColumnWithIdentifier:@"japanese"] 
+         setSortDescriptorPrototype:descript2];
+    //算数
+    NSSortDescriptor *descript3 =
+        [NSSortDescriptor sortDescriptorWithKey:@"records.arithmetic" 
+                                      ascending:YES];
+    [[_tableView tableColumnWithIdentifier:@"arithmetic"]  
+        setSortDescriptorPrototype:descript3];
+}

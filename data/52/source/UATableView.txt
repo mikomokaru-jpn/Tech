@@ -1,0 +1,75 @@
+//---- UATableView.h ----
+#import <Cocoa/Cocoa.h>
+@interface UATableView : NSTableView
+@end
+
+//---- UATableView.m ----
+#import "UATableView.h"
+#import "UATableHeaderCell.h"
+#import "UAUtility.h"
+@implementation UATableView
+//------------------------------------------------------------------------------
+// イニシャライザ：列見出しを作成する
+//------------------------------------------------------------------------------
+-(id)initWithCoder:(NSCoder *)coder{
+    if (![super initWithCoder:coder]){
+        return nil;
+    }
+    self.backgroundColor = [NSColor blackColor];
+    //ヘッダ行の高さ
+    NSRect rect = self.headerView.frame;
+    rect.size.height = 40;
+    self.headerView.frame = rect;
+    //見出し列オブジェクト（NSTableColumnのサブクラス）を作成する
+    
+    /*
+    self.tableColumns[2].headerCell.attributedStringValue =
+    [UAUtility attributedString:@"球団名" FontSize:20 ForeColor:[NSColor blackColor]];
+    self.tableColumns[2].headerCell.drawsBackground = YES;
+    self.tableColumns[2].headerCell.backgroundColor = [NSColor redColor];
+    */
+    
+    for (NSTableColumn* column in self.tableColumns) {
+        UATableHeaderCell* newCell = [[UATableHeaderCell alloc] init];
+        [column setHeaderCell:newCell];
+    }
+    //属性付き文字列の定義、文字揃えの指定
+    self.tableColumns[0].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"順位" FontSize:12 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[0].headerCell).dispAlignment = NSTextAlignmentCenter;
+    
+    self.tableColumns[1].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"マスコット" FontSize:12 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[1].headerCell).dispAlignment = NSTextAlignmentCenter;
+
+    self.tableColumns[2].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"球団名" FontSize:20 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[2].headerCell).dispAlignment = NSTextAlignmentLeft;
+
+    self.tableColumns[3].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"試合数" FontSize:12 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[3].headerCell).dispAlignment = NSTextAlignmentRight;
+
+    self.tableColumns[4].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"勝" FontSize:20 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[4].headerCell).dispAlignment = NSTextAlignmentRight;
+
+    self.tableColumns[5].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"負" FontSize:20 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[5].headerCell).dispAlignment = NSTextAlignmentRight;
+
+    self.tableColumns[6].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"引き分け" FontSize:10 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[6].headerCell).dispAlignment = NSTextAlignmentRight;
+
+    self.tableColumns[7].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"勝率" FontSize:20 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[7].headerCell).dispAlignment = NSTextAlignmentCenter;
+
+    self.tableColumns[8].headerCell.attributedStringValue =
+        [UAUtility attributedString:@"リンク" FontSize:12 ForeColor:[NSColor blackColor]];
+    ((UATableHeaderCell*)self.tableColumns[8].headerCell).dispAlignment = NSTextAlignmentCenter;
+    
+    return self;
+}
+@end

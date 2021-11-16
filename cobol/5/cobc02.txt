@@ -1,0 +1,1 @@
+cobc -c SUB01.cbl //オブジェクト .o を作成cobc -x -o main MAIN01.cbl SUB01.o

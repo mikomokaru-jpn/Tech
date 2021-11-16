@@ -1,0 +1,15 @@
+func pasteImageFromURL(){
+    //FileURLをペーストボードから取得する
+    if let objects = pasteboard.readObjects(forClasses:[NSURL.self] , 
+                                            options: [:]),
+        objects.count > 0,
+        let fileURL = objects[0] as? URL{
+        //FileURLのファイルを読み込む
+        image = NSImage.init(contentsOf: fileURL)
+        if image == nil{
+            return
+        }
+        self.needsDisplay = true
+        return
+    }
+}

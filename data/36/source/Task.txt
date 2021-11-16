@@ -1,0 +1,24 @@
+//------------------------------------------------------------------------------
+//  Task
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+@interface Task : NSObject
+
+@property NSNumber *code;   //タスクコード
+@property NSString *name;   //タスク名
+
+@end
+
+
+//------------------------------------------------------------------------------
+//  Task
+//------------------------------------------------------------------------------
+#import "Task.h"
+
+@implementation Task
+-(NSString *)description
+{
+    NSString *text = [NSString stringWithFormat:@"%@ %@", _code, _name];
+    return text;
+}
+@end

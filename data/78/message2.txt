@@ -1,0 +1,1 @@
+8.Property returns a Core Foundation object of type CGImageRef with a +0 retain 9.incorrect decrement of the reference count of an object that is not owned at this point by the caller

@@ -1,0 +1,11 @@
+@property CGRect shapeRect;
+@property CGFloat lineWidth;
+@property CGColorRef lineColor;
+
+-(void)shapeCreating:(CGPoint)point{
+    _size.width = point.x - _origin.x;   //_originは図形の原点 
+    _size.height = point.y - _origin.y;  // pointは原点の対角の点
+    _shapeRect = CGRectMake(_origin.x, _origin.y, 
+                            _size.width, _size.height); //四角形の定義
+    self.needsDisplay = YES; //ビューの再描画 
+}

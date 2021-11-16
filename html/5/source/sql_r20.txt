@@ -1,0 +1,29 @@
+<?php
+/*
+血圧測定データをDBから読み込む。特定の日付
+*/
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect();
+
+// SQLの実行 ( SELECT )
+try{
+    $sql = "SELECT id, date, lower, upper, confirm FROM blood_pressure WHERE  ( id = :id ) AND ( date = :date ); ";
+	$stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':id', $_POST['id'], PDO::PARAM_INT);	
+    $stmh->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+	die('エラー:'. $e->getMessage());
+}	
+
+//while ($row = $stmh->fetch(PDO::FETCH_ASSOC))
+//{
+//	print ($row['date'].' '.$row['upper'].' '.$row['lower'].'<br />');
+//}
+
+// JSON形式で出力  ( json_encode 関数 )
+header('Content-type: application/json');
+echo json_encode($stmh->fetchAll(PDO::FETCH_ASSOC));
+?>
+

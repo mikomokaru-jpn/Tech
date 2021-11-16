@@ -1,0 +1,10 @@
+let now = Date.init()
+let comps:Set<Calendar.Component> = [.year, .month, .day, 
+                                     .hour, .minute, .second]
+let dComp = Calendar.current.dateComponents(comps, from: now)
+print(String(format:"%ld年%ld月%ld日%ld時%ld分%ld秒",
+             dComp.year ?? 0, dComp.month ?? 0, dComp.day ?? 0,
+             dComp.hour ?? 0, dComp.minute ?? 0, dComp.second ?? 0))
+
+//結果
+2021年2月17日11時48分6秒

@@ -1,0 +1,15 @@
+func castTest() {
+    anyCast(parm: "ABC")
+}
+
+func anyCast(parm: Any){
+    <span class="redcolor">let strCast = parm as? String</span>
+    print("String \(String(describing: strCast))")
+
+    <span class="redcolor">let intCast = parm as? Int</span>
+    print("Int    \(String(describing: intCast))")
+}
+
+//実行結果
+String Optional("ABC")
+Int    nil 

@@ -1,0 +1,7 @@
+DIR* dir = opendir(path);    // ディレクトリをオープンする
+entry = readdir(dir)         // ディレクトを読み込む
+  entry->d_type              // ファイル種別
+                             // DT_DIR（ディレクトリ） 
+                             // DT_REG（通常ファイル） etc..
+  entry->d_name              // ファイル名                 
+closedir(dir);               // ディレクトをクローズする

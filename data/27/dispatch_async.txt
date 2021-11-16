@@ -1,0 +1,50 @@
+//開始；GCD(Grand Central Dispatch) ブロックによるコールバック
+-(void)start1{
+    [self reset];                   //UIリセッット
+    _btnStart.enabled = NO;         //開始ボタン
+    _btnCancel.enabled = YES;       //中止ボタン
+    //カウント処理を別スレッドで実行（メインスレッドとは非同期）
+    dispatch_queue_t queue;
+    queue = 
+      dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL); 
+    dispatch_async(queue, ^{
+        [self countNumberByGCD];
+    });
+}
+//中止
+-(IBAction)cancelBtn:(id)sender{
+    _cancelFlag = YES;
+}
+//-------- 内部メソッッド --------
+//カウント処理：ブロックによるコールバック
+-(void)countNumberByGCD{
+    for(int i=0; i<20; i++){
+        [NSThread sleepForTimeInterval:0.1];
+        _counter = i+1;
+        if (_cancelFlag == YES){
+            break;  //中止
+        }
+        //途中のCallBack（メインスレッド）
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateUI];    //UI更新
+         });
+    }
+    //終了時のCallBack（メインスレッド）
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self postRoutine];
+    });
+}
+//UIリセット
+-(void)reset{
+    _cancelFlag = NO;                   //キャンセルフラグ
+    _counter = 0;                       //カウンタ
+    _label.intValue = _counter;         //カウンタ表示
+    _progInd.maxValue = 20;             //プログレスバー・最大値
+    _progInd.doubleValue = 0;           //プログレスバー・現在値
+}
+//UI更新
+-(void)updateUI{
+    _label.intValue = _counter;         //カウンタ表示
+    _label.needsDisplay = YES;
+    _progInd.doubleValue = _counter;    //プログレスバー
+}

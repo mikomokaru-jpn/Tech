@@ -1,0 +1,136 @@
+//------------------------------------------------------------------------------
+// クラス宣言　CAIndicatorView.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import <QuartzCore/QuartzCore.h>
+@interface CAIndicatorView : NSView
+
+@property CAShapeLayer *circle1;    //赤丸のレイヤー
+@property CAShapeLayer *circle2;    //青丸のレイヤー
+@property CABasicAnimation *anim1;  //赤丸のアニメーションオブジェクト
+@property CABasicAnimation *anim2;  //青丸のアニメーションオブジェクト
+@property BOOL animated;            //アニメーションの停止/再開フラグ
+
+@end
+
+//------------------------------------------------------------------------------
+// クラス実装　CAIndicatorView.m
+//------------------------------------------------------------------------------
+#import "CAIndicatorView.h"
+#import "NSBezierPath+MyBezierPath.h"
+@implementation CAIndicatorView
+//座標系の反転
+- (BOOL) isFlipped
+{
+    return YES;
+}
+//イニシャライザ
+-(id)initWithFrame:(NSRect)frame
+{
+    if (![super initWithFrame:frame])
+        return nil;
+    [self _init];   //初期設定
+    return self;
+}
+//ビューの描画（オーバーライド）
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [super drawRect:dirtyRect];
+    self.layer.backgroundColor = [NSColor whiteColor].CGColor;  //背景色
+    [self.layer addSublayer:_circle1];                          //円の描画
+    [self.layer addSublayer:_circle2];                          //円の描画
+    _anim1.repeatCount = HUGE_VALF;                             //繰り返し回数：無制限
+    [_circle1 addAnimation:_anim1 forKey:@"position"];          //赤円にアニメーションを設定
+    _anim2.repeatCount = HUGE_VALF;                             //繰り返し回数：無制限
+    [_circle2 addAnimation:_anim2 forKey:@"position"];          //青円にアニメーションを設定
+}
+//マウスでクリックした
+- (void)mouseDown:(NSEvent *)event
+{
+    [self animate];    //アニメーションの停止/再開の切り替え
+    [super mouseDown:event];
+}
+//初期設定
+-(void)_init
+{
+    //赤円レイヤーの作成
+    _circle1 = [CAShapeLayer layer];
+    NSBezierPath *path1 = [NSBezierPath bezierPath];;
+    [path1 appendBezierPathWithOvalInRect:NSMakeRect(0, 0, 100, 100)];
+    _circle1.path = path1.cgPath;
+    _circle1.position = NSMakePoint(0, 150);
+    _circle1.fillColor =  [NSColor redColor].CGColor;
+    
+    //青円レイヤーの作成
+    _circle2 = [CAShapeLayer layer];
+    NSBezierPath *path2 = [NSBezierPath bezierPath];;
+    [path2 appendBezierPathWithOvalInRect:NSMakeRect(0, 0, 100, 100)];
+    _circle2.path = path2.cgPath;
+    _circle2.position = NSMakePoint(150, 0);
+    _circle2.fillColor =  [NSColor blueColor].CGColor;
+    
+    //赤円アニメーションオブジェクトの作成：上下に移動
+    NSSize me = self.frame.size;
+    _anim1 = [CABasicAnimation animationWithKeyPath:@"position"];       //キーコード
+    NSNumber *y = [NSNumber numberWithFloat:me.height/2-50];            //Y座標
+    _anim1.fromValue = @[@0, y];                                        //Y座標の開始位置 0
+    _anim1.toValue   = @[[NSNumber numberWithFloat:me.width-100], y];   //Y座標の終了位置 ビューの幅
+    _anim1.duration = 2.0;                                              //移動の単位
+    _anim1.autoreverses = YES;                                          //自動往復
+    _anim1.timingFunction =
+    [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+                                                                        //一定の速度
+    //青円アニメーションオブジェクトの作成：左右に移動
+    _anim2 = [CABasicAnimation animationWithKeyPath:@"position"];       //キーコード
+    NSNumber *x = [NSNumber numberWithFloat:me.width/2-50];             //X座標
+    _anim2.fromValue = @[x, @0];                                        //X座標の開始位置 0
+    _anim2.toValue   = @[x, [NSNumber numberWithFloat:me.height-100]];  //X座標の終了位置 ビューの幅
+    _anim2.duration = 2.0;                                              //移動の単位
+    _anim2.autoreverses = YES;                                          //自動往復
+    _anim2.timingFunction =
+    [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                                                                        //開始ゆっくり途中速く終了ゆっくり
+    [self pauseLayer];
+    _animated = NO;
+}
+//アニメーションの停止
+-(void)pauseLayer
+{
+    CFTimeInterval pausedTime1 = [_circle1 convertTime:CACurrentMediaTime() fromLayer:nil];
+    _circle1.speed = 0.0;
+    _circle1.timeOffset = pausedTime1;
+    CFTimeInterval pausedTime2 = [_circle2 convertTime:CACurrentMediaTime() fromLayer:nil];
+    _circle2.speed = 0.0;
+    _circle2.timeOffset = pausedTime2;
+
+}
+//アニメーションの再開
+-(void)resumeLayer
+{
+    CFTimeInterval pausedTime1 = [_circle1 timeOffset];
+    _circle1.speed = 1.0;
+    _circle1.timeOffset = 0.0;
+    _circle1.beginTime = 0.0;
+    CFTimeInterval timeSincePause1 = [_circle1 convertTime:CACurrentMediaTime()
+                                             fromLayer:nil] - pausedTime1;
+    _circle1.beginTime = timeSincePause1;
+
+    CFTimeInterval pausedTime2 = [_circle2 timeOffset];
+    _circle2.speed = 1.0;
+    _circle2.timeOffset = 0.0;
+    _circle2.beginTime = 0.0;
+    CFTimeInterval timeSincePause2 = [_circle2 convertTime:CACurrentMediaTime()
+                                                fromLayer:nil] - pausedTime2;
+    _circle2.beginTime = timeSincePause2;
+}
+//アニメーション停止/再開の切り替え
+-(void)animate{
+    if (_animated == YES){
+        [self pauseLayer];
+        _animated = NO;
+    }else{
+        [self resumeLayer];
+        _animated = YES;
+    }
+}
+@end

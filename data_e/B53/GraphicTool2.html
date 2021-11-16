@@ -1,0 +1,87 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Write text on image</title>
+<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs2.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm40 tm20 bm0">
+Write text on image
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B53/GraphicTool2.mp4&title=GraphicTool1&width=640" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B53/GraphicTool2.png" alt="[GraphicTool1]" width="400"></a>
+<div class="lm130 tm5 rm60 font90">
+Click the image to see the video
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+Open an image file
+</h3>
+<div class="lm70 tm0 rm60">
+You specify an image file with Open Panel, load and display it in the view of the window. The size of the image will be 800x600 pixels. Depending on the size of the image, there may be vertical or horizontal margins to maintain the aspect ratio of the image.   
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+Write text
+</h3>
+<div class="lm70 tm0 rm60">
+You specify a rectangle on which a text will be written by dragging. 
+Clicking on it will open a sub-window for entering text.
+Enter character strings and click Update Button to complete the text input. 
+At the same time, you can specify the font size and text color. 
+</div>
+<div class="lm70 tm10 rm60">
+By dragging the rectangular area where you have entered the text, 
+you can move the display position and scale the display area.
+</div>
+
+<div class="lm70 tm10 rm60">
+How to write text programmatically
+</div>
+<div class="lm70 tm5 rm60">
+In the definition of the application,  "text"  is a view object that draws a string.
+When you enter a text and click Update Button, a view object (UAView class) is created and pasted into the parent view.
+</div>
+<div class="lm70 tm10 rm60">
+You can change the display position and size  by changing the frame property of the view of text.
+UAView class keeps a font size and a color of  text in its properties so that it can be changed by a user.
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+Output to a file
+</h3>
+<div class="lm70 tm0 rm60">
+ Output an image containing text to a PNG format file. The file size will be 800x600, which is the same size as the view.
+</div>
+<div class="lm70 tm20" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Class Structure Diagram
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B53/class.png&title=クラス構造図&width=900" target="_new">
+<img class="lm70 tm0 " src="/data/B53/class.png" alt="[クラス構造図]" width="500"></a>
+<div class="lm70 tm20" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Class List
+</h3>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S27_GraphicTool2" target="_new">mikomokaru-jpn/macOS_S27_GraphicTool2</a>
+</div>
+  
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

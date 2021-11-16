@@ -1,0 +1,26 @@
+//------------------------------------------------------------------------------
+// クラス宣言　AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "CAIndicatorView.h"
+@interface AppDelegate : NSObject <NSApplicationDelegate,
+                                   NSSpeechRecognizerDelegate,
+                                   NSWindowDelegate>
+@property (weak) IBOutlet NSWindow *window;
+@property CAIndicatorView *indicatorView;   //アニメーション・ビュー
+@end
+
+
+//------------------------------------------------------------------------------
+// クラス実装　AppDelegate.m
+//------------------------------------------------------------------------------
+#import <QuartzCore/QuartzCore.h>
+#import "AppDelegate.h"
+@implementation AppDelegate
+//アプリケーションの起動
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    _indicatorView = [[CAIndicatorView alloc] initWithFrame:_window.contentView.frame];
+    [_window.contentView addSubview:_indicatorView];
+}
+@end

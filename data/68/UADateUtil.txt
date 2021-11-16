@@ -1,0 +1,21 @@
+//---- UADateUtil.h ----
+#import <Foundation/Foundation.h>
+@interface UADateUtil : NSObject
+//当日の年月日をフォントサイズで指定された大きさの文字列で返す。
+-(NSAttributedString*)stringTodayOfSize:(NSInteger)size;
+@end
+
+//---- UADateUtil.m ----
+#import "UADateUtil.h"
+#import "UAStringUtil.h"
+@implementation UADateUtil
+-(NSAttributedString*)stringTodayOfSize:(NSInteger)size{
+    NSDate *today = [NSDate date];
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    format.dateFormat = @"yyyy年MM月dd日";
+    NSString *strDay = [format  stringFromDate:today];
+    NSAttributedString *aStrDay = [UAStringUtil string:strDay 
+                                                ofSize:size];
+    return aStrDay;
+}
+@end

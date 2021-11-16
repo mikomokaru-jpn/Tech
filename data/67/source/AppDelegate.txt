@@ -1,0 +1,108 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "UAView.h"
+#import "UAImageView.h"
+
+@interface AppDelegate () <NSTableViewDataSource>
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSImageView *orgImageView; //表示イメージのサムネイ
+@property (weak) IBOutlet NSTextField *Xpos;         //contentView.bounds.origin.x
+@property (weak) IBOutlet NSTextField *Ypos;         //contentView.bounds.origin.y
+@property NSScrollView *scrollView; //スクロールビュー
+@end
+//アプリケーション起動時
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //ベースビュー（スクロールビューを貼り付ける）
+    UAView *baseView = [[UAView alloc] initWithFrame:_window.contentView.frame];
+    [_window.contentView addSubview:baseView];
+
+    //画像ビューオブジェクトを作成する
+    NSImage *image = [self imageFile];            //イメージファイルを読み込む
+    _orgImageView.image = image;                  //サムネイル画像
+    NSSize imageViewsize = NSMakeSize(600, 450);  //画像ビューの大きさ
+    UAImageView *imageView = [[UAImageView alloc] initWithImage:image size:imageViewsize];
+
+    //スクロールビューオブジェクトを作成する
+    NSRect rect = NSMakeRect(20, 20, 300, 225);   //スクロールビューの大きさ
+    _scrollView = [[NSScrollView alloc] initWithFrame:rect];
+    _scrollView.borderType = NSBezelBorder;       //枠線
+    _scrollView.hasVerticalScroller = YES;        //スクロールバーを表示する
+    _scrollView.hasHorizontalScroller = YES;
+    [baseView addSubview:_scrollView];            //スクロールビューをベースビューに追加する
+    [_scrollView setDocumentView:imageView];      //画像ビューを作成しスクロールビューに埋め込む
+    
+    //画像ビューの位置を表示
+    NSPoint point = _scrollView.contentView.bounds.origin;
+    _Xpos.stringValue = [NSString stringWithFormat:@"%.0f", point.x];
+    _Ypos.stringValue =[NSString stringWithFormat:@"%.0f", point.y];
+    //スクロールビューのスクロールイベントを監視する
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(scrolled:)
+                                                 name:NSViewBoundsDidChangeNotification
+                                               object:nil];
+    //検証用
+    NSSize contentSize =  _scrollView.contentView.frame.size;
+    NSLog(@"contentView %.0f %.0f", contentSize.width, contentSize.height);
+    NSSize documentSize = _scrollView.documentView.frame.size;
+    NSLog(@"documentSize %.0f %.0f", documentSize.width, documentSize.height);
+}
+//ボタンアクション・画像ビューをスクロールビューの上下左右の端までスクロールする
+-(IBAction)move:(NSButton*)sender{
+    NSPoint currentPoint = _scrollView.contentView.bounds.origin; //現在の位置
+    NSPoint toPoint = NSZeroPoint;
+    float num;
+    switch (sender.tag) {
+        case 1: //top
+            toPoint = NSMakePoint(currentPoint.x, 0);
+            break;
+        case 2: //right
+            num = _scrollView.documentView.frame.size.width -
+                  _scrollView.contentView.bounds.size.width;
+            toPoint = NSMakePoint(num, currentPoint.y);
+            break;
+        case 3: //bottom
+            num = _scrollView.documentView.frame.size.height -
+                  _scrollView.contentView.bounds.size.height;
+            toPoint = NSMakePoint(currentPoint.x, num);
+            break;
+        case 4: //left
+            toPoint = NSMakePoint(0, currentPoint.y);
+            break;
+        default:
+            break;
+    }
+    [_scrollView.contentView scrollPoint:toPoint];
+}
+//スクロールイベントのコールバック処理
+-(void)scrolled:(NSNotification*)notification{
+    //画像ビューの位置を表示
+    NSPoint newPoint = _scrollView.contentView.bounds.origin;
+    _Xpos.stringValue = [NSString stringWithFormat:@"%.0f", newPoint.x];
+    _Ypos.stringValue =[NSString stringWithFormat:@"%.0f", newPoint.y];
+    NSLog(@"scrolled %.1f %.1f", newPoint.x, newPoint.y);
+}
+//画像ファイルの読み込み
+-(NSImage*)imageFile{
+    //アプリケーションバンドルを取得する
+    NSBundle *bundle = [NSBundle mainBundle];
+    //リーソスに格納されているファイル（tanka.txt）のパスを求める
+    NSString *path = [bundle pathForResource:@"piyopiyo"
+                                      ofType:@"jpg"];
+    //NSURLに変換する
+    NSURL *url = [NSURL fileURLWithPath:path];
+    //ファイルを読み込む
+    NSData* data = [NSData dataWithContentsOfURL:url];
+    return [[NSImage alloc] initWithData:data];
+}
+@end

@@ -1,0 +1,30 @@
+//HTTPリクエストオブジェクトの作成
+let request = new XMLHttpRequest();
+request.open('POST', './php/sql_r10.php'); 
+request.setRequestHeader( 'Content-Type', 
+                          'application/x-www-form-urlencoded');
+request.timeout = 3000; //msec
+//パラメータの作成
+let id=500;
+let from_date=`${year}${month}01`;
+let to_date=`${year}${month}${days}`;
+let param = `id=${id}&from_date=${from_date}&to_date=${to_date}`;        
+//リクエストの送信
+request.send(param);
+
+//レスポンスの受信（非同期）
+request.onload = function(){
+    let READYSTATE_COMPLETED = 4;
+    let HTTP_STATUS_OK = 200;
+    if( this.readyState == READYSTATE_COMPLETED
+        && this.status == HTTP_STATUS_OK ){
+        //正常・血圧データ取得
+        let jsonText = request.responseText;
+        valuesList = JSON.parse(jsonText);
+        //カレンダーの作成
+        ....
+    }else{
+        alert('HTTPエラー status:'+this.status);
+        return;
+    }
+}

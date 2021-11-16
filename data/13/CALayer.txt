@@ -1,0 +1,8 @@
+- (void)addImageLayer {
+    CAShapeLayer *imageLayer = [CAShapeLayer layer];
+    NSRect rect = self.bounds;  //oigin 0:0  size 800x600 
+    imageLayer.frame = rect;
+    imageLayer.contents = _image;
+    [self.layer addSublayer:imageLayer];
+    [self.layer setValue:imageLayer forKey:@"imageeee"];
+}

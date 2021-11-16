@@ -1,0 +1,8 @@
+// POSTデータ（Json）の取得
+
+//パラメータの取得
+$json_post = file_get_contents('php://input');
+//文字コードの変換
+$json_string = mb_convert_encoding($json_post, 'UTF8', 'ASCII, JIS, UTF-8, EUC-JP, SJIS-WIN');
+//JSONデータを連想配列に変換
+$array = json_decode($json_string, true);

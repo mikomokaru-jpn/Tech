@@ -1,0 +1,28 @@
+let now = Date.init()
+let formatter: DateFormatter = DateFormatter()
+formatter.locale = Locale.init(identifier: "ja_JP")
+formatter.dateStyle = .full
+formatter.timeStyle = .full
+print(formatter.string(from: now)) //現在日
+
+//1年2ヶ月3日後
+var dComp = DateComponents()
+dComp.year = 1
+dComp.month = 2
+dComp.day = 3
+if let futureDate = Calendar.current.date(byAdding: dComp, to: now){
+    print(formatter.string(from: futureDate))
+}
+
+//1年2ヶ月3日前
+dComp.year = -1
+dComp.month = -2
+dComp.day = -3
+if let pastDate = Calendar.current.date(byAdding: dComp, to: now){
+    print(formatter.string(from: pastDate))
+}
+
+//結果
+2021年10月23日 土曜日 12時19分40秒 日本標準時
+2022年12月26日 月曜日 12時19分40秒 日本標準時
+2020年8月20日 木曜日 12時19分40秒 日本標準時

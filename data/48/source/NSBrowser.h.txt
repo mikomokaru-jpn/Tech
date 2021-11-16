@@ -1,0 +1,17 @@
+/*
+    NSBrowser.h
+    Application Kit
+    Copyright (c) 1994-2017, Apple Inc.
+    All rights reserved.
+*/
+.....
+/* Get and set the rowHeight. The value must be greater than 0. 
+   Calling -setRowHeight: with a non-pixel aligning (fractional) value will be forced to a pixel aligning (integral) value. 
+   For variable row height browsers (ones that have the delegate implement -browser:heightOfRow:column:), 
+   -rowHeight will be used to draw alternating rows past the last row in each browser column. 
+   The default value is 17.0. 
+   Note: The rowHeight methods are only valid when using the item delegate methods introduced in Mac OS 10.6. 
+   (see NSObject(NSBrowserDelegate)). 
+   An exception is thrown if using the older matrix delegate methods 
+ */
+@property CGFloat rowHeight NS_AVAILABLE_MAC(10_6);

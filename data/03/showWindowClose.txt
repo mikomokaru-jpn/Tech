@@ -1,0 +1,4 @@
+-(IBAction)buttonOK:(id)sender
+{
+    [self.window close];
+}

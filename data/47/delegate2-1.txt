@@ -1,0 +1,11 @@
+-(id)rootItemForBrowser:(NSBrowser *)browser{
+    Node *root = [[Node alloc] initWithURL:nil];
+    NSURL *url = [NSURL URLWithString:@"/"];
+    NSArray* arrayOfURL = [self contentsAtURL:url];
+    for(NSURL* url in arrayOfURL)
+    {
+        Node* node = [[Node alloc] initWithURL:url];
+        [root.children addObject:node];
+    }
+    return root;
+}

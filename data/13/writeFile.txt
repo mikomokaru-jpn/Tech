@@ -1,0 +1,3 @@
+NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] 
+                             initWithCGImage:newImageRef];
+//Q太郎

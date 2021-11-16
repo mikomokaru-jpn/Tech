@@ -1,0 +1,77 @@
+<!-- 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>一覧表を作成する（３）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">一覧表を作成する（３） 条件によりセルの属性を変える</h2>
+<div class="lm100 tm10 rm60">
+行のレコードの値を条件に、特定の要素の表示値の文字色/背景色を変えることができる。条件は複数の列の値を対象とすることができる。
+</div>
+<div class="lm100 tm10 rm60">
+上記サンプルでは、[脈圧] [平均血圧] は、それぞれの値が基準値以上になったら文字を赤色にしている。[最低血圧] [最高血圧] の背景色は、最低血圧と最高血圧のいずれかが基準値以上になったら黄色にし、両方とも超えていたら赤色としている。
+</div>
+<div class="lm100 tm10 rm60">
+また列の値を整形して表示することができる。[日付] は年月日の間にスラッシュを挿入している。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B32/gridObject3.mp4&title=gridObject3&width=600" target="_new">
+<img class="lm100 tm0 bm0" src="gridObject3.png" alt="[gridObject3]" width="450"></a>
+<div class="lm120 tm0 rm60">
+画像をクリックすると動画になります。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+条件によりセルの属性を変える方法
+</h3>
+<div class="lm100 tm0 rm60">
+セルの作成の際にクロージャを呼ぶ。クロージャは、レコード変数の値に応じたセルの属性（文字色、背景色）や、表示文字列を編集して返すので、それを列の属性に設定する。
+</div>
+<div class="lm100 tm10 rm60">
+クロージャ定義　GridDefinition.swift
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B32/GridDefinition.txt" width="550" height="290"></iframe>
+<div class="lm100 tm20 rm60">
+次の例は、最低血圧が85以上で最高血圧が135以上の場合、それぞれの血圧の背景色を赤にするものである。二値を判定するものである。    
+</div>
+<div class="lm100 tm10 rm60">
+クロージャの実装　AppDelegate.swift
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B32/AppDelegate1.txt" width="550" height="430"></iframe>
+
+<div class="lm100 tm10 rm60">
+セルの編集（クロージャの呼び出し）　UAGridObject.swift
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B32/UAGridObject.txt" width="550" height="90"></iframe>
+
+<h3 class="lm100 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S12_UAGridView" target="_new">mikomokaru-jpn/macOS_S12_UAGridView</a>
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="../index2.php">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>
+
+
+
+

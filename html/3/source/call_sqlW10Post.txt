@@ -1,0 +1,7 @@
+NSString* param = [NSString stringWithFormat:@"id=%ld&date=%ld&lower=%ld&upper=%ld&confirm=%ld"
+                   ,500L
+                   ,_date.integerYearMonthDay
+                   ,_value2.intValue
+                   ,_value1.intValue
+                   ,_confirmFlg.state];
+[UAServerRequest post:@"sqlW10Post.php" prmString:param];

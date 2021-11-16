@@ -1,0 +1,17 @@
+//Gridオブジェクトの作成
+let gridObject =  GridObject()   
+var commonDef = [String : Any]()  //共通定義
+var colsDef = [[String : Any]]()  //列の定義
+
+//<<< 共通定義 >>>
+gridObject.setPropaties(self.commonDef) //設定
+//<<< 列の定義 GridCol構造体 >>>
+var gridColList = [GridCol]()
+for record in self.colsDef{
+    let gridCol = GridCol.init(record)
+    gridColList.append(gridCol)
+}
+gridObject.setCols(gridColList) //設定
+
+//表示
+gridObject.display(dataList: dataList, view: canvasView)

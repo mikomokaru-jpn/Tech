@@ -1,0 +1,6 @@
+//---- Sales.h ----
+#import <Cocoa/Cocoa.h>
+@interface Sales : NSObject
+@property NSInteger price;      //単価
+@property NSInteger quantity;   //売上数量
+@end

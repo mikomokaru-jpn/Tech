@@ -1,0 +1,12 @@
+サブプログラムのコンパイルと共用ライブラリ（.so）の作成
+ライブラリ名はプログラムファイル名の先頭に 'lib' をつけのが決まり
+gcc --shared -fPIC -o libsublib.so sublib.c 
+
+メインプログラムのコンパイルと共用ライブラリのリンク（実行ファイル名は .dylib）
+cobc -L. -lsublib MAIN01.cbl
+
+共用ライブラリのサーチパスの設定（カレントパス）
+export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+
+実行
+cobcrun MAIN01

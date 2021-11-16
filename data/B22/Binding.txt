@@ -1,0 +1,11 @@
+<span class="redcolor">guard let obj = wrappedObj else</span>{
+    //nilのときの処理（エラー処理）
+    return
+}
+//通常の変数obj を利用した正常処理
+
+<span class="redcolor">if let obj = wrappedObj</span>{ 
+    //通常の変数obj を利用した正常処理
+}else{
+    //nilのときの処理（エラー処理）
+}

@@ -1,0 +1,11 @@
+<?php
+  // POSTデータ(JSON形式)の取得
+  $json_post = file_get_contents('php://input');
+  // UTF8にエンコード
+  $json_string = mb_convert_encoding($json_post, 'UTF8',
+                                     'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+  $post_array = json_decode($json_string, true);
+  $name = $post_array['name'].'さん こんにちは！';
+  header('Content-type: application/json');
+  echo json_encode(array($name));
+?>

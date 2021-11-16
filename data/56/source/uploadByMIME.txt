@@ -1,0 +1,29 @@
+@objc func upload2(_ sender: NSButton){
+    if self.urlOfUpfateFile == nil{
+        return
+    }
+    let url = URL.init(string: "http://192.168.11.3/50_test/upload_mime.php")!
+    //URL Request
+    var request:URLRequest = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    var dataList = [String:String]()
+    dataList["file_name"] = fileNameField.stringValue
+    dataList["MAX_FILE_SIZE"] = "10000000"
+    var body: Data
+    do{
+        //BASE64へのエンコード
+        dataList["mime_data"] = try Data.init(contentsOf: urlOfUpfateFile!).base64EncodedString()
+        body = try JSONSerialization.data(withJSONObject: dataList, options: [.prettyPrinted])
+    }catch{
+        return
+    }
+    request.setValue(String(format:"%ld", body.count), forHTTPHeaderField: "Content-Length")
+    request.httpBody = body
+    let resultText = sendRequest(request: request)
+    let alert = NSAlert()
+    alert.messageText = resultText
+    alert.informativeText = self.fileNameField.stringValue
+    alert.runModal()
+}

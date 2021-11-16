@@ -1,0 +1,4 @@
+//propertiesは未指定
+NSData *exportedData = 
+    [bitmap representationUsingType:NSBitmapImageFileTypePNG
+                         properties:[[NSDictionary alloc] init]];

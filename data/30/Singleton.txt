@@ -1,0 +1,36 @@
+//シングルトンクラス：クラス宣言
+#import <Foundation/Foundation.h>
+@interface Singleton : NSObject
++(Singleton *)shareInstance;  //シングルトンなインスタンスを返す
+@property int counter;        //数値カウンタ
+@end
+
+//シングルトンクラス：クラス実装
+#import "Singleton.h"
+@implementation Singleton
+static  Singleton *shareInstance = nil;  //自身のオブジェクト(シングルトン)
+//シングルトンなインスタンスを返す
++(Singleton *)shareInstance
+{
+    if (!shareInstance) {
+        //最初だけインスタンスを作成する
+        shareInstance = [[Singleton alloc] _init];
+    }
+    //２回目以降は作成済みのインスタンスを返す
+    return shareInstance;
+}
+//非公開のイニシャライザ
+-(id)_init
+{
+    if (![super init])
+        return nil;
+    _counter = 0;
+    return self;
+}
+//公開イニシャライザを無効化
+-(id)init
+{
+    NSLog(@"!!! Don't init an instance !!!");
+    return nil;
+}
+@end

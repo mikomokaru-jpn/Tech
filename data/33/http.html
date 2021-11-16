@@ -1,0 +1,81 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>HTTP通信を行うサービスクラス</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm80 tm20 rm60 bm0">HTTP通信を行う定型処理をラップしたクラス</h2>
+<h3 class="lm80 tm10 bm0 rm60">
+処理概要
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/33/33_httpRequest.png&title=Doc&width=800" target="_new">
+<img class="lm90 tm5 bm20" src="33_httpRequest.png" width="580" align="top" alt="Doc" ></a>
+<div class="lm70 tm5 rm60">
+NSMutableURLRequestクラスにより、POSTコマンドによるHTTPリクエストメッセージを作成する。NSURLSessionクラスによりメッセージの送受信をバックグラウンドで行う。dispatch_semaphoreにより、サーバからのレスポンスを受信するまで完了の同期をとる。サーバはレスポンスデータをJSONオブジェクトとして送るものとする。
+</div>
+<h3 class="lm80 tm20 bm0 rm60">
+クラスメソッドを提供する
+</h3>
+<h3 class="lm70 tm5 rm60 bm0">
+POSTコマンド（１）
+</h3>
+<div class="lm70 tm5 rm60">
+URL文字列（cmd）とPOSTパラメータ（param）を引数とする。POSTパラメータは x-www-form-urlencoded形式の文字列。戻り値はJSONオブジェクト。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/33/postGetJson1m.txt" width="580" height="190"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+POSTコマンド（２）
+</h3>
+<div class="lm70 tm5 rm60">
+URL文字列（cmd）とPOSTパラメータ（param）を引数とする。POSTパラメータはKeyと値の組み合わせのDictionaryオブジェクト。戻り値はJSONオブジェクト。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/33/postGetJson2m.txt" width="580" height="210"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+内部メソッド
+</h3>
+<h3 class="lm70 tm0 rm60 bm0">
+リクエストメッセージの作成
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/33/createRequest.txt" width="580" height="380"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+メッセージの送受信
+</h3>
+<div class="lm70 tm0 rm60">
+dispatch_semaphoreにより同期処理を行う。メソッドはサーバからレスポンスを受信するまで待つ。dispatch_semaphore_waitで処理を待機し、dispatch_semaphore_signalの通知により再開する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/33/doRequest.txt" width="580" height="690"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+使用方法
+</h3>
+<div class="lm70 tm5 rm60">
+血圧管理カレンダーアプリケーションで、1ヶ月分の血圧データを表示するために、期間を指定してサーバのDBから血圧データを読み込む処理で使用している。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0" src="/lib/HTMLofText.html?filename=/data/33/sample1.txt" width="580" height="180"></iframe>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+

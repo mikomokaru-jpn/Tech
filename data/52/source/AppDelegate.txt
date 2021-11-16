@@ -1,0 +1,266 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate,
+                                   NSTableViewDelegate,
+                                   NSTableViewDataSource,
+                                   NSTextFieldDelegate>
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "IconView.h"
+#import "UATextField.h"
+#import "UATableHeaderCell.h"
+#import "UAButton.h"
+#import "UAUtility.h"
+#import "UATeam.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTableView* tableView;       //テーブルビュー
+@property NSMutableArray<UATeam*>*teamList;             //チームリスト
+@property NSArray<NSArray*>*itemList;                   //定型データ
+@property NSMutableDictionary<NSString*, NSMutableArray*>*resultList;  //成績表
+@end
+
+@implementation AppDelegate
+//------------------------------------------------------------------------------
+// 初期処理
+//------------------------------------------------------------------------------
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    _teamList = [[NSMutableArray alloc] init];          //チームリスト
+    _resultList = [[NSMutableDictionary alloc] init];   //成績表
+    //データ初期化
+    [self initialData];
+    //保存データの読み込み
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSDictionary<NSString*, NSMutableArray*>*saveData =
+        [ud dictionaryForKey:@"SAVE_DATA"];
+    if (saveData != nil){
+        _resultList = [saveData mutableCopy];
+        for (NSString *key in saveData.allKeys){
+            _resultList[key] = [saveData[key] mutableCopy];
+        }
+    }else{
+        NSLog(@"saveData empty !!!!");
+        //初期成績表の作成
+        _resultList[@"巨人"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"阪神"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"DeNA"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"中日"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"広島"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"ヤクルト"] = @[@0, @0, @0].mutableCopy;
+    }
+    //成績の更新
+    [self createData];
+    [_tableView setDataSource:self];
+    [_tableView setDelegate:self];
+}
+//------------------------------------------------------------------------------
+// NSTableViewDatasource
+//------------------------------------------------------------------------------
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return _teamList.count;
+}
+//------------------------------------------------------------------------------
+// NSTableViewDelegate
+//------------------------------------------------------------------------------
+-(NSView *)tableView:(NSTableView *)tableView
+  viewForTableColumn:(NSTableColumn *)column
+                 row:(NSInteger)row{
+    //セルビューの取得
+    NSTableCellView *cellView = [tableView makeViewWithIdentifier:column.identifier owner:self];
+    cellView.textField.delegate = self; //これでいいのかな
+    cellView.wantsLayer = YES;
+    cellView.textField.stringValue = @"";
+    //行の背景色を偶数行・奇数行で変える
+    if ((row % 2) == 1){
+        cellView.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+    }else{
+        cellView.layer.backgroundColor = [UAUtility cgColorR:255 G:228 B:196];
+    }
+    //順位/球団名/試合数/勝/負/引き分け/勝率の水平方向の文字揃え
+    if ([[column identifier] isEqualToString:@"ranking"]){
+        ((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentCenter;
+    }
+    if ([[column identifier] isEqualToString:@"name"]){
+        ((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentLeft;
+    }
+    if ([[column identifier] isEqualToString:@"number"] ||
+        [[column identifier] isEqualToString:@"win"] ||
+        [[column identifier] isEqualToString:@"lose"] ||
+        [[column identifier] isEqualToString:@"draw"] ||
+        [[column identifier] isEqualToString:@"rate"]){
+        ((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentRight;
+        ((UATextField *)cellView.textField).teamName = _teamList[row].nameString;
+    }
+    //イメージの表示
+    if ([[column identifier] isEqualToString:@"image"]){
+        //IconViewオブジェクト（NSViewのサブクラス）を返す
+        ((IconView *)cellView.textField).teamIcon = _teamList[row].image;
+        cellView.textField.stringValue  = @"dummy";
+        return cellView;
+    }
+    //リンクボタンの表示
+    if ([[column identifier] isEqualToString:@"link"]){
+        [cellView addSubview:_teamList[row].link];
+        //ボタンを貼り付けたセルビューを返す
+        return cellView;
+    }
+    //文字列の表示：属性付き文字列をセットしたセルビューを返す
+    cellView.textField.attributedStringValue = [_teamList[row] valueForKey:[column identifier]];
+    return cellView;
+}
+//------------------------------------------------------------------------------
+// NSTextField Delegate：テキストフィールドに値を入力しenterキーを押したとき
+//------------------------------------------------------------------------------
+- (BOOL)control:(NSControl *)control
+       textView:(NSTextView *)textView
+doCommandBySelector:(SEL)command{
+    //テキストフィールドオブジェクトの取得
+    UATextField *textField = (UATextField *)control;
+    if (command == @selector(insertNewline:)){
+
+        //入力値のニューメリックチェック
+        NSCharacterSet *inputCharSet =
+            [NSCharacterSet characterSetWithCharactersInString:textView.string];
+        NSCharacterSet *digitCharSet =
+            [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+        if ([digitCharSet isSupersetOfSet:inputCharSet]){
+            //行（球団）の判定
+            for (UATeam *team in _teamList){
+                if ([team.nameString isEqualToString:textField.teamName]){
+                    //データの更新
+                    if ([textField.identifier isEqualToString:@"win"]){
+                        team.winValue = textView.string.intValue;
+                    }else if ([textField.identifier isEqualToString:@"lose"]){
+                        team.loseValue = textView.string.intValue;
+                    }else if ([textField.identifier isEqualToString:@"draw"]){
+                        team.drawValue = textView.string.intValue;
+                    }
+                    break;
+                }
+            }
+            [self updataData];
+        }else{
+            NSLog(@"数値以外が含まれています.");
+        }
+    }
+    return NO;
+}
+//------------------------------------------------------------------------------
+// テキストフィールドからフォーカスが外れたとき
+//------------------------------------------------------------------------------
+-(void)controlTextDidEndEditing:(NSNotification *)notification{
+    [_tableView reloadData];
+    return;
+}
+//------------------------------------------------------------------------------
+// ViewBasedでは動かない
+//------------------------------------------------------------------------------
+-(void)tableView:(NSTableView *)tableView
+   setObjectValue:(id)object
+   forTableColumn:(NSTableColumn *)tableColumn
+              row:(NSInteger)row{
+    NSLog(@"setObjectValue");
+}
+//------------------------------------------------------------------------------
+// 初期データ
+//------------------------------------------------------------------------------
+-(void)initialData{
+    //定型データ
+    _itemList = @[@[@"巨人", @"giants", @"https://www.giants.jp/top.html"],
+                  @[@"DeNA", @"baystars", @"https://www.baystars.co.jp"],
+                  @[@"阪神", @"tigers", @"https://hanshintigers.jp"],
+                  @[@"広島", @"carp", @"https://www.carp.co.jp"],
+                  @[@"中日", @"dragons", @"https://dragons.jp"],
+                  @[@"ヤクルト", @"swallows", @"https://www.yakult-swallows.co.jp"]
+                  ];
+}
+//------------------------------------------------------------------------------
+// チームリストの作成
+//------------------------------------------------------------------------------
+-(void)createData{
+    for (NSArray *record in _itemList){
+        UATeam *team = [[UATeam alloc] initWithName:record[0]];
+        team.image = [NSImage imageNamed:record[1]];
+        team.link = [self buttonWithURL:record[2]];
+        NSArray<NSNumber*> *result =_resultList[team.nameString];
+        team.winValue = result[0].intValue;     //勝
+        team.loseValue = result[1].intValue;    //負
+        team.drawValue = result[2].intValue;    //引き分け
+        [_teamList addObject:team];
+    }
+    [self sortTeams];
+}
+//------------------------------------------------------------------------------
+// 成績の更新
+//------------------------------------------------------------------------------
+-(void)updataData{
+    [self sortTeams];
+    [_tableView reloadData];
+}
+//------------------------------------------------------------------------------
+//　勝率によるソート
+//------------------------------------------------------------------------------
+-(void)sortTeams{
+    //勝率でソート＆順位のセット
+    NSSortDescriptor *descript =
+    [NSSortDescriptor sortDescriptorWithKey:@"rateValue" ascending:NO];
+    _teamList = [[_teamList sortedArrayUsingDescriptors:@[descript]] mutableCopy];
+    int ranking = 0;
+    for (UATeam *team in _teamList){
+        team.rankingValue = ++ranking;
+    }
+}
+//------------------------------------------------------------------------------
+//リンクボタン
+//------------------------------------------------------------------------------
+-(NSButton*)buttonWithURL:(NSString*)urlString{
+    UAButton *button = [[UAButton alloc]initWithFrame:NSMakeRect(25, 15, 70, 50)];
+    button.bezelStyle = NSBezelStyleRounded;
+    button.title = @"";
+    button.urlString = urlString;
+    [button setTarget:self];
+    [button setAction:@selector(buttonClicked:)];
+    return button;
+}
+//------------------------------------------------------------------------------
+//ボタンアクション
+//------------------------------------------------------------------------------
+-(void)buttonClicked:(UAButton*)sender{
+    if (![[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:sender.urlString]]){
+        NSLog(@"URLが開けません");
+    }
+}
+//------------------------------------------------------------------------------
+// ウィンドウを閉じるとき：データを保存する
+//------------------------------------------------------------------------------
+- (void)windowWillClose:(NSNotification *)notification{
+    for (UATeam *team in _teamList){
+        NSMutableArray<NSNumber*>*result = _resultList[team.nameString];
+        result[0] = @(team.winValue);
+        result[1] = @(team.loseValue);
+        result[2] = @(team.drawValue);
+    }
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:_resultList forKey:@"SAVE_DATA"];
+    [ud synchronize]; //即更新する
+}
+//------------------------------------------------------------------------------
+// for test
+//------------------------------------------------------------------------------
+-(IBAction)update:(id)sender{
+    
+    [_teamList removeAllObjects];
+    //初期成績表の作成
+    _resultList[@"巨人"] = @[@53, @26, @0].mutableCopy;
+    _resultList[@"阪神"] = @[@41, @39, @0].mutableCopy;
+    _resultList[@"DeNA"] = @[@41, @41, @0].mutableCopy;
+    _resultList[@"中日"] = @[@39, @42, @0].mutableCopy;
+    _resultList[@"広島"] = @[@32, @44, @0].mutableCopy;
+    _resultList[@"ヤクルト"] = @[@32, @46, @0].mutableCopy;
+    [self createData];
+    [_tableView reloadData];
+}
+@end

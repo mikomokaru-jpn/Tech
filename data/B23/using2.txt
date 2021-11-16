@@ -1,0 +1,1 @@
+var dataList = [[String:Any]]()let cmd = "http://192.168.11.3/doc_health_calendar/php/sql_r12_json.php"let fromDate = "20180910"let toDate = "20181231"let param = ["id":"500", "from_date":fromDate, "to_date":toDate]//送受信メソッドの呼び出しlet list = UAServerRequest.postSyncJ(urlString:cmd, param:param)if let unwrappedList  = list as? [[String:Any]] {    dataList = unwrappedList}

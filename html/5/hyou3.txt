@@ -1,0 +1,13 @@
+//一覧表の要素を追加する開始位置
+const startPos = document.querySelector('div.chart'); 
+
+//日数分繰り返す
+for (let i=0; i<days; i++){
+    //日付
+    let dayRef = document.createElement('div');  //要素オブジェクトの作成
+    dayRef.textContent = i+1;                    //表示テキストのセット   
+    dayRef.setAttribute('class', 'box1');        //class属性の追加
+    startPos.appendChild(dayRef);                //HTMLドキュメントに追加する
+    
+    ....（以下同様）....
+}

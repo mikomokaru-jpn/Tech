@@ -1,0 +1,73 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title> メニューバー上のマウスイベントを取得する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+ メニューバー上のマウスイベントを取得する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B56/menu_bar_click.mp4&title=menu_bar_click&width=750" target="_new">
+<img class="lm80 tm10 bm0" src="menu_bar_click.png" alt="[menu_bar_click]" width="450"></a>
+<div class="lm100 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<h3 class="lm70 tm20 rm60 bm0" id="point">
+実装方法
+</h3>
+
+
+<div class="lm70 tm0 rm60">
+メニューバーを含んだウィンドウに相当するビューのオブジェクトは、次のように求めることができる。ここからコンテントビューを除いたの部分がメニューバーの領域となる。
+</div>
+
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B56/superview.swift" width="580" height="50"></iframe>
+
+
+<div class="lm70 tm10 rm60">
+このオブジェクトのクラスは、言語仕様上公開されていないようだが、NSThemeFrame という NSWindow と NSView の間にあるものらしい。ここにもmouseDownメソッドが定義されているようなので、サブクラスを作成しオーバーライドすれば良さそうだが、そのようなことはできない。そこで次のような方法をとる。
+</div>
+<div class="lm70 tm10 rm60">
+メニューバーをクリックしたとき、NSThemeFrameクラスの mouseDownメソッドが起動しているはずだが、そこには処理の記述がない。そこで、どこかしらに、実行したい処理を記述した新しい mouseDownメソッドを作成し、それを上記のメソッドと入れ替える。そうするとメニューバーをクリックしたときこのユーザ定義のメソッドが起動するようになる。
+</div>
+<div class="lm70 tm10 rm60">
+swizzling というテクニックらしい。全てこちらのおかげです。
+</div>
+<div class="lm70 tm0 rm60">
+<a href="https://stackoverflow.com/questions/33096873/method-swizzling-does-not-work" target="_new">https://stackoverflow.com/questions/33096873/method-swizzling-does-not-work</a>
+</div>
+<div class="lm70 tm10 rm60">
+なお、ウィンドウのコンテントビューと、このNSThemeFrameの領域は、ファーストレスポンダとしての上下関係にはないようで、コンテントビューのmouseDownメソッドからsuperのメソッドを呼んでも、このメソッドが呼ばれることはない。
+</div>
+<h3 class="lm70 tm20 rm60 bm0" id="point">
+コンテントビューのサブクラス
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B56/UAView.swift" width="580" height="550"></iframe>
+<div class="lm70 tm10 rm60">
+この方法をとるとアプリケーション内の全てのウィンドウに適用されるので、NSAlertパネルのメニューバーをクリックしても起動する。ウィンドウごとに処理を分けるにはウィンドウのタイトルで判定したりすること。    
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

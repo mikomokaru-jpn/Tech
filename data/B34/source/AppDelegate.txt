@@ -1,0 +1,81 @@
+//---- AppDelegate.swift ----
+import Cocoa
+@NSApplicationMain
+class AppDelegate: NSObject, NSApplicationDelegate {
+    @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var canvasView: FlipedView!  //一覧表の表示領域
+    var dataList = [[String:Any]]()             //表示データ（JSONオブジェクト）
+    let gridObject =  GridObject()              //Gridオブジェクトの作成
+    var commonDef = [String : Any]()            //共通定義
+    var colsDef = [[String : Any]]()            //列の定義
+    //アプリケーション開始時
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        self.getDefinition()          //Gridの定義の取得
+        self.setProperty()            //Gridの定義の実行
+        self.display()                //表示
+    }
+    //ウィンドウの再表示
+    func applicationShouldHandleReopen(_ sender: NSApplication,
+                                       hasVisibleWindows flag: Bool) -> Bool{
+        if !flag{
+            window.makeKeyAndOrderFront(self)
+        }
+        return true
+    }
+    //Gridの定義
+    private func setProperty(){
+        //<<< 共通定義 >>>
+        gridObject.setPropaties(self.commonDef) //設定
+        //<<< 列の定義 GridCol構造体 >>>
+        var gridColList = [GridCol]()
+        for record in self.colsDef{
+            let gridCol = GridCol.init(record)
+            gridColList.append(gridCol)
+        }
+        gridObject.setCols(gridColList) //設定
+    }
+    //表示
+    private func display(){
+        //データの取得
+        self.getData()
+        //表示
+        gridObject.display(dataList: dataList, view: canvasView)
+    }
+    //DBレコードの取得
+    private func getData(){
+        //let cmd = "http://192.168.11.3/doc_health_calendar/php/sql_r11.php"
+        let cmd = "http://localhost/doc_health_calendar/php/sql_r11.php"
+        let fromDate = "20180101"
+        let toDate = "20201231"
+        let param = "id=500&from_date=\(fromDate)&to_date=\(toDate)"
+        let list = UAServerRequest.postSync(urlString:cmd, param:param)
+        //受信データのキャスト  Any -> [[String:Any]]
+        guard let unwrappedList  = list as? [[String:Any]] else{
+            print("cast error")
+            return
+        }
+        self.dataList = unwrappedList
+    }
+    //定義の取得
+    private func getDefinition(){
+        //共通定義
+        var cmd = "http://localhost/doc_health_calendar/php/sql_r11_Common.php"
+        let param = ""
+        var list = UAServerRequest.postSync(urlString:cmd, param:param)
+        //受信データのキャスト  Any -> [[String:Any]]
+        guard let unwrappedList  = list as? [String:Any] else{
+            print("cast error")
+            return
+        }
+        self.commonDef = unwrappedList
+        //列の定義
+        cmd = "http://localhost/doc_health_calendar/php/sql_r11_Cols.php"
+        list = UAServerRequest.postSync(urlString:cmd, param:param)
+        //受信データのキャスト  Any -> [[String:Any]]
+        guard let unwrappedList2  = list as? [[String:Any]] else{
+            print("cast error")
+            return
+        }
+        self.colsDef = unwrappedList2
+    }
+}

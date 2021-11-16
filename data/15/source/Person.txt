@@ -1,0 +1,25 @@
+//---- インタフェース宣言 ----
+typedef enum : NSInteger{
+    MALE = 1,
+    FEMALE = 2
+} SexType;
+@interface Person : NSObject
+@property NSString* name;
+@property NSDate* birthday;
+@property SexType sex;
+-(id)initWtithName:(NSString*)name birthday:(NSDate*)date 
+               sex:(SexType)sex;
+@end
+
+//---- 実装（イニシャライザ） ----
+@implementation Person
+-(id)initWtithName:(NSString*)name birthday:(NSDate*)date 
+               sex:(SexType)sex{
+    if (![super init])
+        return nil;
+    _name = name;
+    _birthday = date;
+    _sex = sex;
+    return self;
+}
+@end

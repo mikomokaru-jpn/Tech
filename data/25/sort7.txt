@@ -1,0 +1,12 @@
+-(IBAction)sort7:(id)sender{
+    if (_sort7Button.tag == YES){
+        _menuList = [[_menuList sortedArrayUsingFunction:funcCompareKana
+                      context:(void*)0] mutableCopy];
+        _sort7Button.tag = NO;
+    }else{
+        _menuList = [[_menuList sortedArrayUsingFunction:funcCompareKana 
+                      context:(void*)1] mutableCopy];
+        _sort7Button.tag = YES;
+    }
+    [_tableView reloadData];
+}

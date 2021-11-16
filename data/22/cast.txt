@@ -1,0 +1,5 @@
+//セルビューの取得
+NSTableCellView *cellView = 
+    [tableView makeViewWithIdentifier:column.identifier owner:self];
+//キャストテクニック
+((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentCenter;

@@ -1,0 +1,5 @@
+-(NSInteger)browser:(NSBrowser *)browser 
+                                 numberOfChildrenOfItem:(id)item{
+    Node* node = item;
+    return node.children.count;
+}

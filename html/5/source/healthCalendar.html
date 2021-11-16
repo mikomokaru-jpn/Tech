@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>カレンダー</title>
+  <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+<div class='topLevel'>
+    <section class='calendar'>
+        <button class='preButton'><</button>    
+        <p class='thisYearMonth'>YYYY年MM月</p>    
+        <button class='nxtButton'>></button>    
+        <table>
+        <thead>
+        <tr>
+            <th>月</td>
+            <th>火</td>
+            <th>水</td>
+            <th>木</td>
+            <th>金</td>
+            <th class='saturday'>土</td>        
+            <th class='sunday'>日</td>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td>13</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>15</td>
+                <td>16</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>21</td>
+                <td>22</td>
+                <td>23</td>
+                <td>24</td>
+                <td>25</td>
+                <td>26</td>
+                <td>27</td>
+            </tr>
+            <tr>
+                <td>28</td>
+                <td>29</td>
+                <td>30</td>
+                <td>31</td>
+                <td>32</td>
+                <td>33</td>
+                <td>34</td>
+            </tr>
+            <tr>
+                <td>35</td>
+                <td>36</td>
+                <td>37</td>
+                <td>38</td>
+                <td>39</td>
+                <td>40</td>
+                <td>41</td>
+            </tr>
+        </tbody>
+        </table>
+        <div class="buttons">
+            <div class="buttonField">
+                <div class="aButton" id='inputValue'>入力</div>
+            </div>
+            <div class="buttonField">
+                <div class="aButton" id='result'>一覧表示</div>
+            </div>
+        </div>
+    </section>
+    <!-- 入力フォーム -------------------------------------------------------------->
+    <section class='INinputForm'>
+        <div class="INwrapper">
+            <div class="INbox1">
+                <div class="INmidashi">
+                日付
+                </div>
+            </div>
+            <div class="INbox2">
+                <div class="INfields"> 
+                    <div class="INaFlexField">
+                        <label for='fname'>最高血圧</label>
+                        <div class='INinputValue' id='highValue'>0</div>
+                    </div>
+                    <div class="INaFlexField">
+                        <label for='fname'>最低血圧</label>
+                        <div class='INinputValue' id='lowValue'>0</div>
+                    </div>
+                    <div class="INaFlexField">
+                        <label for="fname">確定　</label>
+                        <div class='INconfirm' id='confirm'>&#10003</div>
+                    </div>
+                </div>    
+            </div>
+            <div class="INbox3">
+                <div class="INkeys1">
+                    <div class="INaKey INkey1">1</div>
+                    <div class="INaKey INkey2">2</div>
+                    <div class="INaKey INkey3">3</div>
+                    <div class="INaKey INkey4">4</div>
+                    <div class="INaKey INkey5">5</div>
+                    <div class="INaKey INkey6">6</div>
+                    <div class="INaKey INkey7">7</div>
+                    <div class="INaKey INkey8">8</div>
+                    <div class="INaKey INkey9">9</div>
+                </div>  
+                <div class="INkeys2">
+                    <div class="INaKey INkey0">0</div>
+                    <div class="INaKey INkeyC">C</div>
+                </div>
+            </div>    
+            <div class="INbox4">
+                <div class="INbuttons">
+                    <div class="INbuttonField">
+                        <div class="INaButton" id='ok'>OK</div>
+                    </div>
+                    <div class="INbuttonField">
+                        <div class="INaButton" id='cancel'>Cancel</div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </section>
+</div>
+<!--script type="text/javascript" src="./healthCalendar.js"></script-->
+
+<script type="text/javascript" src="./healthCalendar1.js"></script>
+<script type="text/javascript" src="./healthCalendar2.js"></script>
+
+</body>
+</html>

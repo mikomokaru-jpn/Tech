@@ -1,0 +1,4 @@
+CATransform3D tfScale = CATransform3DMakeScale(0.5, 0.5, 1.0);
+CATransform3D tfMove = CATransform3DMakeTranslation(400.0, 300.0, 0);
+//@property CALayer *imageLayer;  //オリジナル画像 
+self.imageLayer.transform = CATransform3DConcat(tfScale, tfMove);

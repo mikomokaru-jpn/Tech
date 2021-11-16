@@ -1,0 +1,174 @@
+//------------------------------------------------------------------------------
+// クラス宣言：マルチスレッド
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "CountNumber.h"
+
+@interface AppDelegate : NSObject <NSApplicationDelegate, CountNumberDelegate>
+
+//@property double counterDouble;         //カウンタ(プログレス値）
+
+@end
+
+
+//------------------------------------------------------------------------------
+// クラス実装：マルチスレッド
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;                 //メインウィンドウ
+@property (weak) IBOutlet NSMatrix *matrix;                 //方式の選択
+@property (weak) IBOutlet NSTextField *label;               //カウンターの表示
+@property (weak) IBOutlet NSProgressIndicator* progInd;     //プログレスバー
+@property (weak) IBOutlet NSButton* btnStart;               //開始ボタン
+@property (weak) IBOutlet NSButton* btnCancel;              //中止ボタン
+@property BOOL cancelFlag;                                  //終了フラグ
+@property int counter;                                      //カウンタ
+
+@end
+
+@implementation AppDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    [self reset];                   //UIリセッット
+    _btnStart.enabled = YES;        //開始ボタン
+    _btnCancel.enabled = NO;        //中止ボタン
+}
+//開始
+-(IBAction)startBtn:(id)sender
+{
+    if (_matrix.selectedCell.tag == 1){
+        [self start1];
+    }else if (_matrix.selectedCell.tag == 2){
+        [self start2];
+    }else if (_matrix.selectedCell.tag == 3){
+        [self start3];
+    }
+}
+//中止
+-(IBAction)cancelBtn:(id)sender
+{
+    _cancelFlag = YES;
+}
+//-------- 内部メソッッド --------
+//開始 GCD(Grand Central Dispatch) ブロックによるコールバック
+-(void)start1
+{
+    [self reset];                   //UIリセッット
+    _btnStart.enabled = NO;         //開始ボタン
+    _btnCancel.enabled = YES;       //中止ボタン
+    //カウント処理を別スレッドで実行（メインスレッドとは非同期）
+    dispatch_queue_t queue;
+    //queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0); //CONCURRENT
+    queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL); //SERIAL
+    dispatch_async(queue, ^{
+        [self countNumberByGCD];
+    });
+}
+//NSThreadクラスのメソッドを使用 (GCD以前の方式）
+-(void)start2
+{
+    [self reset];                   //UIリセッット
+    _btnStart.enabled = NO;         //開始ボタン
+    _btnCancel.enabled = YES;       //中止ボタン
+    //カウント処理を別スレッドで実行（メインスレッドとは非同期）
+    [NSThread detachNewThreadSelector:@selector(countNumberByMethod)
+                             toTarget:self
+                           withObject:nil];
+}
+//GCD(Grand Central Dispatch) CountNumberオブジェクト & デリゲートによるコールバック
+-(void)start3
+{
+    [self reset];                   //UIリセッット
+    _btnStart.enabled = NO;         //開始ボタン
+    _btnCancel.enabled = YES;       //中止ボタン
+    //カウント処理クラスのオブジェクトを作成し、別スレッドで実行（メインスレッドとは非同期）
+    dispatch_queue_t queue;
+    queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL); //SERIAL
+    dispatch_async(queue, ^{
+        CountNumber *cn = [[CountNumber alloc] init];
+        cn.cnDelegate = self;   //CountNumberDelegate
+        [cn count];
+    });
+}
+//カウント処理：ブロックによるコールバック
+-(void)countNumberByGCD
+{
+    for(int i=0; i<20; i++){
+        [NSThread sleepForTimeInterval:0.1];
+        _counter = i+1;
+        if (_cancelFlag == YES){
+            break;  //中止
+        }
+        //途中のCallBack（メインスレッド）
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateUI];    //UI更新
+         });
+    }
+    //終了時のCallBack（メインスレッド）
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self postRoutine];
+    });
+}
+//カウント処理：NSObject performSelectorによるコールバック
+-(void)countNumberByMethod
+{
+    for(int i=0; i<20; i++){
+        [NSThread sleepForTimeInterval:0.1];
+        _counter = i+1;
+        if (_cancelFlag == YES){
+            break;  //中止
+        }
+        [self performSelectorOnMainThread:@selector(updateUI) withObject:nil waitUntilDone:NO];
+    }
+    //終了時のCallBack（メインスレッド）
+    [self performSelectorOnMainThread:@selector(postRoutine) withObject:nil waitUntilDone:NO];
+}
+//UIリセット
+-(void)reset
+{
+    _cancelFlag = NO;                   //キャンセルフラグ
+    _counter = 0;                       //カウンタ
+    _label.intValue = _counter;         //カウンタ表示
+    _progInd.maxValue = 20;             //プログレスバー・最大値
+    _progInd.doubleValue = 0;           //プログレスバー・現在値
+}
+//UI更新
+-(void)updateUI
+{
+    _label.intValue = _counter;         //カウンタ表示
+    _label.needsDisplay = YES;
+    _progInd.doubleValue = _counter;    //プログレスバー
+}
+//------------------------------------------------------------------------------
+// CountNumberDelegate　メソッド実装
+//------------------------------------------------------------------------------
+//UI更新
+-(void)updateUI:(int)counter
+{
+    _label.intValue = counter;         //カウンタ表示
+    _label.needsDisplay = YES;
+    _progInd.doubleValue = counter;    //プログレスバー
+}
+//UI更新・終了メッセージ
+-(void)postRoutine
+{
+    _btnStart.enabled = YES;        //開始ボタン
+    _btnCancel.enabled = NO;        //中止ボタン
+    if(!_cancelFlag)
+    {   //終了ダイアログ
+        //https://openradar.appspot.com/28700495
+        NSAlert *msgBox = [[NSAlert alloc] init];
+        [msgBox setMessageText:@"終了"];
+        [msgBox runModal];
+    }
+}
+//キャンセルフラグの参照
+-(BOOL)isCancel
+{
+    return _cancelFlag;
+}
+
+@end

@@ -1,0 +1,10 @@
+//列見出しをクリック：ソートの実行
+- (void)tableView:(NSTableView *)tableView
+    sortDescriptorsDidChange:(NSArray *)oldDescriptors{
+    _saveIndex = tableView.selectedRow;
+    _descriptors = [tableView sortDescriptors];
+    [self rearrangeObjects];    //配列のソート
+    [_tableView reloadData];    //テーブルビューの並びに反映させる
+    [_tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:_saveIndex]
+            byExtendingSelection:NO];
+}

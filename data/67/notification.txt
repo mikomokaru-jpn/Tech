@@ -1,0 +1,15 @@
+//初期処理
+- (void)anInitializer{
+    //スクロールビューのスクロールイベントを監視する
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                             selector:@selector(scrolled:)
+                    name:NSViewBoundsDidChangeNotification
+                                                object:nil];
+}
+//スクロールイベントのコールバック処理
+-(void)scrolled:(NSNotification*)notification{
+    //画像ビューの位置を表示
+    NSPoint point = _scrollView.contentView.bounds.origin;
+    _Xpos.stringValue = [NSString stringWithFormat:@"%.0f", point.x];
+    _Ypos.stringValue =[NSString stringWithFormat:@"%.0f", point.y];
+}

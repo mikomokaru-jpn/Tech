@@ -1,0 +1,77 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>一覧表を作成する（１）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">一覧表を作成する（１）</h2>
+<div class="lm100 tm10 bm0 rm60">
+Swiftでテーブルデータを一覧表として表示するには、NSTableViewクラスを利用するのが一般的である。このアプリケーションはデリゲートメソッドの実装をすることなく、簡単なパラメータの設定だけで一覧表を表示する方法を提供する。利用者が指定するのは、列の数や幅などの一覧表の属性と、データソースとして引き渡す辞書の配列だけである。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B30/gridObject1.mp4&title=gridObject1&width=600" target="_new">
+<img class="lm100 tm0 bm0" src="gridObject1.png" alt="[gridObject1]" width="450"></a>
+<div class="lm110 tm10 rm60">
+画像をクリックすると動画になります。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+テーブルの一覧表を作成して表示するためのコード
+</h3>
+<h3 class="lm100 tm5 bm0 rm60">
+表の定義
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/B30/AppDelegate1.txt&font=font100" width="550" height="770"></iframe>
+<h3 class="lm100 tm20 bm0 rm60">
+データソース
+</h3>
+<div class="lm100 tm0 bm0 rm60">
+データソースは「辞書の配列」である。辞書のキーは列のidetifireプロパティに紐付き、データを任意の列に表示させる働きをする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B30/dataList.txt&font=font100" width="550" height="210"></iframe>
+
+<h3 class="lm100 tm20 bm0 rm60">
+表示
+</h3>
+<div class="lm100 tm0 bm0 rm60">
+displayメソッドにデータソースとなる辞書の配列と、一覧表を表示する領域のNSViewクラスのオブジェクトを指定する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B30/AppDelegate2.txt" width="550" height="60"></iframe>
+
+<h3 class="lm100 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S12_UAGridView" target="_new">mikomokaru-jpn/macOS_S12_UAGridView</a>
+</div>
+
+<h3 class="lm100 tm20 bm0 rm60">
+クラス構造図
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B30/class.png&title=class.png&width=700" target="_new">
+<img class="lm90 tm0 bm0" src="class.png" alt="[class.png]" width="500"></a>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

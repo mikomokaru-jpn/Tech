@@ -1,0 +1,7 @@
+tail /private/var/log/apache2/error_log
+
+[Thu Mar 04 12:55:29.326187 2021] [php7:notice] [pid 639] 
+[client ::1:50965] collect_codes1.php 
+SQLSTATE[42S02]: Base table or view not found: 1146 
+Table 'mikomokaru_db1.access_codes' doesn't exist, 
+referer: http://localhost/data/index6.php

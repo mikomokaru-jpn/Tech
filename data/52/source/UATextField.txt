@@ -1,0 +1,36 @@
+//---- UATextField.h ----
+#import <Cocoa/Cocoa.h>
+@interface UATextField : NSTextField
+@property NSTextAlignment dispAlignment;    //文字列の文字揃え
+@property NSString *teamName;               //球団名
+@end
+
+//---- UATextField.m ----
+#import "UATextField.h"
+@implementation UATextField
+//------------------------------------------------------------------------------
+//  初期化
+//------------------------------------------------------------------------------
+-(void)awakeFromNib{
+    self.dispAlignment = NSTextAlignmentLeft; //見出し文字列の文字揃え
+}
+//------------------------------------------------------------------------------
+//  ビューの再表示
+//------------------------------------------------------------------------------
+- (void)drawRect:(NSRect)dirtyRect {
+    //文字列の表示位置
+    float y =  dirtyRect.size.height / 2 - self.attributedStringValue.size.height / 2;
+    float x = 10; //左揃え（やや空ける）
+    if (self.dispAlignment == NSTextAlignmentCenter){
+        //中央揃え
+        x =  dirtyRect.size.width / 2 - self.attributedStringValue.size.width / 2;
+    }
+    if (self.dispAlignment == NSTextAlignmentRight){
+        //右揃え
+        x =  dirtyRect.size.width - self.attributedStringValue.size.width;
+    }
+    NSPoint newPoint = NSMakePoint(x, y);
+    //文字列の描画
+    [self.attributedStringValue drawAtPoint:newPoint];
+}
+@end

@@ -1,0 +1,50 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>突然デバッグができなくなった</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h3 class="lm70 tm20 bm10">突然デバッグができなくなった</h3>
+<div class="lm100 tm20 rm60">
+</div>
+<div class="lm100 tm10 rm60">
+Xcodeで開発中、ブレークポイントを入れでデバッグしようとしたらコンソールに次のログが吐き出されて、デバッグが機能しない。前回までは問題なかった。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/61/log.txt&font=font100" width="550" height="60"></iframe>
+<!-- div class="lm100 tm0" style="width:530px; border-top:solid 1px #909090;"></div -->
+<div class="lm100 tm10 rm60">
+（つまらないことだが）直前のビルドで、Build Configurationの指定を "Release" にしていた。"Debug" に戻せば良いだけ。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/61/buildOptimize01.png&title=buildOptimize01&width=800" target="_new">
+<img class="lm90 tm5 bm0" src="buildOptimize01.png" alt="[buildOptimize01]" width="500"></a>
+<div class="lm100 tm10 rm60">
+デフォルトでは、"Release" と "Debug" では、 コンパイルの最適化のレベルが異なる。デバッグが可能なレベルは最適化なし None[-O0] であるが、"Release"では、それより高い Fastest,Smallest[-Os] になっている。
+</div>
+<div class="lm100 tm10 rm60">
+Xcodeでアプリケーションを実行（Product → Run）するとき、Build Configurationで指定したプロダクトを参照するので、デバッグができなかった。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/61/buildOptimize02.png&title=buildOptimize02&width=800" target="_new">
+<img class="lm100 tm10 bm0" src="buildOptimize02.png" alt="[buildOptimize02]" width="500"></a>
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

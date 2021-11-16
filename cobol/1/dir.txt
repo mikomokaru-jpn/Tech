@@ -1,0 +1,1 @@
+/usr/local/Cellar/open-cobol/1.1_2$ ls -go /usr/local/Cellar/open-cobol/1.1_2/bin-r-xr-xr-x  1     1424  6 14 15:09 cob-config-r-xr-xr-x  1   421032  2  6  2009 cobc-r-xr-xr-x  1    13280  6 14 15:09 cobcrun$ ls -go  /usr/local/bin/cobc/usr/local/bin/cobc -> ../Cellar/open-cobol/1.1_2/bin/cobc

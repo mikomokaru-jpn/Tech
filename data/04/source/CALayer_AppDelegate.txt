@@ -1,0 +1,53 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "View4.h"
+#import "View5.h"
+#import "View6.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    _window.contentView.layer.backgroundColor = [NSColor whiteColor].CGColor;
+    NSSize size = NSMakeSize(490, 170);
+    [_window setContentSize:size];
+    
+    [self dwawinglayer];
+}
+//CALayer
+-(void)dwawinglayer{
+    //属性付き文字列の表示 ---------------------------------------------------------
+    NSString *string = @"猪突猛進";
+    NSFont *font = [NSFont fontWithName:@"YuKyo_Yoko-Bold" size:32]; //游教科書体 横用 Bold
+    NSColor *color = [NSColor blueColor];
+    NSAttributedString *atributedString =
+    [[NSAttributedString alloc] initWithString:string
+                                    attributes:@{NSFontAttributeName:font,
+                                                 NSForegroundColorAttributeName:color}];
+    View4 *view4 = [[View4 alloc] initWithFrame:NSMakeRect(10 ,10, 150, 150)
+                               attributedString:atributedString];
+    [_window.contentView addSubview:view4];
+    //イメージの表示 --------------------------------------------------------------
+    NSBundle *bundle = [NSBundle mainBundle];
+    //NSString *path = [bundle pathForResource:@"panda1"
+    NSString *path = [bundle pathForResource:@"piyopiyo"
+                                      ofType:@"jpg"];
+    NSImage *image = [[NSImage alloc] initWithContentsOfFile:path];
+    View5 *view5 = [[View5 alloc] initWithFrame:NSMakeRect(170, 10, 150, 150) image:image];
+    [_window.contentView addSubview:view5];
+    //図形の描画 -----------------------------------------------------------------
+    View6 *view6 = [[View6 alloc] initWithFrame:NSMakeRect(330, 10, 150, 150)];
+    [_window.contentView addSubview:view6];
+}
+@end

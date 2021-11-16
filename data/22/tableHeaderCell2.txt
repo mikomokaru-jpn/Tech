@@ -1,0 +1,37 @@
+// ---- UATableHeaderCell.h ----
+@interface UATableHeaderCell : NSTableHeaderCell
+@property NSTextAlignment dispAlignment;    //見出し文字列の文字揃え
+@property NSColor *dispBackColor;           //背景色
+@end
+
+// ---- UATableHeaderCell.m ----
+- (void)drawWithFrame:(NSRect)cellFrame
+               inView:(NSView *)controlView{
+    //文字列の表示位置を計算する
+    //垂直方向は中央
+    float y =  cellFrame.size.height / 2 
+            - self.attributedStringValue.size.height / 2;
+    //水平方向
+    float x = 10; //左揃え
+    if (self.dispAlignment == NSTextAlignmentCenter){
+        //中央揃え
+        x = cellFrame.size.width / 2 
+          - self.attributedStringValue.size.width / 2;
+    }
+    if (self.dispAlignment == NSTextAlignmentRight){
+        //右揃え
+        x = cellFrame.size.width 
+          - self.attributedStringValue.size.width;
+    }
+    NSPoint newPoint = NSMakePoint(cellFrame.origin.x + x, 
+                                   cellFrame.origin.y + y);
+    //背景色の描画のため新しいセルオブジェクトを作成する
+    NSTextFieldCell *cell = [[NSTextFieldCell alloc] init];
+    cell.drawsBackground = YES;
+    cell.backgroundColor = _dispBackColor;
+    cell.stringValue = @"";
+    //背景色の描画
+    [cell drawWithFrame:cellFrame inView:controlView];
+    //文字列の描画
+    [self.attributedStringValue drawAtPoint:newPoint];
+}

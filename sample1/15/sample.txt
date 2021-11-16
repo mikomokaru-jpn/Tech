@@ -1,0 +1,68 @@
+//------------------------------------------------------------------------------
+// Objective-c
+//------------------------------------------------------------------------------
+//指定したディレクトリ（NSURL）直下のディレクトリ/ファイルの一覧を取得 隠しファイルを除外 
+NSString *path = @"/Developer";
+NSArray<NSURL *> *arrayOfURL;
+NSError *error;
+arrayOfURL = [[NSFileManager defaultManager]
+              contentsOfDirectoryAtURL:[NSURL fileURLWithPath:path]
+              includingPropertiesForKeys:nil
+              options:NSDirectoryEnumerationSkipsHiddenFiles
+              error:&error];
+if (error){
+    NSLog(@"%@", error);
+}else{
+    for (NSURL *url in arrayOfURL){
+        //ファイル/ディレクトリ名
+        NSString *pathName;
+        [url getResourceValue:&pathName
+                       forKey:NSURLNameKey
+                        error:nil];
+        //ファイルか否か　num=1はファイル　（NSURLResourceKeyによる判定）
+        NSNumber *num;
+        [url getResourceValue:&num
+                       forKey:NSURLIsRegularFileKey
+                        error:nil];
+        NSLog(@"[%@] [%@] %d", url, pathName, num.intValue);
+    }
+}
+
+//指定したディレクトリ（NSString）直下のディレクトリ/ファイルの一覧を取得
+NSString *path = @"/Developer";
+NSArray<NSString *> *arrayOfPatyString;
+NSError *error;
+arrayOfPatyString = [[NSFileManager defaultManager]
+                     contentsOfDirectoryAtPath:path error:&error];
+if (error){
+    NSLog(@"%@", error);
+}else{
+    NSLog(@"%@", arrayOfPatyString);
+}
+
+//------------------------------------------------------------------------------
+// Swift
+//------------------------------------------------------------------------------
+//ファイルの存在をチェックし、なければ空のテキストファイルを作る
+let url = URL.init(fileURLWithPath:NSHomeDirectory() + "/Desktop/FindWordsLog.txt")
+if FileManager.default.fileExists(atPath:url.path) == false{
+    if !FileManager.default.createFile(
+        atPath: url.path,
+        contents: "".data(using: .utf8),
+        attributes: nil) {
+        print("\(url.path) not created")
+        return
+    }
+}
+//テキストファイルに追加して書き出す(write apend）
+let log: String = ....
+guard let data = log.data(using: String.Encoding.utf8) else { return }
+do{
+    let fileHandle = try FileHandle(forWritingTo:url)
+    fileHandle.seekToEndOfFile()
+    fileHandle.write(data)
+    fileHandle.closeFile()
+}catch{
+    print(error.localizedDescription)
+    return
+}

@@ -1,0 +1,25 @@
+//---- UAIconView.swift ----
+import Cocoa
+class UAIconView: NSTextField {
+    var teamIcon: NSImage? = nil
+    //--------------------------------------------------------------------------
+    //  ビューの再表示
+    //--------------------------------------------------------------------------
+    override func draw(_ dirtyRect: NSRect) {
+        //super.draw(dirtyRect)
+        if teamIcon == nil{
+            return
+        }
+        let baseWidth = dirtyRect.size.width
+        let baseHeight = dirtyRect.size.height
+        let imageRep = teamIcon?.representations[0]
+        let imageWidth = CGFloat(imageRep!.pixelsWide) * 0.8
+        let imageHeight = CGFloat(imageRep!.pixelsHigh) * 0.8
+        var newRect = NSMakeRect(0, 0, 0, 0)
+        newRect.size.width = imageWidth
+        newRect.size.height = imageHeight
+        newRect.origin.x = (baseWidth - imageWidth) / 2
+        newRect.origin.y = (baseHeight - imageHeight) / 2
+        teamIcon?.draw(in: newRect)
+    }
+}

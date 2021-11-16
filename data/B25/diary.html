@@ -1,0 +1,133 @@
+<!-- 
+NewPractice_Swift/09 MyDiary
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>日記帳　〜 カレンダーから開く 〜</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">日記帳　〜 カレンダーから開く 〜</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary1.mp4&title=日記帳&width=800" target="_new">
+<img class="lm70 tm10 bm0" src="diary1.png" alt="[日記帳]" width="500"></a>
+<div class="lm70 tm10 rm60">
+画像をクリックすると動画が表示されます。
+</div>
+<div class="lm70 tm0" style="width: 580px;x; border-top:solid 1px #909090;"></div>
+<h2 class="lm70 tm20 bm0 rm60">
+テキストエディタ
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+テキストエディタは NSTextViewクラスにより実装する。テキストの形式はプレーンテキストのみとする。このクラスはアプリケーション「テキストエディット」で採用されていると思われ、このクラスを利用すればテキストエディットで出来る操作は基本的に全て実現可能であるはずだ。
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+行間問題（やや細かい話ではあるが）
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+フォントの種類によっては全角文字と半角文字の上下の配置が偏り、かなりおかしな見た目となる。上の図のように、フォントをHelvetica としたとき顕著となる。Osakaやヒラギノ系ではさほど気にならない。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B25/diary2.png&title=diary2&width=500" target="_new">
+<img class="lm100 tm10 bm0" src="diary2.png" alt="[diary2]" width="250"></a>
+<div class="lm70 tm20 bm0 rm60">
+これは「テキストエディット」でも全く同様で、調整したいときは行間隔をマイナス値にするとよさそう。[メニュー → フォーマット → テキスト → 間隔] 
+</div>
+<div class="lm70 tm0 bm0 rm60">
+ただし本アプリでは、ルーラーを表示して設定を変えると原因の分からないエラーが発生するのでルーラーは組み込んでいない。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B25/diary3.png&title=diary3&width=600" target="_new">
+<img class="lm100 tm10 bm0" src="diary3.png" alt="[diary3]" width="300"></a>
+<div class="lm70 tm20 bm0 rm60">
+ところで、miやメールといったアプリではこのような状態にならないのは、エディタを独自に実装しているからだろうか。
+</div>
+<h2 class="lm70 tm20 bm0 rm60">
+日記帳の表示
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+特定の日の日記を開くには、カレンダーの日付のダブルクリックする、または日付を選択して開くボタンを押すか、メニューから「開く」を選択すれば、サブウィンドウが開き日記を記録したエディタを表示する。
+サブウィンドウは最大10個まで同時に開くことができる。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+ウィンドウの位置と大きさは<a href="/lib/HTMLofText.html?filename=/sample1/16/sample.txt" target="_blank">ユーザーデフォルト</a>に記録され、アプリケーション終了後も引き継ぐ。新しく開くウィンドウは最後に閉じたウィンドウと同じになる。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+ウィンドウのコントロール以外の領域をマウスでドラッグすると、それに合わせてウィンドウが移動する。
+<a href="/data/B57/wndow_drag.html" target="_blank">ウィンドウをマウスのドラッグで移動させる</a>を参照
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary4.mp4&title=diary4&width=800" target="_new">
+<img class="lm70 tm20 bm0" src="diary4.png" alt="[diary4]" width="500"></a>
+<div class="lm110 tm0 rm60">
+画像をクリックすると動画が表示されます。
+</div>
+<h2 class="lm70 tm30 bm0 rm60">
+フォントとサイズの変更
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+テキストのフォントとサイズをメニューから選択し変更する。実装には
+<a href='/data/B27/notification.html' target="_blank">通知機能</a>
+を利用する。選択されたフォントとサイズの値は、シングルトンオブジェクトに保持して、必要とするクラスから参照される。値は 
+<a href='/data/B28/plist.html' target="_blank">plist</a>
+に保存してアプリケーション終了後も引き継ぐ。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary5.mp4&title=diary5&width=800" target="_new">
+<img class="lm70 tm20 bm0" src="diary5.png" alt="[diary5]" width="500"></a>
+<div class="lm110 tm0 rm60">
+画像をクリックすると動画が表示されます。
+</div>
+<h2 class="lm70 tm30 bm0 rm60">
+テキスト検索
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+キーワードによる検索を行う。検索にマッチした語はハイライトする。マッチした語が複数あるある場合は enterキーによりカーソルの位置をスキップする。正規表現による検索も可能とする。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary6.mp4&title=diary6&width=600" target="_new">
+<img class="lm70 tm10 bm0" src="diary6.png" alt="[diary6]" width="300"></a>
+<div class="lm110 tm5 rm60">
+画像をクリックすると動画が表示されます。
+</div>
+<h2 class="lm70 tm30 bm0 rm60">
+テキストの保存
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+入力したテキストは日付ごとにファイルに出力する。
+</div>
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+<h2 class="lm70 tm5 bm0 rm60">
+クラス関連図
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B25/diary7.png&title=diary7&width=900" target="_new">
+<img class="lm130 tm0 bm0" src="diary7.png" alt="[diary7]" width="500"></a>
+
+<h2 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S09_MyDiary " target="_new">mikomokaru-jpn/macOS_S09_MyDiary </a>
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

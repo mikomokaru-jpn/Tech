@@ -1,0 +1,67 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>メモリーリークの実例</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+メモリーリークの実例
+</h2>
+<div class="lm70 tm5 rm60">
+ARCの導入によりメモリーリークを起こすようなコーディングはほとんどなくなってきている。また、CGImageクラスは、Objective-Cでは未対応だったが Swiftでは対応済みになったように、ARCがカバーする領域は増えている。アプリケーションの作成過程で一応メモリリークのチェックを行っているが、そういう中でも発生したメモリーリークの稀有な実例を挙げていきたいと思う。
+</div>
+<h3 class="lm70 tm20 bm0">
+システム環境
+</h3>
+<div class="lm70 tm5 rm60 font110">
+OS 10.12.6 
+</div>
+<div class="lm70 tm0 rm60 font110">
+Swift 4.0
+</div>
+<div class="lm70 tm0 rm60 font110">
+Xcode 9.2
+</div>
+<h3 class="lm70 tm20 bm0">
+テキストフィールドへの代入
+</h3>
+<div class="lm70 tm5 rm60">
+テキストフィールドにプログラムから値を代入するという何の変哲もない処理で謎のメモリーリークが発生する。おそらくシステムのバグだと思う。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B50/memory_leak1.txt" width="580" height="180"></iframe>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B50/memory_leak12.png&title=memory_leak12&width=900" target="_new">
+<img class="lm70 tm20" src="memory_leak12.png" alt="[memory_leak12]" width="450"></a>
+<h3 class="lm70 tm30 bm0">
+オープンパネル
+</h3>
+<div class="lm70 tm5 rm60">
+App Sandboxを OFFにしてパネルのオープンを実行するとメモリーリークが発生する。実行のたび必ず起こるのではないが、２〜３回に１回は発生する。
+</div>
+<div class="lm70 tm10 rm60">
+App Sandboxを ON、File Accessの User Selected Fieを Read Onlyに設定すれば発生しない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B50/memory_leak2.txt" width="580" height="370"></iframe>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B50/memory_leak2.png&title=memory_leak2&width=900" target="_new">
+<img class="lm70 tm20" src="memory_leak2.png" alt="[memory_leak2]" width="450"></a>
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,29 @@
+//ログ出力
+void ELAPSE_LOG(NSString *text)
+{
+    //測定データの作成
+    ....
+    //測定データをテーブルに出力する。（直列処理）
+    dispatch_async(sokutei_queue, ^{
+        registerLog(rec);  //測定データ登録処理
+    });
+}
+//測定データ登録処理
+void registerLog(sokutei_t *rec)
+{
+    //測定データ格納リストが満杯のとき、領域を再確保する
+    if (counter >= limit)
+    {
+        limit += NUM;
+        sokutei_t **temp = realloc(list,sizeof(sokutei_t*)*limit);
+        if (!temp)
+        {
+            free(list);
+            return;
+        }
+        list = temp;
+        //NSLog(@"realloc list %ld", sizeof(list));
+    }
+    //レコードを測定データ格納リストに追加する
+    list[counter++] = rec;
+}

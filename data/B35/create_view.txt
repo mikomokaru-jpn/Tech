@@ -1,0 +1,37 @@
+//左側の四角
+let view1 = NSView.init(frame: NSMakeRect(30, 150, 200, 150))
+view1.wantsLayer = true
+view1.layer?.backgroundColor = NSColor.gray.cgColor
+window.contentView?.addSubview(view1)
+
+let view2 = NSView.init(frame: NSMakeRect(13, 40, 80, 90))
+view2.wantsLayer = true
+view2.layer?.backgroundColor = NSColor.red.cgColor
+view1.addSubview(view2)
+
+let view3 = NSView.init(frame: NSMakeRect(106, 10, 80, 90))
+view3.wantsLayer = true
+view3.layer?.backgroundColor = NSColor.blue.cgColor
+view1.addSubview(view3)
+
+//右側の四角
+let view4 = NSView.init(frame: NSMakeRect(250, 150, 150, 150))
+view4.wantsLayer = true
+view4.layer?.backgroundColor = NSColor.gray.cgColor
+window.contentView?.addSubview(view4)
+
+let view5 = NSView.init(frame: NSMakeRect(25, 10, 100, 100))
+view5.wantsLayer = true
+view5.layer?.backgroundColor = NSColor.red.cgColor
+view4.addSubview(view5)
+
+let view6 = NSView.init(frame: NSMakeRect(25, 10, 50, 50))
+view6.wantsLayer = true
+view6.layer?.backgroundColor = NSColor.blue.cgColor
+view5.addSubview(view6)
+
+//下側の四角
+let view7 = NSView.init(frame: NSMakeRect(30, 30, 370, 100))
+view7.wantsLayer = true
+view7.layer?.backgroundColor = NSColor.gray.cgColor
+window.contentView?.addSubview(view7)

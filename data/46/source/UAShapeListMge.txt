@@ -1,0 +1,265 @@
+//------------------------------------------------------------------------------
+// 描画管理クラス UAShapeListMgr.m
+//------------------------------------------------------------------------------
+#import "UAShapeListMgr.h"
+#import "NSBezierPath+MyBezierPath.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UAHistoryMgr.h"
+
+@interface UAShapeListMgr()
+@property NSMutableArray<UAShape*> *shapeList; //「線」の属性の配列
+@property NSInteger currentObjNumber;//最新のオブジェクトNo.
+@property NSInteger lineWidth;  //線の太さ
+@property CGColorRef color;     //線の色
+//*** 履歴の作成 ここから
+@property UAHistoryMgr *historyMgr; //履歴管理オブジェクト
+//*** 履歴の作成 ここまで
+@end
+
+@implementation UAShapeListMgr
+// Override/Delegate -----------------------------------------------------------
+//初期化
+-(id)init{
+    if (![super init])
+        return nil;
+    _shapeList = [[NSMutableArray alloc] init];
+    _currentObjNumber = 0;
+//*** 履歴の作成 ここから
+    _historyMgr = [[UAHistoryMgr alloc] init];
+//*** 履歴の作成 ここまで
+    return self;
+}
+//公開メソッド -------------------------------------------------------------------
+//線分（CAShapeLayerオブジェクト）の作成
+//戻り値：drawRectでaddするCAShapeLayerオブジェクト
+-(NSMutableArray<CAShapeLayer*>*)addShapesStart:(CGPoint)startPoint
+                                            end:(CGPoint)endPoint
+                                           view:(UACGView*)view{
+    //線の太さの選択
+    if (view.lineWidthCode == 1)
+        _lineWidth = 1.0;
+    else if (view.lineWidthCode == 2)
+        _lineWidth = 2.0;
+    else if (view.lineWidthCode == 3)
+        _lineWidth = 5.0;
+    //線の色の選択
+    if (view.colorCode == 1)
+        _color = [NSColor blackColor].CGColor;
+    else if (view.colorCode == 2)
+        _color = [NSColor redColor].CGColor;
+    else if (view.colorCode == 3)
+        _color = [NSColor blueColor].CGColor;
+    //オブジェクトNo.の加算
+    _currentObjNumber++;
+//*** 履歴の作成 ここから
+    NSInteger startObjNum = _currentObjNumber;
+//*** 履歴の作成 ここまで
+    //戻り値となるCAShapeLayerオブジェクトの配列を作成
+    NSMutableArray<CAShapeLayer*> *latestShapes;
+    //ドラッグの距離が1ピクセルを超えるとき、1ピクセルの長さに分割した複数の線を描画する。
+    /*
+     線分は、1ピクセルの線分の集合とする。
+     線分をベクトルとみなせば、これは単位ベクトルの集合と同じである。
+     線を引くときには、ベクトルの始点から、単位ベクトル相当の線分をベクトルの方向に長さ分だけ複数個描画する。
+    */
+    float length = vectLength(startPoint, endPoint);      //ベクトルの長さ
+    CGPoint unitPoint = vectUnit(startPoint, endPoint);   //単位ベクトル
+    CGPoint wkPoint1;
+    CGPoint wkPoint2 = startPoint;
+    //始点から終点に向かって、1ピクセル単位の線分（CAShapeLayerオブジェクト）を作成する。
+    NSInteger num  = length;
+    latestShapes = [[NSMutableArray alloc] init];
+    for (int i=0; i<num-1; i++){
+        wkPoint1 = wkPoint2;
+        wkPoint2 = addPoints(wkPoint1, unitPoint);
+        [latestShapes addObject:[self drawUnitLineStart:wkPoint1 end:wkPoint2]];
+        _currentObjNumber++;
+    }
+    [latestShapes addObject:[self drawUnitLineStart:wkPoint2 end:endPoint]];  //最後の線分（1ピクセルの端数）
+    NSInteger endObjNum = _currentObjNumber;
+//*** 履歴の作成 ここから
+    NSMutableArray *numbers = [[NSMutableArray alloc] init];
+    for (NSInteger i=startObjNum; i<=endObjNum; i++)
+    {   //オブジェクトNo.の収集
+        NSNumber *num = @(i);
+        [numbers addObject:num];
+    }
+    //履歴レコードの追加
+    [_historyMgr makeRecordAdd:numbers];
+//*** 履歴の作成 ここまで
+    return latestShapes;
+}
+//線分（CAShapeLayerオブジェクト）の消去
+-(void)clearShapesRectFrom:(CGPoint)startPoint to:(CGPoint)endPoint
+{
+    //クリア範囲（矩形の始点と終点の座標）を決める。原点に近い方を始点とする。
+    //X座標
+    float xFrom;
+    float xTo;
+    if (startPoint.x < endPoint.x){
+        xFrom = startPoint.x;
+        xTo =  endPoint.x;
+    }else{
+        xFrom = endPoint.x;
+        xTo =  startPoint.x;
+    }
+    //Y座標
+    float yFrom;
+    float yTo;
+    if (startPoint.y < endPoint.y){
+        yFrom = startPoint.y;
+        yTo =  endPoint.y;
+    }else{
+        yFrom = endPoint.y;
+        yTo = startPoint.y;
+    }
+//*** 履歴の作成 ここから
+    NSMutableArray *numbers = [[NSMutableArray alloc] init];
+//*** 履歴の作成 ここまで
+    //CASnapeオブジェクトの保存リストを読み込み、クリア対象か判定する
+    for(UAShape *shape in _shapeList)
+    {
+        BOOL flgX = NO;
+        BOOL flgY = NO;
+        //X座標の範囲内にある
+        if ((xFrom <= shape.startPoint.x && shape.startPoint.x <= xTo ) ||
+            (xFrom <= shape.endPoint.x && shape.endPoint.x <= xTo)){
+            flgX = YES;
+        }
+        //Y座標の範囲内にある
+        if (( yFrom <= shape.startPoint.y && shape.startPoint.y <= yTo ) ||
+            ( yFrom <= shape.endPoint.y && shape.endPoint.y <= yTo )){
+            flgY = YES;
+        }
+        //クリア対象のとき、CASnapeオブジェクトをSuperLayerから削除する。
+        if (flgX && flgY){
+            [shape.object removeFromSuperlayer];
+//*** 履歴の作成 ここから
+            NSNumber *num = @(shape.number);
+            [numbers addObject:num];
+//*** 履歴の作成 ここまで
+        }
+    }
+//*** 履歴の作成 ここから
+    [_historyMgr makeRecordClear:numbers];
+//*** 履歴の作成 ここまで
+}
+
+// Undo:操作の取り消し
+-(NSMutableArray<CAShapeLayer*>*)undo
+{
+    UAHistroryItem* item = [_historyMgr latestItem];
+    if (item.operation == 1){
+        //追加の取り消し
+        return [self clearShapesWithObjectNumbers:item.objNumbers];
+    }else if (item.operation == 0){
+        //クリアの取り消し
+        return [self addSahapesWithObjectNumbers:item.objNumbers];
+    }
+    return nil;
+}
+// Internal Method -------------------------------------------------------------
+//追加の取り消し
+-(NSMutableArray<CAShapeLayer*>*)clearShapesWithObjectNumbers:(NSArray<NSNumber*>*)numbers
+{
+    for (NSNumber* num in numbers){
+        NSInteger objNumber = [num integerValue];
+        for(UAShape *shape in _shapeList)
+        {
+            if (shape.number == objNumber)
+            {
+                [shape.object removeFromSuperlayer];
+            }
+        }
+    }
+    return nil;
+}
+//------------------------------------------------------------------------------
+//クリアの取り消し
+//------------------------------------------------------------------------------
+-(NSMutableArray<CAShapeLayer*>*)addSahapesWithObjectNumbers:(NSArray<NSNumber*>*)numbers
+{
+  
+    NSMutableArray<CAShapeLayer*>* shapes = [[NSMutableArray alloc] init];
+    for (NSNumber* num in numbers){
+        NSInteger objNumber = [num integerValue];
+        for(UAShape *shape in _shapeList)
+        {
+            if (shape.number == objNumber)
+            {
+                [shapes addObject:shape.object];
+            }
+        }
+    }
+    return shapes;
+}
+
+//1ピクセルの線分の作成
+-(CAShapeLayer*)drawUnitLineStart:(CGPoint)startPoint end:(CGPoint)endPoint
+{
+    //bezierPathオブジェクトの作成
+    NSBezierPath *bezierPath = [NSBezierPath bezierPath];
+    [bezierPath moveToPoint:startPoint];    //始点
+    [bezierPath lineToPoint:endPoint];      //終点
+    //shapeLayerオブジェクトに変換
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = bezierPath.cgPath;
+    //線の太さ
+    shapeLayer.lineWidth = _lineWidth;
+    //線の色
+    shapeLayer.strokeColor = _color;
+    shapeLayer.fillColor = nil;
+    //CAShapeLayerオブジェクトの保存 ******
+    UAShape *shape = [[UAShape alloc] init];
+    shape.object = shapeLayer;
+    shape.startPoint = startPoint;
+    shape.endPoint = endPoint;
+    shape.number = _currentObjNumber;
+    [_shapeList addObject:shape];
+    return shapeLayer;
+}
+
+//線分の長さ
+float vectLength(CGPoint sPoint, CGPoint ePoint)
+{
+    float xLen= pow((sPoint.x - ePoint.x), 2.0);
+    float yLen= pow((sPoint.y - ePoint.y), 2.0);
+    float vectLen = sqrt(xLen + yLen);
+    return vectLen;
+}
+//単位ベクトル
+CGPoint vectUnit(CGPoint sPoint, CGPoint ePoint)
+{
+    float xLen = ePoint.x - sPoint.x;
+    float yLen = ePoint.y - sPoint.y;
+    float vectlen = vectLength(sPoint, ePoint);
+    CGPoint newPoint;;
+    newPoint.x = xLen / vectlen;
+    newPoint.y = yLen / vectlen;
+    return newPoint;
+}
+
+//CGPointの加算
+CGPoint addPoints(CGPoint p1, CGPoint p2)
+{
+    CGPoint newPoint = p1;
+    newPoint.x += p2.x;
+    newPoint.y += p2.y;
+    return newPoint;
+}
+
+-(NSString*)description
+{
+    NSString *text = @"";
+    for(UAShape* shape in _shapeList)
+    {
+        NSString *line = [NSString stringWithFormat:@"%ld %.1f:%.1f->%.1f:%.1f \n",
+                          shape.number,
+                          shape.startPoint.x, shape.startPoint.x,
+                          shape.endPoint.x, shape.endPoint.y];
+        text = [text stringByAppendingString:line];
+    }
+    return text;
+}
+
+@end

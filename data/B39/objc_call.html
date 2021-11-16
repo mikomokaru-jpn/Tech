@@ -1,0 +1,173 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>SwiftからObjective-Cメソッドを呼ぶ</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">SwiftからObjective-Cメソッドを呼ぶ</h2>    
+<div class="lm70 tm10 rm60">
+SwiftからObjective-Cのインスタンスメソッドを呼ぶ方法について説明する。
+</div>
+<div class="lm70 tm10 rm60">
+本例では、Objective-Cのクラス "ObjcLib" を定義し、インタフェースの異なった何種類かのインスタンスメソッドを実装する。Swift上でオブジェクトを生成し、これらのメソッドをSwift関数の呼び出し方で呼び出す。メソッドの引数、戻り値の型は、Objective-Cの仕様で定義されているが、実行時にこれらは自動的に適切な型に変換される。この点についても着目してみたい。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+ブリッジング・ヘッダファイルの作成
+</h3>
+<div class="lm70 tm5 rm60">
+まず、Objective-Cクラスのヘッダファイルを参照するため特別のファイルを作成し#import文を記述する。
+</div>
+<div class="lm70 tm0 rm60">
+ファイル名は、(プロジェクト名)-Bridging-Header.h が決まりである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/Test-Bridging-Header.h" width="580" height="80"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+Objective-Cメソッドの定義
+</h3>
+<div class="lm70 tm5 rm60">
+クラス宣言部
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/ObjcLib.h" width="580" height="160"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+引数と戻り値を NSStringとする
+</h3>
+<div class="lm70 tm5 rm60">
+Objective-Cメソッド・入力の文字列を大文字にして返す
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method1.m" width="580" height="130"></iframe>
+<div class="lm70 tm10 rm60">
+Swiftから呼び出す
+</div>
+<div class="lm70 tm0 rm60">
+引数はString型を指定し、戻り値はOptional&lt;String&gt;型となる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method1call.txt" width="580" height="150"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+引数と戻り値を基本整数型（NSInteger）とする
+</h3>
+<div class="lm70 tm5 rm60">
+Objective-Cメソッド・入力の数値を２倍にする
+</div>
+<div class="lm70 tm0 rm60">
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method2.m" width="580" height="150"></iframe>
+<div class="lm70 tm10 rm60">
+Swiftから呼び出す
+</div>
+<div class="lm70 tm0 rm60">
+引数はInt型を指定し、戻り値もInt型となる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method2call.txt" width="580" height="110"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+引数と戻り値を NSNumberとする
+</h3>
+<div class="lm70 tm5 rm60">
+Objective-Cメソッド・入力の数値を３倍にする
+</div>
+<div class="lm70 tm0 rm60">
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method3.m" width="580" height="130"></iframe>
+<div class="lm70 tm10 rm60">
+Swiftから呼び出す
+</div>
+<div class="lm70 tm0 rm60">
+引数はInt型を指定し、戻り値はOptional&lt;NSNumber&gt;型となる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method3call.txt" width="580" height="150"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+引数と戻り値を NSNumberを要素にもつNSArrayとする
+</h3>
+<div class="lm70 tm5 rm60">
+Objective-Cメソッド・入力の配列の要素を３倍にし、結果の配列を返す
+</div>
+<div class="lm70 tm0 rm60">
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method4.m" width="580" height="250"></iframe>
+<div class="lm70 tm10 rm60">
+Swiftから呼び出す
+</div>
+<div class="lm70 tm0 rm60">
+引数にはIntのArrayを渡し、戻り値にはNSNumber（のサブクラス）を要素としたArrayが返る。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/method4call.txt" width="580" height="330"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+SwiftからC関数を呼ぶ
+</h3>
+<div class="lm70 tm5 rm60">
+次の例は、引数に渡されたアルファベット文字列を大文字に変換するものである。Cの関数なので文字列（char型の配列）は参照渡しとなる。
+</div>
+<div class="lm70 tm5 rm60">
+ブリッジング・ヘッダファイルの作成
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/Test-Bridging-Header2.h" width="580" height="40"></iframe>
+<div class="lm70 tm20 rm60">
+関数の定義
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/func1.h" width="580" height="60"></iframe>
+<!-- ソースコード -->
+<iframe class="lm70 tm10" src="/lib/HTMLofText.html?filename=/data/B39/func1.c" width="580" height="230"></iframe>
+<div class="lm70 tm20 rm60">
+Swiftから呼び出す
+</div>
+<div class="lm70 tm0 rm60">
+引数の自動的な型変換は行わないので、Stringオブジェクトをchar型の配列に変換するのは自分で行わなくてはならない。ここが面倒である。ネットで公開されテイルコードを利用下いるが何をしているかよくわからない。
+</div>
+
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/func1call.txt" width="580" height="300"></iframe>
+
+<div class="lm70 tm20 rm60">
+インタフェースの型変換の手間を考えれば、SwiftからC関数を直接呼ぶのではなく、Objective-Cにラップしたメソッドを呼ぶ方が良いと思う。
+</div>
+<div class="lm70 tm20 rm60">
+Objective-Cメソッドの定義
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/wrap.txt" width="580" height="200"></iframe>
+<div class="lm70 tm10 rm60">
+Swiftから呼び出す
+</div>
+<div class="lm70 tm0 rm60">
+Swiftから呼び出す
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B39/wrapcall.txt" width="580" height="90"></iframe>
+
+
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="../index2.php">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>
+
+
+
+

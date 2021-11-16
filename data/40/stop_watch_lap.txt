@@ -1,0 +1,11 @@
+-(IBAction)op1:(id)sender
+{
+    WATCH_START();
+    [NSThread sleepForTimeInterval:0.5];
+    NSLog(@"lap1:%f", WATCH_LAP());
+    [NSThread sleepForTimeInterval:0.5];
+    NSLog(@"lap2:%f", WATCH_LAP());
+}
+// 実行結果
+2019-07-17 10:31:14.729068+0900 Elaps[5226:748442] lap1:0.500474
+2019-07-17 10:31:15.230331+0900 Elaps[5226:748442] lap2:0.501294

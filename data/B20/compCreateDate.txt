@@ -1,0 +1,14 @@
+var dComp = DateComponents.init()
+dComp.year = 1965
+dComp.month = 2
+dComp.day = 14
+if let date =  Calendar.current.date(from: dComp){
+    let formatter: DateFormatter = DateFormatter()
+    formatter.locale = Locale.init(identifier: "ja_JP")
+    formatter.dateStyle = .full
+    formatter.timeStyle = .full
+    print(formatter.string(from: date))
+}
+
+//結果
+1965年2月14日日曜日 0時00分00秒 GMT+09:00

@@ -1,0 +1,25 @@
+public func outlineView(_ outlineView: NSOutlineView,
+                        viewFor tableColumn: NSTableColumn?, 
+                        item: Any) -> NSView? {
+    let myCellView = NSTableCellView()
+    let node = item as! Node
+    let text = node.url!.lastPathComponent
+    myCellView.wantsLayer = true
+    myCellView.layer?.backgroundColor = NSColor.black.cgColor
+    if !node.isFile{
+        myCellView.layer?.backgroundColor = NSColor.lightGray.cgColor
+    }
+    let cellFrame = NSRect(x: 0, y: 0, width: tableColumn!.width, height: 30)
+    let myTextField = UATextField(frame: cellFrame)
+    myTextField.isEditable = false
+    myCellView.addSubview(myTextField)
+    var textColor = NSColor.black
+    if node.isFile{
+        textColor = NSColor.white
+    }
+    let aStr = NSAttributedString(string: text, 
+                                 attributes: [.font: NSFont.systemFont(ofSize: 16),
+                                              .foregroundColor: textColor])
+    myTextField.attributedStringValue = aStr
+    return myCellView
+}

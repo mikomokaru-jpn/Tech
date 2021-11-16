@@ -1,0 +1,6 @@
+-(void)awakeFromNib{
+    //ブラウザのセルにカスタムクラスを使用
+    [_browser setCellClass: [UABrowserCell class]];
+    //0列のデータをロードする
+    [_browser loadColumnZero];  
+}

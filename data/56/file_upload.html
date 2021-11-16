@@ -1,0 +1,155 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ローカルディスクのバイナリファイルをサーバにアップロードする</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0 rm60">ローカルディスクのバイナリファイルをサーバにアップロードする</h2>
+
+<div class="lm70 tm5 rm60">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0
+</div>
+
+<div class="lm70 tm10 rm60">
+Swiftのアプリケーションで実装することは、ありそうにないと思うが、仕組みの理解という意味で紹介しておきます。
+</div>
+<div class="lm70 tm20 rm60">
+HTTPリクエストによりローカルディスクのバイナリファイルをサーバにアップロードする方法は二つある。
+</div>
+<div class="lm70 tm10 rm60">
+<a href="#method1">(1) multipart/form-data形式でバイナリデータを送信する</a>
+</div>
+<div class="lm70 tm5 rm60">
+<a href="#method2">(2) バイナリデータをBASE64形式の文字列に変換して送信する</a>
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+サンプルアプリケーション
+</h3>
+
+<a href="/lib/HTMLofImage.html?filename=/data/56/upload1.png&title=upload1&width=900" target="_new">
+<img class="lm70 tm0 bm0" src="/data/56/upload1.png" alt="[upload1]" width="550"></a>
+
+<div class="lm70 tm20 rm60">
+Openパネルを開いてアップロードするファイルを選択する。イメージファイルの場合イメージを表示する。アップロード方式を選択してボタンをクリックする。送信されたデータは、サーバのPHPスクリプトによりそれぞれの方式に従って所定のディレクトリに保存される。
+</div>
+
+<h2 class="lm70 tm15 bm0 rm60" id="method1">
+(1) multipart/form-data形式でバイナリデータを送信する
+</h2>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+
+<h3 class="lm70 tm15 rm60 bm0">
+リクエストメッセージを作成して送信する
+</h3>
+<div class="lm70 tm5 rm60">
+Content-Type を multipart/form-data とし、 データは multipart形式に準拠して配置していくこと。
+</div>
+
+
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/uploadByMultipart.txt" width="590" height="900"></iframe>
+
+<div class="lm70 tm20 rm60">
+境界文字列の位置、改行コードの数と位置は決められた形式の通りに配置すること。境界文字列は先頭に"--"を付加することを忘れないように。
+</div>
+<div class="lm70 tm10 rm60">
+境界文字列は、1〜70文字までの任意な文字列を設定することになっている。文字数が多いとパフォーマンスに影響を及ぼすらしいが、そもそも文字数が少ない場合の弱点、多い場合のメリットはどういうものなのだろうか？ざっと調べただけでは私にはわからなかった。主要なブラウザは40文字前後で実装しているようなので、ここでは30文字のランダムな文字列としている。
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+メッセージの中身
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/request_data1.txt" width="580" height="250"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+サーバ側の処理（PHPスクリプト）
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/upload_multipart.php.txt" width="580" height="200"></iframe>
+<div class="lm70 tm10 rm60">
+受信したファイルデータはテンポラリファイルに一時的に格納されるので、それを任意の名前で特定のディレクトリに移動する。
+ここでは PHPスクリプトがあるフォルダの下の dataディレクトリに格納している。
+</div>
+
+
+<!------------------------------------------------------------------------------>
+<h2 class="lm70 tm40 bm0 rm60" id="method2">
+(2) ファイルをBASE64形式の文字列に変換してアップロードする
+</h2>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm10 rm60">
+MIME拡張方式により、ファイルデータをBASE64形式の文字列にエンコードし、リクエストメッセージのPOSTデータの１つとして送信する。
+</div>
+<h3 class="lm70 tm15 rm60 bm0">
+リクエストメッセージを作成して送信する
+</h3>
+<div class="lm70 tm10 rm60">
+Content-Type を application/json とし、JSON形式のデータとして送信している。（データは x-www-form-urlencoded のパラメータとして送ってもかまわない）
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/uploadByMIME.txt" width="580" height="510"></iframe>
+
+<h3 class="lm70 tm20 rm60 bm0">
+サーバ側の処理（PHPスクリプト）
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/upload_mime.php.txt" width="580" height="340"></iframe>
+
+<div class="lm70 tm10 rm60">
+データは、php://inputストリームから読み込む。BASE64データのデコードは、base64_decode関数で行う。デコードしたデータは任意のディレクトリにファイルとして出力する。ここでは PHPスクリプトがあるフォルダの下の dataディレクトリに格納している。MAX_FILE_SIZE は受け取るが使用していない。
+</div>
+
+<h2 class="lm70 tm20 bm0 rm60">
+付録
+</h2>
+<h3 class="lm70 tm5 bm0 rm60">
+HTTPリクエストの送受信（同期処理）
+</h3>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/request.txt" width="580" height="660"></iframe>
+
+
+<!--div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div-->
+<h3 class="lm70 tm20 bm0 rm60">
+アップロードファイルのサイズの上限を引き上げる方法
+</h3>
+<div class="lm70 tm5 rm60">
+PHPの設定ファイル（php.ini）のパラメータ値を変更する。例えば、10Mバイトのファイルをアップロードするときは次のようにする。multipart/form-data方式の場合リクエストパラメータに MAX_FILE_SIZEの指定も必要である。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/phpini.txt" width="580" height="210"></iframe>
+<h4 class="lm70 tm20 rm60 bm0">
+php.iniファイルの場所を探す方法（よく行方不明になる）
+</h4>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/56/source/phpinfo.txt" width="580" height="130"></iframe>
+
+<h3 class="lm70 tm30 bm0 rm60">	
+ソースコード
+</h3>
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/56/source/AppDelegate.swift&title=AppDeelegate" target="_new">AppDeelegate</a>
+</div>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/56/source/UAView.swift&title=UAView" target="_new">UAView</a>　UIコントロールの作成 
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+

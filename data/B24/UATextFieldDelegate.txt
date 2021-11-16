@@ -1,0 +1,38 @@
+//プロトコル定義
+protocol UATextFieldDelegate: class  {
+    func reload()
+}
+//---- UATextField.swift ----
+class UATextField: NSTextField {
+    weak var uaDelegate: UATextFieldDelegate?  = nil
+    ....
+    // テキストフィールドの編集の終了
+    override func textDidEndEditing(_ notification: Notification){
+        uaDelegate?.reload()
+    } 
+    .... 
+}
+
+//---- AppDelegate.swift ----
+class AppDelegate: ...., UATextFieldDelegate{
+    .... 
+    // NSTableViewDelegate
+    func tableView(_ tableView: NSTableView,
+              viewFor column: NSTableColumn?,
+              row: Int) -> NSView?{
+        //セルビューを取得する
+        let cellView: NSTableCellView? =
+           tableView.makeView(withIdentifier: (column?.identifier)!,
+                              owner: self) as? NSTableCellView
+        //デリゲートをセットする
+        if ((column?.identifier)!.rawValue == "win"){
+            (cellView?.textField as! UATextField).uaDelegate = self
+        }       
+        .... 
+    }
+    // UATextFieldDelegate
+    func reload(){
+        tableView.reloadData()
+    } 
+    ....
+}

@@ -1,0 +1,9 @@
+class Node: NSObject {
+    var url: URL?
+    var isFile: Bool = false   //ファイル or ディレクトリ
+    var children = [Node]()    //子ノード
+    //イニシャライザ
+    init(url: URL?) {
+        self.url = url
+    }
+}

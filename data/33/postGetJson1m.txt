@@ -1,0 +1,9 @@
++(NSArray*)post:(NSString*)cmd prmString:(NSString*)param{
+    //POSTパラメータ文字列をNSData形式に変換
+    NSData *requestData = [param dataUsingEncoding:NSUTF8StringEncoding];
+    NSMutableURLRequest *request = [self createRequest:cmd
+                                          data:requestData
+                  type:@"application/x-www-form-urlencoded"];
+    //送受信（同期通信）
+    return [self doRequest:request];
+}

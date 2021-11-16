@@ -1,0 +1,10 @@
+//再帰関数
+func getSubview4(_ view: NSView) -> [NSView]{     
+    var array = view.subviews
+    let subArrays = array.map{ getSubview4($0) }
+    // [[view, view,...],[view, view,...],...] 結果は二次元配列になる
+    for subArray in subArrays{
+        array += subArray  //要素の配列を取り出し連結する
+    }
+    return array    
+}

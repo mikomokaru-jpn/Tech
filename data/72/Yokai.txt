@@ -1,0 +1,24 @@
+//---- 日本の妖怪 Yokai.h ----
+#import <Foundation/Foundation.h>
+#import "Records.h"
+@interface Yokai : NSObject
+@property NSNumber *code;
+@property NSString *name;
+@property NSString *kana;
+@property Records *records;
+@end
+
+//---- Yokai.m ----
+#import "Yokai.h"
+@implementation Yokai
+-(id)init{
+    if (![super init]){
+        return nil;
+    }
+    _code = @0;
+    _name = @"";
+    _kana = @"";
+    _records = [[Records alloc] init];
+    return self;
+}
+@end

@@ -1,0 +1,6 @@
+$_GET['year']
+
+-- 使用例 --
+if (!empty ($_GET['year']) and !empty ($_GET['month'])){
+    $firstDate = strtotime($_GET['year'].'-'.$_GET['month'].'-'.'1'); 
+}

@@ -1,0 +1,1 @@
+func copyImage(){    if let image = self.image{        pasteboard.clearContents()        pasteboard.writeObjects([image])    }}

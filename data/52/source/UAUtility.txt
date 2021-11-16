@@ -1,0 +1,43 @@
+//---- UAUtility.h ----
+#import <Cocoa/Cocoa.h>
+
+@interface UAUtility : NSObject
+//属性付き文字列
++(NSMutableAttributedString*)attributedString:(NSString*)str
+                                     FontSize:(float)size
+                                    ForeColor:(NSColor*)color;
+//RGBからCGColoを作成する
++(CGColorRef)cgColorR:(float)r G:(float)g B:(float)b;
+@end
+
+//---- UAUtility.m ----
+#import "UAUtility.h"
+@implementation UAUtility
+//属性付き文字列
++(NSMutableAttributedString*)attributedString:(NSString*)str
+                                     FontSize:(float)size
+                                    ForeColor:(NSColor*)color{
+    NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+    //フォント
+    NSFont* font = [NSFont fontWithName:@"Arial" size:size];
+    [attrStr addAttribute:NSFontAttributeName
+                    value:font
+                    range:NSMakeRange(0, [attrStr length])];
+    //文字色
+    [attrStr addAttribute:NSForegroundColorAttributeName
+                    value:color
+                    range:NSMakeRange(0, [attrStr length])];
+    return attrStr;
+}
+//RGBからCGColoを作成する
++(CGColorRef)cgColorR:(float)r G:(float)g B:(float)b{
+    CGFloat col[4];
+    col[0] = r/255;
+    col[1] = g/255;
+    col[2] = b/255;
+    col[3] = 1.0;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorRef colorRef = CGColorCreate(colorSpace, col);
+    return colorRef;
+}
+@end

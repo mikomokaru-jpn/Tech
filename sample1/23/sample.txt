@@ -1,0 +1,25 @@
+//クラス名の表示
+let button = NSButton.init()
+print(type(of: button))
+
+//継承したクラスと一致するかの判定
+if button is NSButton{
+    print("NSButton: 継承一致")   //true
+}
+if button is NSControl{
+    print("NSControl: 継承一致")  //true
+}
+
+//特定のクラスと一致するかの判定
+if type(of: button) == NSButton.self{
+    print("NSButton: 完全一致")   //true
+}
+if type(of: button) == NSControl.self{
+    print("NSControl: 完全一致")  //false
+}
+
+//出力
+NSButton
+NSButton: 継承一致
+NSControl: 継承一致
+NSButton: 完全一致

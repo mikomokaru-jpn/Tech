@@ -1,0 +1,10 @@
+override func mouseDown(with event: NSEvent) {
+    //クリックした点：コンテントビューの座標
+    let point = event.locationInWindow
+    print(String(format:"In contentView %.0f:%.0f", point.x, point.y))
+    //点の座標の変換：自身のビューを基準にする（from引数 nilはコンテントビュー）
+    let cnvPoint = self.convert(point, from: nil)
+    //同じ変換処理
+    //let cnvPoint = self.window!.contentView!.convert(point, to: self)
+    print(String(format:"in self %.0f:%.0f", cnvPoint.x, cnvPoint.y))
+}

@@ -1,0 +1,17 @@
+let now = Date.init()
+var dComp = DateComponents()
+dComp.year = 2025
+dComp.month = 4
+dComp.day = 13
+if let toDate = Calendar.current.date(from: dComp){
+
+    let totalDaysFrom = Calendar.current.ordinality(of: .day,
+                                                    in: .era, for: now)
+    let totalDaysTo = Calendar.current.ordinality(of: .day,
+                                                in: .era, for: toDate)
+    print(String(format:"大阪万博まであと %ld日",
+                 (totalDaysTo ?? 0) - (totalDaysFrom ?? 0)))
+
+}
+//結果
+大阪万博まであと 1267日

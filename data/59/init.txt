@@ -1,0 +1,5 @@
+//@property (weak) IBOutlet NSMatrix *matrx;
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {   
+    [_matrx selectCell:[_matrx cellWithTag:1]];
+    [self select:1];  //1番目のボタン「A」型を選択する
+}

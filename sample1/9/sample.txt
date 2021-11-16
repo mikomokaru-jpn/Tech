@@ -1,0 +1,96 @@
+// マウスイベントの補足
+//---------------------------------------------------------------------
+// Objective-C
+//---------------------------------------------------------------------
+@interface UAView : NSView
+@property NSTrackingArea *trackingArea;
+@end
+
+@implementation UAView
+-(void)awakeFromNib{
+    //トラッキングエリアの定義とビューへの追加
+    NSTrackingAreaOptions options =  NSTrackingMouseMoved |
+                                     NSTrackingMouseEnteredAndExited  |
+                                     NSTrackingActiveAlways;
+    _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+                                                 options:options
+                                                   owner:self
+                                                userInfo:nil];
+    [self addTrackingArea:_trackingArea];
+}
+//イベントプロシージャ
+- (void)mouseUp:(NSEvent *)event{
+    NSUInteger modifierFlags = [NSEvent modifierFlags];
+    if (modifierFlags & NSEventModifierFlagShift) {
+        NSLog(@"mouseUp with shift key");
+    }else{
+        NSLog(@"mouseUp");
+    }
+}
+- (void)mouseDown:(NSEvent *)event{
+    NSUInteger modifierFlags = [NSEvent modifierFlags];
+    if (modifierFlags & NSEventModifierFlagShift) {
+        NSLog(@"mouseDown with shift key");
+    }else{
+        NSLog(@"mouseDown");
+    }
+}
+-(void)mouseDragged:(NSEvent *)event{
+    NSLog(@"mouseDragged");
+}
+//以下のメソッドはトラッキングエリアを定義しないと起動しない
+-(void)mouseMoved:(NSEvent *)event{
+    NSLog(@"mouseMoved");
+}
+-(void)mouseEntered:(NSEvent *)event{
+    NSLog(@"mouseEntered");
+}
+-(void)mouseExited:(NSEvent *)event{
+    NSLog(@"mouseExited");
+}
+@end
+
+//---------------------------------------------------------------------
+// Swift
+//---------------------------------------------------------------------
+class UAView: NSView {
+    override func awakeFromNib() {
+        //トラッキングエリアの定義とビューへの追加
+        let options:NSTrackingArea.Options = [.mouseMoved,
+                                              .mouseEnteredAndExited,
+                                              .activeAlways]
+        let trackingArea = NSTrackingArea.init(rect: self.bounds,
+                                               options: options,
+                                               owner: self,
+                                               userInfo: nil)
+        self.addTrackingArea(trackingArea)
+    }
+    //イベントプロシージャ
+    override func mouseUp(with event: NSEvent) {
+        if event.modifierFlags.contains([.shift]){
+            print("mouseUp+shift")
+        }else{
+            print("mouseUp")
+        }
+    }
+    override func mouseDown(with event: NSEvent) {
+        if event.modifierFlags.contains([.shift]){
+            print("mouseDown+shift")
+        }else{
+            print("mouseDown")
+        }
+    }
+    override func mouseDragged(with event: NSEvent){
+        print("mouseDragged")
+    }
+    //以下のメソッドはトラッキングエリアを定義しないと起動しない
+    override func mouseMoved(with event: NSEvent) {
+        print("mouseMoved")
+    }
+    override func mouseEntered(with event: NSEvent){
+        print("mouseEntered")
+    }
+    override func mouseExited(with event: NSEvent){
+        print("mouseExited")
+    }    
+}

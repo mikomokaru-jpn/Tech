@@ -1,0 +1,2 @@
+$ node server.js 
+Node server is running..

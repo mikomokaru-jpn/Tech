@@ -1,0 +1,11 @@
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+
+    //Graphics Contextを取得する
+    CGContextRef context = 
+       [[NSGraphicsContext currentContext] graphicsPort];
+
+    //イメージをGraphics Contextに描画する
+    // @property CGImageRef imageRef;
+    CGContextDrawImage(context, dirtyRect, _imageRef);
+}

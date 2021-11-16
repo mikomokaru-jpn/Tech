@@ -1,0 +1,10 @@
+let text1 = "Merry Christmas"
+//フォントオブジェクトの作成：systemFont()は必ず非オプショナルな変数を返す
+let font1:NSFont = NSFont.init(name:"Cochin", size:40)
+    ?? NSFont.systemFont(ofSize: 12)
+let attributedText1 = NSAttributedString.init(
+                      string: text1,
+                      attributes: [.font : font1,
+                                   .foregroundColor : NSColor.yellow,
+                                   .backgroundColor : NSColor.black])
+self.textField1.attributedStringValue = attributedText1

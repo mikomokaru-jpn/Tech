@@ -1,0 +1,37 @@
+<?php
+//起点となるディレクトリからサブディレクトリも含めファイルの一覧を取得する
+$root = $_SERVER['DOCUMENT_ROOT'];
+$fileNameList = getFiles($root."/mikomokaru/data/*");
+
+//一覧を表示する
+foreach($fileNameList as $fileName){
+    print($fileName."<br>");
+}
+
+//------------------------------------
+//再帰関数・ファイル名を取得し、配列にして返す
+//------------------------------------
+function getFiles($path) {
+    $result = array();
+    foreach(glob($path . "/*") as $file) {
+        if (is_dir($file)) {
+            //ディレクトリなら再帰コール
+            $result = array_merge($result, getFiles($file)); 
+        }else{
+            $result[] = $file; //ファイルのみ取得
+        }
+    }
+    return $result;
+}
+
+---- 出力 ----
+/Library/WebServer/Documents/mikomokaru/data/01/01_calendar01.png
+/Library/WebServer/Documents/mikomokaru/data/01/calendar.png
+/Library/WebServer/Documents/mikomokaru/data/01/calendar01.jpg
+/Library/WebServer/Documents/mikomokaru/data/01/simple_calendar.php
+/Library/WebServer/Documents/mikomokaru/data/01/simple_calendar.php-e
+/Library/WebServer/Documents/mikomokaru/data/01/source/AppDelegate.txt
+/Library/WebServer/Documents/mikomokaru/data/01/source/NSColorMyColor.txt
+/Library/WebServer/Documents/mikomokaru/data/01/source/UACalendar.txt
+/Library/WebServer/Documents/mikomokaru/data/01/source/UACalendarDate.txt
+....

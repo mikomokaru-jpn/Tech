@@ -1,0 +1,4 @@
+@IBOutlet weak var strechView: NSView!
+
+//ビューのautoresizingMaskの設定
+strechView.autoresizingMask = [.width, .height]

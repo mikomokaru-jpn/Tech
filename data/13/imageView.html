@@ -1,0 +1,199 @@
+<!-- 
+18 ImageView
+42 mappingView
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューにイメージを表示する（Core Graphics）</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">ビューにイメージを表示する（Core Graphics）</h2>
+<div class="lm70 tm10 bm0 rm60">
+イメージの操作を行うには、CoreGraphicsの機能を利用する。これはlow-leveなl画像処理フレームワークであり、イメージの拡大/縮小をはじめ多様な変換処理が可能である。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/13/imageView01.png&title=imageView01&width=600" target="_new">
+<img class="lm100 tm10" src="imageView01.png" alt="[imageView01]" width="300"></a>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+イメージファイルを読み込む
+</h3>
+<div class="lm100 tm5 bm0 rm60">
+CoreGraphicsでは、処理の対象となるイメージオブジェクトは、ビットマップイメージへの参照である CGImageRef型の変数となる。
+</div>
+<div class="lm100 tm10 bm0 rm60">
+イメージファイルをビットマップイメージとした読み込み、CGImageRef変数に参照をに格納する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/readCGImageRef.txt" width="550" height="210"></iframe>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+ビューにイメージを描画する
+</h3>
+<div class="lm100 tm10 rm60">
+NSViewクラスのdrawRectメソッドの中で、Graphics Context（画像表示先、この場合はディスプレイ）を取得する。
+</div>
+<div class="lm100 tm10 rm60">
+CGContextDrawImage関数により、Graphics Contextにイメージを描画する。関数の引数には、 Graphics Context、表示領域のサイズ、イメージ（CGImageRef）を指定する。
+</div>
+<div class="lm100 tm10 rm60">
+イメージのサイズと表示領域のサイズが異なる場合、イメージは表示領域に合わせて拡大/縮小される。（ビューに表示されるイメージが拡大/縮小されるだけで、元のビットマップのサイズは変わらない）
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/CGContextDrawImage.txt" width="550" height="210"></iframe>
+<div class="lm100 tm10 rm60">
+例題では、NSViewオブジェクトのサイズは800x600ピクセルで定義している。読み込んだイメージファイルも同じ大きさなので、ビュー上には実際のサイズで表示される。これを、CGContextDrawImage関数の表示領域のサイズ（rect）を次のように指定すると横長のイメージで表示される。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/CGContextDrawImage2.txt" width="550" height="60"></iframe>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=13/imageView02.png&title=imageView02&width=600" target="_new">
+<img class="lm100 tm10" src="imageView02.png" alt="[imageView02]" width="300"></a>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+イメージを拡大/縮小する
+</h3>
+<div class="lm100 tm10 rm60">
+ビットマップイメージ自体の大きさを変える方法
+</div>
+<div class="lm100 tm0 rm60">
+変換のステップは、CGImageRef → ビットマップコンテキスト → CGImageRef
+</div>
+<div class="lm100 tm0 rm60">
+ビットマップコンテキストのところでサイズを変換する。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=13/imageView03.png&title=imageView03&width=800" target="_new">
+<img class="lm100 tm20" src="imageView03.png" alt="[imageView03]" width="500"></a>
+<div class="lm100 tm20 rm60">
+(1) ビットマップコンテキスト（CGContextRef）を作成する。コンテキストのサイズは変更後のサイズを指定する。例題では、800x600ピクセルのイメージを400x300に縮小するという想定。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/imageSizeChange.txt" width="550" height="230"></iframe>
+<div class="lm100 tm10 rm60">
+(2) 変更前のイメージ（CGImageRef）をビットマップコンテキストに描画する。
+</div>
+<div class="lm100 tm0 rm60">
+第2引数のCGRect（矩形領域）には、変更後のサイズを指定する。元のイメージがこのサイズに拡大または縮小され、そのままのサイズでビットマップに映し出される。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/imageSizeChange2.txt" width="550" height="80"></iframe>
+<div class="lm100 tm10 rm60">
+(3) ビットマップコンテキストから変更後のイメージ（CGImageRef）を読み込む。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/imageSizeChange3.txt" width="550" height="40"></iframe>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+イメージ（CGImageRef）を画像ファイルに出力する
+</h3>
+<div class="lm100 tm10 rm60">
+(1) CGImageRefをビットマップ画像（NSBitmapImageRep）に変換する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/writeFile.txt" width="550" height="80"></iframe>
+<div class="lm100 tm10 rm60">
+(2) ビットマップ画像をNSDataオブジェクトに変換する。
+このとき画像ファイルタイプ（png etc..）を指定する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/writeFile2.txt" width="550" height="90"></iframe>
+<div class="lm100 tm10 rm60">
+(3) NSDataオブジェクトをファイルに出力する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/writeFile3.txt" width="550" height="110"></iframe>
+<!-- 画像 -->
+<a href="../HTMLofImage.html?filename=13/imageView04.png&title=imageView04&width=800" target="_new">
+<img class="lm100 tm0" src="imageView04.png" alt="[imageView04]" width="500"></a>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+イメージオブジェクトの変換 
+</h3>
+<div class="lm100 tm10 rm60">
+NSImage → CGImageRef
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/NSImage2CGImageRef.txt" width="550" height="130"></iframe>
+<div class="lm100 tm10 rm60">
+CGImageRef → NSImage
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/CGImageRef2NSImage.txt" width="550" height="90"></iframe>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+画像をビューに表示する別の方法
+</h3>
+<div class="lm80 tm10 rm60">
+(1) NSImageオブジェクトを表示する（オーソドックスな方法か？）
+</div>
+<div class="lm100 tm5 rm60">
+NSViewクラスのdrawRectメソッドをオーバーライドし、drawInRectメソッド（またはdrawAtPointメソッド）を実行する。
+</div>
+<div class="lm100 tm10 rm60">
+引数に表示領域（CGRect構造体）を指定する。イメージのサイズと表示領域のサイズが異なる場合、イメージは表示領域に合わせて拡大/縮小される。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/drawInRect.txt" width="550" height="130"></iframe>
+<div class="lm80 tm10 rm60">
+(2) CALayerオブジェクトを表示する
+</div>
+<div class="lm100 tm5 rm60">
+NSLayerオブジェクトを作成して、画像（NSImageオブジェクト）をセットし、親ビューのレイヤーに追加する。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/CALayer.txt" width="550" height="160"></iframe>
+<div class="lm100 tm10 rm60">
+画像を消すには、親ビューのレイヤーに追加したCALayerオブジェクトを削除する。
+</div>
+<div class="lm100 tm5 rm60">
+親ビューのレイヤーからCALayerオブジェクトを削除するとき、該当オブジェクトを特定する方法として、KVC（Key Value Codeing）を利用する。
+</div>
+<div class="lm100 tm10 rm60">
+追加したCALayerオブジェクトを、任意のKey値をつけて親ビューのレイヤーオブジェクトにセットする。オブジェクトを削除をするとき、キー値によりオブジェクトを取得することができる。（おそらくプロパティを動的に追加するような仕組みか？）
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/CALayerRemove.txt" width="550" height="250"></iframe>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+画像のサイズを取得する
+</h3>
+<div class="lm80 tm10 rm60">
+(1) NSImage
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/sizeOfNSImage.txt" width="550" height="130"></iframe>
+<div class="lm80 tm5 rm60">
+(2) CAImageRef
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/13/sizeOfCGImageRef.txt" width="550" height="90"></iframe>
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 bm0 rm60">
+ソースコード
+</h3>
+<!--ソースコードリンク-->
+<div class="lm100 tm0 rm60">	
+カスタムビュークラス　
+<a href="/lib/HTMLofText.html?filename=/data/13/source/UAView.txt&indent=20" target="_new">UAView</a>
+</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

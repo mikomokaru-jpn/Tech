@@ -1,0 +1,212 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate,
+                                   NSTableViewDelegate,
+                                   NSTableViewDataSource,
+                                   NSTextFieldDelegate>
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "UAUtility.h"
+#import "UATeam.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTableView* tableView;       //テーブルビュー
+@property NSMutableArray<UATeam*>*teamList;             //チームリスト
+@property NSArray<NSArray*>*itemList;                   //定型データ
+@property NSMutableDictionary<NSString*, NSMutableArray*>*resultList;  //成績表
+@end
+
+@implementation AppDelegate
+//------------------------------------------------------------------------------
+// 初期処理
+//------------------------------------------------------------------------------
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    _teamList = [[NSMutableArray alloc] init];          //チームリスト
+    _resultList = [[NSMutableDictionary alloc] init];   //成績表
+    //データ初期化
+    [self initialData];
+    //保存データの読み込み
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSDictionary<NSString*, NSMutableArray*>*saveData =
+        [ud dictionaryForKey:@"SAVE_DATA"];
+    if (saveData != nil){
+        _resultList = [saveData mutableCopy];
+        for (NSString *key in saveData.allKeys){
+            _resultList[key] = [saveData[key] mutableCopy];
+        }
+    }else{
+        NSLog(@"saveData empty !!!!");
+        //初期成績表の作成
+        _resultList[@"巨人"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"阪神"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"DeNA"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"中日"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"広島"] = @[@0, @0, @0].mutableCopy;
+        _resultList[@"ヤクルト"] = @[@0, @0, @0].mutableCopy;
+    }
+    //成績の更新
+    [self createData];
+    [_tableView setDataSource:self];
+    [_tableView setDelegate:self];
+}
+//------------------------------------------------------------------------------
+// NSTableViewDatasource
+//------------------------------------------------------------------------------
+//行数を返す
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return _teamList.count;
+}
+//セルに対応した文字列オブジェクトを返す
+- (id)tableView:(NSTableView *)tv
+objectValueForTableColumn:(NSTableColumn *)column
+            row:(NSInteger)row{
+    if ([[column identifier] isEqualToString:@"ranking"] ||
+        [[column identifier] isEqualToString:@"name"]    ||
+        [[column identifier] isEqualToString:@"number"] ||
+        [[column identifier] isEqualToString:@"win"] ||
+        [[column identifier] isEqualToString:@"lose"] ||
+        [[column identifier] isEqualToString:@"draw"] ||
+        [[column identifier] isEqualToString:@"rate"]){
+        NSAttributedString * atrString =
+            [_teamList[row] valueForKey:[column identifier]];
+        return atrString;
+    }else{
+        return nil;
+    }
+}
+//------------------------------------------------------------------------------
+// NSTableViewDelegate
+//------------------------------------------------------------------------------
+- (void)tableView:(NSTableView *)tableView
+  willDisplayCell:(id)cell
+   forTableColumn:(NSTableColumn *)column
+              row:(NSInteger)row{
+    //Cellオブジェクトの取得
+    NSTextFieldCell *aCell = cell;
+    aCell.drawsBackground = YES;
+    //行の背景色を偶数行・奇数行で変える
+    if ((row % 2) == 1){
+        aCell.backgroundColor = [NSColor lightGrayColor];
+    }else{
+        aCell.backgroundColor = [NSColor colorWithRed:255.0/255.0 green:228.0/255.0 blue:196.0/255.0 alpha:1.0];
+    }
+}
+//------------------------------------------------------------------------------
+// 値の変更
+//------------------------------------------------------------------------------
+-(void)tableView:(NSTableView *)tableView
+   setObjectValue:(id)object
+   forTableColumn:(NSTableColumn *)tableColumn
+              row:(NSInteger)row{
+    NSString *string = object; //勝ちor負けor引き分け数
+    //ニューメリックチェック
+    NSCharacterSet *inputCharSet =
+    [NSCharacterSet characterSetWithCharactersInString:string];
+    NSCharacterSet *digitCharSet =
+    [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    if ([digitCharSet isSupersetOfSet:inputCharSet]){
+        UATeam *team = _teamList[row];
+        //更新
+        if ([tableColumn.identifier isEqualToString:@"win"]){
+            team.winValue = string.intValue;
+        }else if ([tableColumn.identifier isEqualToString:@"lose"]){
+            team.loseValue = string.intValue;
+        }else if ([tableColumn.identifier isEqualToString:@"draw"]){
+            team.drawValue = string.intValue;
+        }
+        [self updataData];
+    }else{
+        NSLog(@"数値以外が含まれています.");
+    }
+}
+//------------------------------------------------------------------------------
+// 初期データ
+//------------------------------------------------------------------------------
+-(void)initialData{
+    //定型データ
+    _itemList = @[@[@"巨人", @"giants", @"https://www.giants.jp/top.html"],
+                  @[@"DeNA", @"baystars", @"https://www.baystars.co.jp"],
+                  @[@"阪神", @"tigers", @"https://hanshintigers.jp"],
+                  @[@"広島", @"carp", @"https://www.carp.co.jp"],
+                  @[@"中日", @"dragons", @"https://dragons.jp"],
+                  @[@"ヤクルト", @"swallows", @"https://www.yakult-swallows.co.jp"]
+                  ];
+}
+//------------------------------------------------------------------------------
+// チームリストの作成
+//------------------------------------------------------------------------------
+-(void)createData{
+    for (NSArray *record in _itemList){
+        UATeam *team = [[UATeam alloc] initWithName:record[0]];
+        team.image = [self teamImage:record[1]];
+        NSArray<NSNumber*> *result =_resultList[team.nameString];
+        team.winValue = result[0].intValue;     //勝
+        team.loseValue = result[1].intValue;    //負
+        team.drawValue = result[2].intValue;    //引き分け
+        [_teamList addObject:team];
+    }
+    [self sortTeams];
+}
+//------------------------------------------------------------------------------
+// 成績の更新
+//------------------------------------------------------------------------------
+-(void)updataData{
+    [self sortTeams];
+    [_tableView reloadData];
+}
+//------------------------------------------------------------------------------
+//　勝率によるソート
+//------------------------------------------------------------------------------
+-(void)sortTeams{
+    //勝率でソート＆順位のセット
+    NSSortDescriptor *descript =
+    [NSSortDescriptor sortDescriptorWithKey:@"rateValue" ascending:NO];
+    _teamList = [[_teamList sortedArrayUsingDescriptors:@[descript]] mutableCopy];
+    int ranking = 0;
+    for (UATeam *team in _teamList){
+        team.rankingValue = ++ranking;
+    }
+}
+//------------------------------------------------------------------------------
+//チームのイメージを作成する
+//------------------------------------------------------------------------------
+-(id)teamImage:(NSString*)name{
+    NSImage* image = [NSImage imageNamed:name];
+    if (image){
+        return  image;
+    }else{
+        return [NSNull null];
+    }
+}
+//------------------------------------------------------------------------------
+// ウィンドウを閉じるとき：データを保存する
+//------------------------------------------------------------------------------
+- (void)windowWillClose:(NSNotification *)notification{
+    for (UATeam *team in _teamList){
+        NSMutableArray<NSNumber*>*result = _resultList[team.nameString];
+        result[0] = @(team.winValue);
+        result[1] = @(team.loseValue);
+        result[2] = @(team.drawValue);
+    }
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:_resultList forKey:@"SAVE_DATA"];
+    [ud synchronize]; //即更新する
+}
+//------------------------------------------------------------------------------
+// for test
+//------------------------------------------------------------------------------
+-(IBAction)update:(id)sender{
+    [_teamList removeAllObjects];
+    //初期成績表の作成
+    _resultList[@"巨人"] = @[@53, @26, @0].mutableCopy;
+    _resultList[@"阪神"] = @[@41, @39, @0].mutableCopy;
+    _resultList[@"DeNA"] = @[@41, @41, @0].mutableCopy;
+    _resultList[@"中日"] = @[@39, @42, @0].mutableCopy;
+    _resultList[@"広島"] = @[@32, @44, @0].mutableCopy;
+    _resultList[@"ヤクルト"] = @[@32, @46, @0].mutableCopy;
+    [self createData];
+    [_tableView reloadData];
+}
+@end

@@ -1,0 +1,15 @@
+//--- AppDelegate.m ---
+#import "AppDelegate.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSBrowser *browser;
+@property NSArray<NSURL *> *arrayOfURL;
+@end
+
+@implementation AppDelegate
+-(void)awakeFromNib{
+    //0列のデータをロードする
+    [_browser loadColumnZero];
+}
+....
+@end

@@ -1,0 +1,56 @@
+//--------------------------------------------------------------------------
+// 忘れやすいもの
+//--------------------------------------------------------------------------
+    //小数点以下の桁数
+    float f = 12.3456789;
+    NSLog(@"%.3f", f);        // 12.346
+    NSLog(@"%.0f", f);        // 12 
+
+    //整数部の桁数
+    float f = 12.3456789;
+    NSLog(@"%2.3f", f);        // _2.346  先頭スペース
+    NSLog(@"0%2.3f", f);       // 02.346  先頭ゼロ
+    NSInteger i = 12
+    NSLog(@"%4ld", i);         // __12  先頭スペース
+    NSLog(@"%04ld", i);        // 0012  先頭ゼロ
+    
+    //整数
+    //64bit
+    long long a = 1;
+    int64_t b = 2;
+    long c = 3;
+    NSInteger d = 4;
+
+    //32bit
+    int32_t e = 5;
+    int f = 6;
+
+    //サイズ
+    NSLog(@"size of long long: %ld", sizeof(long long));
+    NSLog(@"size of int64_t:   %ld", sizeof(int64_t));
+    NSLog(@"size of long:      %ld", sizeof(long));
+    NSLog(@"size of NSInteger: %ld", sizeof(NSInteger));
+    NSLog(@"size of int32_t:   %ld", sizeof(int32_t));
+    NSLog(@"size of int:       %ld", sizeof(int));
+
+    //フォーマット指定子
+    NSLog(@"a: %lld", a);
+    NSLog(@"b: %lld", b);
+    NSLog(@"c: %ld", c);
+    NSLog(@"d: %ld", d);
+    NSLog(@"e: %d", e);
+    NSLog(@"f: %d", f);
+
+    // --- result ---
+    // size of long long: 8
+    // size of int64_t:   8
+    // size of long:      8
+    // size of NSInteger: 8
+    // size of int32_t:   4
+    // size of int:       4
+    // a: 1
+    // b: 2
+    // c: 3
+    // d: 4
+    // e: 5
+    // f: 6

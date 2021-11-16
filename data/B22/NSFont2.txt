@@ -1,0 +1,2 @@
+let myfont = NSFont.init(name:"Arial", size:32) ?? 
+                         NSFont.systemFont(ofSize: 12)

@@ -1,0 +1,29 @@
+ PROCEDURE DIVISION USING BY REFERENCE CUST-COUNT CUST-TABLE.
+ PERFORM MAIN-RTN
+* 呼び出し元に返る
+ GOBACK.
+
+ MAIN-RTN.
+*    変数の初期化
+     INITIALIZE END-FLG CUST-COUNT 
+*    ファイルオープン
+     OPEN INPUT M1
+*    顧客マスターの読み込み
+     PERFORM UNTIL END-FLG > 0
+         READ  M1 
+             AT END
+                 ADD 1 TO END-FLG
+             NOT AT END
+*                顧客マスターレコードをLINKAGE　SECTIONのテーブルにセット
+                 ADD 1 TO CUST-COUNT 
+                 MOVE CUST-CODE OF M1R 
+                     TO CUST-CODE OF CUSTOMER(CUST-COUNT) 
+                 MOVE CUST-NAME OF M1R 
+                     TO CUST-NAME OF CUSTOMER(CUST-COUNT)  
+         END-READ
+     END-PERFORM
+     MOVE 999 TO RETURN-CODE
+*    ファイルクローズ
+     CLOSE M1.
+ MAIN-RTN-EX. 
+     STOP RUN.

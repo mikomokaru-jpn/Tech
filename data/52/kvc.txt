@@ -1,0 +1,2 @@
+cellView.textField.attributedStringValue = 
+    [_teamList[row] valueForKey:[column identifier]];

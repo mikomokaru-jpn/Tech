@@ -1,0 +1,25 @@
+//------------------------------------------------------------------------------
+//  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+//  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "UACGView.h"
+#import "UAElapse.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet UACGView *view;
+@end
+@implementation AppDelegate
+-(IBAction)drawButton:(id)sender{
+    [_view drawShape:sender];
+}
+-(IBAction)clearButton:(id)sender{
+    [_view clearShape:sender];
+}
+@end

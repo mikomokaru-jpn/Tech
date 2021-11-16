@@ -1,0 +1,13 @@
+ WORKING-STORAGE             SECTION.
+* 顧客マスターテーブル有効件数（8バイト）
+ 01 CUST-COUNT               PIC 9(18) COMP-X VALUE 0. 
+* 顧客マスターテーブル
+ 01 CUST-TABLE.
+     05 CUSTOMER OCCURS 10 TIMES.
+         10 CUST-CODE        PIC 9(04).
+         10 CUST-NAME        PIC X(20).
+〜〜〜
+*    サブルーチンCALL
+     CALL "read_table" USING BY REFERENCE CUST-COUNT
+                             BY REFERENCE CUST-TABLE
+                       GIVING RETURN-VALUE

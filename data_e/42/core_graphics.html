@@ -1,0 +1,294 @@
+<!-- 
+89 Jigsaw 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Image Guessing Quiz（Core Grapjics）</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">Image Guessing Quiz（Core Grapjics）</h2>
+<h2 class="lm70 tm10 bm0">
+How to use
+</h2>
+<!----------------------------------------------------------------------------->
+<div class="table lm70 tm0">
+<div class="table_cell" style="width:310px; border-top:solid 1px #909090;">
+<div class="tm10">
+Load a image file (JPG or PNG) using NSOpenPanel.
+</div>
+</div>
+<!-- 画像 -->
+<div class="table_cell" style="width:280px;">
+  <a href="/lib/HTMLofImage.html?filename=/data/42/image01.png&title=image01&width=600" target="_new">
+  <img class="lm30" src="/data/42/image01.png" alt="[image01]" width="250"></a>
+</div>
+</div>
+<!----------------------------------------------------------------------------->
+<div class="table lm70 tm30">
+<div class="table_cell" style="width:310px; border-top:solid 1px #909090;">
+<div class="tm10">
+An image is divided into a two-dimensional matrix, randomly arranged and displayed.
+You can specify the number of divisions. Here it is divided by 20 x 20.
+In this state you don't know what it is.
+</div>
+<div class="tm10">
+Click Start button to start random image rearrangement.
+An divided image placed in the correct position is left as it is , and the other images are randomly placed again.
+The processing is repeated until all the images are in their original positions.
+</div>
+</div>
+<!-- 画像 -->
+<div class="table_cell" style="width:280px;">
+  <a href="/lib/HTMLofImage.html?filename=/data/42/image02.png&title=image02&width=700" target="_new">
+  <img class="lm30" src="/data/42/image02.png" alt="[image02]" width="250"></a>
+</div>
+</div>
+<!----------------------------------------------------------------------------->
+<div class="table lm70 tm30">
+<div class="table_cell" style="width:310px; border-top:solid 1px #909090;">
+<div class="tm10">
+The original image gradually appears over time.
+The number of image rearrangements and the elapsed time are displayed in the window.
+Processing can be interrupted and resumed on the way.
+</div>
+<div class="tm10">
+It's like competing for the speed to recognize.
+National treasure Matsumoto Castle was completed in 384 trials.
+</div>
+</div>
+<!-- 画像 -->
+<div class="table_cell" style="width:280px;">
+  <a href="/lib/HTMLofImage.html?filename=/data/42/image03.png&title=image03&width=700" target="_new">
+  <img class="lm30" src="/data/42/image03.png" alt="[image03]" width="250"></a>
+</div>
+</div>
+<h2 class="lm70 tm10 bm0 rm60" style="width:580px; border-bottom:solid 1px #909090;">
+Souce Code
+</h2>
+<!-- ソースコード・リンク-->
+<div class="lm70 tm5 rm60">
+・アプリケーション制御　
+<a href="/lib/HTMLofText.html?filename=/data/42/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0 rm60">
+・ビュークラス（イメージ処理本体）
+<a href="/lib/HTMLofText.html?filename=/data/42/source/UAView.txt&title=UAView" target="_new">UAView</a>
+</div>
+<div class="lm70 tm0 rm60">
+・分割イメージクラス
+<a href="/lib/HTMLofText.html?filename=/data/42/source/ImagePart.txt&title=ImagePart" target="_new">ImagePart</a>
+</div>
+
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 rm60 bm5" style="width:580px; border-bottom:solid 1px #909090;">
+  Process flow
+</h2>
+  <!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/CoreGraphics01.png&title=CoreGraphics01&width=1400" target="_new">
+<img class="lm70 tm10" src="/data/42/CoreGraphics01.png" alt="[CoreGraphics01]" width="550"></a>
+  
+<div class="lm70 tm0 rm60">
+(1) Read a image file with CoreGraphics function and create a CGImage object.
+</div>
+  <div class="lm70 tm10 rm60">
+(2) Resize the CGImage object with the same aspect ratio to fit in 800 x 600 pixels.
+  </div>
+  <div class="lm70 tm10 rm60">
+(3) Divide the image into  20x20 matrix and create  small 400 CGImage objects from each partial image.
+Then, the objects are stored at a random position of a two-dimensional array.
+  </div>
+  <div class="lm70 tm10 rm60">
+(4) Draw CGImage objects from the array to Graphic context  one by one using  CGContextDrawImage function
+  </div>
+  <div class="lm70 tm10 rm60">
+ (5) Repeat the process of rearranging and redisplaying the images. 
+ As it progresses, the number of images placed in the correct position increases, 
+ and finally the original image is displayed.    
+  </div>
+<!----------------------------------------------------------------------------->
+<div class="lm70 tm20" style="width:550px; border-top:solid 1px #909090;"></div>
+<h2 class="lm70 tm10 bm0 rm60">
+Load image file
+</h2>
+<div class="lm70 tm10 rm60">
+Read an image file (jpg, png) and create a CGImage object.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/06.txt" width="550" height="130">
+</iframe>
+<div class="lm70 tm10 rm60">
+Same process as above,  after reading an image file into NSImage object once, it is converted to a CGImage object.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/07.txt" width="550" height="140">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm30 rm60 bm0" id="topic1">
+Increase / reduce the size of an image
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image05.png&title=image05&width=700" target="_new">
+<img class="lm70 tm10" src="/data/42/image05.png" alt="[image05]" width="500"></a>
+<div class="lm70 tm30 rm60">
+To resize the image, draw the CGImage object into Bitmap Context once, read it again from there,  and create a new object.
+You would resize the image where you draw it into Context.
+The following is an example of resizing any size CGImage object to 800x600 pixels.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/02.txt" width="550" height="430">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 rm60 bm0" id="topic2">
+Create a partial image
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image06.png&title=image06&width=600" target="_new">
+<img class="lm70 tm10" src="/data/42/image06.png" alt="[image06]" width="300"></a>
+<div class="lm70 tm30 rm60">
+From the CGImage object, specify the rectangular part and create a new CGImage object.
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/03.txt" width="550" height="150">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 rm60 bm0" id="topic3">
+Display image
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image04.png&title=image04&width=600" target="_new">
+<img class="lm70 tm10" src="/data/42/image04.png" alt="[image04]" width="400"></a>
+<div class="lm70 tm10 rm60">
+In drawRect method of NSView, get Graphic context of the screen and draw a CGImage object with CGContextDrawImage function.
+If the size of the image is different from the size of the context, it resizes to fit the size of Context size.
+</div>
+<div class="lm70 tm10 rm60">
+Media that display images, such as bitmap memory, PDFs, and printers  have Graphic context interface.
+</div>
+<div class="lm70 tm10 rm60">
+</div>
+<div class="lm70 tm10 rm60">
+
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/01.txt" width="550" height="280">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 bm0 rm60">
+Invoking scheduled processing by NSTimer
+</h2>
+<div class="lm70 tm5 rm60">
+NSTimer provides a way to invoke methods at regular intervals.
+</div>
+<div class="lm70 tm10 rm60">
+You create an NSTimer  object and set a method name (@selector format) to start,  a start interval (seconds), and  a dictionary object of additional information.
+Method「fire」 launches the specified method on Main thread.
+Method「invalidate」 stops launching the method.
+</div>
+<div class="lm70 tm10 rm60">
+A method invoked takes an NSTimer object as an argument.
+You cannot define your own arguments to the method, however you can pass information via additional information.
+</div>
+<!-- ソースコード　リンク -->
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/42/04.txt&title=サンプルプログラム" target="_new">サンプルプログラム</a>
+</div>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm30 bm0 rm60">
+Observing changes of property values by KVO
+</h2>
+<div class="lm70 tm5 rm60">
+In the application, the number of image rearrangements and the elapsed time are displayed in real time in the text view of the window.
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image07.png&title=image07&width=800" target="_new">
+<img class="lm70 tm10" src="/data/42/image07.png" alt="[image07]" width="500"></a>
+<div class="lm70 tm20 rm60">
+This is achieved by Key Value Coding (KVC).
+</div>
+<div class="lm70 tm10 rm60">
+First, in Interface Builder, you bind the text fields "execution count" and "elapsed time"  to their related properties "timeCount" and "elapseSec" of UAView class.
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image08.png&title=image08&width=800" target="_new">
+<img class="lm130 tm10" src="/data/42/image08.png" alt="[image08]" width="500"></a>
+<div class="lm70 tm30 rm60">
+Next, in the implementation of UAView class, enclose the code that update  properties with the methods as shown below. 
+Therefore,  you can monitor values of the properties which are the number of executions and elapsed time, 
+and reflect them to the text fields of the window in real time.  
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10 bm10" src="/lib/HTMLofText.html?filename=/data/42/05.txt" width="550" height="300">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm30 bm0 rm60">
+Performance notes
+</h2>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+Processing time of CGContextDrawImage method that draws an image to Graphic Context differs depending on conditions.
+If the size of a drawing image and the size of the display area of ​​Graphic Context are different, 
+the processing will be slightly slower.
+It seems that to scale  ​size of a image costs a little.
+</div>
+<div class="lm70 tm10 rm60">
+In order to arrange the images randomly, 
+the application divides the original image into 400 (20 x 20) images 
+and draws them one by one at random positions in  Graphic Context which has 800x600 area.
+</div>
+<div class="lm70 tm10 rm60">
+If the original image is 800x600, there is no resizing when drawing a  divides image to Context, 
+but if it is any other size, a  divided image needs to be resized.
+</div>
+<div class="lm70 tm10 rm60">
+Since the affect of repeating drawing 400 times is large, 
+the application In advance, normalizes an original image size to a size of 800x600.</div>
+<div class="lm70 tm20 rm60">
+The difference of processing time when the countermeasure taken is shown below.
+</div>
+<div class="lm70 tm10 rm60">
+[Process A] Reduced the original image to a size of 800x600 in advance.
+</div>
+<div class="lm70 tm0 rm60">
+[Process B] The size of the original image is kept as it is, and it is reduced when it is drawn.
+</div>
+
+<div class="lm70 tm10 rm60">
+Image size  2,272 x 1,704 → 800 x 600（Reduction rate35%）
+</div>
+<div class="lm70 tm0 rm60">
+[Process A] 0.029817 sec
+</div>
+<div class="lm70 tm0 rm60">
+  [Process A] 0.155520 sec
+</div>
+
+<div class="lm70 tm10 rm60">
+Image size  5,184 x 3,456 → 800 x 533（Reduction rate15%）
+</div>
+<div class="lm70 tm0 rm60">
+  [Process A] 0.036741 sec
+</div>
+<div class="lm70 tm0 rm60">
+  [Process B] 0.383116 sec
+</div>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

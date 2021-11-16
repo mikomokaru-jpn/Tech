@@ -1,0 +1,8 @@
+//カレンダオブジェクト
+Calendar.current
+
+//カレンダオブジェクトのメソッドによる日付の計算
+let date = Calendar.current.date(byAdding: ....)
+
+//和暦カレンダーの作成
+let calendarJpn = Calendar.init(identifier: .japanese)

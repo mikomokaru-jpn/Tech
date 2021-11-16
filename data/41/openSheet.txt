@@ -1,0 +1,8 @@
+-(IBAction)btnOpen:(id)sender{ 
+    ....
+    //ウィンドウからオープンパネルをシートで開く
+    [openPanel beginWithCompletionHandler:^(NSInteger result){
+        //ハンドラ
+        ....
+     }];
+}

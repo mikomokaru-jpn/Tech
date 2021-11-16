@@ -1,0 +1,82 @@
+//------------------------------------------------------------------------------
+// 履歴管理クラス UAHistoryMgr.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
+#import "UAHistroryItem.h"
+
+@interface UAHistoryMgr : NSObject
+//履歴レコードの追加（線の描画操作）
+-(void)makeRecordAdd:(NSArray<NSNumber*>*)numbers;
+//履歴レコードの追加（線のクリア操作）
+-(void)makeRecordClear:(NSArray<NSNumber*>*)numbers;
+//直近の履歴レコード（操作履歴）を返し、その履歴レコードを削除する
+-(UAHistroryItem*)latestItem;
+//ユティリティ
+-(void)dump;
+@end
+//------------------------------------------------------------------------------
+// 履歴管理クラス UAHistoryMgr.m
+//-----------------------------------------------------------------------------
+#import "UAHistoryMgr.h"
+
+@interface UAHistoryMgr()
+@property NSInteger currentRegNumber;  //最新の履歴No.
+@property NSMutableArray<UAHistroryItem*> *hisoryList; //履歴レコードリスト
+@end
+
+@implementation UAHistoryMgr
+//初期化
+-(id)init
+{
+    if(![super init])
+        return nil;
+    _hisoryList = [[NSMutableArray alloc] init];
+    _currentRegNumber = 0;
+    return self;
+}
+//履歴レコードの追加（線の描画操作）
+-(void)makeRecordAdd:(NSArray<NSNumber*>*)numbers
+{
+    UAHistroryItem *item = [[UAHistroryItem alloc] init];
+    item.regNumber = ++_currentRegNumber;
+    item.operation = 1;
+    item.objNumbers = [numbers copy];
+    [_hisoryList addObject:item];
+}
+//履歴レコードの追加（線のクリア操作）
+-(void)makeRecordClear:(NSArray<NSNumber*>*)numbers
+{
+    UAHistroryItem *item = [[UAHistroryItem alloc] init];
+    item.regNumber = ++_currentRegNumber;
+    item.operation = 0;
+    item.objNumbers = [numbers copy];
+    [_hisoryList addObject:item];
+}
+
+//直近の履歴レコード（操作履歴）を返し、その履歴レコードを削除する
+-(UAHistroryItem*)latestItem
+{
+    UAHistroryItem* item = [_hisoryList lastObject];
+    [_hisoryList removeObject:item];
+    return item;
+    
+}
+//ユティリティ
+-(void)dump
+{
+    for(UAHistroryItem* item in _hisoryList)
+    {
+        for (NSNumber* num in item.objNumbers)
+        {
+            NSInteger objNum = [num integerValue];
+            NSString* strOpe = item.operation == 1 ? @"A" : @"C";
+            NSString* string = [NSString stringWithFormat:@"%@ (r):%ld (o):%ld",
+                                strOpe, item.regNumber, objNum];
+            NSLog(@"%@", string);
+        }
+    }
+}
+
+
+@end

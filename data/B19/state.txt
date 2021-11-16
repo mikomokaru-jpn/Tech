@@ -1,0 +1,1 @@
+if rectangle.state ==  NSControl.StateValue.on{ ....}

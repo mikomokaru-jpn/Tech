@@ -1,0 +1,11 @@
+@property NSAttributedString *attributedString;
+
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //属性付き文字列を描画する：矩形の原点を指定
+    float x = (dirtyRect.size.width / 2) - 
+              (_attributedString.size.width / 2);
+    float y = (dirtyRect.size.height / 2) - 
+              (_attributedString.size.height / 2);
+    [_attributedString drawAtPoint:NSMakePoint(x, y)];
+}

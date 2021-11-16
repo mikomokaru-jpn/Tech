@@ -1,0 +1,13 @@
+//サブクラスのオブジェクトを作成して、既存のものと置き換える
+for (NSTableColumn* column in self.tableColumns) {
+    UATableHeaderCell* newCell = [[UATableHeaderCell alloc] init];
+    [column setHeaderCell:newCell];
+}
+//属性付き文字列のセット
+self.tableColumns[0].headerCell.attributedStringValue =
+    [UAUtility attributedString:@"順位"
+                       FontSize:12 
+                      ForeColor:[NSColor blackColor]];
+//横方向の文字揃えの指定
+((UATableHeaderCell*)self.tableColumns[0].headerCell).dispAlignment = 
+    NSTextAlignmentCenter;

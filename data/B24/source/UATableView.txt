@@ -1,0 +1,100 @@
+//---- UATableView.swift ----
+import Cocoa
+class UATableView: NSTableView {
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.backgroundColor = NSColor.black //背景色
+        //行の高さ
+        self.rowHeight = 80
+        //行のハイライトの無効化
+        self.selectionHighlightStyle = .none
+        //セルの幅：順位
+        self.tableColumns[0].width = 40
+        self.tableColumns[0].maxWidth = 40
+        self.tableColumns[0].minWidth = 40
+        //セルの幅：イメージ
+        self.tableColumns[1].width = 80
+        self.tableColumns[1].maxWidth = 80
+        self.tableColumns[1].minWidth = 80
+        //セルの幅：球団名
+        self.tableColumns[2].width = 150
+        self.tableColumns[2].maxWidth = 150
+        self.tableColumns[2].minWidth = 150
+        //セルの幅：試合数
+        self.tableColumns[3].width = 50
+        self.tableColumns[3].maxWidth = 50
+        self.tableColumns[3].minWidth = 50
+        //セルの幅：勝ち
+        self.tableColumns[4].width = 50
+        self.tableColumns[4].maxWidth = 50
+        self.tableColumns[4].minWidth = 50
+        /* not work
+        let id = NSUserInterfaceItemIdentifier("win")
+        self.tableColumns[4].identifier = id;
+        let cellView: NSTableCellView? = self.makeView(withIdentifier: id , owner: self)
+                as? NSTableCellView
+        cellView?.identifier = id
+        cellView?.textField?.isEditable = true
+        */
+        //セルの幅：負け
+        self.tableColumns[5].width = 50
+        self.tableColumns[5].maxWidth = 50
+        self.tableColumns[5].minWidth = 50
+        //セルの幅：引き分け
+        self.tableColumns[6].width = 50
+        self.tableColumns[6].maxWidth = 50
+        self.tableColumns[6].minWidth = 50
+        //セルの幅：勝率
+        self.tableColumns[7].width = 100
+        self.tableColumns[7].maxWidth = 100
+        self.tableColumns[7].minWidth = 100
+        //セルの幅：リンク
+        self.tableColumns[8].width = 100
+        self.tableColumns[8].maxWidth = 100
+        self.tableColumns[8].minWidth = 100
+        //セルの間隔
+        self.intercellSpacing = NSMakeSize(0, 0)
+        //列見出しの定義
+        self.headerView?.frame.size.height = 40
+        for column in self.tableColumns{
+            let newCell = UATableHeaderCell.init(textCell: "")
+            column.headerCell = newCell
+        }
+        let cell0 = self.tableColumns[0].headerCell as! UATableHeaderCell
+        cell0.attributedStringValue =
+            UAUtility.attributed(string: "順位", size: 12, color: NSColor.black)
+        cell0.dispAlignment = .center
+        let cell1 = self.tableColumns[1].headerCell as! UATableHeaderCell
+        cell1.attributedStringValue =
+            UAUtility.attributed(string: "マスコット", size: 12, color: NSColor.black)
+        cell1.dispAlignment = .center
+        let cell2 = self.tableColumns[2].headerCell as! UATableHeaderCell
+        cell2.attributedStringValue =
+            UAUtility.attributed(string: "球団名", size: 20, color: NSColor.black)
+        cell2.dispAlignment = .left
+        let cell3 = self.tableColumns[3].headerCell as! UATableHeaderCell
+        cell3.attributedStringValue =
+            UAUtility.attributed(string: "試合数", size: 12, color: NSColor.black)
+        cell3.dispAlignment = .right
+        let cell4 = self.tableColumns[4].headerCell as! UATableHeaderCell
+        cell4.attributedStringValue =
+            UAUtility.attributed(string: "勝", size: 20, color: NSColor.black)
+        cell4.dispAlignment = .right
+        let cell5 = self.tableColumns[5].headerCell as! UATableHeaderCell
+        cell5.attributedStringValue =
+            UAUtility.attributed(string: "負", size: 20, color: NSColor.black)
+        cell5.dispAlignment = .right
+        let cell6 = self.tableColumns[6].headerCell as! UATableHeaderCell
+        cell6.attributedStringValue =
+            UAUtility.attributed(string: "引き分け", size: 10, color: NSColor.black)
+        cell6.dispAlignment = .right
+        let cell7 = self.tableColumns[7].headerCell as! UATableHeaderCell
+        cell7.attributedStringValue =
+            UAUtility.attributed(string: "勝率", size: 20, color: NSColor.black)
+        cell7.dispAlignment = .center
+        let cell8 = self.tableColumns[8].headerCell as! UATableHeaderCell
+        cell8.attributedStringValue =
+            UAUtility.attributed(string: "リンク", size: 12, color: NSColor.black)
+        cell8.dispAlignment = .center
+    }
+}

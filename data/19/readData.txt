@@ -1,0 +1,8 @@
+//イメージオブジェクトを読み込む
+NSData *data = [_pasteboard dataForType:@"public.tiff"];
+NSImage *image = [[NSImage alloc] initWithData:data];
+
+//URLオブジェクトを呼び込む
+//URLを文字列として読み込み、それをURLに変換している。あまり普通の方法ではない。
+NSString *string = [_pasteboard  stringForType:@"public.url"];
+NSURL *url = [[NSURL alloc] initWithString:string];

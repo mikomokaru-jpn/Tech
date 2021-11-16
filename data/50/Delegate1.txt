@@ -1,0 +1,8 @@
+- (NSCell *)tableView:(NSTableView *)tableView
+dataCellForTableColumn:(NSTableColumn *)tableColumn
+                  row:(NSInteger)row{
+    //NSImageオブジェクトをセルにセット
+    UAImageCell *imageCell = 
+      [[UAImageCell alloc] initWithImage:_imageList[row]];
+    return imageCell;
+}

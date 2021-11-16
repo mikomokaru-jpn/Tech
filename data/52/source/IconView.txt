@@ -1,0 +1,33 @@
+//---- IconView.h ----
+#import <Cocoa/Cocoa.h>
+@interface IconView : NSTextField
+@property NSImage *teamIcon; //表示イメージ
+@end
+
+//---- IconView.m ----
+#import "IconView.h"
+@implementation IconView
+//------------------------------------------------------------------------------
+//  ビューの再描画
+//------------------------------------------------------------------------------
+- (void)drawRect:(NSRect)dirtyRect {
+    if (!_teamIcon){
+        return;
+    }
+    //描画領域（80 x 80）
+    float baseWidth = dirtyRect.size.width;
+    float baseHeight = dirtyRect.size.height;
+    //イメージの大きさ（縦横いずれかが Max80）
+    NSImageRep *imageRep = _teamIcon.representations[0];
+    //
+    float imageWidth = (float)imageRep.pixelsWide * 0.8;
+    float imageHeight = (float)imageRep.pixelsHigh * 0.8;
+
+    NSRect newRect = dirtyRect;
+    newRect.size.width = imageWidth;
+    newRect.size.height = imageHeight;
+    newRect.origin.x = (baseWidth - imageWidth) / 2;
+    newRect.origin.y = (baseHeight - imageHeight) / 2;
+    [_teamIcon drawInRect:newRect];
+}
+@end

@@ -1,0 +1,10 @@
+//---- ObjcLib.h ----
+void func1(char* str); //Clibに定義したC関数
+
+//---- ObjcLib.m ----
+//関数func1をラップしたメソッド
+-(NSString*)func1wrap:(NSString*)nsstr{
+    char* str = (char*)[nsstr UTF8String];
+    func1(str);
+    return [[NSString alloc] initWithUTF8String:str];
+}

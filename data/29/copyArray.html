@@ -1,0 +1,156 @@
+<!-- 
+Ducument 29
+27 ArrayCopy
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>オブジェクトのコピー/配列のコピー</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">オブジェクトのコピー/配列のコピー</h2>
+<h3 class="lm90 tm20 rm60 bm0">
+１-１. オブジェクトの代入
+</h3>
+<div class="lm100 tm10 rm60">
+オブジェクト変数を別のオブジェクト変数に代入した場合、それぞれの変数が参照する先は同じオブジェクとなる。代入元が参照するオブジェクトの中身を変えると、代入先が参照するオブジェクトも変わる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/assign.txt" width="550" height="90"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy1.png&title=copy1&width=600" target="_new">
+<img class="lm100 tm5 bm10" src="copy1.png" width="280" alt="copy1"></a>	
+<h3 class="lm90 tm20 rm60 bm0">
+  １-２. オブジェクトのコピー
+  </h3>
+<div class="lm100 tm10 rm60">
+オブジェクト変数を別のオブジェクト変数に copyメソッドでコピーした場合、コピー元からオブジェクトが複写され、コピー先の変数はこれを参照する。コピー元の変数からオブジェクトの中身の変えても、コピー先が参照するオブジェクトは変わらない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/copy.txt" width="550" height="90"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy2.png&title=copy2&width=600" target="_new">
+<img class="lm100 tm10 bm10" src="copy2.png" width="300" alt="copy2"></a>	
+<h3 class="lm90 tm20 rm60 bm0">
+２-１. 配列の代入
+</h3>
+<div class="lm100 tm5 rm60">
+配列の場合、配列（NSArrayオブジェクト）が保持する要素オブジェクトの扱いがポイントとなる。
+</div>
+<div class="lm100 tm10 rm60">
+上記のオブジェクトの代入と同じように、配列オブジェクトを別の変数に代入した場合、代入先は同じ配列オブジェクトを参照する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/assign_array.txt" width="550" height="130"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.php?filename=/data/29/copy3.png&title=copy3&width=600" target="_new">
+<img class="lm100 tm10 bm10" src="copy3.png" width="300" alt="copy3"></a>	
+<h3 class="lm100 tm10 rm60 bm0">
+２-２. 配列の shallow（浅い）コピー
+</h3>
+<div class="lm100 tm0 rm60">
+shallowコピーにより配列をコピーすると、コピー元の配列を複写した新しい配列オブジェクトが作成され、コピー先はこれを参照する。
+要素の追加、削除はそれぞれの配列において別個に行われるが、要素はコピーされないので、既存の要素はそれぞれの配列が同じものを参照することになる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/copyShallow.txt" width="550" height="180"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy4.png&title=copy4&width=700" target="_new">
+<img class="lm100 tm10 bm10" src="copy4.png" width="500" alt="copy4"></a>	
+<h3 class="lm100 tm10 rm60 bm0">
+２-３. 配列の deep（深い）コピー
+</h3>
+<div class="lm100 tm0 rm60">
+配列の要素のコピーを行うためには、配列を引数としたイニシャライザ（initWithArray:copyItems:）を使用して、元の配列の要素をコピーした新しい配列を作成する。このとき引数copyItemsをYESにすること。これをdeepコピーという。（NOにすれば、shallowコピーと同じになる）
+
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/29/copyDeep.txt" width="550" height="180"></iframe>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/29/copy5.png&title=copy5&width=700" target="_new">
+<img class="lm100 tm15 bm10" src="copy5.png" width="500" alt="copy5"></a>	
+
+<h3 class="lm90 tm20 rm60 bm0">
+3. NSCopyingプロトコル
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copy_method.txt&font=font100" width="550" height="40"></iframe>
+
+<div class="lm100 tm10 rm60">
+カスタムクラスのオブジェクトのcopyを実現するには、クラスがNSCopyingプロトコルの copyWithZoneメソッドを実装し、要素のコピー組み込んでいること。
+（オブジェクトに対して copyメソッドを呼ぶと、クラスで定義した copyWithZoneメソッドが呼ばれることになる）
+</div>
+<div class="lm100 tm10 rm60">
+copyWithZoneメソッドの実装例を次に示す。
+</div>
+
+<h3 class="lm100 tm5 rm60 bm0">
+例１. 数値型の変数と基本クラスの変数を持つクラス
+</h3>
+<div class="lm100 tm0 rm60">
+自身と同じクラスのオブジェクトを作成し、クラスの全ての要素をコピーし、戻り値として返す。数値型の変数は値の代入、基本クラスのオブジェクトは、copyメソッドによりコピーする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copyWithZone1.txt" width="550" height="320"></iframe>
+
+<h3 class="lm100 tm20 rm60 bm0">
+例２：カスタムクラスのオブジェクトおよびその配列を持つクラス
+</h3>
+<div class="lm100 tm0 rm60">
+カスタムクラスのオブジェクトはcopyメソッドによりコピーする。カスタムクラスはNSCopyingプロトコルに準拠し、copyWithZoneメソッドを実装しておくこと。実装していないと実行時エラーとなる。配列は initWithArray:copyItems:メソッッドにより配列要素のdeepコピーを行う。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copyWithZone2.txt" width="550" height="380"></iframe>
+<div class="lm100 tm10 rm60">
+クラスが階層的な構造になっているとき、下位のクラスに向かって段階的にコピー処理が呼ばれる。
+</div>
+<h3 class="lm90 tm20 rm60 bm0">
+４. システム標準クラスの代入とコピー
+</h3>
+<div class="lm100 tm5 rm60">
+確認してみたらシステム標準クラスであるNSString型の変数とNSDate型の変数は、代入操作もコピー操作も、値のコピーとなった。おそらくこれらのクラスは同じ動作になると思われる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copy_basic_class.txt" width="550" height="90"></iframe>
+<h3 class="lm90 tm20 rm60 bm0">
+５. 多次元配列のコピー
+</h3>
+<div class="lm100 tm5 rm60">
+2次元以上の配列オブジェクトをdeepコピーをすると、直下の配列の要素はコピーされるが、それより深い配列の要素はコピーされない。行うとすれば下記の例のように、配列の次元に対応した多段階ループ中で、それぞれの次元の配列コピーを行う必要がある。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/29/copy_multi_array.txt" width="550" height="420"></iframe>
+<h3 class="lm90 tm30 rm60 bm0">
+６. サンプルプログラム
+</h3>
+<!--ソースコード　リンク-->
+<div class="lm100 tm5 rm60">オブジェクトのコピー/配列のコピーの確認 
+<a href="/lib/HTMLofText.html?filename=/data/29/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegateクラス</a>
+</div>
+<div class="lm100 tm0 rm60">カスタムクラス 
+<a href="/lib/HTMLofText.html?filename=/data/29/source/AClass.txt&title=AClass" target="_new">AClass</a>
+</div>
+<div class="lm100 tm0 rm60">配列を持ったカスタムクラス 
+<a href="/lib/HTMLofText.html?filename=/data/29/source/BClass.txt&title=BClass" target="_new">BClass</a>
+</div>
+
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="../index1.php">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="../access/access2.js"></script>
+</body>
+</html>
+
+
+
+

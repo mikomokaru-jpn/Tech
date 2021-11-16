@@ -1,0 +1,1 @@
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{    _subWinCtrl.ccDelegate = self; }

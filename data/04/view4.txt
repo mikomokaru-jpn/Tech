@@ -1,0 +1,23 @@
+@property NSAttributedString *attributedString;
+
+-(id)initWithFrame:(NSRect)dirtyRect 
+                   attributedString:(NSAttributedString*)aString{
+    if (![super initWithFrame:dirtyRect])
+        return nil;
+    _attributedString = aString;
+    self.wantsLayer = YES;
+    self.layer.borderWidth = 1.0;
+    self.layer.borderColor = [NSColor grayColor].CGColor;
+    //属性付き文字列
+    CATextLayer *textLayer = [CATextLayer layer];
+    float x = (dirtyRect.size.width / 2) - 
+              (_attributedString.size.width / 2);
+    float y = (dirtyRect.size.height / 2) - 
+              (_attributedString.size.height / 2);
+    textLayer.frame = NSMakeRect(x, y,
+                                 _attributedString.size.width,
+                                 _attributedString.size.height);
+    textLayer.string = _attributedString;
+    [self.layer addSublayer:textLayer];
+    return self;
+}

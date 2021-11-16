@@ -1,0 +1,38 @@
+-(NSImage*)readImage:(NSURL*)url{
+    CGImageSourceRef src = 
+      CGImageSourceCreateWithURL((__bridge CFURLRef)url, nil);
+    CGImageRef cgImage = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+    float maxWidth = 100.0;
+    float maxHeight = 100.0;
+    float width = (float)CGImageGetWidth(cgImage);
+    float height = (float)CGImageGetHeight(cgImage);
+    float adjustWidth, adjustHeight;
+    //出力領域の大きさを決める。100ピクセル x 100ピクセルに収める
+    if (width >= height ){
+        //横長のとき
+        adjustWidth = maxWidth;
+        adjustHeight = maxWidth * height / width;
+    }else{
+        //縦長のとき
+        adjustWidth = maxHeight * width / height;
+        adjustHeight = maxHeight;
+    }
+    //出力領域と同じ大きさのBitmapコンテキストを作成する
+    CGImageRef cgNewImage;      //正規化（縮小・拡大）後
+    CGContextRef newContext = NULL;
+    CGColorSpaceRef imageColorSpace = 
+      CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );
+    newContext = CGBitmapContextCreate (NULL,
+                                        (int)adjustWidth,
+                                        (int)adjustHeight,
+                                        8,
+                                        (int)adjustWidth * 4,
+                                        imageColorSpace,
+                                        kCGImageAlphaPremultipliedLast);
+    //イメージをイメージコンテキストに出力する（イメージは縮小/拡大する）
+    CGRect rect = CGRectMake(0, 0, adjustWidth, adjustHeight);
+    CGContextDrawImage(newContext, rect, cgImage);
+    //イメージコンテキストからイメージを取得する
+    cgNewImage = CGBitmapContextCreateImage(newContext);
+    return [[NSImage alloc] initWithCGImage:cgNewImage size:NSZeroSize];
+}

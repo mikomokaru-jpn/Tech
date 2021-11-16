@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>source</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body>
+<h3 class="tm0 bm0">
+<!-- 題名 -->
+</h3>
+<pre class="tm5"><code>
+<!-- text -->
+</pre></code>
+
+<script type="text/javascript">
+var url = new URL(window.location.href);
+//GET引数の取得
+var params = url.searchParams;
+var filename = params.get('filename')
+var title = params.get('title')
+var font = params.get('font')
+//タグの参照
+const titleTag = document.querySelector('title'); 
+const hTag = document.querySelector('h3'); 
+const preTag = document.querySelector('pre'); 
+if (title != null){
+    titleTag.innerHTML = title;
+    hTag.innerHTML = title;
+}
+let request = new XMLHttpRequest()
+request.open('GET', filename, true);
+request.send();
+request.onload = function(){ 
+    if (request.readyState == 4 && request.status == 200){       
+        let text = request.responseText;
+        text = text.replace(/</g, "&lt");   
+        text = text.replace(/>/g, "&gt");           
+        preTag.innerHTML = text;
+         if (font == null){
+            preTag.classList.add("font100");
+        }else{
+            preTag.classList.add(font); 
+        }
+    }
+}
+</script>
+
+</body>
+</html>

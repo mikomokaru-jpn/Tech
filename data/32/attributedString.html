@@ -1,0 +1,236 @@
+<!-- 
+Document 32
+32 AttrString
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>属性付き文字列</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">属性付き文字列 〜 NSAttributedStringクラス 〜</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/32/32_AttrString01.png&title=文字列の修飾&width=800" target="_new">
+<img class="lm110 tm0 bm10" src="32_AttrString01.png" width="400" align="top" alt="文字列の修飾" ></a>
+<div class="lm100 tm20 rm60">
+属性付き文字列（NSAttributedStringクラス）は、文字列と一緒に文字列を装飾する属性を保持する。
+属性は、文字のサイズ、フォント、色、太字や斜体、下線や取り消し線といったものである。
+</div>
+<div class="lm100 tm10 rm60">
+属性付き文字列に属性を設定するには、属性を表すキー（文字列）と属性値（オブジェクト）の組み合わせを指定する。これは、辞書オブジェクト（NSDictionaryクラス）として記述することができる。
+</div>
+<div class="lm100 tm20 rm60">
+上記のテキストで使用した属性（キー：値）の一覧を示す
+</div>
+<div class="lm100 tm0" style="width:540px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+● フォント
+</div>
+<div class="lm130 tm0 rm60">
+NSFontAttributeName：NSFontオブジェクト
+</div>
+<div class="lm100 tm5 rm60">
+● 文字の色
+</div>
+<div class="lm130 tm0 rm60">
+NSForegroundColorAttributeName：NSColorオブジェクト
+</div>
+<div class="lm100 tm5 rm60">
+● 文字の背景色
+</div>
+<div class="lm130 tm0 rm60">
+NSBackgroundColorAttributeNamee：NSColorオブジェクト
+</div>
+<div class="lm100 tm5 rm60">
+● パラグラフ（水平方向の配置）
+</div>
+<div class="lm130 tm0 rm60">
+NSParagraphStyleAttributeName：NSParagraphStyleオブジェクト
+</div>
+<div class="lm100 tm5 rm60">
+● 文字の横方向の伸縮 
+</div>
+<div class="lm130 tm0 rm60">
+NSExpansionAttributeName：NSNumberオブジェクト
+</div>
+<div class="lm100 tm5 rm60">
+● 文字間隔
+</div>
+<div class="lm130 tm0 rm60">
+NSKernAttributeName：NSNumberオブジェクト  
+</div>
+<div class="lm100 tm5 rm60">
+● 下線のスタイル
+</div>
+<div class="lm130 tm0 rm60">
+NSUnderlineStyleAttributeName：NSNumberオブジェクト 
+</div>
+<div class="lm100 tm5 rm60">
+● 下線の色
+</div>
+<div class="lm130 tm0 rm60">
+NSUnderlineColorAttributeName：NSColorオブジェクト
+</div>
+<div class="lm100 tm30 rm60">
+文字列に属性を設定する２つの方法
+</div>
+<div class="lm100 tm0" style="width:540px; border-top:solid 1px #909090;"></div>
+<h3 class="lm100 tm5 rm60 bm0">
+1. 文字列を初期化するとき同時に属性を設定する
+</h3>
+<h3 class="lm100 tm5 rm60 bm0">
+- initWithString:attributes:
+</h3>
+<div class="lm100 tm5 rm60">
+attributes引数に、属性の組み合わせを登録した辞書オブジェクト指定する。辞書なので複数の属性を指定できる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/initWithString.txt" width="550" height="130"></iframe>
+
+<h3 class="lm100 tm20 rm60 bm0">
+2. 作成した文字列に対して、後から属性を追加する
+</h3>
+<div class="lm100 tm5 rm60">
+文字列は、NSMutableAttributedStringオブジェクトとして作成されていること。属性は随時いくつでも追加することができる。文字列の一部分に対してのみ属性を設定することができる。
+</div>
+<h3 class="lm100 tm10 rm60 bm0">
+- addAttributes:range:
+</h3>
+<div class="lm100 tm5 bm0 rm60">
+addAttributes引数に属性の組み合わせを登録した辞書オブジェクト指定する。
+</div>
+<div class="lm100 tm0 rm60">
+range引数に属性を設定する文字列の範囲を指定する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/addAttributes.txt" width="550" height="180"></iframe>
+<h3 class="lm100 tm20 rm60 bm0">
+- addAttribute:value:range:
+</h3>
+<div class="lm100 tm5 rm60">
+属性をひとつだけ設定する。addAttribute引数に属性のキーを指定する。value引数に属性のオブジェクトを指定する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/addAttribute.txt" width="550" height="200"></iframe>
+<h3 class="lm100 tm30 bm0 rm60 bm0">
+属性の種類と設定方法
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+冒頭に表示したテキストについて、文字列の修飾方法の実装手順を示す。属性の設定方法は、属性を登録した辞書または、属性の組み合わせを属性付き文字列に追加する方法にした。
+</div>
+<h3 class="lm100 tm10 bm0 rm60 bm0">
+① フォントを指定する
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/attributeSetting1.txt" width="550" height="130"></iframe>
+<h3 class="lm100 tm20 bm0 rm60 bm0">
+② 文字の色/背景色を指定する
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/attributeSetting2.txt" width="550" height="160"></iframe>
+<h3 class="lm100 tm20 bm0 rm60 bm0">
+③ 水平方向の配置を指定する
+</h3>
+<div class="lm100 tm0 rm60">
+NSParagraphStyleクラスのalignmentプロパティにより文字列の水平方向の配置（左揃え、中央揃え、右揃え）を指定する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/attributeSetting3.txt" width="550" height="170"></iframe>
+<h3 class="lm100 tm20 bm0 rm60 bm0">
+④ 文字列の横方向の伸縮
+</h3>
+<div class="lm100 tm5 rm60">
+値が正であれば横方向に伸び、値が負であれば横方向に縮む。文字列を２つに分けて、それぞれ異なる属性（伸縮率）を設定する。
+</div>
+<div class="lm100 tm5 rm60">
+（印刷の世界では、文字の高さを低くしたものを平体、文字の幅を狭くしたものを長体という。例でいえば、前半が平体で、後半が長体となる。）
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm10" src="/lib/HTMLofText.html?filename=/data/32/attributeSetting4.txt" width="550" height="240"></iframe>
+<h3 class="lm100 tm20 bm0 rm60 bm0">
+⑤ 文字の間隔
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/attributeSetting5.txt" width="550" height="140"></iframe>
+<h3 class="lm100 tm20 bm0 rm60 bm0">
+⑥ 下線を引く、下線の色を指定する
+</h3>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/attributeSetting6.txt" width="550" height="240"></iframe>
+<h3 class="lm100 tm30 bm0 rm60 rm0">
+サービスクラスを作る
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+文字列の装飾の実装は、一からコーディングすると同じような処理を毎回繰り返すことになり、かなりの無駄である。
+コンビニエンスクラスを作成して、必要最小限のコードを指定するだけで処理を済ませるのが定石である。
+</div>
+<div class="lm100 tm10 rm60">
+<a href='/data/01/simple_calendar.html' target="_new">カレンダーアプリケーション</a>で使用しているUATextAttributeクラスを紹介する。
+</div>
+<div class="lm100 tm0 rm60">
+属性の辞書または、属性を設定した文字列を返却するクラスメソッドである。規定値とした属性は、ユーザが記述する必要がないようハードコーディングし、ユーザが変更可能なものだけ引数で指定できるようにする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/UATextAttribute.h.txt" width="550" height="600"></iframe>
+<!--ソースコード　リンク-->
+<div class="lm100 tm10 rm60">実装部　
+<a href="/lib/HTMLofText.html?filename=/data/32/source/UATextAttribute.m.txt&title=UATextAttribute.m" target="_new">UATextAttribute.m</a>	
+</div>
+<div class="lm100 tm40 bm0 rm60">
+フォントを指定する方法	
+</div>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+フォントオブジェクトを作成するときに、フォント名を文字列で指定する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/font.txt" width="550" height="40"></iframe>
+<div class="lm100 tm20 rm60">
+フォント名の一覧は、NSFontManagerクラスのavailableFontsメソッドで取得することができる。リストの一部を抜粋する。ここに出力されたフォント名をそそまま指定すれば良い。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/32/get_font.txt&font=font100" width="550" height="210"></iframe>
+<div class="lm100 tm20 rm60">
+なお、フォント名は、フォントファミリー名と書体（Typeface）の組み合わせを意味する。書体は、ウェイト（太さ）やイタリック体、等幅/プロポーショナルなどスタイルに関する属性を表す。
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+文字の実際の見た目（グリフイメージ）を確認する方法
+</h3>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/32/32_AttrString02.png&title=インタフェースビルダ&width=850" target="_new">
+<img class="lm100 tm10 bm10" src="32_AttrString02.png" width="500" align="top" alt="インタフェースビルダ" ></a>
+<div class="lm100 tm5 rm60">
+インタフェースビルダでテキストフィールドを作成し、ArreibuteInspectorから、フォントパネルを表示し、一覧からフォントとサイズを指定する。
+</div>
+<div class="lm100 tm10 rm60">
+アプリケーションを実行し、テキストフィールドに任意の文字を入力する。選択したフォントによる文字のイメージが表示される。インタフェースビルダで示されるフォント名とNSFontManageのavailableFontsメソッドで取得したフォント名は表現が違うことがあるが、概ね推定可能であろう。
+</div>
+<div class="lm100 tm10 rm60">
+「Osaka レギュラー-等幅」と「Osaka-Mono」　
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/32/32_AttrString03.png&title=グリフイメージ&width=600" target="_new">
+<img class="lm100 tm10 bm10" src="32_AttrString03.png" width="300" align="top" alt="グリフイメージ" ></a>
+
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

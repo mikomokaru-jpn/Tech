@@ -1,0 +1,14 @@
+//do〜catch構文により例外を補足する
+let text: String
+do{
+    text = try String(contentsOf: url)
+}catch{
+    print(error.localizedDescription)　//エラーオブジェクトのメッセージ
+    return
+}
+
+//Optional Bindingを利用する　try?は例外が発生したらnilを返す
+guard let text = try? String(contentsOf: url) else{
+    print(String(format:"%@ :The file couldn't open", url.path))
+    return
+}

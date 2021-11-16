@@ -1,0 +1,24 @@
+//選択開始
+override func mouseDown(with event: NSEvent) {
+    if event.clickCount > 1 {
+        //ダブルクリックにより選択を解除する
+        startPoint = CGPoint()
+        rectView.selectedRect = makeRect(endPoint: CGPoint())
+        return
+    }
+    let point = self.convert(event.locationInWindow, from: nil)
+    startPoint = point
+}
+//ドラッグ中
+override func mouseDragged(with event: NSEvent) {
+    let point = self.convert(event.locationInWindow, from: nil)
+    rectView.selectedRect = makeRect(endPoint: point)
+    rectView.needsDisplay = true //矩形を表示する
+}
+//領域(CGRect)の計算
+private func makeRect(endPoint: CGPoint)->CGRect{
+    return CGRect(x: startPoint.x,
+                  y: startPoint.y,
+              width: endPoint.x - startPoint.x ,
+              height: endPoint.y - startPoint.y)
+}

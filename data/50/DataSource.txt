@@ -1,0 +1,8 @@
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tv{
+    return [_imageList count];
+}
+- (id)tableView:(NSTableView *)tv
+objectValueForTableColumn:(NSTableColumn *)column
+            row:(NSInteger)row{
+    return nil; //空白
+}

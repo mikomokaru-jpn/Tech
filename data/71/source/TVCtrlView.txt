@@ -1,0 +1,38 @@
+//---- TVCtrlView.swift ----
+// ViewBased tableView
+import Cocoa
+class TVCtrlView: NSObject,NSTableViewDelegate, NSTableViewDataSource  {
+    let itemList: Array<Any> // data souce
+    
+    init(array: Array<Any>){
+        itemList = array //SwiftではArrayは値渡し
+        super.init()
+    }
+    //NSTableView DataSource
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return itemList.count
+    }
+    func tableView(_ tv: NSTableView,
+                   viewFor tableColumn: NSTableColumn?,
+                   row: Int) -> NSView?{
+        let items = itemList[row] as! Dictionary<String,Any>;
+        guard let column = tableColumn else { return NSView() }
+        guard let cell = tv.makeView(withIdentifier: column.identifier,
+                                     owner: self) as? NSTableCellView
+            else { return NSView() }
+        //NSTableCellViewオブジェクトを返す
+        if column.identifier.rawValue == "key"{
+            guard let key = items[column.identifier.rawValue]  
+                      else { return NSView() }
+            cell.textField?.integerValue = key as! Int
+            return cell
+        }else if column.identifier.rawValue == "value"{
+            guard let str = items[column.identifier.rawValue]  
+                      else { return NSView() }
+            cell.textField?.stringValue = str as! String
+            return cell
+        }else{
+            return NSView()
+        }
+    }
+}

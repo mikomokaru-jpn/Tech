@@ -1,0 +1,17 @@
+---- NSString+Search.h ----
+-(NSArray<NSTextCheckingResult*>*)searchRegOfString:(NSString*)keyword
+                              options:(NSRegularExpressionOptions)mask;
+
+---- NSString+Search.m ----
+-(NSArray*)searchRegOfString:(NSString*)keyword
+                     options:(NSRegularExpressionOptions)mask{
+    NSRegularExpression *regex = [NSRegularExpression
+                                  regularExpressionWithPattern:keyword
+                                  options:mask
+                                  error:nil];
+    NSArray<NSTextCheckingResult*>*resultList = 
+                                 [regex matchesInString:self
+                                  options:0
+                                  range:NSMakeRange(0, self.length)];
+    return resultList;
+}

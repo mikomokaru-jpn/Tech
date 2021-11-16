@@ -1,0 +1,19 @@
+-(NSArray<NSDictionary*>*)readJsonJis{
+    //JSONファイル -> NSString
+    NSString *inPath = [NSHomeDirectory() 
+      stringByAppendingString:@"/Desktop/sumoJis.txt"];
+    //Shift-JISでエンコードされているテキストを文字列に読み込む。
+    NSError *error;
+    NSString *jsonString = [NSString stringWithContentsOfFile:inPath
+                            encoding:NSShiftJISStringEncoding
+                            error:&error];
+    //読み込んだ文字列を、UTF-8にエンコードしNSDataを作成
+    NSData *jsonData  = 
+      [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    //NSData ->辞書の配列
+    NSArray<NSDictionary*>*itemList =
+    [NSJSONSerialization JSONObjectWithData:jsonData
+                         options:NSJSONReadingMutableContainers 
+                         error:nil];
+    return itemList;
+}

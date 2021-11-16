@@ -1,0 +1,6 @@
+NSImage *image = ...; //変換前のイメージ
+CGImageSourceRef src =  CGImageSourceCreateWithData(
+                         (CFDataRef)[image TIFFRepresentation], 
+                         NULL);
+CGImageRef imageRef = CGImageSourceCreateImageAtIndex(src, 0, NULL);
+CFRelease(src); //解放が必要

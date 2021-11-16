@@ -1,0 +1,29 @@
+-(IBAction)btnSave:(id)sender{
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    [savePanel setMessage:@"ファイルを保存する"];
+    //位置付けるディレクトリ
+    NSURL *url = [NSURL URLWithString:[NSHomeDirectory()
+                        stringByAppendingString:@"/Desktop"]];
+    [savePanel setDirectoryURL:url];
+    //初期表示のファイル名
+    [savePanel setNameFieldStringValue:@"sample.txt"];
+    //セーブパネルを開く
+    [savePanel beginWithCompletionHandler:^(NSInteger result){
+        //ハンドラ
+        if (result == NSFileHandlingPanelOKButton){
+            //OKボタン
+            NSURL *url = savePanel.URL;//選択された出力ファイル
+            //テキストデータをファイルに書き出す
+            NSError *error;
+            BOOL result = [_textView.string writeToURL:url
+                                            atomically:YES
+                             encoding:NSUTF8StringEncoding
+                                              error:&error];
+            if (!result){
+                NSLog(@"!!! %ld !!! %@",error.code, error);
+                return;
+            }
+            //完了ダイアログ表示などの後処理
+        }
+    }];
+}

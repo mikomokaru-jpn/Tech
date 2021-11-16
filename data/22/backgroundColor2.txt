@@ -1,0 +1,2 @@
+cellView.textField.drawsBackground = YES;
+cellView.textField.backgroundColor = [NSColor lightGrayColor];

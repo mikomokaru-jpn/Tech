@@ -1,0 +1,97 @@
+<!--　16_mouse_event -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>マウスのクリックの位置を取得する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">マウスのクリックの位置を取得する</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B37/mouse_location.mp4&title=mouse_location&width=800" target="_new">
+<img class="lm100 tm0 bm0" src="mouse_location.png" alt="[mouse_location]" width="350"></a>
+<div class="lm100 tm10 rm60">
+マウスのクリックイベントを補足しクリックされた点の座標を求める方法は二つある。一つは、NSViewクラスのmouseDownメソッドをオーバーライドする方法、もう一つは、NSEventクラスのマウスイベントを監視する機能によるものである。
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+NSViewクラスのmouseDownメソッドをオーバーライドする
+</h3>
+<div class="lm100 tm5 rm60">
+引数のNSEventオブジェクトのlocationInWindowプロパティにはマウスをクリックした点の座標が渡ってくる。これはウィンドウ（厳密にはコンテントビューの座標）を基準にしたものである。
+</div>
+<div class="lm100 tm10 rm60">
+点の座標を別のビューを基準としたものに変えるときはNSViewクラスのconvertメソッド使用する。本例では自身のビューを基準にしている。convertメソッドは toを引数にするものと fromを引数とするものがある。要は主語が異なるだけで、以下の例では両者は同じ結果となる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B37/mouseDown.txt" width="550" height="210"></iframe>
+<h3 class="lm100 tm20 rm60 bm0">
+マウスイベントを監視する
+</h3>
+<div class="lm100 tm0 rm60">
+マウスイベントを監視する方法は、NSEventクラスのaddLocalMonitorForEventsメソッドまたは、addGlobalMonitorForEventsメソッドを使う。前者は自アプリケーションのウィンドウ上のマウスイベントを補足する。後者はスクリーン上のあらゆるマウスイベントを補足する。ただし上記の自アプリケーションのウィンドウ上のマウスイベントは拾わない。
+</div>
+
+<h3 class="lm100 tm20 rm60 bm0">
+ローカルイベント監視
+</h3>
+<div class="lm100 tm0 rm60">
+次のメソッドを実行すると、自アプリケンーションのタイトルバーを含むウィンドウ上で発生するマウスの左クリックイベント（leftMouseDown）を補足し、ハンドラに記述した処理を実行する。
+</div>
+<div class="lm100 tm10 rm60">
+クリックした点の座標は、スクリーン上の相対位置、およびウィンドウ上の相対位置を取得することができる。前者はNSEventクラスのmouseLocationクラスメソッドにより、後者はNSEventオブジェクトのlocationInWindowメソッドにより取得する。
+</div>
+<div class="lm100 tm10 rm60">
+イベントが補足される順番は、まず最初にローカルイベント監視によるもの、次にNSViewクラスのメソッドにより補足される。ローカルイベント監視のハンドラの戻り値に取得したイベントを戻さないとその後のイベント処理が起動しない。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B37/LocalMonitor.txt" width="550" height="230"></iframe>
+
+<h3 class="lm100 tm20 rm60 bm0">
+グローバルイベント監視
+</h3>
+<div class="lm100 tm0 rm60">
+次のコードは、ローカルイベント監視で補足する自ウィンドウのマウスイベント以外のスクリーン上の全てのマウスイベントを補足する。他アプリケーションのウィンドウ上のマウスイベントも補足する。
+</div>
+<div class="lm100 tm10 rm60">
+取得できる座標はスクリーン上の相対位置である。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B37/GlobalMonitor.txt" width="550" height="150"></iframe>
+<h3 class="lm100 tm20 rm60 bm0">
+イベント監視の終了
+</h3>
+<div class="lm100 tm0 rm60">
+イベント監視を明示的に終了させるには、removeMonitorメソッドを実行する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/B37/removeMonitor.txt" width="550" height="150"></iframe>
+<h3 class="lm100 tm20 rm60 bm0">
+クラスのソースコード
+</h3>
+<!-- ソースコードリンク -->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B37/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<!-- ソースコードリンク -->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/B37/source/UAView.txt&title=UAView" target="_new">UAView</a>
+</div>
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/data/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

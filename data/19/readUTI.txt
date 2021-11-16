@@ -1,0 +1,1 @@
+NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];NSString *filePath = xxxxxxxx;  // a jpeg file pathNSString *type = [workSpace typeOfFile:filePath error:nil];NSString *description = [workSpace localizedDescriptionForType:type];NSLog(@"type:%@", type);NSLog(@"description:%@", description);//---- result ----type:public.jpegdescription:JPEGイメージ

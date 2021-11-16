@@ -1,0 +1,27 @@
+//ウィンドウのコンテントビューに含まれるNSViewオブジェクトを全て取得する。
+NSArray* objects = _window.contentView.subviews;
+//オブジェクトの種類を判定し、固有の情報を得る。
+for (id obj in objects){
+    NSLog(@"%@", NSStringFromClass([obj class]));
+    if ([obj isKindOfClass:NSControl.class])
+    {
+        NSControl *control = obj;
+        NSLog(@" tag=%ld", control.tag);
+    }
+    if ([obj isKindOfClass:NSButton.class])
+    {
+        NSButton *button = obj;
+        NSLog(@" title=%@", button.title);
+    }
+}
+// 実行結果例
+2019-07-19 22:17:35.936618+0900 test[2340:251526] NSButton
+2019-07-19 22:17:35.936673+0900 test[2340:251526]  tag=0
+2019-07-19 22:17:35.936708+0900 test[2340:251526]  title=Start
+2019-07-19 22:17:35.936728+0900 test[2340:251526] NSButton
+2019-07-19 22:17:35.936748+0900 test[2340:251526]  tag=0
+2019-07-19 22:17:35.936766+0900 test[2340:251526]  title=Stop
+2019-07-19 22:17:35.936785+0900 test[2340:251526] NSTextField
+2019-07-19 22:17:35.936807+0900 test[2340:251526]  tag=0
+2019-07-19 22:17:35.936825+0900 test[2340:251526] NSComboBox
+2019-07-19 22:17:35.936845+0900 test[2340:251526]  tag=0

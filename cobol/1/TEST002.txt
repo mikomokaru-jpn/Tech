@@ -1,0 +1,1 @@
+ LOOP-RTN.                  ....          IF エラー発生 THEN         GO TO LOOP-RTN-EX.     END-IF                 ....          正常フローはここ（段落の終わり）で抜ける.    LOOP-RTN-EX.     必要であればエラー発生後の後処理を実行     EXIT.  

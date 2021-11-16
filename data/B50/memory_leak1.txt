@@ -1,0 +1,1 @@
+class AppDelegate: NSObject, NSApplicationDelegate {    @IBOutlet weak var window: NSWindow!    @IBOutlet weak var textFiled: NSTextField!    func applicationDidFinishLaunching(_ aNotification: Notification) {        textFiled.intValue = 20 //謎のmemory leak    }}

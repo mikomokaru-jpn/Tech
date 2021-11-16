@@ -1,0 +1,1 @@
+CGImageRef newImageRef = CGBitmapContextCreateImage(newContext);

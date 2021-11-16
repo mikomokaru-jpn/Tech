@@ -1,0 +1,31 @@
+//------------------------------------------------------------------------------
+// カテゴリ宣言:NSTextField
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+
+@interface NSTextField (MyTextField)
+//文字列を設定し、文字列の大きさに合わせてframeサイズを変更する。
+-(void)setText:(NSString*)text;
+
+@end
+
+//------------------------------------------------------------------------------
+// カテゴリ実装:NSTextField
+//------------------------------------------------------------------------------
+#import "NSTextField+MyTextField.h"
+@implementation NSTextField (MyTextField)
+//文字列を設定し、文字列の大きさに合わせてframeサイズを変更する。
+-(void)setText:(NSString*)text
+{
+    self.stringValue = text;
+//方法1
+//  NSSize size = [text sizeWithAttributes:@{NSFontAttributeName:self.font}];
+//方法2
+    CGSize size = [text boundingRectWithSize:CGSizeMake(0, MAXFLOAT) 
+                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:@{NSFontAttributeName:self.font}
+                                     context:nil].size;
+    [self setFrameSize:size];
+//方法1、方法2いずれも同じ結果
+}
+@end

@@ -1,0 +1,1 @@
+//---- クラス宣言 ----@interface AClass : NSObject<NSCopying>@property NSInteger number;@property NSString* text;@end//---- 実装 ----@implementation AClass (id)copyWithZone:(NSZone *)zone{    AClass* aCopy = [[[self class] alloc] init];    if( aCopy ){        aCopy.number = _number;        //数値型        aCopy.text= [_text copy];      //基本クラス型    }    return aCopy;}@end

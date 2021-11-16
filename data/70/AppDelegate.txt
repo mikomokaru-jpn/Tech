@@ -1,0 +1,49 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@property NSString* text;
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "UAViewController1.h"
+#import "UAViewController2.h"
+#import "UASharedData.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property UASharedData *sharedData;
+@property UAViewController1 *viewCtrl1;
+@property UAViewController2 *viewCtrl2;
+@property NSInteger viewnum;
+@end
+
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //ビューが参照・更新する共用データ
+    _sharedData = [[UASharedData alloc] init];
+    _sharedData.text = @"むかしむかし、あるところに、"
+                        "おじいさんとおばあさんが住んでいました。\n";
+    //ビューコントローラの作成
+    _viewCtrl1 = [[UAViewController1 alloc] initWithSharedData:_sharedData];
+    _viewCtrl2 = [[UAViewController2 alloc] initWithSharedData:_sharedData];
+    //初期表示
+    _viewnum = 1;
+    [_window.contentView addSubview:_viewCtrl1.view];
+    [_viewCtrl1 getFocus];
+}
+//ビューの切り替え
+-(IBAction)chengeButton:(id)sender{
+    if (_viewnum == 1){
+        [_viewCtrl1.view removeFromSuperview];
+        [_window.contentView addSubview:_viewCtrl2.view];
+        [_viewCtrl2 getFocus];
+        _viewnum = 2;
+    }else if (_viewnum == 2){
+        [_viewCtrl2.view removeFromSuperview];
+        [_window.contentView addSubview:_viewCtrl1.view];
+        [_viewCtrl1 getFocus];
+        _viewnum = 1;
+    }
+}
+@end

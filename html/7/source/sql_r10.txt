@@ -1,0 +1,18 @@
+<?php
+//http://192.168.11.3/doc_comm_accounting/php/sql_r10.php
+//DB接続
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect();
+// SQLの実行 
+try{
+    $sql = "SELECT year, income, spending, amount,  unit,  population FROM settlement; ";
+    $stmh = $pdo->prepare($sql);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー:'. $e->getMessage());
+}
+//JSON形式で出力
+header('Content-type: application/json');
+echo json_encode($stmh->fetchAll(PDO::FETCH_ASSOC));
+?>

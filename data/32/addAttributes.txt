@@ -1,0 +1,1 @@
+//文字列の作成NSMutableAttributedString *atrStr = [[NSMutableAttributedString alloc]                                      initWithString:@"山のあなたの空遠く"];//フォントオブジェクトの作成NSFont* font = [NSFont fontWithName:@"YuKyo-Bold" size:20];//属性の追加（文字列の全体が対象）[atrStr addAttributes:@{NSFontAttributeName:font}                 range:NSMakeRange(0, [atrStr length])];

@@ -1,0 +1,50 @@
+/*----------------------------------------------------------------------
+  文字列の置換
+   特定のアルファベットを [ ]で囲む。
+   a, b, c  -> [a], [b], [c] 
+   パターンを( )で囲めば後方参照できる。カッコの順番に、$1, $2,...という変数名で参照できる。 
+*/
+   let text = "___apple__ banana__chocolate___"
+   text = text.replace(/(a|b|c)/g, "($1)");
+   console.log(text);
+
+//結果 ___[a]pple__ [b][a]n[a]n[a]__[c]ho[c]ol[a]te___
+
+/*----------------------------------------------------------------------
+  文字列の置換
+   アルファベットの小文字のを大文字に置換する
+   a, b, c を A, B, C に置き換える例を示す。
+   replacenの第2引数に新しい文字列を生成する関数を指定することができる。
+   function()の第1引数にはマッチした文字列が入る。（第2引数以下についてはマニュアル参照）
+*/
+   let text = "___apple__ banana__chocolate___" 
+   text = text.replace(/a|b|c/g, function(w){ return w.toUpperCase(); });
+   console.log(text);
+ 
+//結果 ___Apple__ BAnAnA__ChoColAte___ 
+
+/*----------------------------------------------------------------------
+  文字列の置換
+   アルファベットの小文字のを大文字に置換する
+   パターンを変数で指定する方法 
+   RegExpコンストラクターで正規表現オブジェクトを作成するのがコツ。
+*/
+   let text = "___apple__ banana__chocolate___"
+   //キーワードの配列をパターン文字列に変換する。 -> "a|b|c"
+   const keywordArray = ['a', 'b', 'c'];
+   let keywordList = "";
+   for (let i = 0; i < keywordArray.length; i++){
+       if (i == 0){
+           keywordList += keywordArray[i];
+       }else{
+           keywordList += "|" + keywordArray[i];
+       }
+   }
+   let regexp =  new RegExp(keywordList, "g");  // keywordList is "a|b|c" 
+   text = text.replace(regexp, function(w){ return w.toUpperCase(); });
+   console.log(text);
+   
+//結果 ___Apple__ BAnAnA__ChoColAte___ 
+ 
+ 
+ 

@@ -1,0 +1,42 @@
+func outputLog(_ text: String){
+    let ft = DateFormatter()
+    ft.dateStyle = .short
+    ft.timeStyle = .short
+    //日付時刻、テキスト
+    let log = String(format:"%@ : %@\n",
+                     ft.string(from: Date()),
+                     text)
+    //StringをDataオブジェクトに変換する                
+    guard let data = log.data(using: String.Encoding.utf8) else {
+        print("couuld not create log data")
+        return
+    }
+    //ファイルのパスを設定する
+    let url = URL.init(fileURLWithPath:NSHomeDirectory() + "/Documents/test.txt")
+    //ファイルが存在しなければ空のファイルを作成する
+    if FileManager.default.fileExists(atPath:url.path) == false{
+        let ret = FileManager.default.createFile(atPath: url.path,
+                                                 contents: "".data(using: .utf8),
+                                                 attributes: nil)
+        if ret == false{
+            print("\(url.path)  couuld not create")
+            return
+        }
+    }
+    //ファイルの最後尾にデータを追加（append）する。
+    if let fh = try? FileHandle(forWritingTo: url){
+        fh.seekToEndOfFile()
+        fh.write(data)
+        fh.closeFile()
+    }else{
+        print("\(url.path)  couuld not write")
+        return
+    }
+}
+
+outputLog("abcde")
+outputLog("12345")
+
+->
+2021/03/17 19:42 : abcde
+2021/03/17 19:42 : 12345

@@ -1,0 +1,91 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Manipulate bitmaps to create grayscale image</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm40 tm20 bm0">
+Manipulate bitmaps to create grayscale image
+</h2>
+
+<div class="lm70 tm5 rm60">
+Read an image file (jpeg, png), convert it to the grayscale image by bitmap operation, and display it. 
+Also, the converted image can be output as a png format file.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/88/bitmapOpe1.png?title=GraphicTool1&width=640" target="_new">
+<img class="lm100 tm20 bm0" src="/data/88/bitmapOpe1.png" alt="[GraphicTool1]" width="400"></a>
+<div class="lm110 tm20 rm60">
+Original image
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/88/bitmapOpe2.png?title=GraphicTool1&width=640" target="_new">
+<img class="lm100 tm0 bm0" src="/data/88/bitmapOpe2.png" alt="[GraphicTool1]" width="400"></a>
+
+<div class="lm70 tm20" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Data flow diagram
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/88/bitmapOpe3.png&title=データフロー図&width=700" target="_new">
+<img class="lm70 tm0 " src="/data/88/bitmapOpe3.png" alt="[データフロー図]" width="550"></a>
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Implementation points
+</h3>
+<div class="lm70 tm5 rm60">
+Read an image file (jpeg, png) and convert it to a CGImage object.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/88/bitmapOpe1.txt&font=font100" width="580" height="320"></iframe>
+<h3 class="lm70 tm20 rm60 bm0">
+Convert an image to be grayscale.
+</h3>
+<div class="lm70 tm0 rm60">
+Create a bitmap context from a CGImage object.
+Get RGB elements from each pixel of the bitmap, calculate grayscale, and then draw back to RGB values.
+You can use bindMemory method of  CGContext class to reference the RGB value of the bitmap via the C pointer. 
+Therefore, it is unsafe.
+References to RGB values in bitmaps are made via the C pointer using the bindMemory method. Therefore, it is unsafe.
+There are several coefficients for grayscale, and HDTV coefficient is used here.
+In addition, NTSC coefficient etc. can be used.
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/88/bitmapOpe2.txt" width="580" height="640"></iframe>
+<div class="lm70 tm20 rm60">
+  Output CGImage object to png format file
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/88/bitmapOpe3.txt" width="580" height="90"></iframe>
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm5 rm60 bm0">
+Source Code
+</h3>
+<!--ソースコードリンク-->
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/88/source/AppDelegate.swift&title=AppDelegate" target="_new">AppDelegate.swift</a>
+</div>
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/88/source/UAView.swift&title=UAView" target="_new">UAView.swift</a>
+</div>
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

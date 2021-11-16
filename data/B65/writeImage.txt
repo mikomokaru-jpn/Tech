@@ -1,0 +1,20 @@
+func writeFile(){
+    let url = NSURL.fileURL(withPath: NSHomeDirectory() + "/Pictures/sakura_resized.png")
+    //ビットマップイメージに変換する
+    let bitmap = NSBitmapImageRep.init(cgImage: cgNewImage!)
+    //png形式のDataオブジェクトに変換する
+    guard  let data = bitmap.representation(using: .png, properties: [:]) else {
+        print("bitmap.representation error")
+        return
+    }
+    do {
+        try data.write(to:url) //ファイル出力
+    }catch{
+        print(error.localizedDescription)
+        return
+    }
+    let alert = NSAlert();
+    alert.messageText = "ファイルし出力成功";
+    alert.informativeText = url.path;
+    alert.runModal()
+}

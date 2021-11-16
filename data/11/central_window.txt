@@ -1,0 +1,41 @@
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    //ビュー（正方形）の辺の長さ
+    int LENGTH = 400;
+    
+    //スクリーンの表示可能領域のサイズを求める
+    NSRect screenRect = [[NSScreen mainScreen] visibleFrame];
+    
+    //任意のウィンドウのコンテントビューの大きさを取得
+    NSRect contRect = [_window contentRectForFrameRect:_window.frame];
+    
+    //タイトルバーの高さを求める　（ウィンドウの高さ - コンテントビューの高さ）
+    float barHeight = _window.frame.size.height - contRect.size.height;
+    
+    //ウィンドウの大きさを求める　（ビューの高さ＋タイトルバーの高さ）
+    NSSize winSize = NSMakeSize(LENGTH, LENGTH + barHeight);
+    
+    //ウィンドウの表示位置を決める（スクリーンの中央）
+    float xPos = screenRect.size.width/2 - LENGTH/2;
+    float yPos = screenRect.size.height/2 - (LENGTH/2 + barHeight/2);
+    NSPoint point = NSMakePoint(xPos, yPos);
+    
+    //ウィンドウの位置と大きさ設定して再表示する
+    NSRect winRect =  NSMakeRect(point.x, point.y,
+                                 winSize.width, winSize.height);
+    [_window setFrame:winRect display:YES];
+    
+    //ログ出力
+    //物理的なスクリーンのサイズ（参考までに）
+    NSRect phyScreenRect = [[NSScreen mainScreen] frame];
+    NSLog(@"スクリーンのサイズ: %.1f x %.1f",
+          phyScreenRect.size.width, phyScreenRect.size.height);
+    NSLog(@"スクリーンのサイズ: %.1f x %.1f （表示可能領域）",
+          screenRect.size.width, screenRect.size.height);
+    NSLog(@"ウィンドウのタイトルバーの高さ: %.1f",
+          barHeight);
+    NSLog(@"ウィンドウの位置　: %.1f x %.1f",
+          winRect.origin.x, winRect.origin.y);
+    NSLog(@"ウィンドウの大きさ: %.1f x %.1f",
+          winRect.size.width, winRect.size.height);
+}

@@ -1,0 +1,11 @@
+guard let visibleFrame = NSScreen.main?.visibleFrame else{
+    return
+}
+guard let frame = NSScreen.main?.frame else{
+    return
+}
+//結果
+visibleFrame (0.0, 55.0, 1280.0, 722.0)  //Docを固定した場合
+visibleFrame (0.0,  4.0, 1280.0, 773.0)  //Docを自動的に隠すにした場合
+frame        (0.0,  0.0, 1280.0, 800.0)
+

@@ -1,0 +1,9 @@
+brew install carthage 
+
+cd /YOUR_XCODE_PROJECT
+touch Cartfile
+
+vi Cartfile
+github "ReactiveX/RxSwift” == 5.0.1
+
+carthage update --platform osx

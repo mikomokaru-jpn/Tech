@@ -1,0 +1,183 @@
+//------------------------------------------------------------------------------
+// インタフェース宣言  AppDelegate.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "CPView.h"
+#import "UAView.h"
+@interface AppDelegate : NSObject <NSApplicationDelegate, CPViewDelegate>
+@end
+
+
+//------------------------------------------------------------------------------
+// クラス実装  AppDelegate.m
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+#import "CPView.h"
+
+//*** 宣言 ***
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet CPView *view;             //コンテントビュー
+@property (weak) IBOutlet UAView *imageView;        //イメージを表示
+@property (weak) IBOutlet NSTextView *labelView;    //URLを表示
+@property (weak) IBOutlet NSMenu* editMenu;         //of MainMenu　メニューの有効化で参照
+@property (weak) IBOutlet NSMenu* contrxtMenu;      //ContextMenu　メニューの有効化で参照
+@property (weak) IBOutlet NSTextField *noImage;     //"No image"を表示
+@property NSPasteboard *pasteboard;                 //ペーストボードの共有
+@end
+
+//*** 実装 ***
+@implementation AppDelegate
+//アプリケーションの開始
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+    _pasteboard = [NSPasteboard generalPasteboard]; //genaral pasreboardの取得
+    [_pasteboard clearContents];                    //pasreboardのクリア
+    _view.cpDelegate = self;                        //コンテントビューのデリゲートになる
+    _noImage.hidden = NO;
+    _imageView.myDelegate = self;
+}
+//メニューのアクション
+-(IBAction)copy:(id)sender{
+    //ペーストボードを空にする
+    [_pasteboard clearContents];
+    //オブジェクトを格納する配列を作成
+    NSMutableArray *objects = [[NSMutableArray alloc] init];
+    if (_imageView.image != nil){
+        //イメージを追加
+        [objects addObject:_imageView.image];
+    }
+    if (_labelView.string.length > 0){
+        //文字列をURLに変換
+        NSURL *url = [NSURL URLWithString:_labelView.string];
+        //URLオブジェクトを追加
+        [objects addObject:url];
+    }
+    [_pasteboard writeObjects:objects];
+}
+//ペースト
+-(IBAction)paste:(id)sender{
+    //確認
+    if ([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.image"]]){
+        NSLog(@"canReadItem:image");
+    }
+    if ([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.tiff"]]){
+        NSLog(@"canReadItem:tiff");
+    }
+    if ([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.url"]]){
+        NSLog(@"canReadItem:url");
+    }
+    if ([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.file-url"]]){
+        NSLog(@"canReadItem:file-url");
+    }
+    if ([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.jpeg"]]){
+        NSLog(@"canReadItem:jpeg");
+    }
+    if ([_pasteboard canReadObjectForClasses:@[[NSImage class]] options:nil]){
+        NSLog(@"canReadClass:NSImage");
+    }
+    if ([_pasteboard canReadObjectForClasses:@[[NSURL class]] options:nil]){
+        NSLog(@"canReadClass:NSURL");
+    }
+    _labelView.string = @"";
+    //ペーストボードにイメージがコピーされている
+    if ([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.tiff"]]){
+        //画像イメージを読む
+        NSData *data = [_pasteboard dataForType:@"public.tiff"];
+        _imageView.image = [[NSImage alloc] initWithData:data];
+        _imageView.needsDisplay = YES;
+        // URLがあればを読む・%エンコード
+
+        NSURL *url = [NSURL URLFromPasteboard:_pasteboard];
+        if (url){
+            _labelView.string = url.absoluteString;
+        }else{
+            _labelView.string = @"image only";
+        }
+        /*
+        //URLがあればを読む・そのままの文字列を表示
+        NSString *string = [_pasteboard stringForType:@"public.url"];
+        if (string){
+            _label.stringValue = string;
+        }else{
+            _label.stringValue = @"image only";
+        }
+        */
+    }else if([_pasteboard canReadItemWithDataConformingToTypes:@[@"public.url"]]){
+    //ペーストボードにイメージはコピーされていないが、URLオブジェクがコピーされている。
+        NSURL *url = [NSURL URLFromPasteboard:_pasteboard];
+        if (url){
+            NSWorkspace *workSpace = [NSWorkspace sharedWorkspace];
+            NSString *utiType;
+            NSError *error;
+            //URLのuti typeの判定
+            if ([url getResourceValue:&utiType forKey:NSURLTypeIdentifierKey error:&error]) {
+                //Http:は、utiTypeがnullになり、読めない。
+                //App Transport Security has blocked a cleartext HTTP (http://) resource load since it insecure.
+                if (utiType){
+                    //uti typeが image の場合、URL先の画像イメージを読む
+                    if ([workSpace type:utiType conformsToType:@"public.image"]) {
+                        NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
+                        _imageView.image = image;
+                    }else{
+                        _imageView.image = nil;
+                    }
+                }else{
+                    _imageView.image = nil;
+                }
+                _imageView.needsDisplay = YES;
+                _labelView.string = url.absoluteString;
+            }
+        }
+    }
+    //イメージがない場合、"No image"を表示する
+    [self displayNoImage:!_imageView.image];
+    //メニューの編集（オブジェクトがあればcopyを使用可）
+    [self setMenuAvailable];
+}
+//イメージとテキストのクリア
+-(IBAction)clear:(id)sender{
+    _labelView.string = @"";
+    _imageView.image = nil;
+    _imageView.needsDisplay = YES;
+}
+//デリゲートメソッド
+-(void)writeLabel:(NSString*)text{
+    _labelView.string = text;
+}
+-(void)displayNoImage:(BOOL)flg{
+    _noImage.hidden = !flg;
+}
+//NSWindow Delegate ------------------------------------------------------------
+-(void)windowDidBecomeKey:(NSNotification *)notification{
+    [self setMenuAvailable]; //メニューの編集（有効化）
+}
+//ウィンドウの再表示
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender
+                    hasVisibleWindows:(BOOL)flag {
+    if (!flag){
+        [sender.windows[0] makeKeyAndOrderFront:self];
+    }
+    return YES;
+}
+//Internal routine -------------------------------------------------------------
+//メニューの編集（有効化）
+-(void)setMenuAvailable{
+    //pasteboardのデータの有無により、Pasteメニューの有効/無効をセットする
+    NSArray<NSPasteboardType> *types = @[@"public.tiff", @"public.url"];
+    if([_pasteboard canReadItemWithDataConformingToTypes:types]){
+        _contrxtMenu.itemArray[1].enabled = YES;
+        _editMenu.itemArray[5].enabled = YES;
+    }else{
+        _contrxtMenu.itemArray[1].enabled = NO;
+        _editMenu.itemArray[5].enabled = NO;
+    }
+    //イメージ及び文字列の有無により、Copyメニューの有効/無効をセットする
+    if (_imageView.image || (_labelView.string.length > 0)){
+        _contrxtMenu.itemArray[0].enabled = YES;
+        _editMenu.itemArray[4].enabled = YES;
+    }else{
+        _contrxtMenu.itemArray[0].enabled = NO;
+        _editMenu.itemArray[4].enabled = NO;
+    }
+}
+@end

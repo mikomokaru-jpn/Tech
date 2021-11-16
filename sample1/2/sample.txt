@@ -1,0 +1,55 @@
+-----------------------
+文字列の結合
+-----------------------
+let pahString = NSHomeDirectory() + "/Pictures"
+
+-----------------------
+文字列の空白をトリミングする
+-----------------------
+トリミングとは文字列の両端から不要な文字を削除すること
+  let text = "  スィフト swift　" 
+  元データ "(半角スペース)(半角スペース)スィフト swift(全角スペース)"
+
+  let newText = text.trimmingCharacters(in: CharacterSet.whitespaces) 
+  変換後 "スィフト swift"
+
+-------------------------------------------------------
+空白を区切り文字として文字列を分割し、分割した各語を配列に格納する
+-------------------------------------------------------
+  let text2 = "abc  あいう　123"
+  元データ "abc(半角スペース)あいう(全角スペース)123"
+
+  let text2Array = text2.components(separatedBy:CharacterSet.whitespaces)
+  変換後 ["abc", "あいう", "123"]
+
+
+なお、長さゼロの文字列も一つの文字列として分割される
+  let txt3 = ""
+  
+  let txt3Array = str.components(separatedBy:CharacterSet.whitespaces)
+  変換後 [""]
+
+空白文字を複数続けるとその間に、また両端に空白文字があるとその前後に、
+長さゼロの文字列（""）があると認識される
+  let text3: String = " abc  あいう　　123　"
+  元データ "(半角スペース)abc(半角スペース)(半角スペース)あいう(全角スペース)(全角スペース)123(全角スペース)"
+
+  let text3Array = text3.components(separatedBy:CharacterSet.whitespaces)
+  変換後 ["", "abc", "", "あいう", "", "123", ""]
+
+------------------
+特定の文字列を置換する
+------------------
+  let text: String = "イロハニホヘトチリヌルヲ"
+  let newText = text.replacingOccurrences(of: "イロハニホヘト", with: "色は匂へど")
+  置換語 "色は匂へどチリヌルヲ"
+
+---------------------------------
+文字列を大文字/小文字の区別なく比較する
+---------------------------------
+  let text1 = "abcde"
+  let text2 = "ABCDE"
+  let result = text1.caseInsensitiveCompare(text2) == .orderedSame 
+  結果はtrue　大小も比較できる .orderedAscending /.orderedDescending 
+  
+

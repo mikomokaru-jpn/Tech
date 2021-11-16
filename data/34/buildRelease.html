@@ -1,0 +1,130 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>アプリケーションバンドル（&thinsp;.app&thinsp;）を作成する</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs1.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">アプリケーションバンドル（&thinsp;.app&thinsp;）を作成する</h2>
+<div class="lm100 tm15 rm60">
+ソースコードをリリース版でビルドし、作成したアプリケーションバンドル（.appファイル）をコピーして任意の場所に置き、実行できるようにする。
+</div>
+<h3 class="lm100 tm20 bm0 rm60">
+リリース版/デバッグ版を切り替えビルドする
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+ビルドの設定（スキーマ）を定義するフォームを開く。
+</div>
+<div class="lm100 tm0 rm60">
+Xcodeメニュー → [Ptoduct] → [Scheme] → [Edit Scheme...] → [Run]タブ
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release01.png&title=ビルド1&width=850" target="_new">
+<img class="lm90 tm10" src="34_bundle_release01.png" width="400" align="top" alt="ビルド1" ></a>
+<div class="lm100 tm20 rm60">
+Build configuration の Debug/Release を切り替え、ビルドを行う。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release02.png&title=ビルド2&width=850" target="_new">
+<img class="lm100 tm5" src="34_bundle_release02.png" width="400" align="top" alt="ビルド2" ></a>
+<div class="lm100 tm20 rm60">
+Project Navigator → Productsフォルダ の「MyProject.app」を選択状態にし、 Show in Finder により中身を表示する。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release03.png&title=ビルド3&width=850" target="_new">
+<img class="lm100 tm10 bm10" src="34_bundle_release03.png" width="400" align="top" alt="ビルド3" ></a>
+<div class="lm100 tm20 rm60">
+Debugフォルダ/Releaseフォルダのそれぞれの下にアプリケーションバンドル（.app）が作成される。実体はファイルなので、コピーや移動で任意のフォルダに置くことができる。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release04.png&title=ビルド4&width=850" target="_new">
+<img class="lm100 tm10 " src="34_bundle_release04.png" width="400" align="top" alt="ビルド4" ></a>
+<div class="lm100 tm20 rm60">
+ディスクトップにおけば、アイコンの下にアプリケーション名が表示され、クリックすればアプリケーションが起動する。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release05.png&title=ビルド5&width=200" target="_new">
+<img class="lm120 tm5 bm10" src="34_bundle_release05.png" width="100" align="top" alt="ビルド5" ></a>
+<div class="lm100 tm20 rm60">
+アイコンを右クリックし、コンテキストメニューから [パッケージの内容を表示]を選ぶと、アプリケーションバンドルの構成を見ることができる。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release11.png&title=ビルド11&width=850" target="_new">
+<img class="lm100 tm10 " src="34_bundle_release11.png" width="500" align="top" alt="ビルド11" ></a>
+<h3 class="lm100 tm30 bm0 rm60">
+アプリケーション名の変更方法
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+アプリケーション名（アプリケーションバンドル名）は、Build Settings の Product Name で定義される。初期値は $(Target_NAME) になっているのでプロジェクト名と同じになる。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release06.png&title=ビルド6&width=850" target="_new">
+<img class="lm100 tm5 " src="34_bundle_release06.png" width="400" align="top" alt="ビルド6" ></a>
+<div class="lm100 tm15 rm60">
+これを違った名前に変更してみる。
+</div>
+<div class="lm100 tm0 rm60">
+Build Settings の Product Nameを「MyApplication」に直接書き換える。（同時に、Product Moduke Nameが自動的に同名に変わる）
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release07.png&title=ビルド7&width=850" target="_new">
+<img class="lm100 tm5 " src="34_bundle_release07.png" width="400" align="top" alt="ビルド7" ></a>
+
+<div class="lm100 tm20 rm60">
+ビルドを行うと、「MyApplication」という名前のアプリケーションバンドルが新たに作成される。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release08.png&title=ビルド8&width=850" target="_new">
+<img class="lm100 tm5 " src="34_bundle_release08.png" width="400" align="top" alt="ビルド8" ></a>
+<div class="lm100 tm20 rm60">
+アプリケーション名が新しい名前になっている。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release09.png&title=ビルド9&width=200" target="_new">
+<img class="lm120 tm10 bm10" src="34_bundle_release09.png" width="100" align="top" alt="ビルド9" ></a>
+
+<div class="lm90 tm20 rm60">
+（注意）
+</div>
+<div class="lm100 tm0 rm60">
+ネットの情報によれば次の方法で変更できるとあった。
+</div>
+<div class="lm120 tm5 rm60">
+アプリケーションバンドル名は、info.plistの設定値により決まる。
+</div>
+<div class="lm120 tm0 rm60">
+まず、Bundle display nameがあればその値。なければ、Bundle nameの値がアプリケーションバンドル名になる。この値を変えれば、アプリケーションバンドル名を変えることができる。
+</div>
+<div class="lm100 tm10 rm60">
+そこで、info.plistを修正し、
+</div>
+<div class="lm100 tm0 rm60">
+項目 Bundle display nameを追加し「NewBundleDisplayName」をセット、Bundle nameは「NewBundleName」に変更してビルドを行なってみたが、何も変わらなかった。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/34/34_bundle_release10.png&title=ビルド10&width=850" target="_new">
+<img class="lm100 tm5 " src="34_bundle_release10.png" width="400" align="top" alt="ビルド10" ></a>
+<div class="lm100 tm15 rm60">
+何かやり方に問題があるのかもしれない。
+</div>
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

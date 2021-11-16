@@ -1,0 +1,12 @@
+<body>    
+    <div class='thisYearMonth'>YYYY年MM月</div>    
+    <section>
+    <div class='chart'> <!-- 要素追加の開始位置 -->
+        <div class='midashi'>日</div>
+        <div class='midashi'>曜日</div>
+        <div class='midashi'>最低</div>
+        <div class='midashi'>最高</div>
+        <div class='midashi2'>200</div>
+    </div>
+    </section>    
+</body>

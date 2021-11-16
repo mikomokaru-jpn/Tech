@@ -1,0 +1,6 @@
+//--------------------------------------------------------------------------
+// 日付文字列からNSDateオブジェクトを作成する
+//--------------------------------------------------------------------------
+NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+[formatter setDateFormat:@"yyyy-MM-dd"];
+NSDate *date = [formatter dateFromString:@"1970-01-01"];

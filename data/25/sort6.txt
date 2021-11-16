@@ -1,0 +1,17 @@
+-(IBAction)sort6:(id)sender{
+    NSSortDescriptor *descript;
+    if (_sort6Button.tag == YES){
+        descript = [NSSortDescriptor sortDescriptorWithKey:nil 
+                    ascending:NO
+                    selector:@selector(compareKana:)];
+        _sort6Button.tag = NO;
+    }else{
+        descript = [NSSortDescriptor sortDescriptorWithKey:nil 
+                    ascending:YES
+                    selector:@selector(compareKana:)];
+        _sort6Button.tag = YES;
+    }
+    _menuList = [[_menuList sortedArrayUsingDescriptors:@[descript]] 
+                                                        mutableCopy];
+    [_tableView reloadData];
+}

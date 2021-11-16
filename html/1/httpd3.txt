@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------
+# エイリアス定義
+# 特定のディレクトリを、ドキュメントルート配下のディレクトリとして扱うことができる
+# 例えば、/Users/user/testScripts/request.html を
+#         http://xxx.xxx.xxx.xxx/test/request.php として呼ぶことができる
+#-----------------------------------------------------------------------
+<IfModule alias_module>
+    Alias /test /Users/user/testScripts
+</IfModule>
+
+#-----------------------------------------------------------------------
+# エイリアス・ディレクトリ属性（サブディレクトリを含む）
+#-----------------------------------------------------------------------
+<Directory "/Users/user/testScripts">
+    AllowOverride None
+    Options Indexes FollowSymLinks Multiviews ExecCGI
+    MultiviewsMatch Any
+    Require all granted
+    AddHandler cgi-script .cgi .py 
+    AddHandler application/x-httpd-php .php
+</Directory>

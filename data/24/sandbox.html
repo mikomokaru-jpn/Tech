@@ -1,0 +1,122 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>App&nbsp;Sandboxについて</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript"src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">
+App&nbsp;Sandboxについて　〜ファイルのアクセス権〜
+</h2>
+<div class="lm70 tm5 rm60">
+App Sandboxを有効にするとアプリケーションが利用できる資源（ファイルシステム、ネットワーク、プリンタやカメラなどのデバイス）に対してアクセスを制御することができる。セキュリティレベルを高めるために通常は有効にすべきである。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+Sandboxの設定方法
+</h3>
+<div class="lm70 tm5 rm60">
+Xcode のプロジェクトの設定
+</div>
+<div class="lm70 tm0 rm60">
+TARGETS → Capabilities → App Samdbox ON 
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/24/24_sandbox1.png&title=App Sandbox&width=800" target="_new">
+<img class="lm70 tm10 bm0" src="24_sandbox1.png" alt="[App Sandbox]" width="500"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+ホームディレクトリ
+</h3>
+
+<div class="lm70 tm0 rm60">
+AppSandboxをONのした場合ホームディレクトリはアプリケーションごとに固有の領域が割り当てられる。ホームディレクトリはアプリケーションを最初に実行した時点で自動的に作成される。
+</div>
+
+<div class="lm70 tm10 rm60 font110">
+/Users/[user]/Library/Containers/[bundleIdentifier]/Data
+</div>
+
+<div class="lm70 tm10 rm60">
+userは、ログインユーザ名。bundleIdentifierは、アプリケーションを識別するためのユニークなID。一般的にはユーザドメインを逆に記述したものにプロジェクト名を追加したものになる。（ユーザドメインはメールアドレスで代替できるが文字列にアンダーバーは使用不可）
+</div>
+<div class="lm70 tm20 rm60">
+このIDは、プロジェクトの新規作成時に指定できる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/24/24_sandbox2.png&title=App Sandbox&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="24_sandbox2.png" alt="[App Sandbox]" width="500"></a>
+<div class="lm70 tm20 rm60">
+プロジェクト作成後に変更は、プロジェクトの設定で行うことができる。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/24/24_sandbox3.png&title=App Sandbox&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="24_sandbox3.png" alt="[App Sandbox]" width="500"></a>
+
+<h3 class="lm70 tm30 rm60 bm0">
+ホームディレクトリ以下のディレクトリ構造
+</h3>
+<div class="lm70 tm5 rm60">
+Documents, Library（システムファイルを格納する領域）が固有のフォルダ。Desktop, Downloads, Movies, Music, Pictures は通常のユーザホームディレクトリにあるフォルダのエイリアスになっている。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/24/24_sandbox4.png&title=App Sandbox&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="24_sandbox4.png" alt="[App Sandbox]" width="550"></a>
+
+<h3 class="lm70 tm20 rm60 bm0">
+アクセス可否
+</h3>
+<div class="lm70 tm5 rm60">
+ホームディレクトリ直下とDocumentsは、無条件にディレクトリ、ファイルの作成、削除およびファイルの読み書きができる。
+</div>
+<div class="lm70 tm10 rm60">
+Downloads, Movies, Music, Pictures はAppSandoboxのFileAccessの設定によりディレクトリ、ファイルの作成、削除およびファイルの読み書きができる。設定を変更しビルドすると「プロジェクト名.entitlemants」ファイルが作成され、実際にはこれによりアクセスが制御される。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/24/24_sandbox5.png&title=App Sandbox&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="24_sandbox5.png" alt="[App Sandbox]" width="500"></a>
+<div class="lm120 tm5 rm60">
+User Selected File の設定については、<a href='../41/open_save_panel.php#sandbox' target="_blank">NSOpenPanel / NSSavePanel</a> の「AppSandboxの設定について」を参照のこと。
+</div>
+<div class="lm70 tm20 rm60">
+entitlemantsファイル
+</div>
+<div class="lm70 tm0 rm60">
+このファイルを直接編集することも可能
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/24/24_sandbox6.png&title=App Sandbox&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="24_sandbox6.png" alt="[App Sandbox]" width="500"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+注意
+</h3>
+<div class="lm70 tm0 rm60">
+AppSandoboxをONにしていると Desktopフォルダのファイルにアクセスすることはできない。ホームディレクトリからDesktopフォルダは見えているので勘違いしやすい。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+確認のためのソースコード
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/24/source/AppDelegate.txt&indent=20" target="_new">AppDelegate</a>
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

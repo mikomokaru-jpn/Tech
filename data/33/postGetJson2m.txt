@@ -1,0 +1,11 @@
++(NSArray*)post:(NSString*)cmd prmDictionary:(NSDictionary*)param{
+    //辞書形式のパラメータをJSON形式文字列に変換 -> NSData形式に変換
+    NSData *requestData =  [NSJSONSerialization dataWithJSONObject:param
+                            options:NSJSONWritingPrettyPrinted
+                            error:nil];
+    NSMutableURLRequest *request = [self createRequest:cmd
+                                          data:requestData
+                                   type:@"application/json"];
+    //送受信（同期通信）
+    return [self doRequest:request];
+}

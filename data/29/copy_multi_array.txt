@@ -1,0 +1,22 @@
+//コピー元の2次元配列の作成と初期化
+NSMutableArray<NSMutableArray<AClass*>*> *multiArray1;
+multiArray1 = [[NSMutableArray alloc] init];
+for (int i=0; i<10; i++){
+    NSMutableArray* sourceSubArray = [[NSMutableArray alloc] init];
+    for (int j=0; j<10; j++){
+        AClass *objA = [[AClass alloc] init...]; //要素オブジェクトの作成
+        [sourceSubArray addObject:objA];
+    }
+    [multiArray1 addObject:sourceSubArray];
+}
+
+//コピー先の2次元配列の作成
+NSMutableArray<NSMutableArray<AClass*>*> *multiArray2;
+multiArray2 = [[NSMutableArray alloc] init];
+
+//2次元目の配列のコピー
+for (NSMutableArray<AClass*>* subArray in multiArray1){
+    NSMutableArray* copySubArray =
+        [[NSMutableArray alloc] initWithArray:subArray copyItems:YES];
+    [multiArray2 addObject:copySubArray];
+}

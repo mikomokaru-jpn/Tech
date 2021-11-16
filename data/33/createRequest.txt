@@ -1,0 +1,20 @@
++(NSMutableURLRequest*)createRequest:(NSString*)cmd
+                                data:(NSData*)data
+                                type:(NSString*)type{
+    //URLオブジェクトの作成
+    NSURL *url = [NSURL URLWithString:cmd];
+    //URL
+    NSMutableURLRequest *request= [NSMutableURLRequest requestWithURL:url];
+    //メソッド
+    [request setHTTPMethod:@"POST"];
+    //リクエストヘッダ：受信データ形式
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    //リクエストヘッダ：コンテンツ種別：id=dataの形式
+    [request setValue:type forHTTPHeaderField:@"Content-Type"];
+    //リクエストヘッダ：コンテンツ長(POSTデータのバイト数)
+    [request setValue:[NSString stringWithFormat:@"%ld",[data length]]
+     forHTTPHeaderField:@"Content-Length"];
+    //リクエストヘッダ：メッセージボディ(POSTデータ)をセット
+    [request setHTTPBody:data];
+    return request;
+}

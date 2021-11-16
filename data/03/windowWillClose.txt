@@ -1,0 +1,4 @@
+- (void)windowWillClose:(NSNotification *)notification
+{
+    [NSApp stopModalWithCode:NSModalResponseCancel];
+}

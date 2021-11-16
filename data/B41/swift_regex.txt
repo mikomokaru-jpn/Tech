@@ -1,0 +1,24 @@
+import Foundation
+extension String {
+    func searchReg(keyword: String, 
+                   options mask: NSRegularExpression.Options = []) 
+                   -> [NSRange]{
+        var matchList = [NSRange]()
+        do{
+            let regex = try NSRegularExpression(pattern: keyword, 
+                                                options: mask)
+            //検索実行
+            let results = regex.matches(in: self,
+                                        options: [],
+                                        range: NSRange(0..<self.count))
+            for result in results {
+                matchList.append(result.range)
+            }
+        }catch{
+            print(error.localizedDescription)
+            return matchList
+        }
+        return matchList
+    }
+
+}

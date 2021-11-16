@@ -1,0 +1,3 @@
+NSArray *allowDragTypes= @[@"public.image",
+                           @"public.url"];
+[self registerForDraggedTypes:types];

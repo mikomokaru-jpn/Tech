@@ -1,0 +1,12 @@
+//ビューを取得する（再帰関数呼び出し）
+let array =  self.getSubview2(self.window!.contentView!)
+
+//再帰関数
+func getSubview2(_ view: NSView) -> [NSView]{
+    var array = [NSView]()
+    for view in view.subviews{
+        array.append(view)
+        array += self.getSubview2(view)      
+    }
+    return array
+}

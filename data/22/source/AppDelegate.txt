@@ -1,0 +1,184 @@
+//---- AppDelegate.h ----
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate,
+                                   NSTableViewDelegate,
+                                   NSTableViewDataSource>
+@end
+
+//---- AppDelegate.m ----
+#import "AppDelegate.h"
+#import "IconView.h"
+#import "UATextField.h"
+#import "UATableHeaderCell.h"
+#import "UAButton.h"
+#import "UAUtility.h"
+
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSTableView* tableView;           //テーブルビュー
+@property NSArray<NSArray *>*itemList;                      //データソースリスト
+@property NSMutableArray<NSMutableDictionary*>* dispList;   //文字列リスト
+@end
+
+@implementation AppDelegate
+//------------------------------------------------------------------------------
+// 初期処理
+//------------------------------------------------------------------------------
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [self createData];
+    [_tableView setDataSource:self];
+    [_tableView setDelegate:self];
+}
+//------------------------------------------------------------------------------
+// NSTableViewDatasource
+//------------------------------------------------------------------------------
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+    return _itemList.count;
+}
+//------------------------------------------------------------------------------
+// NSTableViewDelegate
+//------------------------------------------------------------------------------
+-(NSView *)tableView:(NSTableView *)tableView
+  viewForTableColumn:(NSTableColumn *)column
+                 row:(NSInteger)row{
+    //セルビューの取得
+    NSTableCellView *cellView = [tableView makeViewWithIdentifier:column.identifier owner:self];
+    cellView.wantsLayer = YES;
+    cellView.textField.stringValue = @"";
+    //行の背景色を偶数行・奇数行で変える
+    if ((row % 2) == 1){
+        cellView.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+        //これはUATextFieldでdrawRecをオーバーライドし[super drawRect:]を呼んでいないので動作しない。
+        //cellView.textField.drawsBackground = YES;
+        //cellView.textField.backgroundColor = [NSColor redColor];
+    }else{
+        cellView.layer.backgroundColor = [UAUtility cgColorR:255 G:228 B:196];
+    }
+    //順位/球団名/試合数/勝/負/引き分け/勝率の水平方向の文字揃え
+    if ([[column identifier] isEqualToString:@"ranking"]){
+        //キャストテクニック
+        ((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentCenter;
+    }
+    if ([[column identifier] isEqualToString:@"name"]){
+        //((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentLeft;
+    }
+    if ([[column identifier] isEqualToString:@"number"] ||
+        [[column identifier] isEqualToString:@"win"] ||
+        [[column identifier] isEqualToString:@"lose"] ||
+        [[column identifier] isEqualToString:@"draw"] ||
+        [[column identifier] isEqualToString:@"rate"]){
+        ((UATextField *)cellView.textField).dispAlignment = NSTextAlignmentRight;
+    }
+    //イメージの表示
+    if ([[column identifier] isEqualToString:@"image"]){
+        //IconViewオブジェクト（NSViewのサブクラス）を返す
+        ((IconView *)cellView.textField).teamIcon = _itemList[row][4];
+        return cellView;
+        //[cellView.imageView setImage:[self teamImage:@"giants"]]; //NG Why?
+        //NSLog(@"%@", cellView.imageView.image); is Null
+    }
+    //リンクボタンの表示
+    if ([[column identifier] isEqualToString:@"link"]){
+        [cellView addSubview:_itemList[row][5]];
+        //ボタンを貼り付けたセルビューを返す
+        return cellView;
+    }
+    //文字列の表示：属性付き文字列をセットしたセルビューを返す
+    cellView.textField.attributedStringValue = _dispList[row][[column identifier]];
+    return cellView;
+}
+//------------------------------------------------------------------------------
+//辞書の配列を作成する
+//------------------------------------------------------------------------------
+-(void)createData{
+    //データ：球団名/勝/負/引き分け/イメージ/公式URL
+    _itemList = @[@[@"巨人", @47, @23, @0, [self teamImage:@"giants"],
+                    [self buttonWithURL:@"https://www.giants.jp/top.html"]],
+                  @[@"阪神", @37, @34, @0, [self teamImage:@"tigers"],
+                    [self buttonWithURL:@"https://hanshintigers.jp"]],
+                  @[@"DeNA", @36, @36, @0, [self teamImage:@"baystars"],
+                    [self buttonWithURL:@"https://www.baystars.co.jp"]],
+                  @[@"中日", @33, @39, @0, [self teamImage:@"dragons"],
+                    [self buttonWithURL:@"https://dragons.jp"]],
+                  @[@"広島", @29, @37, @0, [self teamImage:@"carp"],
+                    [self buttonWithURL:@"https://www.carp.co.jp"]],
+                  @[@"ヤクルト", @28, @41, @0, [self teamImage:@"swallows"],
+                    [self buttonWithURL:@"https://www.yakult-swallows.co.jp"]]
+                  ];
+    //属性付き文字列リスト
+    _dispList = [[NSMutableArray alloc] init];
+    int ranking = 0;
+    for (NSArray *record in _itemList){
+        NSMutableDictionary *strRecord = [[NSMutableDictionary alloc] init];
+        //順位
+        strRecord[@"ranking"] = [UAUtility attributedString:
+                                 [NSString stringWithFormat:@"%d", ++ranking]
+                                                  FontSize:24
+                                                 ForeColor:[NSColor blackColor]];
+        //球団名
+        strRecord[@"name"] = [UAUtility attributedString:record[0]
+                                                  FontSize:30
+                                                 ForeColor:[NSColor blackColor]];
+        //勝
+        strRecord[@"win"] = [UAUtility attributedString:
+                             [NSString stringWithFormat:@"%d", [record[1] intValue]]
+                                                 FontSize:24
+                                                ForeColor:[NSColor blackColor]];
+        //負
+        strRecord[@"lose"] = [UAUtility attributedString:
+                              [NSString stringWithFormat:@"%d", [record[2] intValue]]
+                                                  FontSize:24
+                                                 ForeColor:[NSColor blackColor]];
+        //引き分け
+        strRecord[@"draw"] = [UAUtility attributedString:
+                              [NSString stringWithFormat:@"%d", [record[3] intValue]]
+                                                  FontSize:24
+                                                 ForeColor:[NSColor blackColor]];
+        //試合数
+        int numberOfGames = [record[1] intValue] + [record[2] intValue] + [record[3] intValue];
+        strRecord[@"number"] = [UAUtility attributedString:
+                                [NSString stringWithFormat:@"%d", numberOfGames]
+                                                    FontSize:24
+                                                   ForeColor:[NSColor blackColor]];
+        //勝率
+        float winRate = [record[1] floatValue] / numberOfGames;
+        strRecord[@"rate"] = [UAUtility attributedString:
+                              [NSString stringWithFormat:@"%.3f", winRate]
+                                                  FontSize:24
+                                                 ForeColor:[NSColor blackColor]];
+        [_dispList addObject:strRecord];
+    }
+}
+//------------------------------------------------------------------------------
+//チームのイメージを作成する
+//------------------------------------------------------------------------------
+-(id)teamImage:(NSString*)name{
+    NSImage* image = [NSImage imageNamed:name];
+    if (image){
+        return  image;
+    }else{
+        return [NSNull null];
+    }
+    
+}
+//------------------------------------------------------------------------------
+//リンクボタン
+//------------------------------------------------------------------------------
+-(NSButton*)buttonWithURL:(NSString*)urlString{
+    UAButton *button = [[UAButton alloc]initWithFrame:NSMakeRect(25, 15, 70, 50)];
+    button.bezelStyle = NSBezelStyleRounded;
+    button.title = @"";
+    button.urlString = urlString;
+    [button setTarget:self];
+    [button setAction:@selector(buttonClicked:)];
+    return button;
+}
+//------------------------------------------------------------------------------
+//ボタンアクション
+//------------------------------------------------------------------------------
+-(void)buttonClicked:(UAButton*)sender{
+    if (![[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:sender.urlString]]){
+        NSLog(@"URLが開けません");
+    }
+}
+@end

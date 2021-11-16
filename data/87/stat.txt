@@ -1,0 +1,7 @@
+#include <sys/stat.h> //ファイル・ディレクトリに関する情報を取得（POSIX）
+
+char charPath[4096]; 
+strcpy(charPath, [@“/Users/user/Documents/abc.txt" UTF8String]);
+struct stat status;
+stat(charPath, &status);
+long size = status.st_size;  //ファイルサイズ

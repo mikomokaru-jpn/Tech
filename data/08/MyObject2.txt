@@ -1,0 +1,26 @@
+//カテゴリ実装  NSObject+who.m
+#import "NSObject+who.h"
+@implementation NSObject (who)
+-(NSString*)who{ 
+    //クラス名称を自身のクラスからNSObjectまでさかのぼって取得する.
+    NSString* log = @"";
+    [NSObject goUpClass:self.class text:&log];
+    return log;
+}
+//内部メソッド：NSObjectに至るまで再帰的に親クラスの名称を求める。
++(void)goUpClass:(Class)class text:(NSString**)textString{
+    NSString* str;
+    if ([*textString isEqualToString:@""]){
+        str = [NSString stringWithFormat:@"%@", class.className];
+    }else{
+        str = [NSString stringWithFormat:@" -> %@", class.className];
+    }
+    *textString = [*textString stringByAppendingString:str];
+    if ([class.className isEqualToString:@"NSObject"]){
+        return; //NSObjectに到達したので終了する。
+    }else{
+        //親クラスを取得し繰り返し.
+        [self goUpClass:class.superclass text:textString];  
+    }
+}
+@end

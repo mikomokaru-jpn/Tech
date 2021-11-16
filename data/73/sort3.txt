@@ -1,0 +1,10 @@
+//テーブルの再編成（ソート）
+- (NSArray *)arrangeObjects:(NSArray *)objects{
+    NSLog(@"arrangeObjects:");
+    //ソート
+    if (_descriptors){
+        NSLog(@"%@", _descriptors);
+        objects = [objects sortedArrayUsingDescriptors:_descriptors];
+    }
+    return [super arrangeObjects:objects];
+}

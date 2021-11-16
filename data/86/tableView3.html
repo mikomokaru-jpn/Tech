@@ -1,0 +1,98 @@
+<!-- 
+21-3 TableView
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Cell Based テーブルビュー・データを更新する</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">Cell Based テーブルビュー・データを更新する</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/86/tableView.png&title=テーブルビュー&width=800" target="_new">
+<img class="lm70 tm0 bm0" src="tableView.png" alt="[テーブルビュー]" width="500"></a>
+
+
+<div class="lm70 tm20 rm60">
+<a href='/data/52/tableView2.html' target="_blank">テーブルビューのデータを更新する（View Based）<a>に相当する機能を Cell Basedのテーブルビューで実装する。ただし制約により表示オブジェクトの位置揃えと、イメージの表示、リンクボタンの表示は実装していない。
+</div>
+<h3 class="lm70 tm20 rm60 bm0">
+Cell Based テーブルビューのクラス構造
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/86/86_tableViewStruction.png&title=データ・オブジェクトの構造&width=800" target="_new">
+<img class="lm90 tm10 bm0" src="86_tableViewStruction.png" alt="[データ・オブジェクトの構造]" width="580"></a>
+<div class="lm70 tm10 bm0 rm60">
+Cell Basedのテーブルビューは、NSTextFieldCellクラス（またはそのサブクラス）のオブジェクトを通してセルに値を表示するものである。
+</div>
+<div class="lm70 tm20 bm0 rm60">
+オーソドックスな実装方法は、次の二つのNSTableViewDataSourceプロトコルに準じたメソッドを記述することである。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/86/dataSource.txt" width="580" height="400"></iframe>
+<div class="lm70 tm10 bm0 rm60">
+一般的にCellBasedのテーブルビュー表示するオブジェクトは文字列（属性付きを含む）である。セルのクラスは規定値として NSTextFieldCellクラスが埋め込まれていて、内部的にはDataSourceメソッドから渡ってくる文字列をTextFieldに表示するという仕組みのようだ。
+</div>
+<div class="lm70 tm20 bm0 rm60">
+次は、NSTableViewDelegateメソッドにより偶数行/奇数行の背景色を変えている。この操作を有効にするには、TextFieldCellオブジェクトのdrawsBackgroundプロパティをYESにすること。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/86/delegate.txt" width="580" height="300"></iframe>
+<div class="lm70 tm10 bm0 rm60">
+このメソッドにより取得できるNSTextFieldCellクラスのオブジェクトに操作を加えればイメージをセルに表示する、セルの中で文字列の表示位置を変えるということも可能である。ただし、Cellに直接描画するというやや稀有な方法が求められるため、実際にどこまでできるか詳しい検証はしていない。
+</div>
+<div class="lm70 tm0 bm0 rm60">
+これは列見出し（NSTableHeaderCellクラス）の編集とほぼ同等な方法である。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+結論としては、レイアウトの自由度や拡張性を求めるのであれば、View Basedのテーブルビューを選択するのが常道であろう。逆にCell Basedのテーブルビューは比較的実装が容易なので、テキストのみの表示で見た目に拘らなのであれば充分利用できる。
+</div>
+<div class="lm70 tm10 bm0 rm60">
+なお CellBasedのテーブルビューにイメージを表示させる方法については<a href='/data/50/tableViewOfImage.html' target="_blank">Cell Based テーブルビューにイメージを表示する</a>を参照されたい。
+</div>
+<div class="lm70 tm20 bm0 rm60">
+セルの値を変更しデータソースに反映するにはつぎのデリゲートメソッドが利用できる。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/86/delegate2.txt" width="580" height="450"></iframe>
+<h3 class="lm70 tm30 bm0">
+クラス一覧
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm70 tm0 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/86/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/86/source/UATableView.txt&title=UATableView" target="_new">UATableView</a>　列見出しの編集
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/86/source/UATableHeaderCell.txt&title=UATableHeaderCell" target="_new">UATableHeaderCell</a>　列見出しの編集
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/86/source/UAUtility.txt&title=UAUtility" target="_new">UAUtility</a>　ユーティリティ・メソッド
+</div>
+<div class="lm70 tm0rm60">
+<a href="/lib/HTMLofText.html?filename=/data/86/source/UATeam.txt&title=UATeam" target="_new">UATeam</a>　チーム成績
+</div>
+
+<div class="bp40"></div>
+<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

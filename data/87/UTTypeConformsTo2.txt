@@ -1,0 +1,7 @@
+let url = URL.init(fileURLWithPath: "/Users/itohisao/Desktop/misc/doc1")
+if let values = try? url.resourceValues(forKeys: [.typeIdentifierKey]),
+    let uti = values.typeIdentifier {
+    if UTTypeConformsTo(uti as CFString, kUTTypeText){
+        print("Text File")
+    }
+}

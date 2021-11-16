@@ -1,0 +1,39 @@
+//初期化
+NSDictionary* dictionary = @{@1:@"安", @2:@"伊", @3:@"宇", @"E":@"江", @"O":@"於"};
+
+//全てのキーと値を取得する
+for (id key in dictionary.allKeys){
+    NSLog(@"%@:%@", key, dictionary[key]);
+}
+
+//全ての値を取得する
+for (id value in dictionary.allValues){
+    NSLog(@"%@", value);
+}
+
+//値を取得する
+id value;
+value = dictionary[@1]; //"安"
+if (value){
+    NSLog(@"%@", value);
+}else{
+    NSLog(@"not found");
+}
+
+value = dictionary[@9];	//"not found"　値がない場合 nil が返る。
+if (value){
+    NSLog(@"%@", value);
+}else{
+    NSLog(@"not found");
+}
+
+value = dictionary[@"1"];//"not found"　型が違えばキーは別の値となる。
+if (value){
+    NSLog(@"%@", value);
+}else{
+    NSLog(@"not found");
+}
+
+//値を追加する
+NSMutableDictionary* mDictionary = [@{@"あ":@"あああ"} mutableCopy];
+mDictionary[@"い"] = @"いいい";

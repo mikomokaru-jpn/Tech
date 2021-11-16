@@ -1,0 +1,4 @@
+AClass *objA = [[AClass alloc] init...]; //オブジェクトの初期化
+AClass *objB;
+objB = objA;          //オブジェクト変数の代入
+objA.number = 123;    //メンバの更新：ObjB.itemは、123になる。

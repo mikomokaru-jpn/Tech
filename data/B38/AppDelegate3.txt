@@ -1,0 +1,6 @@
+//コンボボックス・オブジェクトの作成
+let comboBox = ComboBox.init(NSMakeRect(10, 10, 110, 22),
+    completionHandler: { (index) in
+        print("<<<< \(index) selectd >>>>")
+    }
+)

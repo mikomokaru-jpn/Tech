@@ -1,0 +1,275 @@
+<!-- 
+Document 28
+26 dateOperation
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>日付に関連するクラスについて</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">日付に関連するクラスについて</h2>
+<div class="lm70 tm10 rm60">
+</div>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm30 bm0 rm60">
+NSDate / NSCalendar / NSDateFormatterクラス
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/28/DateClass1.png&title=クラス関連図：NSDate　NSCalendar　NSDAteFormatter&width=800" target="_new">
+<img class="lm70 tm20 bm10" src="DateClass1.png" width="500" alt="クラス関連図：NSDate　NSCalendar　NSDAteFormatter" ></a>	
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm20 bm0 rm60" id="100">
+NSDateクラス
+</h3>
+<div class="lm70 tm0" style="width:580px; border-top:solid 2px #909090;"></div>
+<div class="lm70 tm5 rm60">
+日付に関する基本情報を保持する（年、月、日、曜日、時、分、秒など）
+</div>
+<div class="lm70 tm0 rm60">
+日時は、GMT（グリニッジ標準時）と同じ値を持つ。
+</div>		
+<div class="lm70 tm5 rm60">
+このクラスは、日時の情報のみ保持し、日付の属性であるタイムゾーン、カレンダーの種類、地域・言語による表示様式の差異などに関しては関与しない。これらの事柄は以下に説明するクラスが担当する。
+</div>		
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm20 bm0 rm60" id="200">
+NSCalendarクラス
+</h3>
+<div class="lm70 tm0" style="width:580px; border-top:solid 2px #909090;"></div>
+<div class="lm70 tm5 rm60">
+NSCalendarクラスは、年・月・日・曜日など暦/カレンダーに関する情報を保持する。システムは、規定値としてグレゴリオ歴（gregorian）のカレンダーを作成する。普通はグレゴリオ歴以外を使うことはないだろうが、年に元号を使用する場合は、和暦カレンダを作成する必要がある。（イスラム暦、ヘブライ歴などにも対応しているようだ）
+</div>
+<div class="lm70 tm10 rm60">
+Calendarオブジェクトを直接利用するのは和暦を使用したり、後述する DateComponentsクラスと連携し、Calendarクラスのメソッドを利用し日付の計算を行う場合である。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/28/code01.txt" width="580" height="210"></iframe>
+<div class="lm70 tm5 rm60">
+なお、曜日（Manday or 月曜）や月（January or １月）の名前は国・言語によって異なるが、この差はシステムロケールによる相違であり、カレンダの種類による違いではない。
+</div>
+
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm20 bm0 rm60" id="300">
+NSDateFormatterクラス
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+日付オブジェクトを文字列として表示する。日付の文字列から日付オブジェクトを作成する。タイムゾーン、言語・地域（ロケール）を管理する
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+日付（NSDateオブジェクト）を文字列に編集して出力する
+</h3>
+<div class="lm70 tm10 rm60">
+NSDateFormatterオブジェクトのstringWithFormatメソッドにより、日付オブジェクトの日時を、指定した日付書式に従って文字列に出力する。
+</div>
+<div class="lm70 tm10 rm60">
+年月日・時分秒に相当するキーワードは、<a href="https://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns" target="_new">Unicode Technical Standard #35</a> を参照のこと。区切り文字は例にも示した通り任意である。   
+</div>
+<div class="lm70 tm10 rm60">
+曜日は、日付オブジェクトの内部では、日曜から始まる整数値（1〜7）で保持されている。日付書式子の "e" は整数値そのまま、
+"E" は、ロケール（言語・地域）に応じた曜日名に変換した値が表示される。日本であれば、日, 月, 火, ...となる。
+</div>
+<div class="lm70 tm10 rm60">
+クラスで用意された定型的な4種類の編集形式を選ぶことができる。dateStyleプロパティに NSDateFormatterStyle定数を指定する。
+</div>
+<div class="lm70 tm10 rm60">
+現在日時を表示する
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm0 bm10" src="/lib/HTMLofText.html?filename=/data/28/code02.txt" width="580" height="600"></iframe>
+<h3 class="lm70 tm10 rm60 bm0">
+タイムゾーン（時差の調整）について
+</h3>
+<!--テーブル 始まり-->
+<div class="table tm0 lm70 rm60">
+<div class="table_cell">
+<a href="/lib/HTMLofImage.html?filename=/data/28/DateTimeZone.png&title=タイムゾーン&width=600" target="_new">
+<img class="lm10 tm10 bm10" src="DateTimeZone.png" width="200" alt="タイムゾーン" ></a>	
+</div>
+<div class="table_cell lm70"><div class="lm20 tm30">
+日付オブジェクトの日時はグリニッッジ標準時（GMT）で保持されるので、英国以外の地域で日時を表示したり、日時を指定して日付オブジェクトを作成したりするとき、時差の調整が必要になる。
+</div></div>
+</div>
+<!--テーブル 終わり-->
+<div class="lm70 tm10 rm60">
+調整は NSDateFormatterオブジェクトのプロパティに指定したタイムゾーンの基づいて行われる。システムのデフォルトでは、プロパティにはその地域のタイムゾーン（localTimeZone）が自動的に設定される。
+</div>
+<div class="lm70 tm0 rm60">
+日本のタイムゾーンは、名称"Asia/Tokyo”、略称”JST"
+</div>
+<div class="lm70 tm10 rm60">
+アプリケーションは、NSDateFormatterオブジェクトを通して時差を意識することなく日付を取り扱うことができる。
+</div>
+<div class="lm70 tm10 rm60">
+タイムゾーンを変更する場合には、タイムゾーン名を指定してTimeZoneオブジェクトを作成し、DateFormatterオブジェクトのtimeZoneプロパティにセットする。次のコードはタイムゾーンをグリニッジ標準時に変更する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code03.txt" width="580" height="230"></iframe>	
+<h3 class="lm70 tm20 bm0 rm60">
+日付の文字列から日付（NSDateオブジェクト）を作成する
+</h3>
+<div class="lm70 tm5 rm60">
+DateFormatterクラスの dateFromStringメソッドにより、指定したフォーマット指定子の文字列から日付オブジェクトを作成する。年月日・時分秒に相当するキーワードは、<a href="https://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns" target="_new">Unicode Technical Standard #35</a> を参照のこと。区切り文字は任意。作成に失敗すると nilが返る。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code04.txt" width="580" height="210"></iframe>	
+<h3 class="lm70 tm10 bm5 rm60" id="320">
+和暦を使う
+</h3>
+<div class="lm70 tm0 rm60">
+NSDateFormatterクラスのカレンダー属性に和暦カレンダーを設定すれば、和暦を操作することができる。元号を表すキーワードは"G"になる。
+</div>
+<div class="lm70 tm10 rm60">
+日付オブジェクトを和暦で表示する	
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code05.txt" width="580" height="230"></iframe>
+<div class="lm70 tm0 rm60">
+和暦の日付文字列から日付オブジェクトを作成する	
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code06.txt" width="580" height="450"></iframe>	
+
+<h3 class="lm70 tm10 bm0 rm60" id="330">
+言語・地域（ロケール）について
+</h3>
+<div class="lm70 tm5 rm60">
+システムの設定でロケールは日本語・日本（ja_JP）になっているので日本語を使用する場合は特に何も指定しなくてよい。他地域・他言語を使用する場合は、Localeオブジェクトを作成し、NSDateFormatterオブジェクトのlocale属性に設定する。次の例ではロケールを英語（言語）・米国（地域）に変更している。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code07.txt" width="580" height="180"></iframe>	
+
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm20 bm0 rm60" id="400">
+NSDateComponentsクラス
+</h3>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/28/DateClass2.png&title=クラス関連図：NSCalendar　NSDAteComponents&width=800" target="_new">
+<img class="lm160 tm10 bm10" src="DateClass2.png" width="400" alt="クラス関連図：NSCalendar　NSDAteComponents" ></a>	
+<div class="lm70 tm20 rm60">
+NSDateComponentsオブジェクトは日付・日時の構成要素（年、月、日、曜日、時、分、秒）を保持する。NSCalendarクラスと連携して日付の計算などを行う。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+DateComponentsオブジェクトの取得
+</h3>
+<div class="lm70 tm0 rm60">
+NSCalendarクラスのcomponents:メソッドを使用し NSDateオブジェクトからNSDateComponentsオブジェクトを作成し、日付・時刻の要素を取得する。
+</div>
+<div class="lm70 tm10 rm60">
+componentsに定義していない要素には nullを意味する符号付き64bit整数の最大値が設定されるが、無意味な値なので参照してはいけない。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm0" src="/lib/HTMLofText.html?filename=/data/28/code08.txt" width="580" height="210"></iframe>
+<h3 class="lm70 tm20 bm0 rm60" id="410">
+日付オブジェクトの作成
+</h3>
+<div class="lm70 tm5 rm60">
+NSDateComponentsオブジェクトからNSDateオブジェクトを作成することができる。NSDateComponentsオブジェクトの各要素に日時を設定する。未設定の要素の値はゼロとなる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code09.txt" width="580" height="210"></iframe>
+<h3 class="lm70 tm20 bm0 rm60" id="420">
+日付の計算を行う
+</h3>
+<div class="lm70 tm0 rm60">
+日付の操作に関して色々な例を示す。
+</div>
+<h3 class="lm70 tm5 bm0 rm60" id="421">
+(1) 月末日を求める
+</h3>
+<div class="lm70 tm5 rm60">
+NSDataComponentsオブジェクトから当月末日の NSDateオブジェクトを作成する。要素の年月には対象日の年月を、日は当月の末日（日数）を指定する。末日は NSCalendarクラスの rangeメソッドで求まる。これらから日付オブジェクトを作成すれば、当月末日の日付を得ることができる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code10.txt" width="580" height="420"></iframe>
+<h3 class="lm70 tm5 bm0 rm60" id="421">
+(2) 日付の計算（加算/減算）
+</h3>
+<div class="lm70 tm5 rm60">
+日付の加算/減算は、計算対象のオペランドに NSDataComponentsオブジェクトの要素（年月日時分秒）を指定する。
+</div>
+<div class="lm70 tm10 rm60">
+次の例はある日付に対して、１年2ヶ月３日後または、前を求める方法である。計算には NSCalrndarクラスの dateByAddingComponentsメソッドを使用する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code11.txt" width="580" height="490"></iframe>
+<div class="lm70 tm5 rm60">
+月末日を求めるには、日付の加算/減算によって行うこともできる。
+</div>
+<div class="lm70 tm0 rm60">
+対象日の月の１日から１ヶ月を加算して翌月の1日の日付を求め、そこから1日を引けば月末日となる。(1)の別解
+</div>
+<div class="lm120 tm5 rm60">
+2021/2/1 + 1ヶ月 = 2021/3/1
+</div>
+<div class="lm120 tm0 rm60">
+2021/3/1 - 1日 = 2021/2/28 
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm5" src="/lib/HTMLofText.html?filename=/data/28/code12.txt" width="580" height="400"></iframe>
+
+<h3 class="lm70 tm10 bm0 rm60" id="421">
+(3) 日付の差（期間）を求める
+</h3>
+<div class="lm70 tm5 rm60">
+NSCalendarクラスの components:fromDate:toDate:メソッドを使用すれば、二つの日付の差（期間）を NSDataComponentsオブジェクトとして得ることができる。
+</div>	
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code13.txt" width="580" height="350"></iframe>
+
+<div class="lm70 tm5 rm60">
+もう一つの方法として、暦の通算日数の差から期間を求める方法がある。日付の表し方の一つとして、グレゴリオ暦の場合、西暦1年1月1日0時からの通算日時で表わすことができる。NSCalendarクラスの ordinalityOfUnit:メソッドを使う。例題では、ある日付が暦の始まりを起点としたとき何日目であるかを返す。例えば、起点を yearにすれば年初からの通算日数が得られる。（49日）
+</div>	
+<div class="lm70 tm10 rm60">
+日付を通算日数として表しておけば、二つの日付の差分は、そのまま日数の差（期間）となる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/28/code14.txt" width="580" height="370"></iframe>
+<h3 class="lm70 tm20 bm0 rm60" id="430">
+曜日を求める
+</h3>
+<div class="lm70 tm5 rm60">
+NSDateComponentsオブジェクトの曜日要素（weekDay）には、日曜から始まる整数値（1〜7）がセッットされる。整数値を曜日名に変換するには、NSDateFormatterクラスのシンボル名配列から求めることができる。整数値-1を添え字として配列を読み込めば対応する曜日の文字列を取得できる。曜日名は、ロケール（言語・地域）に応じた名前に変換される。
+</div>		
+<!--ソースコード-->
+<iframe class="lm70 tm10 bm10" src="/lib/HTMLofText.html?filename=/data/28/code15.txt" width="580" height="230"></iframe>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm20 bm0 rm60" id="500">
+日付操作ライブラリ
+</h3>
+<div class="lm70 tm0" style="width:580px; border-top:solid 2px #909090;"></div>
+<div class="lm70 tm10 rm60">
+日付の操作として代表的と思われる処理を共通ライブラリにしてみた。
+</div>
+<div class="lm70 tm5">
+<!--ソースコード　リンク-->	
+<a href="/data//HTMLofText.html?filename=/data/28/source/UADateUtil.h&title=UADateUtil.h<" target="_new">UADateUtil.h</a>
+</div>
+<div class="lm70 tm5">
+<!--ソースコード　リンク-->	
+<a href="/data//HTMLofText.html?filename=/data/28/source/UADateUtil.m&title=UADateUtil.m" target="_new">UADateUtil.m</a>
+</div>
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+

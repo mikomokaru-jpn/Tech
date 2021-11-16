@@ -1,0 +1,28 @@
+Array
+(
+    [Host] => localhost
+    [Content-Type] => multipart/form-data; boundary=5wuppooqKgFeMwrdep3ycZS0KIAKky
+    [Connection] => keep-alive
+    [Accept] => */*
+    [User-Agent] => UAUpload/1 CFNetwork/811.11 Darwin/16.7.0 (x86_64)
+    [Content-Length] => 1310096
+    [Accept-Language] => ja-jp
+    [Accept-Encoding] => gzip, deflate
+)
+Array
+(
+    [title] => 国宝松本城
+    [MAX_FILE_SIZE] => 10000000
+)
+Array
+(
+    [userfile] => Array
+        (
+            [name] => Matsumoto_Castle.jpg
+            [type] => image/jpeg
+            [tmp_name] => /private/var/tmp/phpA0KgwE
+            [error] => 0
+            [size] => 1309717
+        )
+)
+file upload was successful

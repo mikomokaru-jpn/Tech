@@ -1,0 +1,28 @@
+-(IBAction)move:(NSButton*)sender{
+    //現在の位置
+    NSPoint currentPoint = 
+            _scrollView.contentView.bounds.origin; 
+    NSPoint toPoint = NSZeroPoint;
+    float num;
+    switch (sender.tag) {
+        case 1: //top
+            toPoint = NSMakePoint(currentPoint.x, 0);
+            break;
+        case 2: //right
+            num = _scrollView.documentView.frame.size.width -
+                  _scrollView.contentView.bounds.size.width;
+            toPoint = NSMakePoint(num, currentPoint.y);
+            break;
+        case 3: //bottom
+            num = _scrollView.documentView.frame.size.height -
+                  _scrollView.contentView.bounds.size.height;
+            toPoint = NSMakePoint(currentPoint.x, num);
+            break;
+        case 4: //left
+            toPoint = NSMakePoint(0, currentPoint.y);
+            break;
+        default:
+            break;
+    }
+    [_scrollView.contentView scrollPoint:toPoint];
+}

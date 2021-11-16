@@ -1,0 +1,119 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>画像当てクイズ（Core Grapjics）</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+    <h2 class="lm70 tm20 bm0">
+画像当てクイズ（Core Grapjics）
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B49/GraphicQuiz.mp4&title=GraphicQuiz&width=640" target="_new">
+<img class="lm70 tm10 bm0" src="GraphicQuiz2.jpg" alt="[GraphicQuiz]" width="450"></a>
+<div class="lm100 tm5 rm60 font90">
+画像をクリックすると動画になります。
+</div>
+<div class="lm70 tm20 rm60">
+オープンパネルからイメージファイル（JPEG, PNG）を読み込み、２次元のマトリックスに分割しランダムに配置する。
+処理をスタートするとイメージの再配置を定時間隔で繰り返し、最終的に全ての分割イメージが正しい位置に配置され、本来の画像が表示されたところで終了する。ストップボタンで途中一時停止することができる。
+</div>
+<div class="lm70 tm10 rm60">
+<a href="/data/42/core_graphics.html" target="_blank">Objective-C版はこちら。</a>以前に作成したものでかなり解りづらい実装になっている。Swift版ではプログラムの構造を見直し、可読性が大いに向上していると思う。
+</div>
+
+<h3 class="lm70 tm20 rm60 bm0">
+アプリケーションの状態遷移
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B49/GraphicQuiz4.png&title=GraphicQuiz4&width=700" target="_new">
+<img class="lm70 tm10 " src="GraphicQuiz4.png" alt="[GraphicQuiz4]" width="500"></a>
+<div class="lm70 tm30 rm60">
+状態遷移に応じた制御は、状態を表すプロパティを監視し、ステータスが変わったタイミングで必要な処理を起動するようにする。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz4.txt" width="580" height="640"></iframe>
+
+<h3 class="lm70 tm30 rm60 bm0">
+分割イメージの配置について
+</h3>
+<div class="lm70 tm5 rm60">
+800x450ピクセルのイメージをを16分割して表示する例。高さ450ピクセルを4等分すると割り切れないので1ピクセル単位で按分する。
+</div>
+<div class="lm70 tm10 rm60">
+MacOSのフレームワークではビューの座標は左下が原点（0,0）になるが、グラフィックディスプレイの表示では左上が原点となる。そのため16分割したイメージのレイアウトはY軸方向については逆順にする必要がある。
+</div>
+<div class="lm70 tm10 rm60">
+ビューに表示されるイメージは、ベースとなる800x600の大きさのビューの中央に収まるよう実際は余白の分だけ縦方向または横方向に移動する。以下の例では、横長の画像になので、左下のイメージ「M」の表示位置はY軸方向に移動し（0,75）となる。
+</div>
+<div class="lm70 tm0 rm60">
+( 600 - 450 ) / 2 = 75
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B49/GraphicQuiz3.png&title=GraphicQuiz3&width=900" target="_new">
+<img class="lm70 tm20 " src="GraphicQuiz3.png" alt="[GraphicQuiz3]" width="530"></a>
+<h3 class="lm70 tm20 rm60 bm0">
+CGImageクラスの実装のポイント
+</h3>
+
+<div class="lm70 tm5 rm60">
+イメージファイルを読み込み、CGImageイメージを作成する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz1.txt" width="580" height="140"></iframe>
+<div class="lm70 tm20 rm60">
+CGImageイメージを任意のサイズに変更し、新しいCGImageイメージを作成する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz2.txt" width="580" height="380"></iframe>
+
+<div class="lm70 tm20 rm60">
+CGImageイメージから任意のサイズの矩形を切り取り新しいCGImageイメージを作成する。    
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz3.txt" width="580" height="60"></iframe>
+
+<div class="lm70 tm20 rm60">
+CGImageイメージをビューに描画する。    
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B49/GraphicQuiz5.txt" width="580" height="150"></iframe>
+
+
+<h3 class="lm70 tm20 rm60 bm0">
+メモリ管理について
+</h3>
+<div class="lm70 tm5 rm60">
+Swiftでは、CGImageクラスはARCに対応するようになったので、Objective-Cとは異なり、メモリの解放についてはアプリケーションで行う必要はなくなった。
+</div>
+<div class="lm70 tm10 rm60">
+<span class="redcolor">App Sadboxは ON にすること。</span>File Accessは User Selected Fileを Read Onlyに設定する。Sadboxを OFFにすると NSOpenPanelのオープン処理で謎のメモリリークが発生する。
+</div>
+
+<h3 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S26_GraphicQuiz " target="_new">mikomokaru-jpn/macOS_S26_GraphicQuiz</a>
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

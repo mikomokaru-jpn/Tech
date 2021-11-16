@@ -1,0 +1,1 @@
+$ /usr/local/Cellar/open-cobol/1.1_2/bin/cobc  -Vcobc (OpenCOBOL) 1.1.0

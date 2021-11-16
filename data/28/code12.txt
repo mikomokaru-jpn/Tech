@@ -1,0 +1,22 @@
+NSDate *now = [NSDate date];
+unsigned components = NSCalendarUnitYear | NSCalendarUnitMonth |
+                      NSCalendarUnitDay;
+NSDateComponents *dComp = [[NSCalendar currentCalendar]
+                            components:components fromDate:now];
+dComp.day = 1; //初日
+NSDate* firstDate = [[NSCalendar currentCalendar] 
+                      dateFromComponents:dComp];
+NSDateComponents *dComp2 = [[NSDateComponents alloc] init];
+dComp2.month = 1;
+dComp2.day = -1;
+NSDate* lastDate = [[NSCalendar currentCalendar]
+                    dateByAddingComponents:dComp2
+                                   toDate:firstDate
+                                  options:0];
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:lastDate]);
+    
+//結果
+2021年2月28日日曜日 0時00分00秒 日本標準時

@@ -1,0 +1,10 @@
+//---- UAButton.h ----
+#import <Cocoa/Cocoa.h>
+@interface UAButton : NSButton
+@property NSString *urlString;
+@end
+
+//---- UAButton.m ----
+#import "UAButton.h"
+@implementation UAButton
+@end

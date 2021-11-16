@@ -1,0 +1,12 @@
+//イメージオブジェクト
+@property CGImageRef imageRef;
+//マウス操作
+@property BOOL selectedFlg;     //選択済フラグ
+@property CGPoint startPoint;   //開始ポイント
+@property CGPoint endPoint;     //終了ポイント
+@property CGFloat width;        //幅
+@property CGFloat height;       //高さ
+//選択矩形
+@property CAShapeLayer *rectShape;
+//ペーストボード
+@property NSPasteboard *pasteboard;

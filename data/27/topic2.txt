@@ -1,0 +1,13 @@
+NSAlert *msgBox = [[NSAlert alloc] init];
+[msgBox setMessageText:@"終了"];
+[msgBox runModal];
+
+--------------------------------------------------------------------------------
+2019-03-22 13:53:08.530561+0900 thread[2625:419126] [Layout] Detected missing 
+constraints for <NSTextField: 0x10068e690>.  It cannot be placed because there 
+are not enough constraints to fully define the size and origin. Add the missing 
+constraints, or set translatesAutoresizingMaskIntoConstraints=YES and 
+constraints will be generated for you. If this view is laid out manually on macOS 
+10.12 and later, you may choose to not call [super layout] from your override. 
+Set a breakpoint on DETECTED_MISSING_CONSTRAINTS to debug. This error will only 
+be logged once.

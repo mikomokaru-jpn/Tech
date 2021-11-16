@@ -1,0 +1,15 @@
+@property (weak) IBOutlet NSTableView *tableView;   //テーブルビュー
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    //ヘッダを非表示
+    _tableView.headerView = nil;  
+    //セル同士の間隔（隙間）はなし
+    _tableView.intercellSpacing = NSMakeSize(0, 0); 
+    //選択行の表示形式
+    _tableView.selectionHighlightStyle = 
+      NSTableViewSelectionHighlightStyleSourceList;
+}
+//---- NSTableView Delegate ----
+- (CGFloat)tableView:(NSTableView *)tableView
+         heightOfRow:(NSInteger)row{
+    return 100.0; //行の高さ
+}

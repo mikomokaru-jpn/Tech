@@ -1,0 +1,39 @@
++(NSArray*)doRequest:(NSMutableURLRequest*)request{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    //戻り値の変数定義：Blocksの中で値の変更を許可する。__block
+    __block NSArray* responseList = nil;
+    
+    //ネットワーク通信オブジェクトの生成（一時セッション）
+    NSURLSessionConfiguration *configuration =
+        [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    NSURLSession *session = 
+        [NSURLSession sessionWithConfiguration:configuration];
+    //データの送受信：バックグラウンドで実行する（同期）
+    NSURLSessionDataTask *task =
+        [session dataTaskWithRequest:request
+        completionHandler:^(NSData * _Nullable data,
+                            NSURLResponse * _Nullable response,
+                            NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@", error);
+            dispatch_semaphore_signal(semaphore); //taskの終了を通知する
+            return;
+        }
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        if (httpResponse.statusCode != 200) {
+            NSLog(@"statusCode:%ld", httpResponse.statusCode);
+            dispatch_semaphore_signal(semaphore); //taskの終了を通知する
+            return;
+        }
+        //レスポンスデータは、NSData* data に格納されている。
+        responseList =  [NSJSONSerialization JSONObjectWithData:data
+                              options:NSJSONReadingMutableContainers
+                                                           error:nil];
+        dispatch_semaphore_signal(semaphore);
+    }];
+    [task resume];
+    //taskの終了を待つ
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);  
+    /* [request setTimeoutInterval:10]; */
+    return responseList;
+}

@@ -1,0 +1,11 @@
+//日付要素を設定
+NSDateComponents *dComp =  [[NSDateComponents alloc] init];
+dComp.year = 2020;
+dComp.month = 12;
+dComp.day = 31;
+//日付の作成
+NSDate *date = [[NSCalendar currentCalendar] dateFromComponents:dComp];
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:date]);

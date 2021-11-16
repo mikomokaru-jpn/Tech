@@ -1,0 +1,13 @@
+-(NSView *)tableView:(NSTableView *)tableView
+  viewForTableColumn:(NSTableColumn *)column
+                 row:(NSInteger)row{
+    //セルビューの取得
+    NSTableCellView *cellView = 
+                 [tableView makeViewWithIdentifier:column.identifier 
+                                             owner:self];
+    //セルに表示する文字列のセット 
+    cellView.textField.attributedStringValue = 
+                                _dispList[row][[column identifier]];
+    //戻り値
+    return cellView;
+}

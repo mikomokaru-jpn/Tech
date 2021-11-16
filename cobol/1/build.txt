@@ -1,0 +1,1 @@
+cobc -x ABC.cbl         # 実行ファイル ABC を作成するcobc -x ABC.cbl -o XYZ  # 実行ファイルの名前を XYZ で出力する 

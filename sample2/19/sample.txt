@@ -1,0 +1,44 @@
+--------
+Request
+--------
+<!DOCTYPE html>
+<html>
+<head>
+<title>js02</title>
+</head>
+<body>
+<a href="/atest/tes02.html?value=1&value=2&value=3">引数の配列</a>
+<script>
+"use strict";
+window.load = init();
+function init(){
+}
+</script>
+</body>
+</html>
+
+---------
+Response
+---------
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>tes02</title>
+</head>
+<body>
+<h2><!-- 合計 --></h2>
+<script type="text/javascript">
+const hTag = document.querySelector('h2'); 
+//GET引数の取得
+var url = new URL(window.location.href);
+var params = url.searchParams;
+var valueList = params.getAll('value') //getAll()で配列を取得する
+let sum = 0;
+for (let value of valueList){
+    sum += Number(value);
+}
+hTag.innerHTML = sum; // "6" が表示される 
+</script>
+</body>
+</html>

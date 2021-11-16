@@ -1,0 +1,361 @@
+//------------------------------------------------------------------------------
+//  UAView.h a A
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+#import "ImagePart.h"
+#import "UAElapse.h"
+@interface UAView : NSView
+//イメージの実際の大きさ
+@property float xTotalImageLength;
+@property float yTotalImageLength;
+//出力領域の大きさ（正規化後のイメージの大きさ）
+@property float xDispLength;   //Max 800
+@property float yDispLength;   //Max 600
+//測定
+@property  NSInteger timeCount; //回数
+@property  double elapseSec;    //処理時間
+//イメージファイルの読み込み
+-(void)setUpImage:(CGImageRef)image xParts:(NSInteger)xparts yParts:(NSInteger)yparts ;
+//イメージを順序通りに分割・表示
+-(void)displayInOrder;
+//イメージをランダムに分割・表示
+-(void)displayRandomlyInitial;
+-(void)displayRandomlyPause;
+//タイマーの停止
+-(void)timerStop;
+@end
+
+//------------------------------------------------------------------------------
+//  UAView.m
+//------------------------------------------------------------------------------
+#import "UAView.h"
+static const float kDispWidth = 800;
+static const float kDispHeight = 600;
+//宣言 --------------------------------------------------------------------------
+@interface UAView(){
+    //ビューコンテキスト
+    CGContextRef myContext;
+    //イメージ
+    CGImageRef cgImage;         //オリジナル
+    CGImageRef cgNewImage;      //正規化（縮小・拡大）後
+    //分割イメージマトリックス（二次元配列）
+    NSMutableArray<NSMutableArray<ImagePart*>*>*matrix;
+    //分割数
+    NSInteger xNum;
+    NSInteger yNum;
+    //分割したイメージの大きさ
+    float xPartImageLength;
+    float yPartImageLength;
+    //分割した表示領域の大きさ
+    float xPartDispLength;
+    float yPartDispLength;
+    NSMutableArray<NSNumber *>*indexList;   //使用済分割イメージのリスト
+    NSInteger status;   //実行ステータス  0:初期/停止中　1:実行中 9:完了
+    BOOL continuation;  //YES:繰り返し処理中 NO:初回
+    double accumeSec;   //累積経過時間ワーク
+    NSTimer *timer;     //タイマーオブジェクト（繰り返し処理用）
+}
+@end
+@implementation UAView
+//初期化
+-(void)awakeFromNib{
+    //ビューの背景色と枠線
+    self.wantsLayer = YES;
+    
+    /*
+    CGFloat col[4];
+    col[0] = 85.0/255;
+    col[1] = 200.0/255;
+    col[2] = 190.0/255;
+    col[3] = 1.0;
+    self.layer.backgroundColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(),col);
+    */
+    self.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+    self.layer.borderWidth = 1.0;
+    self.layer.borderColor = [NSColor blackColor].CGColor;
+    indexList = [[NSMutableArray alloc] init];//設定済分割イメージのリスト
+}
+//ビューの描画：オーバーライド
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    //ビューのコンテキスト
+    myContext = [[NSGraphicsContext currentContext] graphicsPort];
+    //分割イメージをビューに表示する（コンテキストに出力する）
+    [self drawPartsImage:myContext];
+    //[self drawHoleImage:myContext];
+    
+}
+//公開インスタンスメソッド　---------------------------------------------------------
+// タイマーの停止
+-(void)timerStop{
+    if ([timer isValid]){
+        [timer invalidate];
+    }
+}
+//イメージファイルの読み込み
+-(void)setUpImage:(CGImageRef)image
+           xParts:(NSInteger)xparts
+           yParts:(NSInteger)yparts{
+    [self statusClear];         //変数の初期化
+    [self buttonTitleChange];   //ボタンのタイトル
+    //イメージの取得・インスタンス変数に保存
+    cgImage = image;
+    //イメージの実際の大きさ
+    _xTotalImageLength = (float)CGImageGetWidth(cgImage);
+    _yTotalImageLength = (float)CGImageGetHeight(cgImage);
+    //イメージ表示位置の調整
+    float xAjust = 0.0;
+    float yAjust = 0.0;
+    //出力領域の大きさを決める。800ピクセル x 600ピクセルに収める
+    if ((_xTotalImageLength / _yTotalImageLength) > (kDispWidth/kDispHeight) ){
+        //横長のとき
+        _xDispLength = kDispWidth;
+        _yDispLength = kDispWidth * _yTotalImageLength / _xTotalImageLength;
+        yAjust = (kDispHeight - _yDispLength) /2;
+    }else{
+        //縦長のとき
+        _yDispLength = kDispHeight;
+        _xDispLength = kDispHeight * _xTotalImageLength / _yTotalImageLength;
+        xAjust = (kDispWidth - _xDispLength) /2;
+    }
+    //出力領域と同じ大きさのBitmapコンテキストを作成する
+    CGContextRef newContext = NULL;
+    CGColorSpaceRef imageColorSpace = CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB );
+    newContext = CGBitmapContextCreate (NULL,
+                                        (int)_xDispLength,
+                                        (int)_yDispLength,
+                                        8,
+                                        (int)_xDispLength * 4,
+                                        imageColorSpace,
+                                        kCGImageAlphaPremultipliedLast);
+    //イメージをイメージコンテキストに出力する（イメージは縮小/拡大する）
+    CGRect rect = CGRectMake(0, 0, _xDispLength, _yDispLength);
+    CGContextDrawImage(newContext, rect, cgImage);
+    //イメージコンテキストからイメージを取得する
+    cgNewImage = CGBitmapContextCreateImage(newContext);
+    CFAutorelease(imageColorSpace);
+    CFAutorelease(newContext);
+    //分割するイメージの大きさを求める
+    xNum = xparts;
+    yNum = yparts;
+    xPartImageLength = CGImageGetWidth(cgNewImage) / xNum;
+    yPartImageLength = CGImageGetHeight(cgNewImage) / yNum;
+    //xPartImageLength = CGImageGetWidth(cgImage) / xNum;  //bad performance
+    //yPartImageLength = CGImageGetHeight(cgImage) / yNum; //bad performance
+    //イメージ分割マトリックスの作成
+    matrix = [[NSMutableArray alloc] init];
+    for (int i=(int)yNum-1; i >=0; i--){
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        for (int j=0; j < xNum; j++){
+            //imagePartオブジェクト作成
+            ImagePart *ip = [[ImagePart alloc] init];
+            //分割表示領域の位置と大きさ
+            ip.dispRect = CGRectMake(j*_xDispLength/xNum + xAjust,
+                                     i*_yDispLength/yNum + yAjust,
+                                     _xDispLength/xNum,
+                                     _yDispLength/yNum);
+            array[j] = ip;
+        }
+        [matrix addObject:array];
+    }
+}
+//イメージをランダムに分割（初回）
+-(void)displayRandomlyInitial{
+    continuation = NO;
+    [indexList removeAllObjects];
+    [self displayRandomly]; //画面（コンテキスト）に表示
+}
+//一時停止・開始ボタン
+-(void)displayRandomlyPause{
+    if (status == 0) //停止中
+    {   //開始
+        status = 1;
+        WATCH_START();
+        [self displayRandomlyContinue];
+    }else if (status == 1) //実行中
+    {   //停止
+        if ([timer isValid]){
+            status = 0;
+            accumeSec += _elapseSec;
+            [timer invalidate];
+        }
+    }else if (status == 9) //完了
+    {   //初期化＆開始
+        [self statusClear];  //変数の初期化
+        [self displayRandomlyInitial];
+    }
+    [self buttonTitleChange];
+}
+//イメージを順序通りに分割
+-(void)displayInOrder{
+    for (int i=0; i < yNum; i++){
+        for (int j=0; j < xNum; j++){
+            //分割イメージ
+            CGRect rect = CGRectMake(j*xPartImageLength, i*yPartImageLength,
+                                     xPartImageLength, yPartImageLength);
+            CGImageRef imageRef = CGImageCreateWithImageInRect(cgNewImage, rect);
+            matrix[i][j].partImage = imageRef;
+            //matrix[i][j].partImage = CGImageCreateWithImageInRect(cgImage, rect); //bad performance
+        }
+    }
+    [self setNeedsDisplay:YES];
+}
+// 内部メソッド ------------------------------------------------------------------
+//イメージをランダムに分割（本体処理）
+-(void)displayRandomly{
+    //イメージの分割
+    NSInteger count = 0;
+    //イメージ分割マトリックスを順番に処理する
+    for (int i=0; i < yNum; i++){
+        for (int j=0; j < xNum; j++,count++){
+            if (continuation && matrix[i][j].seq == count){
+                //適正な位置にイメージがあるときはスキップ（２回目以降の処理）
+                continue;
+            }
+            //分割イメージの代入
+            int seq = 0;
+            while(1){
+                //分割イメージの順序番号を乱数から取得する
+                seq = myRandom(xNum * yNum);
+                if ([self canUseImage:seq])
+                {   //イメージを未使用の場合
+                    //順序番号をXY座標に変換する
+                    NSPoint point = [self pointAtseq:seq];
+                    //イメージの位置と大きさを決定する
+                    CGRect rect = CGRectMake(point.x*xPartImageLength, point.y*yPartImageLength,
+                                             xPartImageLength, yPartImageLength);
+                    //イメージ分割マトリックスにイメージを分割して設定する
+                    CGImageRelease(matrix[i][j].partImage); //** 重要 **
+                    matrix[i][j].partImage = CGImageCreateWithImageInRect(cgNewImage, rect);
+                    
+                    
+                    //matrix[i][j].partImage = CGImageCreateWithImageInRect(cgImage, rect); //bad performance
+                    //分割イメージの順序番号を保持する
+                    matrix[i][j].seq = seq;
+                    //使用済リストに順序番号を追加する
+                    [indexList addObject:@(seq)];
+                    break;  //Whileループを抜ける
+                }
+            }
+        }
+    }
+    //使用済リストのアップデート
+    count = 0;
+    for (int i=0; i < yNum; i++){
+        for (int j=0; j < xNum; j++){
+            if (count != matrix[i][j].seq){
+                //適正な位置のイメージ順序番号のみ残す：それ以外は次回の設定対象とする
+                [indexList removeObject:@(count)];
+            }
+            count++;
+        }
+    }
+    [self setNeedsDisplay:YES]; //ビューの描画
+    //完了：全ての分割イメージが適正な位置に置かれた
+    if (indexList.count == (xNum * yNum))
+    {
+        [timer invalidate];
+        status = 9; //完了
+        [self buttonTitleChange];
+    }
+}
+//変数の初期化
+-(void)statusClear{
+    continuation = NO;
+    status = 0;
+    [self willChangeValueForKey:@"timeCount"];
+    _timeCount = 0;
+    [self didChangeValueForKey:@"timeCount"];
+    [self willChangeValueForKey:@"elapseSec"];
+    _elapseSec = 0.0;
+    [self didChangeValueForKey:@"elapseSec"];
+    accumeSec = 0.0;
+}
+//イメージをランダムに分割（繰り返し）
+-(void)displayRandomlyContinue{
+    continuation = YES;
+    //タイマーオブジェクトを起動
+    timer =[NSTimer
+            scheduledTimerWithTimeInterval:0.01f
+            target:self
+            selector:@selector(displayRandomlyStart:)
+            userInfo:nil
+            repeats:YES];
+    [timer fire];
+}
+//タイマー処理本体
+-(void)displayRandomlyStart:(NSTimer*)tm{
+    [self displayRandomly];
+    //KVO
+    [self willChangeValueForKey:@"timeCount"];
+    [self willChangeValueForKey:@"elapseSec"];
+    _timeCount++;
+    _elapseSec = floor((WATCH_SPLIT()+accumeSec)*100)/100;;
+    [self didChangeValueForKey:@"timeCount"];
+    [self didChangeValueForKey:@"elapseSec"];
+}
+//分割イメージをビューに表示する（コンテキストに出力する）
+-(void)drawPartsImage:(CGContextRef)context{
+    //100回繰り返し（補足・イメージの縮小が発生すると遅い）
+    for (int i=0; i < yNum; i++){
+        for (int j=0; j < xNum; j++){
+            CGContextDrawImage(context, matrix[i][j].dispRect, matrix[i][j].partImage);
+        }
+    }
+}
+//全体イメージをビューに表示する・未使用
+-(void)drawHoleImage:(CGContextRef)context
+{
+    CGRect rect = CGRectMake(0, 0, _xDispLength, _yDispLength);
+    //CGContextDrawImage(context, rect, cgNewImage);
+    CGContextDrawImage(context, rect, cgImage);
+}
+//分割イメージは使用できるか？
+-(BOOL)canUseImage:(int)num{
+    for (NSNumber* imageNum in indexList)
+    {
+        if (imageNum.intValue == num )
+            return NO;
+    }
+    return YES;
+}
+//順序番号から行列の添え字（x, y）を求める
+-(NSPoint)pointAtseq:(NSInteger)seq{
+    NSPoint point = NSMakePoint(0, 0);
+    NSInteger count = 0;
+    for (int i=0; i < yNum; i++){
+        for (int j=0; j < xNum; j++){
+            if(count == seq){
+                point.y = i;
+                point.x = j;
+                return point;
+            }
+            count++;
+        }
+    }
+    return point;
+}
+//Pauseボタンのタイトルの変更
+-(void)buttonTitleChange{
+    NSArray* objects = _window.contentView.subviews;
+    for (id obj in objects){
+        if ([obj isKindOfClass:NSButton.class]){
+            NSButton* button = obj;
+            if (button.tag == 1){
+                if (status == 0){
+                    button.title = @"Start";
+                }else if (status == 1){
+                    button.title = @"Pause";
+                }else if (status == 9){
+                    button.title = @"もう一度";
+                }
+            }
+        }
+    }
+}
+//内部関数 ----------------------------------------------------------------------
+//乱数の取得
+int myRandom(NSInteger max){
+    return (int)arc4random_uniform((int)max);
+}
+@end

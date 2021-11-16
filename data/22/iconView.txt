@@ -1,0 +1,27 @@
+//---- IconView.h ----
+@interface IconView : NSTextField
+@property NSImage *teamIcon; //表示イメージ
+@end
+
+//---- IconView.m ----
+- (void)drawRect:(NSRect)dirtyRect {
+    if ([_teamIcon isEqual:[NSNull null]]){
+        return; //イメージ未設定
+    }
+    //描画領域（80 x 80）
+    float baseWidth = dirtyRect.size.width;
+    float baseHeight = dirtyRect.size.height;
+    //イメージの大きさ（縦横いずれかが Max80）
+    NSImageRep *imageRep = _teamIcon.representations[0];
+    //縮小
+    float imageWidth = (float)imageRep.pixelsWide * 0.8;
+    float imageHeight = (float)imageRep.pixelsHigh * 0.8;
+    //出力範囲
+    NSRect newRect = dirtyRect;
+    newRect.size.width = imageWidth;
+    newRect.size.height = imageHeight;
+    newRect.origin.x = (baseWidth - imageWidth) / 2;
+    newRect.origin.y = (baseHeight - imageHeight) / 2;
+    //描画
+    [_teamIcon drawInRect:newRect];
+}

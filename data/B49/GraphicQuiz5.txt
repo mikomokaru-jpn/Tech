@@ -1,0 +1,1 @@
+override func draw(_ dirtyRect: NSRect) {    if let context = NSGraphicsContext.current?.cgContext{        if cgImage != nil{            context.draw(cgImage! , in: imagePart.dispRect)        }    }}

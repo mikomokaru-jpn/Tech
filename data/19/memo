@@ -1,0 +1,61 @@
+-------------------
+copy&paste to  
+
+プラウザに表示された画像から「イメージをコピー」
+Safari localFile (tiff) ◯ with URL           
+Safari http経由 (tiff) ◯ with URL         
+
+イメージエディタに表示された画像
+Preview (tiff) ◯         
+Grab    (tiff) ◯         
+
+  画像イメージをペーストボードから直接読み込めるのは、tiff形式のみ。
+  NSPasteboardクラス dataForTypeメソッド（public.tiffを指定、public.imageでは読み込めない） 
+                    readObjectsForClassesメソッド
+
+
+Finderの画像ファイル (URL)  ◯ with URL 
+  URLオブジェクトを取得し、URL先のファイルから画像イメージを読み込む。
+  NSImageクラス initWithContentsOfURLメソッド
+
+    
+プラウザに表示された画像から「イメージのアドレスをコピー」
+Safari localFile (URL) ◯ with URL           
+Safari http経由 (URL) ×         
+
+
+-------------------
+copy&paste from
+image only ◯
+image+URL ◯
+
+-------------------
+drag&drop distination
+
+プラウザに表示された画像から「イメージをコピー」
+Safari localFile (tiff) ◯ with URL           
+Safari http経由 (tiff) ◯ with URL         
+
+イメージエディタに表示された画像
+Preview (tiff) ー(drag未対応）        
+Grab    (tiff) ◯         
+
+  画像イメージをペーストボードから直接読み込めるのは、tiff形式のみ。
+  NSPasteboardクラス dataForTypeメソッド（public.tiffを指定、public.imageでは読み込めない） 
+                    readObjectsForClassesメソッド
+
+
+Finderの画像ファイル (URL)  ◯ with URL 
+  URLオブジェクトを取得し、URL先のファイルから画像イメージを読み込む。
+  NSImageクラス initWithContentsOfURLメソッド
+
+-------------------
+drag&drop source
+image only ◯
+image+URL ◯
+
+-------------------
+
+
+
+

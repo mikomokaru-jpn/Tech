@@ -1,0 +1,9 @@
+- (void)mouseDown:(NSEvent *)event{
+    //直前の矩形（CALayerオブジェクト）を消す
+    [_rectShape removeFromSuperlayer];
+    //矩形の選択を開始する
+    _selectedFlg = NO;
+    //始点を決める
+    _startPoint = [self convertPoint:event.locationInWindow 
+                            fromView:nil];
+}

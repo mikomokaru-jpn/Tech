@@ -1,0 +1,14 @@
+[_pasteboard clearContents];  //ペーストボードを空にする
+//オブジェクトを格納する配列を作成
+NSMutableArray *objects = [[NSMutableArray alloc] init];
+//イメージオブジェクトを追加する
+if (_imageView.image != nil){
+    [objects addObject:_imageView.image];  
+}
+//URLオブジェクトを追加する
+if (_labelView.string.length > 0){
+    //文字列をURLに変換
+    NSURL *url = [NSURL URLWithString:_labelView.string];
+    [objects addObject:url];  
+}
+[_pasteboard writeObjects:objects]; //ペーストボードに書き出す

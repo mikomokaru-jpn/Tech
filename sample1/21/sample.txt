@@ -1,0 +1,31 @@
+//基本形（計算を行わない）
+private var _value = 0.0 
+var value:Int{
+    get{       
+        return _value
+    }
+    set(inValue){
+        _value = inValue
+    }
+}
+
+//変数に対して何らかの計算をする
+private var _value = 0.0 
+var value:Int{
+    get{       
+        return _value * 1.08 
+    }
+    set(inValue){
+        _value /= 1.08 
+    }
+}
+
+//disSet：プロパティの値が変化したとき実行する処理（KVCのような）
+var tax: Int = 0
+var price: Int = 0{
+    didSet{
+        tax = Int(Float(price) * 0.1)
+    }
+}
+
+

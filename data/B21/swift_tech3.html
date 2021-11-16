@@ -1,0 +1,72 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>イニシャライザ</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<div class="lm70 tm20 rm60">
+macOS Sierra 10.12.6 / Xcode 9.2 / Swift 4.0
+</div>
+<h2 class="lm70 tm20 bm0 rm60">
+イニシャライザ
+</h2>
+<div class="lm70 tm10 rm60">
+イニシャライザの例
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B21/init1.txt" width="550" height="150"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+鉄則
+</h3>
+<div class="lm70 tm5 rm60">
+カスタムクラスで定義したプロパティの初期化は、スーパクラスのイニシャライズの前に、当該イニシャライザの中で行う。
+なお、NSObjectクラスのサブクラスであればスーパークラスのイニシャライズは省略できる
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+NSViewクラスのサブクラスのイニシャライザ
+</h3>
+<div class="lm70 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+サブクラスのオブジェクト作成方法によりイニシャライズの方法が異なる
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+プログラムの中でオブジェクトを生成し親ビューに追加する
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B21/init2.txt" width="550" height="300"></iframe>
+<div class="lm70 tm5 rm60">
+注意：イニシャライザ init(coder:) も必要なので例のように記述すること。そうないとコンパイルエラーとなる。
+</div>
+<div class="lm70 tm20 rm60">
+ビューの作成方法
+</div>
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B21/appDelegate.txt" width="550" height="110"></iframe>
+
+<h3 class="lm70 tm30 bm0 rm60">
+インタフェースビルダにオブジェクトを作成し親ビューに組み込む
+</h3>
+<div class="lm70 tm0 rm60">
+このケースではイニシャライザ init(coder:) の方が呼ばれるので、初期化処理はこちらに記述すること。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B21/init3.txt" width="550" height="280"></iframe>
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,9 @@
+class UAView: NSView {
+    var cgOriginalImage: CGImage? = nil{ //ファイル読み込み後のイメージ
+        didSet{
+            self.cgNewImage = self.cgOriginalImage
+        }
+    }
+    var cgNewImage: CGImage? = nil  //表示イメージ
+    ....
+}

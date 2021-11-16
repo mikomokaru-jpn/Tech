@@ -1,0 +1,38 @@
+//---- UAViewController1.h ----
+#import <Cocoa/Cocoa.h>
+#import "UASharedData.h"
+@interface UAViewController1 : NSViewController
+-(id)initWithSharedData:(UASharedData*) sharedData;
+-(void)getFocus; //テキストフィールドをファーストレスポンダにする
+@end
+
+//---- UAViewController1.m -----
+å#import "UAViewController1.h"
+@interface UAViewController1 ()
+@property (weak) UASharedData* sharedData;
+@property (weak) IBOutlet NSTextField *textField;
+@property(weak) IBOutlet NSTextField *label;
+@end
+
+@implementation UAViewController1
+//イニシャライザ
+-(id)initWithSharedData:(UASharedData*) sharedData{
+        if (![super initWithNibName:@"UAViewController1" bundle:nil]){
+        return nil;
+    }
+    //共用データ
+    _sharedData = sharedData;
+    return self;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    NSLog(@"UAViewController1 viewDidLoad");
+    //ビューの外観
+    self.view.wantsLayer = YES;
+    self.view.layer.backgroundColor = [NSColor lightGrayColor].CGColor;
+    _label.textColor = [NSColor blackColor];
+}
+-(void)getFocus{
+    [self.view.window makeFirstResponder:_textField];
+}
+@end

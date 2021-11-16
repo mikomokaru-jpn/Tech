@@ -1,0 +1,20 @@
+//--- AppDelegate.m ---
+#import "AppDelegate.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSView *view;
+@property (weak) IBOutlet NSTextField *textField;
+@property (weak) IBOutlet NSButton *button;
+@end
+@implementation AppDelegate
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    [_textField setStringValue:@"テスト"];
+    [_button setTitle:@"Click me"];
+}
+-(IBAction)buttonClicked:(id)sender
+{
+    [_textField setStringValue:@"ボタンがクリックされた"];
+    [_button setEnabled:NO];    //ボタンを無効化する
+}
+@end

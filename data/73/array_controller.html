@@ -1,0 +1,100 @@
+<!-- 
+NewPractice/55 ArrayController2
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ArrayControllerを使ってテーブルビューを表示する２</title>
+  <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm0">ArrayControllerを使ってテーブルビューを表示する</h2>
+<h2 class="lm70 tm0 bm10">レコードの追加/削除/ソートを組み込む</h2>
+<div class="lm70 tm10 rm60">
+ArrayControllerとバインドを使ってテーブルビューを表示し、データの追加と削除、およびソートを行えるようにする。
+</div>
+<h3 class="lm70 tm10 bm0 rm60">
+レコードの追加
+</h3>
+<div class="lm70 tm5 rm60">
+追加（＋）ボタンをクリックすると、テーブルビューの最終行に新しいレーコードが作成される。作成されたレコードを選択し、項目（コード、名前、カナ、国語/算数の点数）を入力する。入力はテーブルビュー、テキストビューいずれからでも可能である。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/73/array_controller1.png&title=array_controller1&width=600" target="_new">
+<img class="lm70 tm5 bm0" src="array_controller1.png" alt="[array_controller1]" width="400"></a>
+<h3 class="lm70 tm20 bm0 rm60">
+レコードの削除
+</h3>
+<div class="lm70 tm5 rm60">
+テーブルビューのレコードを選択して削除（−）ボタンをクリックすると、選択されたレコードが削除される。
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+ソート
+</h3>
+<div class="lm70 tm5 rm60">
+列見出しの「No.」「国語」「算数」をクリックすると、それぞれの列のキーで配列をソートする。連続してクリックすると昇順/降順を繰り返す。
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/72/array_controller2.png&title=array_controller2&width=600" target="_new">
+<img class="lm70 tm5 bm0" src="array_controller2.png" alt="[array_controller2]" width="400"></a>
+<div class="lm70 tm30 bm0 rm60">
+実装手順
+</div>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<h3 class="lm70 tm10 bm0 rm60">
+レコードの追加
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/73/add.txt" width="580" height="230"></iframe>
+<div class="lm70 tm5 rm60">
+（注１）新しいレコードを追加した後、テーブルビューでその行を選択状態にしようとしてもできない。テーブルビュー1行目が選択状態になってしまう。<a href="/lib/HTMLofImage.html?filename=/data/73/array_controller3.png&title=array_controller3&width=600" target="_new">結局二つの行が選ばられてるような状態。</a>
+</div>
+<h3 class="lm70 tm20 bm0 rm60">
+レコードの削除
+</h3>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/73/remove.txt" width="580" height="350"></iframe>
+<h3 class="lm70 tm20 bm0 rm60">
+ソート
+</h3>
+<div class="lm70 tm5 rm60">
+ソートキーを指定したソート記述子（NSSortDescriptor）を作成し、ソートしたい列に組み込む。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/73/sort1.txt" width="580" height="520"></iframe>
+<div class="lm70 tm10 rm60">
+テーブルビューの列をクリックしたときに起動するメソッド（NSTableViewDataSourceプロトコル）を実装し、rearrangeObjectsメソッドにより arrangeObjectsメソッドを呼び出す。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/73/sort2.txt" width="580" height="210"></iframe>
+<div class="lm70 tm10 rm60">
+arrangeObjectsメソッドをオーバーライドし、列に定義されているソート記述子をもとにソートを行う。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/73/sort3.txt" width="580" height="200"></iframe>
+
+<h3 class="lm70 tm30 bm0 rm60">
+クラス定義の変更
+</h3>
+<h4 class="lm70 tm0 rm60 bm0">
+原因のよくわからない不具合に遭遇したので、プロパティの型を一部変更した。
+</h4>    
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/73/Yokai.txt" width="580" height="300"></iframe>
+<div class="lm70 tm10 rm60">
+既存の値を変更したり、レコードを追加した後にソートを行うと正しく並び替わらない、ときに実行時エラーが発生したりする。数値プロパティ（コード、国語と算数の点数）の型を NSNumbe から NSInteger に変更したら解決した。原因はよくわからないが、バインドを経由してデータを自動更新したとき不整合が発生しているのかもしれない。バインドを使用しないでプログラムで更新すれば発生しないかもしれない。
+</div>
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>

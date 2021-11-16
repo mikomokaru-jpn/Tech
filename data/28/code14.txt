@@ -1,0 +1,19 @@
+NSDate *now = [NSDate date];
+NSDateComponents *dComp = [[NSDateComponents alloc] init];
+dComp.year = 2025;
+dComp.month = 4;
+dComp.day = 13;
+NSDate* toDate = [[NSCalendar currentCalendar] dateFromComponents:dComp];
+
+NSInteger totalDaysFrom = [[NSCalendar currentCalendar]
+                            ordinalityOfUnit:NSCalendarUnitDay
+                            inUnit:NSCalendarUnitEra
+                            forDate:now];
+NSInteger totalDaysTo = [[NSCalendar currentCalendar]
+                          ordinalityOfUnit:NSCalendarUnitDay
+                          inUnit:NSCalendarUnitEra
+                          forDate:toDate];
+NSLog(@"大阪万博まであと %ld日", totalDaysTo - totalDaysFrom);
+
+//結果
+大阪万博まであと 1513日

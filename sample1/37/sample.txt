@@ -1,0 +1,8 @@
+let startDate = Date() //処理時間策定開始
+....
+let endDate = Date()   //処理時間測定終了
+let elaps = endDate.timeIntervalSince(startDate) //経過秒数
+
+//example
+0.887099981307983
+

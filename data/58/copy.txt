@@ -1,0 +1,23 @@
+-(IBAction)copy:(id)sender{
+    //矩形により画像が選択されていないときは何もしない。
+    if (!_selectedFlg || 
+        CGPointEqualToPoint(_startPoint, _endPoint)){
+        return;
+    }
+    //選択範囲のイメージの位置と大きさを求める（原点とサイズを調整する）
+    CGRect rect = [self adjustRect:
+                   CGRectMake(_startPoint.x, _startPoint.y,
+                              _width, _height)];
+    //部分イメージを取得する
+    CGImageRef partImageRef = CGImageCreateWithImageInRect(
+                               _imageRef, rect);
+    //CGImageRef -> NSImageに変換する
+    NSImage *partimage = [[NSImage alloc] initWithCGImage:partImageRef
+                                                     size:rect.size];
+    
+    //NSImageオブジェクトをペーストボードにコピーする
+    [_pasteboard clearContents];
+    NSMutableArray *objects = [[NSMutableArray alloc] init];
+    [objects addObject:partimage];
+    [_pasteboard writeObjects:objects];
+}

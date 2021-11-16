@@ -1,0 +1,6 @@
+-(void)tableView:(NSTableView *)tableView
+  setObjectValue:(id)object
+  forTableColumn:(NSTableColumn *)tableColumn
+             row:(NSInteger)row{
+    NSLog(@"setObjectValue");
+}

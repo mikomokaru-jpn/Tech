@@ -1,0 +1,9 @@
+let now = Date.init()
+let formatter = DateFormatter()
+formatter.dateFormat = "Gyy年MM月dd日 HH時mm分ss秒"
+formatter.calendar = Calendar.init(identifier: .japanese)
+formatter.locale = Locale.init(identifier: "ja_JP")
+print(formatter.string(from: now))
+
+//結果
+令和3年10月23日 11時21分55秒

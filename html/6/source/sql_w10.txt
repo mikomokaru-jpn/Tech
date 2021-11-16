@@ -1,0 +1,64 @@
+<?php
+//日記帳テーブルにデータを書き出す。
+//同じ日付のデータがあれば変更、なければ追加。
+ini_set('display_errors',1);
+//DB接続
+require_once("init.php");
+require_once("MYDB.php");
+$pdo = db_connect();
+//SQLの実行 ---------------------------------------------------------------------
+try{
+    $sql = "SELECT COUNT(*) as count FROM diary_text WHERE date=:date;";
+    $stmh = $pdo->prepare($sql);
+    $stmh->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+    $stmh->execute();
+}catch (PDOException $e) {
+    die('エラー1:'. $e->getMessage());
+}
+// 件数を取得
+while ($row = $stmh->fetch(PDO::FETCH_ASSOC)){
+    $count = ($row["count"]);
+}
+if ($count > 0){ // あれば UPDATE
+    try{
+        $sql = "UPDATE diary_text SET text=:text WHERE date=:date;";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+        $stmh->bindValue(':text', $_POST['text'], PDO::PARAM_STR);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー2:'. $e->getMessage());
+    }
+    
+}else{ // なければ INSERT
+    try{
+        $sql = "INSERT INTO diary_text VALUES (:date, :text);";
+        $stmh = $pdo->prepare($sql);
+        $stmh->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+        $stmh->bindValue(':text', $_POST['text'], PDO::PARAM_STR);
+        $stmh->execute();
+    }catch (PDOException $e) {
+        die('エラー3:'. $e->getMessage());
+    }
+    
+}
+
+if (isset($_POST['write_print'])){
+    //------------------------------------------------------------------------------
+    print('<DOCTYPE HTML>');
+    print('<html id="mainhtml">');
+    print('<head>');
+    print('<meta http-equiv="Content-Type" content="text/html; charset=utf-8">');
+    print('<title>Test</title>');
+    print('</head>');
+    print('<body>');
+    print('<p>1</p>');
+    print('</body>');
+    print('</html>');
+}else{
+    // JSON形式で出力 (json_encode 関数)
+    $res = array(array('result'=>'inserted'));
+    header('Content-type: application/json');
+    echo json_encode($res);
+}
+?>

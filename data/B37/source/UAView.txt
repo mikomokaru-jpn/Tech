@@ -1,0 +1,15 @@
+import Cocoa
+class UAView: NSView {
+    var name = ""
+    override func mouseDown(with event: NSEvent) {
+        //クリックした点：コンテントビューの座標
+        let point = event.locationInWindow
+        print("--- \(self.name) ---")
+        print(String(format:"In contentView %.0f:%.0f", point.x, point.y))
+        //点の座標の変換：自身のビューを基準にする
+        //from引数を nilにするとコンテントビューになる
+        let cnvPoint = self.convert(point, from: nil)
+        //or let cnvPoint = self.window!.contentView!.convert(point, to: self)
+        print(String(format:"in self %.0f:%.0f", cnvPoint.x, cnvPoint.y))
+    }
+}

@@ -1,0 +1,256 @@
+/*-----------------------------------------------------------------------------*/
+/*  タグ　                                                                      */          
+/*-----------------------------------------------------------------------------*/
+body{
+font-family: メイリオ, Meiryo, 'ヒラギノ角ゴ ProN W3','Hiragino Kaku Gothic ProN', 'MS PGothic', sans-serif;
+font-size: 0.9em; 
+}
+pre{
+	 white-space: pre;
+	font-family:  SFMono-Regular, Consolas, monospace;
+	font-size: 0.9em; 
+}
+th, td {
+font-size: 0.9em; 
+}
+h1, p {
+margin: 0;
+padding: 0;
+}
+iframe{
+	border: solid 1px #000000;
+}
+/*-----------------------------------------------------------------------------*/
+/*  ID 　                                                                      */          
+/*-----------------------------------------------------------------------------*/
+/* ブラウザの背景色 */
+html#mainhtml{
+background-color: #BDBDBD;	
+}
+/* ブラウザの背景色 */
+html#menuhtml{
+background-color: #FFFFFF;	
+}
+/* メインフォームの幅・自動的に位置を中央に合わせる */
+body#mainbody{
+width: 700px;
+margin: 0 auto;
+}
+/* メニュー用メインフォームの幅・自動的に位置を中央に合わせる */
+body#mainbody2{
+width: 850px;
+margin: 0 auto;
+}
+/* メインフォームのヘッダ部の幅 */
+header#mainheader{
+background-color: #BCF5A9;
+width: 100%;
+}
+/* メインフォームのフッター部 */
+footer#mainfooter{
+clear: both;
+background-color: #BCF5A9;
+width: 100%;
+}
+/* メインフォームの背景色 */
+div#content {
+background-color: #ffffff;
+overflow: hidden;
+}
+/* メインフォームの記述部 */
+div#desc {
+background-color: #ffffff;
+width: 80%;
+float: right;
+}
+div.topLevel{
+    display: grid;
+	grid-template-columns: 250px 600px;
+}
+section.menu{
+    background-color:#BCF5A9;
+    /*border: solid 1px black;*/
+}
+section.index{
+	background-color: #ffffff;
+	/*border: solid 1px black;*/
+}
+
+/*-----------------------------------------------------------------------------*/
+/*  クラス                                                                      */          
+/*-----------------------------------------------------------------------------*/
+/* テーブル */
+.table{
+	display: table;
+}
+.table_row{
+	display: table-row;
+}
+
+.table_cell{
+	display: table-cell;
+	vertical-align: top;
+	table-layout: fixed;
+	/*border: solid 1px #CCCCCC;*/
+}
+
+/* 罫線の定義 */
+.border {border: solid 1px #000000;}
+
+/* マージンの定義 */
+/* 左 */
+.lm5 {margin-left: 5px;}
+.lm10 {margin-left: 10px;}
+.lm15 {margin-left: 15px;}
+.lm20 {margin-left: 20px;}
+.lm30 {margin-left: 30px;}
+.lm40 {margin-left: 40px;}
+.lm50 {margin-left: 50px;}
+.lm60 {margin-left: 60px;}
+.lm70 {margin-left: 70px;}
+.lm80 {margin-left: 80px;}
+.lm90 {margin-left: 90px;}
+.lm100 {margin-left: 100px;}
+.lm110 {margin-left: 110px;}
+.lm120 {margin-left: 120px;}
+.lm130 {margin-left: 130px;}
+.lm140 {margin-left: 140px;}
+.lm150 {margin-left: 150px;}
+.lm160 {margin-left: 160px;}
+.lm170 {margin-left: 170px;}
+.lm180 {margin-left: 180px;}
+.lm190 {margin-left: 190px;}
+.lm200 {margin-left: 200px;}
+.lm250 {margin-left: 250px;}
+.lm300 {margin-left: 300px;}
+.lm400 {margin-left: 400px;}
+/* 右 */
+.rm20 {margin-right: 20px;}
+.rm30 {margin-right: 30px;}
+.rm40 {margin-right: 40px;}
+.rm50 {margin-right: 50px;}
+.rm60 {margin-right: 60px;}
+.rm200 {margin-right: 200px;}
+.rm300 {margin-right: 300px;}
+.rm400 {margin-right: 400px;}
+.rm500 {margin-right: 500px;}
+/* 上 */
+.tm0  {margin-top: 0px;}
+.tm5  {margin-top: 5px;}
+.tm10 {margin-top: 10px;}
+.tm15 {margin-top: 15px;}
+.tm20 {margin-top: 20px;}
+.tm30 {margin-top: 30px;}
+.tm40 {margin-top: 40px;}
+.tm50 {margin-top: 50px;}
+/* 下 */
+.bm0  {margin-bottom: 0px;}
+.bm5  {margin-bottom: 5px;}
+.bm10 {margin-bottom: 10px;}
+.bm15 {margin-bottom: 15px;}
+.bm20 {margin-bottom: 20px;}
+.bm30 {margin-bottom: 30px;}
+.bm40 {margin-bottom: 40px;}
+
+/* パディングの定義 */
+/* 左 */
+.lp5  {padding-left: 5px;}
+/* 右 */
+.rp5  {padding-right: 5px;}
+/* 上 */
+.tp0  {padding-top: 0px;}
+.tp5  {padding-top: 5px;}
+.tp10 {padding-top: 10px;}
+.tp20 {padding-top: 20px;}
+.tp30 {padding-top: 30px;}
+.tp40 {padding-top: 40px;}
+/* 下 */
+.bp0  {padding-bottom: 0px;}
+.bp5  {padding-bottom: 5px;}
+.bp10 {padding-bottom: 10px;}
+.bp20 {padding-bottom: 20px;}
+.bp30 {padding-bottom: 30px;}
+.bp40 {padding-bottom: 40px;}
+/* フォントサイズ */
+.font200 { font-size: 2.0em; } /* 200% */
+.font150 { font-size: 1.5em; } /* 150% */
+.font140 { font-size: 1.4em; } /* 140% */
+.font130 { font-size: 1.3em; } /* 130% */
+.font120 { font-size: 1.2em; } /* 120% */
+.font110 { font-size: 1.1em; } /* 110% */
+.font100 { font-size: 1.0em; } /* 100% */
+.font95 { font-size: 0.95em; } /* 95% */
+.font90 { font-size: 0.9em; } /* 90% */
+.font80 { font-size: 0.8em; } /* 80% */
+/* 文字の色 */
+.redcolor { color: #ff0000; } 
+.bluecolor { color: #0000ff; }
+.greencolor { color: #008000; }
+.darkorangecolor { color: #ff8c00; }
+/* 背景色の色 */
+.bkYellow { background-color: yellow; }
+.bkPaleBlue { background-color: #bbffff; } 
+/* 水平方向の配置 */
+.textleft { text-align: left;}
+.textright { text-align: right;}
+/* 幅 */
+.w10 {width: 10px}
+.w15 {width: 15px}
+.w20 {width: 20px}
+.w30 {width: 30px}
+.w40 {width: 40px}
+.w50 {width: 50px}
+.w60 {width: 60px}
+.w70 {width: 70px}
+.w80 {width: 80px}
+.w90 {width: 90px}
+.w100 {width: 100px}
+.w150 {width: 150px}
+.w200 {width: 200px}
+.w250 {width: 250px}
+.w300 {width: 300px}
+.w350 {width: 350px}
+.w400 {width: 400px}
+.w450 {width: 450px}
+.w500 {width: 500px}
+/* 高さ */
+.h10 {height: 10px}
+.h20 {height: 20px}
+.h30 {height: 30px}
+/* 枠線 */
+.lborder {border-left: solid 1px #000000;}
+.rborder {border-right: solid 1px #000000;}
+.tborder {border-top: solid 1px #000000;}
+.bborder {border-bottom: solid 1px #000000;}
+.noborder { border: none; }
+
+/* 1行に複数のブロック */
+.inlineblock {
+ display: inline-block;
+ vertical-align: middle; }
+ .inline{display: inline;}
+
+/* フォントを変えずにpre要素を作る */
+.div-pre {
+    white-space: pre;
+}
+*/
+/* 等幅フォントのpre要素を作る */
+.div-pre-mono {
+    white-space: pre;
+	font-family:"Osaka-mono", "Courier New", monospace;
+}
+
+button.sort{ /* 並び替えボタン */
+    margin-top: 0px;
+    font-size: 0.9em;
+    width: 120px;
+	height: 22px;
+}
+select.combo{ /* コンボボックス */
+    font-size: 1.2em;
+    width: 150px;
+}
+
+
+

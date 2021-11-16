@@ -1,0 +1,1 @@
+//フォントオブジェクトの作成NSFont* font = [NSFont fontWithName:@"YuKyo-Bold" size:20];//属性付き文字列の作成NSAttributedString *atrStr = [[NSAttributedString alloc]     initWithString:@"山のあなたの空遠く"    attributes:@{NSFontAttributeName:font}];

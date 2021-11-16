@@ -1,0 +1,33 @@
+//---- AppDelegate.m ----
+@property NSMutableArray<Sushi*> *menuList; //データソース
+@property NSArray<NSSortDescriptor*> *descriptors; //ソート記述子
+
+-(void)awakeFromNib{
+    NSLog(@"awakeFromNib");
+    NSArray *sourceList =
+    @[@[@1, @"鮪赤身", @"マグロアカミ", @300, @47],
+      @[@2, @"鮪トロ", @"マグロトロ", @500, @12],
+      @[@3, @"烏賊", @"イカ", @150, @45],
+      @[@4, @"蛸", @"タコ", @180, @31],
+      @[@5, @"海老", @"エビ", @200, @40],
+      @[@6, @"鉄火巻き", @"テッカマキ", @300, @18],
+      @[@7, @"鰤", @"ブリ", @200, @26],
+      @[@8, @"海栗", @"ウニ", @550, @19],
+      @[@9, @"穴子", @"アナゴ", @400, @28],
+      @[@10, @"小鰭", @"コハダ", @200, @31]];
+    _menuList = [[NSMutableArray alloc] init];
+    for(NSArray *items in sourceList){
+        Sushi *sushi = [[Sushi alloc] init];
+        sushi.code = items[0];
+        sushi.name = items[1];
+        sushi.kana = items[2];
+        NSNumber *num = items[3];
+        sushi.sales.price =  num.integerValue;
+        num = items[4];
+        sushi.sales.quantity =  num.integerValue;
+        [_menuList addObject:sushi];
+    }
+    _sort1Button.tag = YES;
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:0];
+    [_tableView selectRowIndexes:indexes byExtendingSelection:YES];
+}

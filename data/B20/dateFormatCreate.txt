@@ -1,0 +1,17 @@
+let formatter: DateFormatter = DateFormatter()
+formatter.dateFormat = "yyyy_MM_dd HH-mm-ss"
+let dateString1 = "2000_5_31 23-15-8"
+if let date = formatter.date(from: dateString1) {
+    print(formatter.string(from: date))
+    formatter.dateStyle = .full
+    formatter.timeStyle = .full
+    print(formatter.string(from: date))
+}
+
+//結果
+2000_05_31 23-15-08
+2000年5月31日水曜日 23時15分08秒 日本標準時
+
+//極端な例だがこれでも良い
+formatter.dateFormat = "yyyyMMddHHmmss"
+let dateString1 = "20000531231508"

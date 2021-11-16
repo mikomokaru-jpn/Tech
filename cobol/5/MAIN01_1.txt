@@ -1,0 +1,13 @@
+ WORKING-STORAGE             SECTION.
+**** 顧客マスターテーブル有効件数（戻り値） ****
+ 01 CUST-COUNT               PIC 9(02).
+**** 顧客マスターテーブル（戻り値）****
+ 01 CUST-TABLE.
+     05 CUSTOMER OCCURS 10 TIMES.
+         10 CUST-CODE        PIC 9(04).
+         10 CUST-NAME        PIC X(20).
+〜〜〜
+**** サブルーチンCALL ****
+     CALL "SUB01" USING BY REFERENCE CUST-COUNT
+                        BY REFERENCE CUST-TABLE
+                  GIVING RETURN-VALUE

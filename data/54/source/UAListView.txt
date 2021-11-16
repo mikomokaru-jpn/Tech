@@ -1,0 +1,56 @@
+//---- UAImageListView.h ----
+#import <Cocoa/Cocoa.h>
+#import "UAView.h"
+@interface UAListView : NSView <UAViewDelegate>
+@property NSMutableArray<UAView*>* viewList; //ビュー配列
+@end
+
+//---- UAImageListView.m ----
+#import "UAListView.h"
+@implementation UAListView
+//イニシャライザ
+-(id)initWithFrame:(NSRect)frameRect{
+    if(![super initWithFrame:frameRect])
+        return nil;
+    self.wantsLayer = YES;
+    self.layer.backgroundColor = [NSColor blackColor].CGColor;
+    //ビューを作成しビュー配列に追加する
+    _viewList = [[NSMutableArray alloc] init];
+    NSSize vewSize = NSMakeSize(50.0, 50.0);
+    for(int i=0; i<10; i++){
+        NSString *num = [NSString stringWithFormat:@"%d", i];
+        UAView *aView = [[UAView alloc] initWithIndex:i number:num];
+        aView.frame = NSMakeRect(i*vewSize.height+2+(i*2), 2, vewSize.width , vewSize.height);
+        aView.uaDelegate = self;        //デリゲート
+        [_viewList addObject:aView];    //ビューリストにビューを追加する
+        [self addSubview:aView];        //自ビューにビューを追加する
+    }
+    self.needsDisplay = YES;
+    return self;
+}
+//デリゲートメソッド：イメージリストの再配置
+-(void)resetImageListTo:(NSInteger)toNumber from:(NSInteger)fromNumber{
+    NSString *temp = _viewList[fromNumber].number;
+    //添字の増分値
+    NSInteger incr;
+    if(toNumber == fromNumber){
+        return;
+    }else if (toNumber < fromNumber){
+        incr = -1;
+        for(NSInteger i=fromNumber; i > toNumber; i+=incr){
+            //文字列の移動
+            _viewList[i].number = _viewList[i+incr].number;
+            _viewList[i].needsDisplay = YES;
+        }
+    }else{
+        incr = 1;
+        for(NSInteger i=fromNumber; i < toNumber; i+=incr){
+            //文字列の移動
+            _viewList[i].number = _viewList[i+incr].number;
+            _viewList[i].needsDisplay = YES;
+        }
+    }
+    _viewList[toNumber].number = temp;
+    _viewList[toNumber].needsDisplay = YES;
+}
+@end

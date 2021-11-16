@@ -1,0 +1,9 @@
+/* 
+バインドの ModelKeyPath が self.sharedData.text であるとき、
+参照オブジェクト sharedData には "@objc" 
+プロパティ text には "@objc dynamic" をつける必要がある。
+*/
+//---- UAViewController1.swift ----
+@objc let sharedData: UASharedData //共用データ @objc必須
+//---- UASharedData.swift ----
+@objc dynamic var text: String //@objc dynamic必須

@@ -1,0 +1,24 @@
+-(IBAction)sort3:(id)sender{
+    NSSortDescriptor *descript1, *descript2;
+    if (_sort3Button.tag == YES){
+        descript1 = [NSSortDescriptor 
+                     sortDescriptorWithKey:@"sales.price" 
+                     ascending:NO];
+        descript2 = [NSSortDescriptor 
+                     sortDescriptorWithKey:@"code" 
+                     ascending:NO];
+        _sort3Button.tag = NO;
+    }else{
+        descript1 = [NSSortDescriptor 
+                     sortDescriptorWithKey:@"sales.price" 
+                     ascending:YES];
+        descript2 = [NSSortDescriptor 
+                     sortDescriptorWithKey:@"code"
+                     ascending:YES];
+        _sort3Button.tag = YES;
+    }
+    _menuList = [[_menuList 
+                   sortedArrayUsingDescriptors:@[descript1, descript2]] 
+                                                           mutableCopy];
+    [_tableView reloadData];
+}

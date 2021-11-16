@@ -1,0 +1,28 @@
+NSArray *resultList;
+resultList = [text searchRegOfString:@"japan" options:0];
+[self display:resultList]; // {6, 5} 
+
+resultList = [text searchRegOfString:@"japan"
+                             options:NSRegularExpressionCaseInsensitive];
+[self display:resultList]; // {6, 5} {87, 5} {244, 5} 
+
+resultList = [text searchRegOfString:@"日本" options:0];
+[self display:resultList]; // {147, 2} {388, 2}
+
+resultList = [text searchRegOfString:@"j.*?n"
+                             options:NSRegularExpressionCaseInsensitive];
+[self display:resultList]; // {6, 5} {87, 5} {244, 5}
+
+resultList = [text searchRegOfString:@"日.*?本" options:0];
+[self display:resultList]; // {147, 2} {289, 5} {388, 2}
+
+//コンソール表示
+-(void)display:(NSArray*)resultList{
+    NSString *disp = @"";
+    for (NSTextCheckingResult *result in resultList){
+        disp = [disp stringByAppendingString:
+                [NSString stringWithFormat:@"{%ld, %ld} ",
+                 result.range.location, result.range.length]];
+    }
+    NSLog(@"%@", disp); 
+}    

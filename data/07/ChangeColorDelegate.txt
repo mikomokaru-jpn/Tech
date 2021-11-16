@@ -1,0 +1,4 @@
+@protocol ChangeColorDelegate <NSObject>      //プロトコル名
+@optional //or @required
+-(void)changeColorByButton:(NSColor *)color;  //デリゲートメソッド定義
+@end

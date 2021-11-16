@@ -1,0 +1,3 @@
+CGContextDrawImage(newContext,
+                   CGRectMake(0, 0, newWidth, newHeight),
+                   _originalImageRef);

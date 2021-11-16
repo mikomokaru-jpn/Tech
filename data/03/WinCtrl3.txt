@@ -1,0 +1,30 @@
+//--- WinCtrl3.h ---
+#import <Cocoa/Cocoa.h>
+@interface WinCtrl3 : NSWindowController
+@end
+
+//--- WinCtrl3.m ---
+#import "WinCtrl3.h"
+@interface WinCtrl3 ()
+@property(weak) IBOutlet NSTextField *label1;
+-(IBAction)buttonOK:(id)sender;
+-(IBAction)buttonCancel:(id)sender;
+@end
+
+@implementation WinCtrl3
+- (void)windowDidLoad
+{
+    [super windowDidLoad];
+    _label1.stringValue = @"モードレスなウィンドウ";
+}
+//ウィンドウを閉じる（OK）
+-(IBAction)buttonOK:(id)sender
+{
+    [self.window close];
+}
+//ウィンドウを閉じる（キャンセル）
+-(IBAction)buttonCancel:(id)sender
+{
+    [self.window close];
+};
+@end

@@ -1,0 +1,5 @@
+let plistURL: URL = URL.init(fileURLWithPath: 
+                    NSHomeDirectory() + "/Documents/myFont.plist")
+let plist: NSDictionary = ["fontName" : "Osaka",
+                           "fontSize" : 14]
+plist.write(to: plistURL, atomically: true)

@@ -1,0 +1,5 @@
+print(String(format:"view1 bounds %.0f:%.0f %.0f:%.0f",
+             view1.bounds.origin.x, view1.bounds.origin.y,
+             view1.bounds.size.width, view1.bounds.size.height))
+//結果
+superview 0:0 200:100

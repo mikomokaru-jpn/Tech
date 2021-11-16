@@ -1,0 +1,19 @@
+//---- Records.h ----
+#import <Foundation/Foundation.h>
+@interface Records : NSObject
+@property NSNumber *japanese;       //国語の点数
+@property NSNumber *arithmetic;     //算数の点数
+@end
+
+//---- Records.m ----
+#import "Records.h"
+@implementation Records
+-(id)init{
+    if(![super init]){
+        return nil;
+    }
+    _japanese = @0;
+    _arithmetic = @0;
+    return self;
+}
+@end

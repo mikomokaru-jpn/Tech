@@ -1,0 +1,59 @@
+//------------------------------------------------------------------------------
+// NSMutableArray+TaskInfo.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+#import "Task.h"
+
+@interface NSMutableArray (TaskInfo)
+
+-(void)createTable;                        //タスクリストの作成
+-(NSString*)taskNameAt:(NSNumber*)code;    //タスクコードからタスク名を求める
+-(NSUInteger)indexOfCode:(NSNumber*)code;  //タスクコードからインデックス（整数）を求める
+@end
+//------------------------------------------------------------------------------
+// NSMutableArray+TaskInfo.m
+//------------------------------------------------------------------------------
+#import "NSMutableArray+TaskInfo.h"
+
+@implementation  NSMutableArray (TaskInfo)
+//タスクリストの作成
+-(void)createTable
+{
+    NSBundle *bundle = [NSBundle mainBundle];        //アプリケーションバンドル
+    NSString *pathTask = [bundle pathForResource:@"taskList" ofType:@"txt"];
+    NSData *dataTask  = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:pathTask]];
+    NSString *strTask = [[NSString alloc] initWithData:dataTask encoding:NSUTF8StringEncoding];
+    
+    NSArray *arrayTask = [strTask componentsSeparatedByString:@"\n"];
+    for (NSString *line in arrayTask)
+    {
+        NSArray *tmp = [line componentsSeparatedByString:@";"];
+        if (tmp.count == 2){
+            Task *task = [[Task alloc] init]; //Taskオブジェクト
+            task.code = tmp[0];
+            task.name = tmp[1];
+            [self addObject:task];
+        }
+    }
+}
+//タスクコードからタスク名を求める
+-(NSString*)taskNameAt:(NSNumber*)code
+{
+    for (Task* task in self)
+    {
+        if (task.code.intValue == code.intValue)
+            return task.name;
+    }
+    return @"";
+}
+//タスクコードからインデックス（整数）を求める
+-(NSUInteger)indexOfCode:(NSNumber*)code
+{
+    for (int i=0; i< self.count; i++)
+    {
+        if ( [((Task*)self[i]).code  compare:code] == NSOrderedSame)
+            return i;
+    }
+    return 0;
+}
+@end

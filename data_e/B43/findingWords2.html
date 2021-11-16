@@ -1,0 +1,162 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Full-text search tool No.2</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type='text/javascript' src='/lib/funcs2.js'></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h3 class="lm100 tm20 bm0"> Full-text search tool No.2</h3>
+<h2 class="lm100 tm0 bm0">Full-text search  traversing  a specified directory</h2>  
+<h2 class="lm100 tm0 bm0">Parallel processing by multithreading</h2>    
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B43/findingWords2.mp4&title=findingWords2&width=700" target="_new">
+<img class="lm100 tm30 bm0" src="/data/B43/findingWords2.png" alt="[findingWords2]" width="450"></a>
+<div class="lm100 tm20 rm60">
+Confirmed operation: MacOS 10.14.6 / Xcode 11.3.1
+</div>
+<div class="lm100 tm10 rm60">
+Full-text search process for a file system is expected to target  the number of files on the order of thousands to tens of thousands.
+If you want the turn around time shorten, it is efective that  you divide one process  into  multiple processes and execute them in parallel.
+As a result of modifying <a href='../B40/findingWords.html' target="_blank">full-text text search tool  No.1</a> to parallelization and executing it, I found  that a considerable effect can be expected.
+</div>
+<h3 class="lm100 tm10 rm60 bm0">
+Parallelization requirements
+</h3>
+<div class="lm100 tm5 rm60">
+Divide all files to be searched into 2 to 10 and perform  text search processes individually in parallel for each file group, 
+and merge the results after all the processes are completed.
+The results are finally sorted, so the order of each processing does not matter.
+</div>
+<div class="lm100 tm10 rm60">
+Display the progress rate of the process in the progress bar of the window.
+A progress rate is a ratio of a number of processed files to total number of files.
+However, from the point of efficiency, this function does not work with a  number of files (1,000) or less.
+</div>
+<div class="lm100 tm10 rm60">
+Cancellation of processing can be accepted in the middle of processing. 
+The process is stopped immediately when stop button is clicked.
+</div>
+<div class="lm100 tm10 rm60">
+If the number of target files is too large, the process will take a long time, 
+so if the number of files exceeds 100,000, a warning dialog will be displayed and the user can cancel the process.
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+Class structure diagram
+</h3>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B43/findingWords2-2.png&title=findingWords2-2&width=900" target="_new">
+<img class="lm110 tm0 bm0" src="/data/B43/findingWords2-2.png" alt="[findingWords2-2]" width="500"></a>
+<h3 class="lm100 tm10 rm60 bm0">
+Implementation points
+</h3>
+<h3 class="lm100 tm0 rm60 bm0">
+(1) Multi-thread processing
+</h3>
+<div class="lm100 tm5 rm60 bm0">
+The parallelization of processing uses multi-thread function GCD. The queue is concurrent.
+Subthread processing is asynchronous  in order to enable to display data to UI and to get events from UI.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+After all text search processes by subthread has been completed, the list is created and displayed.
+These processes are implemented with delegate method.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+UI operations need to be done in  main thread, and if you try to do it  from  sub thread, 
+you must re-queue the function  to be done to main thread.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+Be careful when multiple subthreads process executed concurrently update properties of an object.
+For example, when adding an element to an array, this process is not thread-safe and can cause a system crash due to a conflict of multiple  assignments.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+Then, there is a process that it  first gets a currentry value of the property , updates it, 
+and then rewrites it back the property. it is a multi-step process.
+So if many number of subthreads execute this process at the same time, 
+the consistency of each process  is not guaranteed, and unexpected results are likely to occur.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+In such cases, you should queue the processing block to serial queue, so sequential processing is guaranteed and problems can be avoided.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+In this application, as the above example, the following two processes are executed in main thread via serial queue.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+1. Merge the records of individual search results into the aggregation table.
+</div>
+<div class="lm100 tm10 rm60 bm0">
+2. Add the number of processed files for each thread to current total number. This value is displayed in the progress bar as progress.
+</div>
+<h3 class="lm100 tm10 rm60 bm0">
+(2) Processing synchronization
+</h3>
+<div class="lm100 tm5 rm60 bm0">
+Wait for the end of all the search processes have been executed in parallel, and then create the list of results. 
+This requires synchronous control.
+Here, a global counter is prepared, the counter is incremented each time one search process is completed, 
+and when all the processes are completed, a delegate method that creates and displays the list of result is called.
+</div>
+<h3 class="lm100 tm20 rm60 bm0">
+Execution log output
+</h3>
+<div class="lm100 tm5 rm60 bm0">
+  Output the following values to <a href="/lib/HTMLofText.html?filename=/data/B43/source/log.txt&title=ログファイル" target="_new">a log file</a>
+</div>
+<div class="lm110 tm5 rm60 bm0">
+・Number of divisions for parallel processing
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Elapsed time
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Total number of files
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Number of files to be searched (text files that can be searched)
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Number of files matched by search
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Time taken for directory traverse
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Directory name for search
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Search keyword
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・AND / OR search option
+</div>
+<div class="lm110 tm0 rm60 bm0">
+・Search method (is regular expression or not)
+</div>
+
+<h3 class="lm100 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm100 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S20_FindingWords2" target="_new">mikomokaru-jpn/macOS_S20_FindingWords2</a>
+</div>
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+湖畔
+
+
+

@@ -1,0 +1,124 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>イメージの表示、拡大・縮小、グレースケール化、ファイル入出力</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm0 rm60">
+イメージの表示、拡大・縮小、グレースケール化
+</h2>
+<h2 class="lm70 tm0 bm0 rm60">
+ファイル入出力 [Core Graphics]
+</h2>
+<div class="lm70 tm5 rm60">
+macOS Mojava 10.14.6 / Xcode 11.3.1 / Swift 5.0
+</div>
+
+<h2 class="lm70 tm20 bm0">
+クラスの作成
+</h2>
+<div class="lm70 tm5 rm60">
+NSViewクラスのサブクラスを作成し、次の機能を組み込む。
+</div>
+<div class="lm70 tm5 rm60">
+<a href="#step1">1. イメージファイルを読み込む</a>
+</div>
+<div class="lm70 tm5 rm60">
+<a href="#step2">2. イメージを描画する</a>
+</div>
+<div class="lm70 tm5 rm60">
+<a href="#step3">3. イメージを拡大・縮小する</a>
+</div>
+<div class="lm70 tm5 rm60">
+<a href="#step4">4. イメージファイルに書き出す</a>
+</div>
+<div class="lm70 tm5 rm60">
+<a href="#step5">5. イメージをグレースケール化する</a>
+</div>
+
+<h2 class="lm70 tm20 bm0">
+プロパティ定義
+</h2>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B65/property.txt&font=font100" width="580" height="180"></iframe>
+
+<h2 class="lm70 tm20 bm0" id="step1">
+イメージファイルを読み込む
+</h2>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B65/readImage.txt&font=font100" width="580" height="140"></iframe>
+
+<h2 class="lm70 tm30 bm0" id="step2">
+イメージを描画する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B65/sakura.jpeg?title=sakura.jpeg&width=640" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B65/sakura.jpeg" alt="[sakura.jpeg]" width="350"></a>
+<div class="lm70 tm20 rm60">
+NSViewクラスの drawメソッドをオーバーライドする。グラフィックコンテキストを取得し、コンテキストの drawメソッドによりイメージをビューに描画する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B65/drawImage.txt&font=font100" width="580" height="200"></iframe>
+
+<h2 class="lm70 tm30 bm0" id="step3">
+イメージを拡大・縮小する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B65/sakura2.png?title=sakura2.png&width=640" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B65/sakura2.png" alt="[sakura2.png]" width="350"></a>
+<div class="lm70 tm20 rm60">
+新しいグラフィックコンテキストを作成し、drawメソッドによりサイズを指定してイメージを書き出す。この時点でコンテキストにはサイズを変更したイメージが作成される。そこから makeImageメソッドによりイメージを取り出す。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B65/resizeImage.txt&font=font100" width="580" height="340"></iframe>
+
+<h2 class="lm70 tm30 bm0" id="step4">
+イメージをグレースケール化する
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B65/gray.png?title=gray.png&width=640" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B65/gray.png" alt="[gray.png]" width="350"></a>
+<div class="lm70 tm20 rm60">
+実装のポイントは、グラフィックコンテキストに作成したビットマップデータをCポインタ経由で参照し更新するところ。グレースケールを求める係数はいくつかあり、ここでは、HDTV係数を使用している。他には、NTSC係数などがある。
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B65/grayImage.txt&font=font100" width="580" height="610"></iframe>
+
+<h2 class="lm70 tm30 bm0" id="step5">
+イメージファイルに書き出す
+</h2>
+<div class="lm70 tm5 rm60">
+CGイメージ → Bitmapイメージ → Dataオブジェクト
+</div>
+<!-- ソースコード -->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/B65/writeImage.txt&font=font100" width="580" height="390"></iframe>
+
+<h2 class="lm70 tm30 rm60 bm0">
+データフロー図
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B65/bitmapOpe.png&title=データフロー図&width=700" target="_new">
+<img class="lm70 tm0 " src="/data/B65/bitmapOpe.png" alt="[データフロー図]" width="550"></a>
+
+
+<div class="bp40"></div> <!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

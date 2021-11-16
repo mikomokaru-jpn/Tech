@@ -1,0 +1,25 @@
+<script>
+//---- カンマ追加 ----
+function addComma(value){
+    if (value == ''){
+        return '';
+    }
+    return String(value).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,'); 
+}
+//--- カンマ削除 ----
+function delComma(value){
+    if (value == ''){
+        return '';
+    }
+    return value.replace( /,/g, '');
+}
+let num = "1234567890";
+num = addComma(num);
+document.write(`<p>${num}</p>`);
+num = delComma(num);
+document.write(`<p>${num}</p>`);
+</script>
+
+//結果
+1,234,567,890
+1234567890

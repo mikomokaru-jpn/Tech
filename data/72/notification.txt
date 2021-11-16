@@ -1,0 +1,3 @@
+ [self willChangeValueForKey:@"someProperty"];
+ self.someProperty = ....;
+ [self didChangeValueForKey:@"someProperty"];

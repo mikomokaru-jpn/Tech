@@ -1,0 +1,146 @@
+<!-- 
+NewPractice_Swift/09 MyDiary
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Diary, open from calendar</title>
+    <link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs2.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<!--div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">Diary, open from calendar</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary1.mp4&title=日記帳&width=800" target="_new">
+<img class="lm70 tm10 bm0" src="/data/B25/diary1.png" alt="[日記帳]" width="500"></a>
+<div class="lm70 tm10 rm60">
+Click the image to see the video
+</div>
+<div class="lm70 tm0" style="width: 580px;x; border-top:solid 1px #909090;"></div>
+<h2 class="lm70 tm20 bm0 rm60">
+Text Editor
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+Text editor of this application is implemented  from NSTextView class.
+The text format is plain text only.
+NSTextView class class seems to be adopted by  TextEdit.app.
+As adopted this class, I think In theory We can do all operations that we can do with TextEdit.app. </div>
+<h3 class="lm70 tm10 bm0 rm60">
+Line spacing problem (although it is a little detailed)
+</h3>
+<div class="lm70 tm0 bm0 rm60">
+Depending on the type of font, 
+upper and lower display positions of full-width characters and half-width characters are different, 
+which makes it look quite strange. 
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B25/diary2.png&title=diary2&width=500" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B25/diary2.png" alt="[diary2]" width="250"></a>
+<div class="lm70 tm20 rm60">
+This is exactly the same for TextEdit.app.If you want to adjust it,  you could set the line spacing to a negative value by Ruler Setting.
+</div>  
+<div class="lm70 tm0  rm60">
+[Menu → Format → Text → Interval]
+</div>  
+<div class="lm70 tm10 rm60">
+However, in this app does not
+incorporate Ruler Setting, because when setting value is changed, an error of unknown cause occurs.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B25/diary3.png&title=diary3&width=600" target="_new">
+<img class="lm100 tm10 bm0" src="/data/B25/diary3.png" alt="[diary3]" width="300"></a>
+<div class="lm70 tm20 bm0 rm60">
+By the way, why this situation does not occur in apps such as mi and mail?
+They implement their own editors?
+</div>
+<h2 class="lm70 tm20 bm0 rm60">
+Display diary
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+To open a diary for a particular day, double-click the date on the calendar, 
+select the date and press Open Button, or select Open Item from the menu, 
+and a subwindow will open to display the editor that recorded the diary. 
+Up to 10 subwindows can be opened at the same time.
+</div>
+<div class="lm70 tm10 bm0 rm60">
+The position and size of the main window are recorded in <a href="/lib/HTMLofText.html?filename=/sample1/16/sample.txt" target="_blank">User Defaults</a> and will be inherited after the application is closed.
+So when you open a new window, it will be the same position and size as the last closed window. 
+</div>
+<div class="lm70 tm10 bm0 rm60">
+If you drag the window area except for control views, the window will move accordingly.
+See <a href="/data/B57/wndow_drag.html" target="_blank">ウィンドウをマウスのドラッグで移動させる<a>
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary4.mp4&title=diary4&width=800" target="_new">
+<img class="lm70 tm20 bm0" src="/data/B25/diary4.png" alt="[diary4]" width="500"></a>
+<div class="lm110 tm0 rm60">
+  Click the image to see the video
+</div>
+<h2 class="lm70 tm30 bm0 rm60">
+Change font and size
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+Select a font name  or size of the text from the menu and change it .
+This process is implemented using <a href='/data/B27/notification.html' target="_blank">NSNotification function</a>.
+The selected font name and size values are held in a singleton object and referenced by some objects that need them.
+The values are saved in <a href='/data/B28/plist.html' target="_blank">Plist</a> and are inherited even after the application is closed.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary5.mp4&title=diary5&width=800" target="_new">
+<img class="lm70 tm20 bm0" src="/data/B25/diary5.png" alt="[diary5]" width="500"></a>
+<div class="lm110 tm0 rm60">
+Click the image to see the video
+</div>
+<h2 class="lm70 tm30 bm0 rm60">
+Text search
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+Search by a  keyword and highlight the word that match your search.
+If there are multiple matching words, press  Enter key to skip the cursor position to the next word.
+You can also search with regular expression.
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofVideo.html?filename=/data/B25/diary6.mp4&title=diary6&width=600" target="_new">
+<img class="lm70 tm10 bm0" src="/data/B25/diary6.png" alt="[diary6]" width="300"></a>
+<div class="lm110 tm5 rm60">
+Click the image to see the video
+</div>
+<h2 class="lm70 tm30 bm0 rm60">
+Save text
+</h2>
+<div class="lm70 tm0 bm0 rm60">
+The text of the diary is saved in a file by date.
+</div>
+<div class="lm70 tm30" style="width:580px; border-top:solid 1px #909090;"></div>
+<h2 class="lm70 tm5 bm0 rm60">
+Class Structure Diagram
+</h2>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/B25/diary7.png&title=diary7&width=900" target="_new">
+<img class="lm130 tm0 bm0" src="/data/B25/diary7.png" alt="[diary7]" width="500"></a>
+
+<h2 class="lm70 tm20 bm0 rm60">
+GitHub
+</h3>
+<div class="lm70 tm5 rm60">
+<a href="https://github.com/mikomokaru-jpn/macOS_S09_MyDiary " target="_new">mikomokaru-jpn/macOS_S09_MyDiary </a>
+</div>
+
+<div class="bp40"></div>	<!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index2.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

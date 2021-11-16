@@ -1,0 +1,226 @@
+//---- UAView.swift ----
+import Cocoa
+class UAView: NSView, NSDraggingSource {
+    let pasteboard = NSPasteboard.general  //Generalペーストボード
+    let typeFileURL = kUTTypeFileURL as String  //uti定数 file URL
+    let typeTIFF = kUTTypeTIFF as String        //uti定数 tiff（イメージオブジェクト）
+    var image: NSImage? = nil  //表示イメージオブジェクト
+    
+    //クリックしたときに即反応する
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool{
+        return true
+    }
+    
+    //--------------------------------------------------------------------------
+    //ファーストレスポンダになる
+    //--------------------------------------------------------------------------
+    override func becomeFirstResponder() -> Bool{
+        self.layer?.borderWidth = 2 //枠線の編集
+        return true
+    }
+    //--------------------------------------------------------------------------
+    //ファーストレスポンダを外れる
+    //--------------------------------------------------------------------------
+    override func resignFirstResponder() -> Bool {
+        self.layer?.borderWidth = 0 //枠線の編集
+        return true
+    }
+    //--------------------------------------------------------------------------
+    //イニシャライザ
+    //--------------------------------------------------------------------------
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        self.regist()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.regist()
+    }
+    //--------------------------------------------------------------------------
+    // 初期化
+    //--------------------------------------------------------------------------
+    private func regist(){
+        //ドラッグ用ペーストボードに格納できるオブジェクトの指定
+        self.registerForDraggedTypes([NSPasteboard.PasteboardType(rawValue: typeFileURL),
+                                      NSPasteboard.PasteboardType(rawValue: typeTIFF)])
+        //self.registerForDraggedTypes([.tiff]) //fileURL is available on OSX 10.13
+        //ビューの外観
+        self.wantsLayer = true
+        self.layer?.backgroundColor = NSColor.white.cgColor
+        self.layer?.borderColor = NSColor.blue.cgColor
+    }
+    //--------------------------------------------------------------------------
+    // ビューの再表示
+    //--------------------------------------------------------------------------
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        
+        if image == nil{
+            return
+        }
+        let newRect = NSView.adjustFrame(rect: self.frame, image: image!)
+        image!.draw(in: newRect)
+    }
+    //--------------------------------------------------------------------------
+    // 切り取り・イメージをペーストボードに書き出し、元のイメージを削除する。AppDelegateのメニューから呼ばれる
+    //--------------------------------------------------------------------------
+    func cutImage(){
+        if let image = self.image{
+            pasteboard.clearContents()
+            pasteboard.writeObjects([image])
+            self.image = nil
+            self.needsDisplay = true
+        }
+    }
+    //--------------------------------------------------------------------------
+    // コピー・イメージをペーストボードに書き出す。AppDelegateのメニューから呼ばれる
+    //--------------------------------------------------------------------------
+    func copyImage(){
+        if let image = self.image{
+            pasteboard.clearContents()
+            pasteboard.writeObjects([image])
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 貼り付け・ペーストボードのFileURLからイメージを読み込みビューに表示する。
+    // AppDelegateのメニューから呼ばれる
+    //--------------------------------------------------------------------------
+    func pasteImageFromURL(){
+        //FileURLをペーストボードから取得する
+        if let objects = pasteboard.readObjects(forClasses:[NSURL.self] , options: [:]),
+            objects.count > 0,
+            let fileURL = objects[0] as? URL{
+            //FileURLのファイルを読み込む
+            image = NSImage.init(contentsOf: fileURL)
+            if image == nil{
+                return
+            }
+            self.needsDisplay = true
+            return
+        }
+    }
+    //--------------------------------------------------------------------------
+    // 貼り付け・ペーストボードのイメージをビューに表示する。
+    // AppDelegateのメニューから呼ばれる
+    //--------------------------------------------------------------------------
+    func pasteImage(){
+        //イメージをペーストボードから取得する
+        if let objects = pasteboard.readObjects(forClasses:[NSImage.self] , options: [:]),
+            objects.count > 0{
+            image = objects[0] as? NSImage
+            if image == nil{
+                return
+            }
+            self.needsDisplay = true
+            return
+        }
+    }
+    //--------------------------------------------------------------------------
+    // ドラッグを受け入れる
+    //--------------------------------------------------------------------------
+    override func draggingEntered(_ info: NSDraggingInfo) -> NSDragOperation{
+        return .generic
+    }
+    //--------------------------------------------------------------------------
+    // ドロップの実行
+    //--------------------------------------------------------------------------
+    override func performDragOperation(_ info: NSDraggingInfo) -> Bool{
+        if !info.draggingPasteboard().canReadItem(withDataConformingToTypes: [typeFileURL, typeTIFF]){
+            print("image not found")
+            return false
+        }
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        /* クラスを指定して読み込む */
+        //FileURL
+        if let objects = info.draggingPasteboard().readObjects(forClasses:[NSURL.self] , options: [:]),
+                  objects.count > 0,
+                  let fileURL = objects[0] as? URL{
+            //ファイルタイプのチェック
+            if let value = try? fileURL.resourceValues(forKeys: [.typeIdentifierKey]) {
+                if UTTypeConformsTo(value.typeIdentifier! as CFString, kUTTypeImage){
+                    //OK
+                }else{
+                    print("not png or jpeg")
+                    return false
+                }
+            }else{
+                return false
+            }
+            //ファイルからオメージを読み込む
+            image = NSImage.init(contentsOf: fileURL)
+            if image == nil{
+                return false
+            }
+            self.needsDisplay = true
+            //ファーストレスポンダーになる
+            appDelegate.window.makeFirstResponder(self)
+            return true
+        }
+        //イメージ
+        if let objects = info.draggingPasteboard().readObjects(forClasses:[NSImage.self] , options: [:]),
+               objects.count > 0{
+            image = objects[0] as? NSImage
+            if image == nil{
+                return false
+            }
+            //ファーストレスポンダーになる
+            appDelegate.window.makeFirstResponder(self)
+            //自アプリケーションのビュー間のドラッグのとき、ドラッグ元のイメージを消す
+            if let sourceObject = info.draggingSource() as? UAView{
+                
+                if sourceObject != self{
+                    appDelegate.imageDropped(self)
+                }
+            }
+            self.needsDisplay = true
+            return true
+        }
+        return false //失敗
+    }
+    //--------------------------------------------------------------------------
+    // ドラッグの開始
+    //--------------------------------------------------------------------------
+    override func mouseDown(with event: NSEvent) {
+
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        appDelegate.window.makeFirstResponder(self)
+        
+        guard let image = self.image else {
+            return //イメージが表示されていないので何もしない
+        }
+        //ドラッグするオブジェクトを配列に格納する
+        var itemList = [NSDraggingItem]()
+        itemList.append(NSDraggingItem.init(pasteboardWriter: image))
+        //itemList.append(NSDraggingItem.init(pasteboardWriter: url!)) コンパイルエラー
+        
+        //ドラッグ中にスクリーンに表示するイメージの作成
+        //itemList[0].setDraggingFrame(self.bounds, contents: image)
+        var iconRect = NSRect.init(x: 0, y: 0, width: 70, height: 70)
+        iconRect = NSView.adjustFrame(rect: iconRect, image:image)
+        let point = self.convert(event.locationInWindow, from: nil)
+        //or let point = self.window!.contentView!.convert(event.locationInWindow, to: self)
+        iconRect.origin.x = point.x - iconRect.width / 2
+        iconRect.origin.y = point.y - iconRect.height / 2
+        itemList[0].setDraggingFrame(iconRect, contents: image)
+        //ドラッグの開始の宣言
+        self.beginDraggingSession(with: itemList, event: event, source: self)
+        
+    }
+    //--------------------------------------------------------------------------
+    // ドラッグ中
+    //--------------------------------------------------------------------------
+    func draggingSession(_ session: NSDraggingSession,
+                         sourceOperationMaskFor context: NSDraggingContext) -> NSDragOperation {
+        return  NSDragOperation.generic
+    }
+    
+    //--------------------------------------------------------------------------
+    // utl文字列
+    //--------------------------------------------------------------------------
+    private func utiString(url: URL) -> String? {
+        guard let value = try? url.resourceValues(forKeys: [.typeIdentifierKey]) else {
+            return nil
+        }
+        return value.typeIdentifier
+    }
+}

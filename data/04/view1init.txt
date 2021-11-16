@@ -1,0 +1,8 @@
+-(id)initWithFrame:(NSRect)dirtyRect 
+  attributedString:(NSAttributedString*)aString{
+    if (![super initWithFrame:dirtyRect])
+        return nil;
+    //属性付き文字列
+    _attributedString = aString;
+    return self;
+}

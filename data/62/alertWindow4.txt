@@ -1,0 +1,6 @@
+NSAlert *alert = [[NSAlert alloc] init];
+alert.messageText = @"デフォルの設定";
+alert.informativeText = @"ここに詳細な情報を表示する";
+[alert runModal];
+//リターンコードはなぜか 0（NSModalResponseCancel）が返る
+//NSModalResponse ret = [alert runModal]; 

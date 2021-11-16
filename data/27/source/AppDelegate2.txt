@@ -1,0 +1,153 @@
+//------------------------------------------------------------------------------
+// クラス宣言：マルチスレッドの同期処理
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface AppDelegate : NSObject <NSApplicationDelegate>
+@end
+
+//------------------------------------------------------------------------------
+// クラス実装：マルチスレッドの同期処理
+//------------------------------------------------------------------------------
+#import "AppDelegate.h"
+@interface AppDelegate ()
+@property (weak) IBOutlet NSWindow *window;                 //メインウィンドウ
+@property (weak) IBOutlet NSButton *btnStart;               //開始ボタン
+@property (weak) IBOutlet NSMatrix *matrix;;
+@end
+
+@implementation AppDelegate
+//開始
+-(IBAction)startBtn:(id)sender
+{
+    if (_matrix.selectedCell.tag == 1){
+        //メインスレッドの直列
+        [self op1];
+    }else if (_matrix.selectedCell.tag == 2){
+        //dispatch_sync（同期）
+        [self op2];
+    }else if (_matrix.selectedCell.tag == 3){
+        //dispatch_async（非同期）
+        [self op3];
+    }else if (_matrix.selectedCell.tag == 4){
+        //dispatch_async & semaphore（セマフォによる同期）
+        [self op4];
+    }else if (_matrix.selectedCell.tag == 5){
+        //dispatch_async SERIAL
+        [self op5];
+    }else if (_matrix.selectedCell.tag == 6){
+        //dispatch_async CONCURRENT
+        [self op6];
+    }
+}
+//*** メインスレッドによる直列処理 ****
+-(void)op1{
+    NSLog(@"(1) メインスレッドによる直列処理: %@", [NSThread currentThread]);
+    _btnStart.enabled = NO; //処理(For文)が終わるまで待たされる。後回しになているようだ。
+    for(int i=0; i<10; i++){
+        [NSThread sleepForTimeInterval:0.2];
+        NSLog(@"(2) %d: %@",i,[NSThread currentThread]);
+    }
+    NSLog(@"(3): %@",  [NSThread currentThread]);
+    _btnStart.enabled = YES;
+}
+//**** dispatch_syncによる同期処理 ****
+-(void)op2{
+    NSLog(@"(1) dispatch_syncによる同期処理: %@", [NSThread currentThread]);
+    _btnStart.enabled = NO; //処理(For文)が終わるまで待たされる。後回しになているようだ。
+    //別スレッド・CONCURRENT
+    dispatch_queue_t queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL);
+    dispatch_sync(queue, ^{
+        for(int i=0; i<10; i++){
+            [NSThread sleepForTimeInterval:0.2];
+            NSLog(@"(2) %d: %@",i,[NSThread currentThread]);
+        }
+    });
+    NSLog(@"(3): %@",  [NSThread currentThread]);
+    _btnStart.enabled = YES;
+}
+//**** dispatch_asyncによる非同期処理 ****
+-(void)op3{
+    NSLog(@"(1)dispatch_asyncによる非同期処理: %@", [NSThread currentThread]);
+    _btnStart.enabled = NO;
+    //別スレッド
+    //dispatch_queue_t queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0); //CONCURRENT
+    dispatch_async(queue, ^{
+        for(int i=0; i<10; i++){
+            [NSThread sleepForTimeInterval:0.2];
+            NSLog(@"(3) %d: %@",i,[NSThread currentThread]);
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                //途中のCallBack：直後の処理と同期を取るために syncにする
+                _btnStart.enabled = YES;
+                NSLog(@"(4) %d: %@",i,[NSThread currentThread]);
+            });
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //終了時のCallBack
+            _btnStart.enabled = YES;
+            NSLog(@"(5): %@",  [NSThread currentThread]);
+        });
+    });
+    NSLog(@"(2): %@",  [NSThread currentThread]);
+}
+//**** dispatch_asyncによる非同期処理 & セマフォによる同期 ****
+-(void)op4{
+    NSLog(@"(1) dispatch_asyncによる非同期処理 & セマフォ: %@", [NSThread currentThread]);
+    //セマフォオブジェクトを作成する
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    //別スレッド・CONCURRENT
+    dispatch_queue_t queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL);
+    //メインスレッドと非同期処理
+    dispatch_async(queue, ^{
+        for(int i=0; i<10; i++){
+            [NSThread sleepForTimeInterval:0.2];
+            NSLog(@"(3):%d: %@",i,[NSThread currentThread]);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //途中ののCallBack：キューされるだけ。処理は(5)の後で実行される。
+                _btnStart.enabled = YES;
+                NSLog(@"(5):%d: %@",i, [NSThread currentThread]);
+            });
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //終了時のCallBack：キューされるだけ。処理は(5)の後で実行される。
+            _btnStart.enabled = YES;
+            NSLog(@"(6): %@",  [NSThread currentThread]);
+        });
+        //メインスレッドに再開を通知
+        dispatch_semaphore_signal(semaphore);
+    });
+    NSLog(@"(2): %@",  [NSThread currentThread]);
+    //別スレッドの処理の終了を待つ
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);  
+    NSLog(@"(4): %@",  [NSThread currentThread]);
+}
+-(void)op5{
+    NSLog(@"(1): %@", [NSThread currentThread]);
+    //別スレッド：SERIAL
+    dispatch_queue_t queue = dispatch_queue_create("com.mikomokaru", DISPATCH_QUEUE_SERIAL);  //Serial
+    for(int i=0; i<10; i++){
+        dispatch_async(queue, ^{
+            [NSThread sleepForTimeInterval:0.2];
+            NSLog(@"(3) %d: %@",i,[NSThread currentThread]);
+        });
+    }
+    NSLog(@"(2): %@",  [NSThread currentThread]);
+}
+-(void)op6{
+    NSLog(@"(1): %@", [NSThread currentThread]);
+    //別スレッド：CONCURRENT
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    for(int i=0; i<10; i++){
+        dispatch_async(queue, ^{
+            [NSThread sleepForTimeInterval:0.2];
+            NSLog(@"(3) %d: %@",i,[NSThread currentThread]);
+        });
+    }
+    NSLog(@"(2): %@",  [NSThread currentThread]);
+}
+-(IBAction)aBtn:(id)sender
+{
+    NSLog(@"ボタンをクリックした %@",[NSThread currentThread]);
+}
+
+@end

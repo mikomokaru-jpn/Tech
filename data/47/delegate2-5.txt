@@ -1,0 +1,11 @@
+- (BOOL)browser:(NSBrowser *)browser isLeafItem:(id)item{
+    Node* node = item;
+    NSNumber *num;
+    [node.url getResourceValue:&num
+                        forKey:NSURLIsRegularFileKey
+                         error:nil];
+    if ([num intValue] == 1)
+        return YES; //ファイル（リーフ）
+    else
+        return NO;  //ディレクトリ
+}

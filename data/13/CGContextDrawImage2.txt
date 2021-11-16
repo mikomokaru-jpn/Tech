@@ -1,0 +1,2 @@
+CGRect rect = CGRectMake(0, 0, 800, 300);
+CGContextDrawImage(context, rect, _imageRef);

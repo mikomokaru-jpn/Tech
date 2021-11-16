@@ -1,0 +1,241 @@
+<!-- 
+60 MyCategory
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>カテゴリ一覧</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">ユーティリティなツールとして使用できるカテゴリ</h2>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm20 rm60 bm0" id="MyBezierPath">
+NSBezierPathをCGPathに変換する
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm100 tm5 rm60">カテゴリ名：
+<a href="/lib/HTMLofText.html?filename=/data/15/source/NSBezierPathMyBezierPath.txt&indent=20" target="_new">NSBezierPath (MyBezierPath)</a>
+</div>
+<div class="lm100 tm0 rm60">
+メソッド名：-cgPath
+</div>
+<div class="lm100 tm10 rm60">
+接頭語 "CG"は、Core Graphics frameworkの略で、2次元描画を行うフレームワークのこと。CGPathは2次元図形の数学的記述のことで、これに基づいてCore Graphicsは図形をビューに描画する。
+</div>
+<div class="lm100 tm10 rm60">
+NSBezierPathも二次元図形を描画するためのクラス。Core Graphicsのラッパーで、よりオブジェクト指向的な使い方ができる。CGPathと同様に2次元図形を数学的に記述することにより描画を行う。（図形をベジエ曲線として記述するためこのような名前になっている）
+</div>
+<div class="lm100 tm10 rm60">
+アプリケーションの仕様によっては、NSBezierPathをCGPathに変換する必要がある。例えば、NSBezierPathで作成した図形をCAShapeLayerのpathプロパティに代入するといったケース。そのために、NSBezierPathオブジェクトをCGPathオブジェクトに変換するcgPathメソッドをカテゴリにより提供する。
+</div>
+<div class="lm100 tm10 rm60">
+（参考）似たような関係で、NSColorオブジェクトをCGColorオブジェクトに変換するメソッドCGColorは、Cocoaフレームワークで提供されている。
+</div>
+<div class="lm100 tm10 rm60">
+使用方法　<a href="/data/05/view_drawing.html#layerProgramming">ビューに図形を描画する・レイヤープログラミング</a>
+</div>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm30 rm60 bm0">
+ビューに格子を描画するCAShapeLayerオブジェクトを作成する
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm100 tm5 rm60">カテゴリ名：
+<a href="/lib/HTMLofText.html?filename=/data/15/source/CAShapeLayerMyShapeLayer.txt&title=CAShapeLayer (MyShapeLayer)" target="_new">CAShapeLayer (MyShapeLayer)</a>
+</div><div class="lm100 tm0 rm60">
+メソッド名： -layerGridInRect:atInterval:width:
+</div>
+<div class="table lm100 rm60">
+  <div class="table_cell">
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/15/layerGrid.png&title=格子を描画する&width=400" target="_new">
+<img class="lm0 tm10 bm0 bp0" src="layerGrid.png" width="200" align="top" alt="NSLayerによる描画" ></a>
+  </div>	
+  <div class="table_cell">
+    <div class="lm20 tm30">
+引数に格子の間隔と線の太さをピクセル単位に指定して、CAShapeLayerオブジェクトを作成する。オブジェクトをビューのサブレイヤーに追加すれば、ビューに格子状の線を描画することができる。
+    </div>
+    <div class="lm20 tm10">
+ビューのデザインを行うときに、コントロールを配置する場所（座標点）をピクセル単位に把握することができる。
+    </div>
+  </div>		
+</div>
+<div class="lm100 tm20 rm60">
+使用方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/15/layerGrid.txt" width="550" height="360"></iframe>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm30 rm60 bm0">
+NSColorクラスのカテゴリ
+</h3>
+<!-- ソースコード　リンク -->
+<div class="lm100 tm5 rm60">カテゴリ名：
+<a href="/lib/HTMLofText.html?filename=/data/15/source/NSColorMyColor.txt&title=NSColor (MyColor)" target="_new">NSColor (MyColor)</a>
+</div>
+<div class="lm80 tm20 rm60">
+（1） RGB値を指定してNSColorオブジェクトを作成する
+</div>
+<div class="lm100 tm0 rm60">
+メソッド名： +myColorR:G:B: / +myColorR:G:B:alph:
+</div>
+<div class="lm100 tm5 rm60">
+RGB値を0〜255の範囲で指定する。透明度（alpha値）を0〜1の範囲で指定する。
+</div>
+<div class="lm100 tm10 rm60">
+使用方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/15/mycolor.txt" width="550" height="40"></iframe>
+<!----------------------------------------------------------------------------->
+<div class="lm80 tm20 rm60">
+（2）RGB値を指定してCGColorを作成する。
+</div>
+<div class="lm100 tm0 rm60">
+メソッド名： +cgColorR:G:B: / +cgColorR:G:B:alph:
+</div>
+<div class="lm100 tm5 rm60">
+RGB値を0〜255の範囲で指定する。透明度（alpha値）を0〜1の範囲で指定する。CGColorCreate関数を使用してRGB値からCGColorを作成する。
+</div>
+<div class="lm100 tm10 rm60">
+使用方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/15/mycolor2.txt" width="550" height="40"></iframe>
+
+<div class="lm100 tm10 rm60">
+NSColorクラスのカテゴリにデフォルトで定義済みの CGColorメソッドは、NSColorオブジェクトを CGColorRef に変換するものだが、
+RGB値を指定して作成したNSColorオブジェクトには対応していない。エラーにはならないが意図した色にならない。 
+</div>
+<div class="lm100 tm5 rm60">
+下記の例からわかるのは、NScolorオブジェクトは色の作成方法によって、実体としては異なるクラスになる。そして、CGColorメソッドが対応しているのは特定のNScolorクラスだけのようだ。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/15/mycolor3.txt&font=font100" width="550" height="260"></iframe>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm30 rm60 bm0">
+文字列の大きさに合わせてNSTextFieldオブジェクトのframeサイズを変更する
+</h3>
+<div class="lm100 tm5 rm60">カテゴリ名：
+<!-- ソースコード　リンク -->
+<a href="/lib/HTMLofText.html?filename=/data/15/source/NSTextFieldMyTextField.txt&title=NSTextField (MyTextField)" target="_new">NSTextField (MyTextField)</a>
+</div>
+<div class="lm100 tm0 rm60">
+メソッド名： -setText:
+</div>
+<div class="lm100 tm10 rm60">
+テキストフィールドの幅と高さ（frameサイズ）は表示する文字列とフォントによって決まる。
+表示する文字列の内容が実行時に決まる場合、フォームのデザイン時に、あらかじめサイズを決めることはできない。
+</div>
+<div class="lm100 tm10 rm60">
+このメソッドは引数に文字列（NSStringオブジェクト）を指定すると、文字列とテキストフィールドが持つフォントの種類から、表示に必要なテキストフィールドの幅と高さを計算し、自身のframeサイズを変更する。実行時に文字列の内容が変わっても、frameサイズは文字列に応じて自動的に変えることができる。
+</div>
+<div class="lm100 tm20 rm60">
+使用方法
+</div>
+<div class="lm100 tm0 rm60">
+・frameサイズがゼロのテキストフィールドオブジェクトを作成する。任意のフォントをセットする。
+</div>
+<div class="lm100 tm0 rm60">
+・適当な文字列を作成してテキストフィールド表示する。
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm5" src="/lib/HTMLofText.html?filename=/data/15/setText.txt" width="550" height="270"></iframe>
+<div class="lm100 tm20 rm60">
+結果
+</div>
+<!-- 画像 -->
+<a href="/lib/HTMLofImage.html?filename=/data/15/textField.png&title=テキストフィールド&width=600" target="_new">
+<img class="lm100 tm0 bm0 bp0" src="textField.png" width="400" align="top" alt="テキストフィールド" ></a>
+<div class="lm110 tm10 rm60 redcolor font110">
+ところが、幅、高さとも必要なサイズが不足する。原因不明。
+</div>
+<!----------------------------------------------------------------------------->
+<h3 class="lm70 tm30 rm60 bm0">
+NSArrayクラスへのメソッド追加
+</h3>
+<div class="lm100 tm10 rm60">
+NSArrayクラスにアプリケーション独自の操作を追加したいとき、カテゴリを利用することができる。
+</div>
+<div class="lm100 tm10 rm60">
+次の配列（NSArrayオブジェクト）は、配列の要素はカスタムクラス（Person）のオブジェクトとし、独自のイニシャライザと検索メソッドを追加する。
+イニシャライザは、Personのオブジェクトの元となるデータを読み込み、Personオブジェクトを作成し、配列の要素に追加する。
+検索は、Personオブジェクトのメンバ（性別、誕生日）から、条件に合った要素を返却するものである。
+</div>
+<div class="lm100 tm10 rm60">
+なお重要な点として、カテゴリは対象のクラスに独自のインスタンス変数を定義できないことを明記しておく。
+</div>
+<div class="lm100 tm5 rm60">
+カテゴリの宣言
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/15/NSArrayPerson1.txt" width="550" height="200"></iframe>
+<!-- ソースコード　リンク -->
+<div class="lm100 tm15 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/15/source/NSArrayPerson2.txt&title=イニシャライザ" target="_new">カテゴリの実装：イニシャライザ</a>
+</div>
+<!-- ソースコード　リンク -->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/15/source/NSArrayPerson3.txt&title=>カテゴリの実装" target="_new">カテゴリの実装：検索メソッド</a>
+</div>
+<div class="lm100 tm20 rm60">
+使用方法
+</div>
+<!-- ソースコード -->
+<iframe class="lm100 tm0" src="/lib/HTMLofText.html?filename=/data/15/AppDelegate.txt" width="550" height="350"></iframe>
+
+<!-- ソースコード　リンク -->
+<div class="lm100 tm15 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/15/source/Person.txt&title=Personクラス" target="_new">Personクラス</a>
+</div>
+<!-- ソースコード　リンク -->
+<div class="lm100 tm5 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/15/source/personList.txt&title=Personオブジェクトの元となるデータ" target="_new">Personオブジェクトの元となるデータ</a>
+</div>
+
+<div class="lm100 tm20 rm60">
+カテゴリにメソッドを追加するテクニックは、実装は容易だが、元のクラスに対してどのような機能が追加されているのか分かりづらいという欠点がある。
+</div>
+<div class="lm100 tm10 rm60">
+上記のカテゴリの例でいえば、Personオブジェクト以外の要素を配列をに追加し、カテゴリの検索メソッドを実行することは、コンパイルも通るので可能であるが、実行時エラーとなる可能性が高い。カテゴリの使用にあたってカテゴリの実装の中身まで理解しなければならないというのは、オブジェクト志向の考え方から外れたところがある。
+</div>
+<div class="lm100 tm20 rm60">
+[備忘録] クラスを拡張する方法は一般的に次の二つである。
+</div>
+<div class="lm100 tm0 rm60">
+・元のクラスのサブクラスを作成する（継承）
+</div>
+<div class="lm100 tm0 rm60">
+・カスタムクラスを作成し、元のクラスのオブジェクトをメンバとして持つ（合成）
+</div>
+<div class="lm100 tm0 rm60">
+ただし、NSArrayに関しては、
+</div>
+<div class="lm100 tm0 rm60">
+NSMutableArrayクラスは、クラスタークラスなので、サブクラス化は不可である。NSArrayクラスは、おそらくサブクラス化できるみたいだが、要素の追加や削除ができないのでは、あまり使い道がない。
+</div>
+<!----------------------------------------------->
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+
+

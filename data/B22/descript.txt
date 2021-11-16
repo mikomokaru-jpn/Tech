@@ -1,0 +1,12 @@
+<span class="redcolor">var str1: String? //オプショナル変数</span>
+str1 = "ABC"
+
+var str2: String
+str2 = "DEF"
+
+print("\(String(describing: str1))")
+print("\(String(describing: str2))")
+
+//実行結果
+<span class="redcolor">Optional("ABC")</span>
+DEF

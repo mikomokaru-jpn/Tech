@@ -1,0 +1,12 @@
+//--- UAElapse.h ---
+#import <Foundation/Foundation.h>
+
+//ストップウォッチ機能 ------------------------------------------
+void WATCH_START(void);                   //開始
+double WATCH_SPLIT(void);                 //スプリットタイムを返す
+double WATCH_LAP(void);                   //ラップタイムを返す
+
+//経過時間の計測（マルチスレッッド対応）----------------------------
+void ELAPSE_INIT(void);                   //初期化
+void ELAPSE_LOG(NSString *text);          //ログ出力
+void ELAPSE_CLOSE(void);                  //経過時間の計算・出力

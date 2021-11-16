@@ -1,0 +1,35 @@
+//------------------------------------------------------------------------------
+//  BClass.h
+//------------------------------------------------------------------------------
+#import <Foundation/Foundation.h>
+#import "AClass.h"
+@interface BClass : NSObject
+@property AClass *object;
+@property NSMutableArray<AClass*> *array;
+-(id)initWithObject:(AClass*)object array:(NSMutableArray<AClass*>*)array;
+@end
+
+//------------------------------------------------------------------------------
+//  BClass.m
+//------------------------------------------------------------------------------
+#import "BClass.h"
+@implementation BClass
+//イニシャライザ
+-(id)initWithObject:(AClass*)object array:(NSMutableArray<AClass*>*)array{
+    if (![super init])
+        return nil;
+    _object = object;
+    _array = array;
+    return self;
+}
+//NSCopyingプロトコルに準拠
+- (id)copyWithZone:(NSZone *)zone{
+    BClass* aCopy = [[[self class] alloc] init];
+    if( aCopy ){
+        aCopy.object = [_object copy];
+        aCopy.array = [[[_array class] alloc]
+                                       initWithArray:_array copyItems:YES]; 
+    }
+    return aCopy;
+}
+@end

@@ -1,0 +1,6 @@
+@interface UAShape : NSObject
+@property CAShapeLayer *object; //CAShapeLayerオブジェクト
+@property NSInteger number;     //オブジェクトNo.
+@property CGPoint startPoint;   //始点ポイント
+@property CGPoint endPoint;     //終点ポイント
+@end

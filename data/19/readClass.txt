@@ -1,0 +1,11 @@
+//イメージオブジェクトを読み込む
+NSArray<Class> *classes = @[[NSImage class]];
+NSArray *pboard = [_pasteboard readObjectsForClasses:classes 
+                                             options:nil];
+NSImage *image = [pboard objectAtIndex:0];
+
+//URLオブジェクトを呼び込む
+NSArray<Class> *classes = @[[NSURL class]];
+NSArray *pboard = [_pasteboard readObjectsForClasses:classes 
+                                             options:nil];
+NSURL *url = [pboard objectAtIndex:0];

@@ -1,0 +1,56 @@
+//------------------------------------------------------------------------------
+//  View5.h
+//------------------------------------------------------------------------------
+#import <Cocoa/Cocoa.h>
+@interface View5 : NSView
+-(id)initWithFrame:(NSRect)dirtyRect image:(NSImage*)image;
+@end
+
+//------------------------------------------------------------------------------
+//  View5.m
+//------------------------------------------------------------------------------
+#import "View5.h"
+#import <QuartzCore/QuartzCore.h>
+
+@interface View5()
+@property NSImage *image;
+@end
+
+@implementation View5
+//イニシャライザ
+-(id)initWithFrame:(NSRect)dirtyRect image:(NSImage*)image{
+    if (![super initWithFrame:dirtyRect])
+        return nil;
+    _image = image;
+    self.wantsLayer = YES;
+    self.layer.borderWidth = 1.0;
+    self.layer.borderColor = [NSColor grayColor].CGColor;
+    return self;
+}
+//ビューの再描画
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    
+    float aRatio = _image.size.height / _image.size.width;
+    
+    float x, y, w, h;
+    if (dirtyRect.size.width >= dirtyRect.size.height){
+        //横長
+        w = dirtyRect.size.width;
+        h = dirtyRect.size.height * aRatio;
+        x = 0;
+        y = (dirtyRect.size.height - h) / 2;
+    }else{
+        //縦長
+        w = dirtyRect.size.width * (1 / aRatio);
+        h = dirtyRect.size.height;
+        x = (dirtyRect.size.width - w) / 2;;
+        y = 0;
+    }
+    NSRect newRect = NSMakeRect(x, y, w, h);
+    CALayer *layer = [CAShapeLayer layer];
+    layer.frame = newRect;
+    layer.contents = _image;  //OS10.6 and later
+    [self.layer addSublayer:layer];
+}
+@end

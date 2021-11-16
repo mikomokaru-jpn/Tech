@@ -1,0 +1,143 @@
+<!-- 
+10 balloon
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ビューの外見を変更する</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm40 tm20 bm10">ビューの外見を変更する</h2>
+<h3 class="lm100 tm20 rm40 bm5">
+CALayerクラス
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm5 rm60">
+Core Animationフレームワークは、グラフィックスの描画やアニメーションに関する機能を提供する。CALayerクラスはその主要なクラスである。
+</div>
+<div class="lm100 tm10 rm60">
+ひとつのビュー（NSViewオブジェクト）は、ビューに対応したCALayerオブジェクトをひとつ持つ。これはlayerプロパティとして表され、このプロパティを操作することによってビューの外見を変えることができる。
+</div>
+<div class="table lm100 tm20 rm40">
+  <div class="table_cell">
+<!-- 画像 -->
+<a href="/HTMLofImage.html?filename=/daya/05/drawing1.png&title=Layerプロパティ&width=600" target="_new">
+<img class="lm20 tm5" src="drawing1.png" width="200" align="top" alt="Layerプロパティ" ></a>
+	</div>
+  <div class="table_cell">
+<a href="/HTMLofImage.html?filename=05/05_view_drawing1.png&title=Layerプロパティ&width=600" target="_new">
+<img class="lm40 tm5" src="05_view_drawing1.png" width="200" align="top" alt="Layerプロパティ" ></a>
+  </div>
+</div>
+<div class="lm100 tm10 rm60">
+ウィンドウを保持したAppDelegateクラス
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm5" src="/lib/HTMLofText.html?filename=/data/05/layerProperty.txt" width="530" height="180"></iframe>
+<div class="lm100 tm0 rm60">
+コンテントビューの背景色をシアンにし、3ピクセルの太さの青色の枠線で囲み、角に丸みをつける。
+CALayerオブジェクトで扱う色オブジェクトはCGColorクラスなので、NSColorクラスで作成した色オブジェクトは変換する必要がある。
+レイヤーの属性を変更するためには、ビューのwantsLayerプロパティをYESにする。
+</div>
+<h3 class="lm100 tm30 rm40 bm5">
+ビューに図形を描画する
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<h3 class="lm100 tm5 bm0 rm40">
+(1) CAShapeLayerクラスを利用する方法
+</h3>
+<div class="lm100 tm5 rm60">
+CALayerクラスのサブクラスであるCAShapeLayerクラスのオブジェクトを作成し、そこに図形（直線、曲線、多角形、円など）を書き出す。そのオブジェクトを、ビューが保持するCALayerオブジェクトの上に重ねていく。オブジェクトはいくつでも重ねることができる。
+</div>
+<div class="lm100 tm10 rm60">
+図形の描画は、NSBezierPathクラスのメソッッドにより行う。
+</div>
+<div class="table lm110 tm20 bm20">
+  <div class="table_cell">
+<!-- 画像 -->
+<a href="/HTMLofImage.html?filename=/data/05/drawing2.png&title=Layerプロパティ&width=600" target="_new">
+<img class="lm10 tm20" src="drawing2.png" width="200" align="top" alt="ビューに図形を描画する" ></a>
+	</div>
+  <div class="table_cell">
+<a href="/HTMLofImage.html?filename=05/05_view_drawing2.png&title=Layerプロパティ&width=600" target="_new">
+<img class="lm10 tm5" src="05_view_drawing2.png" width="300" align="top" alt="ビューに図形を描画する" ></a>
+  </div>
+</div>
+<div class="lm100 tm10 rm60">
+NSViewクラスのサブクラスを定義する。装飾文字列"ABC"を表示する。CAShapeLayerオブジェクトに半透明の緑色の円と青色の四角形を作成し、ビューのレイヤーに重ねる。
+</div>
+<div class="lm100 tm10 rm60">
+NSViewのサブクラス
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/05/UAItemView.txt" width="550" height="1110"></iframe>
+<div class="lm100 tm10 rm60">
+使用例：カスタムビューを作成して、コンテントビューに貼り付ける。
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/05/AppDelegate.txt" width="550" height="150"></iframe>
+<h3 class="lm100 tm20 bm0 rm40">
+(2) 図形をビューオブジェクトに直接書き出す方法
+</h3>
+<!-- 画像 -->
+<div class="table lm110 tm20 bm10">
+  <div class="table_cell">
+<a href="/lib/HTMLofImage.html?filename=/data/05/drawing3.png&title=Layerプロパティ&width=600" target="_new">
+<img class="lm10 tm20" src="drawing3.png" width="200" align="top" alt="ビューに図形を描画する" ></a>
+  </div>
+  <div class="table_cell">
+<a href="/lib/HTMLofImage.html?filename=/data/05/05_view_drawing3.png&title=Layerプロパティ&width=500" target="_new">
+<img class="lm60 tm5" src="05_view_drawing3.png" width="200" align="top" alt="ビューに図形を描画する" ></a>
+  </div>
+</div>
+<div class="lm100 tm5 rm60">
+NSBezierPathクラスのメソッッドにより図形をビューに直接書き出すことができる。ひとつの面に順に上書していくため、画像を半透明にして下の画像を見せるということはできない。
+例題では、緑の円→文字列→青い四角の順に書き出している。
+</div>
+<div class="lm100 tm10 rm60">
+NSViewのサブクラス
+</div>
+<!--ソースコード-->
+<iframe class="lm100 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/05/UAItemView2.txt" width="550" height="840"></iframe>
+<h3 class="lm100 tm10 rm60 bm5">
+Tips
+</h3>
+<div class="lm100 tm0" style="width:550px; border-top:solid 1px #909090;"></div>
+<div class="lm100 tm10 rm60">
+・ビューオブジェクトの初期化
+</div>
+<div class="lm130 tm0 rm60">
+ビューオブジェクトをインタフェースビルダーで作成したとき、アプリケーション独自の初期処理は、ビューオブジェクトがxibファイルからロードされたときに起動するawakeFromNibメソッドの中で行うこと。（既定のイニシャライザは起動しない）
+</div>
+<div class="lm130 tm0 rm60">
+一方、ビューオブジェクトをプログラムから作成する場合、オブジェクト生成時に既定のイニシャライザが起動するので、初期処理はそこに記述すること。
+</div>
+<div class="lm100 tm10 rm60">
+・wantsLayerプロパティの変更はインタフェースビルダより行うことができる
+</div>
+<div class="lm130 tm0 rm60">
+viewを選んで、View Effects Inspectoを開き、Core Animation LayerプロパティのチェックをON（YES）にする。
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> 
+<span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span>
+<span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span>
+</div> 
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+

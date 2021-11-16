@@ -1,0 +1,1 @@
+cobc -x -o main MAIN01.cbl SUB01.cbl 

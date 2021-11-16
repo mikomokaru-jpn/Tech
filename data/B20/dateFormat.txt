@@ -1,0 +1,34 @@
+let now = Date.init()
+let formatter: DateFormatter = DateFormatter()
+formatter.locale = Locale.init(identifier: "ja_JP")
+
+//現在日付・時刻 custom format
+formatter.dateFormat = "yyyyねん MMがつ ddにち HHじ mmふん ssびょう E曜日"
+print(formatter.string(from: now))
+
+//現在日付・時刻　full format
+formatter.dateStyle = .full
+formatter.timeStyle = .full
+print(formatter.string(from: now))
+
+//現在日付・時刻 long format
+formatter.dateStyle = .long
+formatter.timeStyle = .long
+print(formatter.string(from: now))
+
+//現在日付・時刻 medium format
+formatter.dateStyle = .medium
+formatter.timeStyle = .medium
+print(formatter.string(from: now))
+
+//現在日付・時刻 short format
+formatter.dateStyle = .short
+formatter.timeStyle = .short
+print(formatter.string(from: now))
+
+//結果
+2021ねん 02がつ 16にち 19じ 50ふん 24びょう 火曜日
+2021年2月16日火曜日 19時50分24秒 日本標準時
+2021年2月16日 19:50:24 JST
+2021/02/16 19:50:24
+2021/02/16 19:50

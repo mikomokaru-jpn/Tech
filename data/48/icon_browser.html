@@ -1,0 +1,133 @@
+<!-- -->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ブラウザ（NSBrowser）の応用　〜ファイルのアイコンを表示する〜</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<!----------------------------------------------->
+<h2 class="lm70 tm20 bm0">ブラウザ（NSBrowser）の応用</h2>
+<h2 class="lm200 tm0 bm10">〜ファイルのアイコンを表示する〜</h2>
+<h4 class="lm70 tm20 bm0 rm60">
+</h4>
+<h4 class="lm70 tm10 bm0 rm60">
+Matrix based delegate方式をベースとする
+</h4>
+<div class="lm70 tm0" style="width:570px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+Finderと同じように、ファイル/ディレクトリ名の先頭にアイコンを表示する。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/48/browser01.png&title=browser01&width=800" target="_new">
+<img class="lm90 tm0"src="browser01.png" alt="[browser02]" width="490" align="middle"></a>
+<div class="lm70 tm10 rm60">
+アイコンの左右に余白のスペース（各4ピクセル）を埋め込む。高さも変更したかったが（私が調べた限りでは）できなかった。高さは16ピクセルが規定値。
+</div>
+<h4 class="lm70 tm20 bm0 rm60">
+ファイル/ディレクトリのアイコンの取得（NSWorkspaceクラス） 
+</h4>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/48/getIcon.txt" width="580" height="180"></iframe>
+<div class="lm70 tm5 rm60">
+（関数にした理由は特にない）
+</div>
+<h4 class="lm70 tm20 bm0 rm60">
+ブラウザにファイル/ディレクトリ名とアイコンを表示する
+</h4>
+<div class="lm70 tm5 rm60">
+ブラウザ（NSBrowser）は、ブラウザセル（NSBrowserCell）の集合である。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/48/browser03.png&title=browser03&width=800" target="_new">
+<img class="lm90 tm20"src="browser03.png" alt="[browser03]" width="490" align="middle"></a>
+
+<div class="lm70 tm20 rm60">
+ブラウザセルには、NSBrowserCellクラスのメソッドにより、文字列とイメージを表示することができる。以下のデリゲートメソッドのcell引数にはNSBrowserCellオブジェクトが渡されてくる。文字列にファイル/ディレクトリ名を指定し、イメージにそのアイコンイメージを指定する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/48/wllDisplayCell1.txt" width="580" height="260"></iframe>
+<h4 class="lm70 tm20 bm0 rm60">
+表示するアイコンの左右にスペースを埋め込む
+</h4>
+<div class="lm70 tm0 rm60">
+上記の方法では、イメージと文字列は隙間なく表示される。
+</div>
+<div class="lm70 tm0 rm60">
+以下に、NSBrowserCellクラスのサブクラスを作成することにより、イメージの左右に４ピクセルのスペースを埋め込む方法を示す。
+</div>
+<div class="lm70 tm10 rm60">
+(1) NSBrowserCellのサブクラスを、NSBrowserクラスのセルとして使用することを宣言する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/48/awakeFromNib.txt" width="580" height="130"></iframe>
+<div class="lm70 tm20 rm60">
+(2) NSBrowserCellクラスのサブクラスの実装
+</div>
+<div class="lm70 tm0 rm60">
+プロパティにアイコンイメージを持つ。drawInteriorWithFrame:inView:メソッドをオーバーライドし、アイコンイメージをセルの特定の位置に表示する。
+</div>
+<div class="lm70 tm10 rm60">
+セルの表示領域の大きさは、引数cellFrameにより渡される。
+</div>
+<div class="lm70 tm0 rm60">
+これを、アイコンの表示領域と文字列の表示領域に分割する。アイコンはNSImageクラスのdrawRectメソッドによりビューに表示する。文字列はsuperクラスの同メソッドを呼び出すことで表示する。
+</div>
+<div class="lm130 tm20 rm60">
+引数cellFrame：rect( 0, 0, W, 16)
+</div>
+<div class="lm130 tm0 rm60">
+アイコンの表示領域：rect( 4, 0, 16, 16)
+</div>
+<div class="lm130 tm0 rm60">
+文字列の表示領域：rect( 24, 0, W-24, 16)
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/48/browser04.png&title=browser04&width=600" target="_new">
+<img class="lm90 tm0"src="browser04.png" alt="[browser04]" width="380" align="middle"></a>
+<!--ソースコード-->
+<iframe class="lm70 tm20" src="/lib/HTMLofText.html?filename=/data/48/UABrowserCell.txt" width="580" height="670"></iframe>
+<div class="lm70 tm20 rm60">
+(3) delagateメソッドの実装
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/48/wllDisplayCell2.txt" width="580" height="300"></iframe>
+<h4 class="lm70 tm30 bm0 rm60">
+Item based delegate方式をベースとする
+</h4>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<!--画像-->
+<a href="/lib/HTMLofImage.php?filename=/data/48/browser02.png&title=browser02&width=800" target="_new">
+<img class="lm80 tm10"src="browser02.png" alt="[browser02]" width="570" align="middle"></a>
+<div class="lm70 tm20 rm60">
+（私が調べた限りでは）文字列の先頭にアイコンを表示することができなかった。仕方ないのでブラウザで選択したノード（ファイル/ディレクトリ）のアイコンをイメージビューに表示するようにしてみた。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/48/selectNode.txt" width="580" height="450"></iframe>
+<div class="lm70 tm20 rm60">
+行の高さは、NSBrowserクラスのrowHeightプロパティによって変更可能である。これは、<a href="/lib/HTMLofText.html?filename=/data/48/source/NSBrowser.h.txt&indent=20"> item based delegate方式でのみ可能な方法</a>であるらしい。例では行の高さを20ピクセルにしている。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5" src="/lib/HTMLofText.html?filename=/data/48/rowHeight.txt" width="580" height="110"></iframe>
+<!----------------------------------------------->
+<div class="bm40"></div>
+</div><!-- end of content -->
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+
+
+

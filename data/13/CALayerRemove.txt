@@ -1,0 +1,13 @@
+//追加
+- (void)addImageLayer {
+    CAShapeLayer *imageLayer = [CAShapeLayer layer];
+    ....
+    [self.layer addSublayer:imageLayer];
+    [self.layer setValue:imageLayer forKey:@"imageeee"];
+}
+//削除
+-(void)removeImageLayer {
+    CALayer *oldLayer = [self.layer valueForKey:@"imageeee"];
+    [oldLayer removeFromSuperlayer];
+    oldLayer = nil;
+}

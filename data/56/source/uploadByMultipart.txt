@@ -1,0 +1,52 @@
+@objc func upload1(_ sender: NSButton){
+    if self.urlOfUpfateFile == nil{
+        return
+    }
+    let url = URL.init(string: "http://192.168.11.3/50_test/upload_multipart.php")!
+    // 境界文字列
+    let boundary = generateRandomString(length: 30)
+    // HTTPリクエスト
+    var request:URLRequest = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue(String(format:"multipart/form-data;  boundary=%@", boundary),
+                     forHTTPHeaderField: "Content-Type")
+    // HTTPデータ本体
+    var body = Data()
+    //----------------------------------------------------------------------
+    body.append(String(format:"--%@", boundary).data(using: .utf8)!)
+    body.append("\r\n".data(using: .utf8)!)
+    //----------------------------------------------------------------------
+    // バイナリデータ
+    body.append(String(format:"Content-Disposition: form-data; name=\"userfile\"; filename=\"%@\"",
+                       fileNameField.stringValue).data(using: .utf8)!)
+    body.append("\r\n".data(using: .utf8)!)
+    body.append("Content-Type: application/octet-stream".data(using: .utf8)!)
+    body.append("\r\n\r\n".data(using: .utf8)!)
+    do{
+        try body.append(Data.init(contentsOf: urlOfUpfateFile!))
+    }catch{
+        return
+    }
+    body.append("\r\n".data(using: .utf8)!)
+    //----------------------------------------------------------------------
+    body.append(String(format:"--%@", boundary).data(using: .utf8)!)
+    body.append("\r\n".data(using: .utf8)!)
+    //----------------------------------------------------------------------
+    // POSTパラメータ
+    body.append("Content-Disposition: form-data; name=\"MAX_FILE_SIZE\"".data(using: .utf8)!)
+    body.append("\r\n\r\n".data(using: .utf8)!)
+
+    body.append(String(format:"10000000").data(using: .utf8)!)
+    body.append("\r\n".data(using: .utf8)!)
+    //----------------------------------------------------------------------
+    body.append(String(format:"--%@\r\n", boundary).data(using: .utf8)!)
+    body.append("\r\n".data(using: .utf8)!)
+    //----------------------------------------------------------------------
+    request.httpBody = body
+    print(String(data:body, encoding: .utf8) ?? "?")
+    let resultText = sendRequest(request: request)  //送受信
+    let alert = NSAlert()
+    alert.messageText = resultText
+    alert.informativeText = self.fileNameField.stringValue
+    alert.runModal()
+}

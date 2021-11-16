@@ -1,0 +1,5 @@
+//ビューオブジェクトを作成する
+let myView = UAView.init(frame: NSMakeRect(10, 10, 400, 300))
+
+//親ビューに追加する
+window.contentView?.addSubview(myView)

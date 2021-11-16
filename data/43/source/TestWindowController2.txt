@@ -1,0 +1,25 @@
+@implementation TestWindowController
+//フォームロード時
+-(void)awakeFromNib
+{
+    [[self window]  setTitle:@"てすとうぃんどう"]; //Windowの参照方法
+    //テキストフィールドの作成
+    _textField = [[NSTextField alloc] init];
+    [_textField setFrame:NSMakeRect(20, 108, 166, 22)];
+    [_textField setStringValue:@"テスト"];
+    [_view addSubview:_textField];
+    //ボタンの作成
+    _button = [NSButton buttonWithTitle:@"Click me"
+                                target:self
+                                action:@selector(buttonClicked:)];
+    _button.frame = NSMakeRect(87, 13, 105, 32);
+    [_button setButtonType:NSMomentaryPushInButton];
+    [_view addSubview:_button];
+}
+//ボタンのクリックアクション
+-(void)buttonClicked:(id)sender
+{
+    [_textField setStringValue:@"ボタンがクリックされた"];
+    [_button setEnabled:NO];    //ボタンを無効化する
+}
+@end

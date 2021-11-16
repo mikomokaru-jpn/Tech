@@ -1,0 +1,1 @@
+let point = self.convert(event.locationInWindow, from: nil)

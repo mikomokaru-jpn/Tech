@@ -1,0 +1,12 @@
+NSDate* now = [NSDate date]; //現在日の取得
+NSDateFormatter *formatter =  [[NSDateFormatter alloc] init];
+//GMTからの時差(分)
+formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+//略称指定
+//formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+formatter.dateStyle = NSDateFormatterFullStyle;
+formatter.timeStyle = NSDateFormatterFullStyle;
+NSLog(@"%@", [formatter stringFromDate:now]);
+
+//結果
+2021年2月18日木曜日 23時27分27秒 グリニッジ標準時

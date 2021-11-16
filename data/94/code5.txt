@@ -1,0 +1,5 @@
+func browser(_ browser: NSBrowser, objectValueForItem item: Any?) -> Any?{
+    let node =  item as! Node
+    let text = node.url?.lastPathComponent ?? "noname"
+    return text
+}

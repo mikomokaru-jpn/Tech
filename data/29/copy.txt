@@ -1,0 +1,4 @@
+AClass *objA = [[AClass alloc] init...]; //オブジェクトの初期化
+AClass *objB;
+objB = [objA copy];   //オブジェクト変数のコピー
+objA.number = 123;    //メンバの更新：ObjBは更新しない。

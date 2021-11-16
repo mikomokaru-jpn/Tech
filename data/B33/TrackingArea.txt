@@ -1,0 +1,16 @@
+override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    //トラッキングエリアの設定：補足したいイベントを指定する
+    let options:NSTrackingArea.Options = [
+        .mouseMoved,
+        .mouseEnteredAndExited,
+        .activeAlways
+        ]
+    //インスタンスの作成
+    let trackingArea = NSTrackingArea.init(rect: self.bounds,
+                                           options: options,
+                                           owner: self,
+                                           userInfo: nil)
+    //インスタンスの追加
+    self.addTrackingArea(trackingArea) 
+}

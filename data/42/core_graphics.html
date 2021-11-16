@@ -1,0 +1,271 @@
+<!-- 
+89 Jigsaw 
+-->
+<DOCTYPE HTML>
+<html id="mainhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>画像当てクイズ（初歩のCore Graphics）</title>
+	<link rel="stylesheet" type="text/css" href="/lib/document.css">
+</head>
+<body id="mainbody">
+<!-- ↓↓↓↓↓↓↓↓↓↓↓ -->
+<script type="text/javascript" src="/lib/funcs1.js"></script>
+<!-- ↑↑↑↑↑↑↑↑↑↑ -->
+<div id="content">
+<h2 class="lm70 tm20 bm10">画像当てクイズ（初歩のCore Graphics）</h2>
+<h2 class="lm70 tm10 bm0">
+使い方
+</h2>
+<!----------------------------------------------------------------------------->
+<div class="table lm70 tm0">
+<div class="table_cell" style="width:310px; border-top:solid 1px #909090;">
+<div class="tm10">
+NSOpenPanelを使用して、任意の画像ファイル（JPG or PNG）を読み込む。
+</div>
+</div>
+<!-- 画像 -->
+<div class="table_cell" style="width:280px;">
+  <a href="/lib/HTMLofImage.html?filename=/data/42/image01.png&title=image01&width=600" target="_new">
+  <img class="lm30" src="image01.png" alt="[image01]" width="250"></a>
+</div>
+</div>
+<!----------------------------------------------------------------------------->
+<div class="table lm70 tm30">
+<div class="table_cell" style="width:310px; border-top:solid 1px #909090;">
+<div class="tm10">
+画像イメージを２次元のマトリックスに分割し、ランダムな配置で表示する。この状態では何もわからない。分割数はユーザが指定できる。ここでは 20 x 20で分割。
+</div>
+<div class="tm20">
+開始ボタンで、ランダムなイメージの再配置が始まる。正しい位置に配置されたイメージはそのままに、それ以外のイメージを再度ランダムに配置する。これを全てのイメージが本来の位置に配置されるまで繰り返す。
+</div>
+</div>
+<!-- 画像 -->
+<div class="table_cell" style="width:280px;">
+  <a href="/lib/HTMLofImage.html?filename=/data/42/image02.png&title=image02&width=700" target="_new">
+  <img class="lm30" src="image02.png" alt="[image02]" width="250"></a>
+</div>
+</div>
+<!----------------------------------------------------------------------------->
+<div class="table lm70 tm30">
+<div class="table_cell" style="width:310px; border-top:solid 1px #909090;">
+<div class="tm10">
+時間とともに段々と本来の画像が姿を現してくる。ウィンドウにはイメージを再配置した回数と経過時間を表示する。途中で処理を中断/再開することができる。わかるまでの時間の早さを競うといったような感じ。（384回の試行で国宝松本城は完成した）
+</div>
+</div>
+<!-- 画像 -->
+<div class="table_cell" style="width:280px;">
+  <a href="/lib/HTMLofImage.html?filename=/data/42/image03.png&title=image03&width=700" target="_new">
+  <img class="lm30" src="image03.png" alt="[image03]" width="250"></a>
+</div>
+</div>
+<h2 class="lm70 tm10 bm0 rm60" style="width:580px; border-bottom:solid 1px #909090;">
+ソースコード
+</h2>
+<!-- ソースコード・リンク-->
+<div class="lm70 tm5 rm60">
+・アプリケーション制御　
+<a href="/lib/HTMLofText.html?filename=/data/42/source/AppDelegate.txt&title=AppDelegate" target="_new">AppDelegate</a>
+</div>
+<div class="lm70 tm0 rm60">
+・ビュークラス（イメージ処理本体）
+<a href="/lib/HTMLofText.html?filename=/data/42/source/UAView.txt&title=UAView" target="_new">UAView</a>
+</div>
+<div class="lm70 tm0 rm60">
+・分割イメージクラス
+<a href="/lib/HTMLofText.html?filename=/data/42/source/ImagePart.txt&title=ImagePart" target="_new">ImagePart</a>
+</div>
+
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 rm60 bm5" style="width:580px; border-bottom:solid 1px #909090;">
+処理の流れ
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/CoreGraphics01.png&title=CoreGraphics01&width=1400" target="_new">
+<img class="lm70 tm10" src="CoreGraphics01.png" alt="[CoreGraphics01]" width="550"></a>
+
+<div class="lm70 tm0 rm60">
+(1) CoreGraphicsクラスの関数によりイメージファイルを読み込み、CGImageオブジェクトを作成する。
+</div>
+<div class="lm70 tm10 rm60">
+(2) CGImageオブジェクトを 800 x 600ピクセルに収まるよう縦横比はそのままにイメージのサイズを縮小/拡大する。
+</div>
+<div class="lm70 tm10 rm60">
+(3) イメージを 20x20 のマトリックスに分割し、それぞれの部分イメージからCGImageオブジェクトを作成する。作成したオブジェクトをランダムに二次元配列に配置する。
+</div>
+<div class="lm70 tm10 rm60">
+(4) 配列に格納したCGImageオブジェクトを、CGContextDrawImage関数により、一つづつグラフィックコンテキストに出力する。
+</div>
+<div class="lm70 tm10 rm60">
+(5) イメージの再配置と再表示を繰り返す。2回目以降の処理では、配列の正しい位置に配置されたイメージは再配置の対象外とする。これにより繰り返し処理が進むにつれ正しい位置に配置されたイメージの数が増えていき、最終的には画像が完成する。
+</div>
+<!----------------------------------------------------------------------------->
+<div class="lm70 tm20" style="width:550px; border-top:solid 1px #909090;"></div>
+<h2 class="lm70 tm10 bm0 rm60">
+イメージファイルを読み込む
+</h2>
+<div class="lm70 tm10 rm60">
+イメージファイル（jpg, png）を読み込み、CGImageオブジェクトを作成する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/06.txt" width="550" height="130">
+</iframe>
+<div class="lm70 tm10 rm60">
+上記と同じ処理だが、イメージファイルを一度 NSImageオブジェクトに読み込ん後、CGImageオブジェクトに変換している。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/07.txt" width="550" height="140">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm30 rm60 bm0" id="topic1">
+イメージを拡大/縮小する
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image05.png&title=image05&width=700" target="_new">
+<img class="lm70 tm10" src="image05.png" alt="[image05]" width="500"></a>
+<div class="lm70 tm30 rm60">
+イメージを拡大/縮小するには CGImageオブジェクトを一度ビットマップコンテキストに落とし込み、そこから再び読み出すという手順を踏む。コンテキストに落とし込むところでサイズの変更を行う。以下は不定なサイズのCGImageオブジェクトを 800x600ピクセルのオブジェクトに変換する例
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/02.txt" width="550" height="430">
+</iframe>
+<div class="lm70 tm5 rm60 font90">
+メモ：NSImageクラスにイメージにサイズを変更するメソッド（setSize）があるが、これは一時的にサイズを変更するだけで、元のイメージ（CoreGrapficsオブジェクト）のサイズを変更するものではない。
+</div>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 rm60 bm0" id="topic2">
+部分イメージを作成する
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image06.png&title=image06&width=600" target="_new">
+<img class="lm70 tm10" src="image06.png" alt="[image06]" width="300"></a>
+<div class="lm70 tm30 rm60">
+CGImageオブジェクトから、部分の位置と大きさを指定し、新しいCGImageオブジェクトを作成する。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/03.txt" width="550" height="150">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 rm60 bm0" id="topic3">
+イメージを表示する
+</h2>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image04.png&title=image04&width=600" target="_new">
+<img class="lm70 tm10" src="image04.png" alt="[image04]" width="400"></a>
+<div class="lm70 tm10 rm60">
+NSViewクラスの drawRectメソッドの中で、スクリーンのグラフィックコンテキストを取得し、CGContextDrawImageメソッドによりCGImageオブジェクトを出力する。イメージのサイズがコンテキストのサイズと異なる場合、コンテキストサのイズの大きさに合わせて拡大・縮小される。
+</div>
+<div class="lm70 tm10 rm60">
+グラフィックコンテキストのインタフェースは、スクリーンの他に、ビットマップメモリ、PDF、プリンターといったイメージを表示する媒体も持つ。
+</div>
+<div class="lm70 tm10 rm60">
+</div>
+<div class="lm70 tm10 rm60">
+
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm5 bm10" src="/lib/HTMLofText.html?filename=/data/42/01.txt" width="550" height="280">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm20 bm0 rm60">
+NSTimerクラスによる定時処理の起動
+</h2>
+<div class="lm70 tm5 rm60">
+NSTimerクラスは、メソッドを定時間隔に起動する手段を提供する。
+</div>
+<div class="lm70 tm10 rm60">
+NSTimerクラスのオブジェクトを作成し、起動するメソッド名（@selector形式）、起動間隔（秒）、付加情報（辞書オブジェクト）を設定する。fireメソッドにより指定したメソッドがメインスレッド上で起動する。メソッドの起動を停止するには、invalidateメソッドを実行する。
+</div>
+<div class="lm70 tm10 rm60">
+メソッドはNSTimerオブジェクトを引数として受け取る。メソッドには独自の引数を定義することはできないが、付加情報を介して情報の受け渡しをすることができる。
+</div>
+<!-- ソースコード　リンク -->
+<div class="lm70 tm10 rm60">
+<a href="/lib/HTMLofText.html?filename=/data/42/04.txt&title=サンプルプログラム" target="_new">サンプルプログラム</a>
+</div>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm30 bm0 rm60">
+キー値コーディングによるプロパティ値の変化の監視
+</h2>
+<div class="lm70 tm5 rm60">
+本アプリケーションでは、イメージの再配置の回数と経過時間をメインウィンドウのテキストビューにリアルタイムで表示する。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image07.png&title=image07&width=800" target="_new">
+<img class="lm70 tm10" src="image07.png" alt="[image07]" width="500"></a>
+<div class="lm70 tm20 rm60">
+これはキー値コーディング（KVC）により実現している。
+</div>
+<div class="lm70 tm10 rm60">
+実装手順は、まず、インタフェースビルダーで、テキストフィールドの times（実行回数） と sec（経過時間）を UAViewクラスの timeCountプロパティと elapseSecプロパティにバインドする。
+</div>
+<!--画像-->
+<a href="/lib/HTMLofImage.html?filename=/data/42/image08.png&title=image08&width=800" target="_new">
+<img class="lm130 tm10" src="image08.png" alt="[image08]" width="500"></a>
+<div class="lm70 tm30 rm60">
+次に、UAViewクラスで、実行回数と経過時間をプロパティに加算している部分を下記のメソッドで囲む。これによりプロパティの値を監視し、変化する回数と経過時間をリアルタイムにテキストビューの値に反映させることができる。
+</div>
+<!--ソースコード-->
+<iframe class="lm70 tm10 bm10" src="/lib/HTMLofText.html?filename=/data/42/05.txt" width="550" height="300">
+</iframe>
+<!----------------------------------------------------------------------------->
+<h2 class="lm70 tm30 bm0 rm60">
+パフォーマンス上の注意点
+</h2>
+<div class="lm70 tm0" style="width:580px; border-top:solid 1px #909090;"></div>
+<div class="lm70 tm5 rm60">
+グラフィックコンテキストにイメージを描き出す CGContextDrawImageメソッドは、条件により処理時間に差が出る。
+</div>
+<div class="lm70 tm10 rm60">
+描画イメージのサイズとコンテキストの表示領域のサイズが異なる場合、処理が若干遅くなる。イメージの縮小・拡大にコストがかかっていると考えられる。
+</div>
+<div class="lm70 tm10 rm60">
+本アプリケーションでは、イメージをランダムに配置するため、元のイメージを 400 ( 20 x 20 ) イメージに分割し、それらをひとつづつ、800x600 のグラフィックコンテキストのランダムな位置に描画している。元のイメージが 800x600 であれば、分割イメージをコンテテキストに出力するときサイズの変更はないが、それ以外の大きさだと、分割イメージのサイズを変更する必要がある。
+</div>
+<div class="lm70 tm10 rm60">
+描画を400回繰り返すとなるとかなりの影響を受けるため、本アプリケーションでは、元のイメージを事前に 800x600  のサイズに正規化する対応をとっている。
+</div>
+<div class="lm70 tm20 rm60">
+以下に、この対応をした場合としなかった場合の処理時間の差を示す。
+</div>
+<div class="lm70 tm10 rm60">
+[ 処理A ] 
+あらかじめ元のイメージを 800x600 のサイズに縮小しておく。
+</div>
+<div class="lm70 tm5 rm60">
+[ 処理B ] 元のイメージのサイズはそのままとし、コンテキスト出力時に縮小する。
+</div>
+
+<div class="lm70 tm10 rm60">
+イメージのサイズ  2,272 x 1,704 → 800 x 600（縮小率35%）
+</div>
+<div class="lm70 tm0 rm60">
+処理A：0.029817 sec
+</div>
+<div class="lm70 tm0 rm60">
+処理B：0.155520 sec
+</div>
+
+<div class="lm70 tm10 rm60">
+イメージのサイズ  5,184 x 3,456 → 800 x 533（縮小率15%）
+</div>
+<div class="lm70 tm0 rm60">
+処理A：0.036741 sec
+</div>
+<div class="lm70 tm0 rm60">
+処理B：0.383116 sec
+</div>
+
+<div class="bp40"></div><!-- 空白行 -->
+<!----------------------------------------------->
+</div><!-- end of content -->
+<footer id="mainfooter">
+<div class="tp10 bm10 bp10 textright"> <span class="rm500 font80"><a href="/lib/index1.html">メニューに戻る</a></span><span class="rm20 font80"><a href="#mainheader">TOPに戻る</a></span></div>
+</footer>
+<script type="text/javascript" src="/lib/access/access2.js"></script>
+</body>
+</html>
+
+
+
+

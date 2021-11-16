@@ -1,0 +1,1 @@
+newArray = [array sortedArrayUsingDescriptors:ソート記述子の配列];

@@ -1,0 +1,15 @@
+let scrollView = NSScrollView(frame: CGRect(x: 0, y: 0, 
+                                            width: 400, height: 300))
+scrollView.hasVerticalScroller = true
+scrollView.hasHorizontalScroller = true
+//scrollView.borderType = .noBorder       //385:285  15ピクセル
+scrollView.borderType = .bezelBorder      //383:283  17ピクセル
+//scrollView.borderType = .lineBorder     //383:283  17ピクセル
+//scrollView.borderType = .grooveBorder   //381:281  19ピクセル
+self.window?.contentView?.addSubview(scrollView)
+
+print(String.init(format: "%.0f:%.0f", scrollView.frame.width, 
+                                       scrollView.frame.height))
+let contentSize = scrollView.contentSize
+print(String.init(format: "%.0f:%.0f", contentSize.width, 
+                                       contentSize.height))
